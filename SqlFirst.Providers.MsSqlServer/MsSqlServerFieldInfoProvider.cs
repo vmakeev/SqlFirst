@@ -72,7 +72,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					break;
 
 				case "DataType":
-					details.ClrType = value.Unbox<Type>().FullName;
+					details.ClrType = value.Unbox<Type>();
 					break;
 
 				case "AllowDBNull":

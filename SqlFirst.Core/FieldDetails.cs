@@ -1,4 +1,6 @@
-﻿namespace SqlFirst.Core
+﻿using System;
+
+namespace SqlFirst.Core
 {
 	/// <summary>
 	/// Информация о поле
@@ -93,7 +95,7 @@
 		/// <summary>
 		/// Имя типа данных CLR
 		/// </summary>
-		public string ClrType { get; set; }
+		public Type ClrType { get; set; }
 
 		public string UdtAssemblyQualifiedName { get; set; }
 
