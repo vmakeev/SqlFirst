@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26730.12
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.Providers.MsSqlServer", "SqlFirst.Providers.MsSqlServer\SqlFirst.Providers.MsSqlServer.csproj", "{0C30FCB4-E211-4BF0-AF6C-F69F01D84146}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.Core", "SqlFirst.Core\SqlFirst.Core.csproj", "{C9BF930A-BE65-4155-9FE3-CC9A72F45977}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{0C30FCB4-E211-4BF0-AF6C-F69F01D84146}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0C30FCB4-E211-4BF0-AF6C-F69F01D84146}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0C30FCB4-E211-4BF0-AF6C-F69F01D84146}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0C30FCB4-E211-4BF0-AF6C-F69F01D84146}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C9BF930A-BE65-4155-9FE3-CC9A72F45977}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C9BF930A-BE65-4155-9FE3-CC9A72F45977}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C9BF930A-BE65-4155-9FE3-CC9A72F45977}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C9BF930A-BE65-4155-9FE3-CC9A72F45977}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {1EAC2A1F-C598-46CC-A81C-EB229C2336CB}
+	EndGlobalSection
+EndGlobal
