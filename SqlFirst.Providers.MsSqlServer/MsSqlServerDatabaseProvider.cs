@@ -14,10 +14,10 @@ namespace SqlFirst.Providers.MsSqlServer
 	{
 		private readonly string[] _typesWithLength =
 		{
-			"char",
-			"varchar",
-			"nchar",
-			"nvarchar"
+			MsSqlDbType.Char,
+			MsSqlDbType.VarChar,
+			MsSqlDbType.NChar,
+			MsSqlDbType.NVarChar
 		};
 
 		public virtual IDbConnection GetConnection(string connectionString)

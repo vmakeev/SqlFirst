@@ -4,76 +4,6 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
-	internal static class MsSqlDbType
-	{
-		public static string Char => "char";
-
-		public static string NChar => "nchar";
-
-		public static string NText => "ntext";
-
-		public static string NVarChar => "nvarchar";
-
-		public static string VarChar => "varchar";
-
-		public static string Text => "text";
-
-		public static string Xml => "xml";
-
-		public static string Date => "date";
-
-		public static string DateTime => "datetime";
-
-		public static string DateTime2 => "datetime2";
-
-		public static string SmallDateTime => "smalldatetime";
-
-		public static string Time => "time";
-
-		public static string Binary => "binary";
-
-		public static string Image => "image";
-
-		public static string Timestamp => "timestamp";
-
-		public static string VarBinary => "varbinary";
-
-		public static string Decimal => "decimal";
-
-		public static string Money => "money";
-
-		public static string SmallMoney => "smallmoney";
-
-		public static string SqlVariant => "sql_variant";
-
-		public static string Variant => "variant";
-
-		public static string Udt => "udt";
-
-		public static string Bigint => "bigint";
-
-		public static string DateTimeOffset => "datetimeoffset";
-
-		public static string Float => "float";
-
-		public static string Real => "real";
-
-		public static string Smallint => "smallint";
-
-		public static string Tinyint => "tinyint";
-
-		public static string Int => "int";
-
-		public static string Structured => "structured";
-
-		public static string UniqueIdentifier => "uniqueidentifier";
-
-		public static string Normalize(string type)
-		{
-			return type?.ToLowerInvariant();
-		}
-	}
-
 	public class MsSqlServerTypeMapper : IDatabaseTypeMapper
 	{
 		internal static IDatabaseTypeMapper Instance { get; } = new MsSqlServerTypeMapper();
@@ -93,68 +23,68 @@ namespace SqlFirst.Providers.MsSqlServer
 
 		private static Type GetBaseType(string dbType)
 		{
-			switch (dbType.ToLower())
+			switch (MsSqlDbType.Normalize(dbType))
 			{
-				case "char":
-				case "nchar":
-				case "ntext":
-				case "nvarchar":
-				case "varchar":
-				case "text":
-				case "xml":
+				case MsSqlDbType.Char:
+				case MsSqlDbType.NChar:
+				case MsSqlDbType.NText:
+				case MsSqlDbType.NVarChar:
+				case MsSqlDbType.VarChar:
+				case MsSqlDbType.Text:
+				case MsSqlDbType.Xml:
 					return typeof(string);
 
-				case "date":
-				case "datetime":
-				case "datetime2":
-				case "smalldatetime":
-				case "time":
+				case MsSqlDbType.Date:
+				case MsSqlDbType.DateTime:
+				case MsSqlDbType.DateTime2:
+				case MsSqlDbType.SmallDateTime:
+				case MsSqlDbType.Time:
 					return typeof(DateTime);
 
-				case "binary":
-				case "image":
-				case "timestamp":
-				case "varbinary":
+				case MsSqlDbType.Binary:
+				case MsSqlDbType.Image:
+				case MsSqlDbType.Timestamp:
+				case MsSqlDbType.VarBinary:
 					return typeof(byte[]);
 
-				case "decimal":
-				case "money":
-				case "smallmoney":
+				case MsSqlDbType.Decimal:
+				case MsSqlDbType.Money:
+				case MsSqlDbType.SmallMoney:
 					return typeof(decimal);
 
-				case "sql_variant":
-				case "variant":
-				case "udt":
+				case MsSqlDbType.SqlVariant:
+				case MsSqlDbType.Variant:
+				case MsSqlDbType.Udt:
 					return typeof(object);
 
-				case "bit":
+				case MsSqlDbType.Bit:
 					return typeof(bool);
 
-				case "bigint":
+				case MsSqlDbType.Bigint:
 					return typeof(long);
 
-				case "datetimeoffset":
+				case MsSqlDbType.DateTimeOffset:
 					return typeof(DateTimeOffset);
 
-				case "float":
+				case MsSqlDbType.Float:
 					return typeof(double);
 
-				case "real":
+				case MsSqlDbType.Real:
 					return typeof(float);
 
-				case "smallint":
+				case MsSqlDbType.Smallint:
 					return typeof(short);
 
-				case "tinyint":
+				case MsSqlDbType.Tinyint:
 					return typeof(byte);
 
-				case "int":
+				case MsSqlDbType.Int:
 					return typeof(int);
 
-				case "structured":
+				case MsSqlDbType.Structured:
 					return typeof(DataTable);
 
-				case "uniqueidentifier":
+				case MsSqlDbType.UniqueIdentifier:
 					return typeof(Guid);
 
 				default:

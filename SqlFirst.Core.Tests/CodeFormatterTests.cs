@@ -4,7 +4,7 @@ using Xunit.Should;
 
 namespace SqlFirst.Core.Tests
 {
-	public class CodeFormatterTests
+	public class AdjustTextCaseTests
 	{
 		[Theory]
 		[InlineData(null, "")]
@@ -26,7 +26,7 @@ namespace SqlFirst.Core.Tests
 		[InlineData("some_long_TEST_VARIaBLE_wiThSurprise_s", "someLongTestVARIaBLEWiThSurpriseS")]
 		public void CamelCaseTests(string input, string output)
 		{
-			TextCaseFormatter.ToCamelCase(input).ShouldBe(output);
+			AdjustTextCase.ToCamelCase(input).ShouldBe(output);
 		}
 
 		[Theory]
@@ -49,7 +49,7 @@ namespace SqlFirst.Core.Tests
 		[InlineData("some_long_TEST_VARIaBLE_wiThSurprise_s", "SomeLongTestVARIaBLEWiThSurpriseS")]
 		public void PascalTests(string input, string output)
 		{
-			TextCaseFormatter.ToPascal(input).ShouldBe(output);
+			AdjustTextCase.ToPascal(input).ShouldBe(output);
 		}
 
 		[Theory]
@@ -73,7 +73,7 @@ namespace SqlFirst.Core.Tests
 		[InlineData("some_long_TEST_VARIaBLE_wiThSurprise_s", "SOME_LONG_TEST_VARIA_BLE_WI_TH_SURPRISE_S")]
 		public void UnderscopeTests(string input, string output)
 		{
-			TextCaseFormatter.ToUnderscopes(input).ShouldBe(output);
+			AdjustTextCase.ToUnderscopes(input).ShouldBe(output);
 		}
 	}
 }

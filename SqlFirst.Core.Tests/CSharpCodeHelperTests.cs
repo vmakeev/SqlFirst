@@ -33,7 +33,6 @@ namespace SqlFirst.Core.Tests
 		}
 
 		[Theory]
-
 		#region A lot of test cases
 
 		#region CamelCase
@@ -133,7 +132,6 @@ namespace SqlFirst.Core.Tests
 		#endregion
 
 		#endregion
-
 		public void GetValidVariableNameWithFormatTests(VariableNamingPolicy policy, string input, string output)
 		{
 			CSharpCodeHelper.GetValidVariableName(input, policy).ShouldBe(output);

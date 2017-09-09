@@ -33,7 +33,6 @@ namespace SqlFirst.Providers.MsSqlServer
 			switch (columnName)
 			{
 				case "ColumnName":
-					// sby : ColumnName might be null, in which case it will be created from ordinal.
 					if (!string.IsNullOrEmpty(value.Unbox<string>()))
 					{
 						details.ColumnName = value.Unbox<string>();
@@ -44,7 +43,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					details.ColumnOrdinal = value.Unbox<int>();
 					if (string.IsNullOrEmpty(details.ColumnName))
 					{
-						details.ColumnName = "col" + details.ColumnOrdinal;
+						details.ColumnName = "column_" + details.ColumnOrdinal;
 					}
 					break;
 

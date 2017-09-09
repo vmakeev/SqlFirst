@@ -3,13 +3,21 @@ using System.Data;
 
 namespace SqlFirst.Core
 {
+	/// <inheritdoc />
 	public abstract class SchemaFetcher : ISchemaFetcher
 	{
+		/// <summary>
+		/// Поставщик доступа к методам БД
+		/// </summary>
 		protected abstract IDatabaseProvider DatabaseProvider { get; }
 
+		/// <summary>
+		/// Поставщик доступа к информации о полях БД
+		/// </summary>
 		protected abstract IFieldInfoProvider FieldInfoProvider { get; }
 
-		public List<FieldDetails> GetFields(string connectionString, string query)
+		/// <inheritdoc />
+		public List<FieldDetails> GetResults(string connectionString, string query)
 		{
 			DataTable schemaTable = GetQuerySchema(connectionString, query);
 

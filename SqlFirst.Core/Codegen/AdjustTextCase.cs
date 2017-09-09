@@ -5,8 +5,16 @@ using System.Text;
 
 namespace SqlFirst.Core.Codegen
 {
-	internal static class TextCaseFormatter
+	/// <summary>
+	/// Помощник форматирования текста
+	/// </summary>
+	internal static class AdjustTextCase
 	{
+		/// <summary>
+		/// Преобразует строку <paramref name="name"/> в стиль CamelCase
+		/// </summary>
+		/// <param name="name">Искомая строка</param>
+		/// <returns>Преобразованная строка</returns>
 		public static string ToCamelCase(string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -34,6 +42,11 @@ namespace SqlFirst.Core.Codegen
 			return char.ToLowerInvariant(name[0]) + name.Substring(1);
 		}
 
+		/// <summary>
+		/// Преобразует строку <paramref name="name"/> в стиль Pascal
+		/// </summary>
+		/// <param name="name">Искомая строка</param>
+		/// <returns>Преобразованная строка</returns>
 		public static string ToPascal(string name)
 		{
 			if (string.IsNullOrEmpty(name))
@@ -44,11 +57,6 @@ namespace SqlFirst.Core.Codegen
 			if (name.All(p => p == '_'))
 			{
 				return "_";
-			}
-
-			if (name.StartsWith("_") || name.EndsWith("_"))
-			{
-				name = name.Trim('_');
 			}
 
 			if (name.Contains("_"))
@@ -66,6 +74,11 @@ namespace SqlFirst.Core.Codegen
 			return char.ToUpperInvariant(name[0]) + name.Substring(1);
 		}
 
+		/// <summary>
+		/// Преобразует строку <paramref name="name"/> в верхний регистр с разделением значимых частей нижним подчеркиванием
+		/// </summary>
+		/// <param name="name">Искомая строка</param>
+		/// <returns>Преобразованная строка</returns>
 		public static string ToUnderscopes(string name)
 		{
 			if (string.IsNullOrEmpty(name))

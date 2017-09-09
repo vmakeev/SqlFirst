@@ -27,7 +27,7 @@ namespace SqlFirst.Core.Codegen
 			if (TypesHelper.IsGenericType(type, out Type[] underlyingTypes))
 			{
 				string outerTypeName = GetTypeName(type.GetGenericTypeDefinition(), directTypeNameResolver, simplifyNullable);
-				string genericArguments = string.Join(", ", underlyingTypes.Select(p => GetTypeName(p, directTypeNameResolver, simplifyNullable)));
+				string genericArguments = string.Join(", ", underlyingTypes.Select(innerType => GetTypeName(innerType, directTypeNameResolver, simplifyNullable)));
 				return $"{outerTypeName}<{genericArguments}>";
 			}
 
@@ -142,19 +142,19 @@ namespace SqlFirst.Core.Codegen
 			switch (namingPolicy)
 			{
 				case VariableNamingPolicy.CamelCase:
-					formattedName = TextCaseFormatter.ToCamelCase(preparedName);
+					formattedName = AdjustTextCase.ToCamelCase(preparedName);
 					break;
 
 				case VariableNamingPolicy.CamelCaseWithUnderscope:
-					formattedName = '_' + TextCaseFormatter.ToCamelCase(preparedName).TrimStart('_', '@');
+					formattedName = '_' + AdjustTextCase.ToCamelCase(preparedName).TrimStart('_', '@');
 					break;
 
 				case VariableNamingPolicy.Pascal:
-					formattedName = TextCaseFormatter.ToPascal(preparedName);
+					formattedName = AdjustTextCase.ToPascal(preparedName);
 					break;
 
 				case VariableNamingPolicy.Underscope:
-					formattedName = TextCaseFormatter.ToUnderscopes(preparedName);
+					formattedName = AdjustTextCase.ToUnderscopes(preparedName);
 					break;
 
 				default:
@@ -190,7 +190,7 @@ namespace SqlFirst.Core.Codegen
 				result = name;
 			}
 
-			if (_reservedWords.Any(p => p == result))
+			if (_reservedWords.Any(reservedWord => result == reservedWord))
 			{
 				return '@' + result;
 			}
@@ -212,7 +212,7 @@ namespace SqlFirst.Core.Codegen
 			}
 
 			return replacement != null
-				? new string(name.Select(c => IsValidSymbol(c) ? c : replacement.Value).ToArray())
+				? new string(name.Select(symbol => IsValidSymbol(symbol) ? symbol : replacement.Value).ToArray())
 				: new string(name.Where(IsValidSymbol).ToArray());
 		}
 
