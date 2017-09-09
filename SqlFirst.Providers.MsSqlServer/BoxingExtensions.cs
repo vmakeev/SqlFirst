@@ -1,10 +1,17 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Reflection;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
 	internal static class BoxingExtensions
 	{
+		public static T Unbox<T>(this object value)
+		{
+			Converter<object, T> converter = GetConverter<T>();
+			return converter.Invoke(value);
+		}
+
 		private static T ReferenceField<T>(object value)
 		{
 			return value == DBNull.Value ? default(T) : (T)value;
@@ -16,6 +23,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			{
 				throw new InvalidCastException($"{typeof(T)} can not be casted to null.");
 			}
+
 			return (T)value;
 		}
 
@@ -26,6 +34,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			{
 				return default(TElem?);
 			}
+
 			return (TElem)value;
 		}
 
@@ -46,12 +55,12 @@ namespace SqlFirst.Providers.MsSqlServer
 			}
 			else
 			{
-				if (type.IsNullableValueType()) 
+				if (type.IsNullableValueType())
 				{
 					typeConverter = (Converter<object, T>)Delegate.CreateDelegate(
 						typeof(Converter<object, T>),
 						typeof(BoxingExtensions)
-							.GetMethod("NullableField", System.Reflection.BindingFlags.Static | System.Reflection.BindingFlags.NonPublic)
+							.GetMethod("NullableField", BindingFlags.Static | BindingFlags.NonPublic)
 							.MakeGenericMethod(type.GetGenericArguments()[0]));
 				}
 				else
@@ -61,12 +70,6 @@ namespace SqlFirst.Providers.MsSqlServer
 			}
 
 			return typeConverter;
-		}
-		
-		public static T Unbox<T>(this object value)
-		{
-			Converter<object, T> converter = GetConverter<T>();
-			return converter.Invoke(value);
 		}
 	}
 }

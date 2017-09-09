@@ -42,14 +42,5 @@ namespace SqlFirst.Core
 		/// <param name="connectionString">Строка подключения</param>
 		/// <returns>Подключение к БД</returns>
 		IDbConnection GetConnection(string connectionString);
-
-		/// <summary>
-		/// Возвращает имя типа CLR, который может быть безопасно использован для представления указанного типа данных в БД
-		/// </summary>
-		/// <param name="dbType">Название типа данных в БД</param>
-		/// <param name="dbTypeNormalized">Нормализованное название типа данных в БД</param>
-		/// <param name="nullable">Поддерживается ли значение null</param>
-		/// <returns>Имя типа CLR</returns>
-		string GetClrTypeName(string dbType, out string dbTypeNormalized, bool nullable = true);
 	}
 }

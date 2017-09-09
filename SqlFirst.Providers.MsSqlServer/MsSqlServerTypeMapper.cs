@@ -1,111 +1,162 @@
 ﻿using System;
+using System.Data;
 using SqlFirst.Core;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
+	internal static class MsSqlDbType
+	{
+		public static string Char => "char";
+
+		public static string NChar => "nchar";
+
+		public static string NText => "ntext";
+
+		public static string NVarChar => "nvarchar";
+
+		public static string VarChar => "varchar";
+
+		public static string Text => "text";
+
+		public static string Xml => "xml";
+
+		public static string Date => "date";
+
+		public static string DateTime => "datetime";
+
+		public static string DateTime2 => "datetime2";
+
+		public static string SmallDateTime => "smalldatetime";
+
+		public static string Time => "time";
+
+		public static string Binary => "binary";
+
+		public static string Image => "image";
+
+		public static string Timestamp => "timestamp";
+
+		public static string VarBinary => "varbinary";
+
+		public static string Decimal => "decimal";
+
+		public static string Money => "money";
+
+		public static string SmallMoney => "smallmoney";
+
+		public static string SqlVariant => "sql_variant";
+
+		public static string Variant => "variant";
+
+		public static string Udt => "udt";
+
+		public static string Bigint => "bigint";
+
+		public static string DateTimeOffset => "datetimeoffset";
+
+		public static string Float => "float";
+
+		public static string Real => "real";
+
+		public static string Smallint => "smallint";
+
+		public static string Tinyint => "tinyint";
+
+		public static string Int => "int";
+
+		public static string Structured => "structured";
+
+		public static string UniqueIdentifier => "uniqueidentifier";
+
+		public static string Normalize(string type)
+		{
+			return type?.ToLowerInvariant();
+		}
+	}
+
 	public class MsSqlServerTypeMapper : IDatabaseTypeMapper
 	{
+		internal static IDatabaseTypeMapper Instance { get; } = new MsSqlServerTypeMapper();
+
 		/// <inheritdoc />
-		public string Map(string dbType, out string dbTypeNormalized, bool nullable = true)
+		public Type Map(string dbType, bool nullable)
+		{
+			Type baseType = GetBaseType(dbType);
+
+			if (nullable && baseType.IsValueType)
+			{
+				return typeof(Nullable<>).MakeGenericType(baseType);
+			}
+
+			return baseType;
+		}
+
+		private static Type GetBaseType(string dbType)
 		{
 			switch (dbType.ToLower())
 			{
-				case "bigint":
-					dbTypeNormalized = "BigInt";
-					return nullable ? "long?" : "long";
-				case "binary":
-					dbTypeNormalized = "Binary";
-					return "byte[]";
-				case "image":
-					dbTypeNormalized = "Image";
-					return "byte[]";
-				case "timestamp":
-					dbTypeNormalized = "Timestamp";
-					return "byte[]";
-				case "varbinary":
-					dbTypeNormalized = "Varbinary";
-					return "byte[]";
-				case "bit":
-					dbTypeNormalized = "Bit";
-					return nullable ? "bool?" : "bool";
-				case "date":
-					dbTypeNormalized = "Date";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetime":
-					dbTypeNormalized = "DateTime";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetime2":
-					dbTypeNormalized = "DateTime2";
-					return nullable ? "DateTime?" : "DateTime";
-				case "smalldatetime":
-					dbTypeNormalized = "SmallDateTime";
-					return nullable ? "DateTime?" : "DateTime";
-				case "time":
-					dbTypeNormalized = "Time";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetimeoffset":
-					dbTypeNormalized = "DateTimeOffset";
-					return nullable ? "DateTimeOffset?" : "DateTimeOffset";
-				case "decimal":
-					dbTypeNormalized = "Decimal";
-					return nullable ? "decimal?" : "decimal";
-				case "money":
-					dbTypeNormalized = "Money";
-					return nullable ? "decimal?" : "decimal";
-				case "smallmoney":
-					dbTypeNormalized = "SmallMoney";
-					return nullable ? "decimal?" : "decimal";
-				case "float":
-					dbTypeNormalized = "Float";
-					return nullable ? "double?" : "double";
-				case "real":
-					dbTypeNormalized = "Real";
-					return nullable ? "float?" : "float";
-				case "smallint":
-					dbTypeNormalized = "SmallInt";
-					return nullable ? "short?" : "short";
-				case "tinyint":
-					dbTypeNormalized = "TinyInt";
-					return nullable ? "byte?" : "byte";
-				case "int":
-					dbTypeNormalized = "Int";
-					return nullable ? "int?" : "int";
 				case "char":
-					dbTypeNormalized = "Char";
-					return "string";
 				case "nchar":
-					dbTypeNormalized = "NChar";
-					return "string";
 				case "ntext":
-					dbTypeNormalized = "NText";
-					return "string";
 				case "nvarchar":
-					dbTypeNormalized = "NVarChar";
-					return "string";
 				case "varchar":
-					dbTypeNormalized = "VarChar";
-					return "string";
 				case "text":
-					dbTypeNormalized = "Text";
-					return "string";
 				case "xml":
-					dbTypeNormalized = "Xml";
-					return "string";
+					return typeof(string);
+
+				case "date":
+				case "datetime":
+				case "datetime2":
+				case "smalldatetime":
+				case "time":
+					return typeof(DateTime);
+
+				case "binary":
+				case "image":
+				case "timestamp":
+				case "varbinary":
+					return typeof(byte[]);
+
+				case "decimal":
+				case "money":
+				case "smallmoney":
+					return typeof(decimal);
+
 				case "sql_variant":
-					dbTypeNormalized = "Variant";
-					return "object";
 				case "variant":
-					dbTypeNormalized = "Variant";
-					return "object";
 				case "udt":
-					dbTypeNormalized = "Udt";
-					return "object";
+					return typeof(object);
+
+				case "bit":
+					return typeof(bool);
+
+				case "bigint":
+					return typeof(long);
+
+				case "datetimeoffset":
+					return typeof(DateTimeOffset);
+
+				case "float":
+					return typeof(double);
+
+				case "real":
+					return typeof(float);
+
+				case "smallint":
+					return typeof(short);
+
+				case "tinyint":
+					return typeof(byte);
+
+				case "int":
+					return typeof(int);
+
 				case "structured":
-					dbTypeNormalized = "Structured";
-					return "DataTable";
+					return typeof(DataTable);
+
 				case "uniqueidentifier":
-					dbTypeNormalized = "UniqueIdentifier";
-					return "Guid";
+					return typeof(Guid);
+
 				default:
 					throw new Exception("type not matched : " + dbType);
 			}

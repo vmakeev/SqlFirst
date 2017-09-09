@@ -1,40 +1,29 @@
-﻿namespace SqlFirst.Core
+﻿using System;
+
+namespace SqlFirst.Core
 {
+	/// <inheritdoc />
 	public class QueryParamInfo : IQueryParamInfo
 	{
-		/// <summary>
-		/// Имя параметра в C#
-		/// </summary>
+		/// <inheritdoc />
 		public string CsName { get; set; }
 
-		/// <summary>
-		/// Тип параметра в C#
-		/// </summary>
-		public string CsType { get; set; }
+		/// <inheritdoc />
+		public Type ClrType { get; set; }
 
-		/// <summary>
-		/// Имя параметра в запросе
-		/// </summary>
+		/// <inheritdoc />
 		public string DbName { get; set; }
 
-		/// <summary>
-		/// Тип параметра в запросе
-		/// </summary>
+		/// <inheritdoc />
 		public string DbType { get; set; }
 
-		/// <summary>
-		/// Длина параметра
-		/// </summary>
+		/// <inheritdoc />
 		public int Length { get; set; }
 
-		/// <summary>
-		/// Числовая точность
-		/// </summary>
+		/// <inheritdoc />
 		public int Precision { get; set; }
 
-		/// <summary>
-		/// Точность после запятой
-		/// </summary>
+		/// <inheritdoc />
 		public int Scale { get; set; }
 	}
 }

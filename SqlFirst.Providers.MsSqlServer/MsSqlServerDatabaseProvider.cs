@@ -6,6 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using SqlFirst.Core;
+using SqlFirst.Core.Codegen;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
@@ -64,11 +65,11 @@ namespace SqlFirst.Providers.MsSqlServer
 					{
 						// build declaration.
 						myParams.Add(new QueryParamInfo()
-						{
-							DbName = rdr.GetString(1),
-							DbType = rdr.GetString(3),
-							Length = rdr.GetInt16(4)
-						}
+							{
+								DbName = rdr.GetString(1),
+								DbType = rdr.GetString(3),
+								Length = rdr.GetInt16(4)
+							}
 						);
 					}
 				}
@@ -95,134 +96,29 @@ namespace SqlFirst.Providers.MsSqlServer
 			return stringBuilder.ToString();
 		}
 
-		public virtual string GetClrTypeName(string dbType, out string dbTypeNormalized, bool nullable = true)
-		{
-			switch (dbType.ToLower())
-			{
-				case "bigint":
-					dbTypeNormalized = "BigInt";
-					return nullable ? "long?" : "long";
-				case "binary":
-					dbTypeNormalized = "Binary";
-					return "byte[]";
-				case "image":
-					dbTypeNormalized = "Image";
-					return "byte[]";
-				case "timestamp":
-					dbTypeNormalized = "Timestamp";
-					return "byte[]";
-				case "varbinary":
-					dbTypeNormalized = "Varbinary";
-					return "byte[]";
-				case "bit":
-					dbTypeNormalized = "Bit";
-					return nullable ? "bool?" : "bool";
-				case "date":
-					dbTypeNormalized = "Date";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetime":
-					dbTypeNormalized = "DateTime";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetime2":
-					dbTypeNormalized = "DateTime2";
-					return nullable ? "DateTime?" : "DateTime";
-				case "smalldatetime":
-					dbTypeNormalized = "SmallDateTime";
-					return nullable ? "DateTime?" : "DateTime";
-				case "time":
-					dbTypeNormalized = "Time";
-					return nullable ? "DateTime?" : "DateTime";
-				case "datetimeoffset":
-					dbTypeNormalized = "DateTimeOffset";
-					return nullable ? "DateTimeOffset?" : "DateTimeOffset";
-				case "decimal":
-					dbTypeNormalized = "Decimal";
-					return nullable ? "decimal?" : "decimal";
-				case "money":
-					dbTypeNormalized = "Money";
-					return nullable ? "decimal?" : "decimal";
-				case "smallmoney":
-					dbTypeNormalized = "SmallMoney";
-					return nullable ? "decimal?" : "decimal";
-				case "float":
-					dbTypeNormalized = "Float";
-					return nullable ? "double?" : "double";
-				case "real":
-					dbTypeNormalized = "Real";
-					return nullable ? "float?" : "float";
-				case "smallint":
-					dbTypeNormalized = "SmallInt";
-					return nullable ? "short?" : "short";
-				case "tinyint":
-					dbTypeNormalized = "TinyInt";
-					return nullable ? "byte?" : "byte";
-				case "int":
-					dbTypeNormalized = "Int";
-					return nullable ? "int?" : "int";
-				case "char":
-					dbTypeNormalized = "Char";
-					return "string";
-				case "nchar":
-					dbTypeNormalized = "NChar";
-					return "string";
-				case "ntext":
-					dbTypeNormalized = "NText";
-					return "string";
-				case "nvarchar":
-					dbTypeNormalized = "NVarChar";
-					return "string";
-				case "varchar":
-					dbTypeNormalized = "VarChar";
-					return "string";
-				case "text":
-					dbTypeNormalized = "Text";
-					return "string";
-				case "xml":
-					dbTypeNormalized = "Xml";
-					return "string";
-				case "sql_variant":
-					dbTypeNormalized = "Variant";
-					return "object";
-				case "variant":
-					dbTypeNormalized = "Variant";
-					return "object";
-				case "udt":
-					dbTypeNormalized = "Udt";
-					return "object";
-				case "structured":
-					dbTypeNormalized = "Structured";
-					return "DataTable";
-				case "uniqueidentifier":
-					dbTypeNormalized = "UniqueIdentifier";
-					return "Guid";
-				default:
-					throw new Exception("type not matched : " + dbType);
-					// todo : keep going here. old method had a second switch on FieldDetails.DataType to catch a bunch of never seen types
-			}
-		}
-		
 		private void FillParamInfo(IQueryParamInfo qp, string name, string sqlTypeAndLength)
 		{
 			string typeOnly;
-			int len = 0;
+			int length = 0;
 			if (sqlTypeAndLength.IndexOf('(') > 0)
 			{
 				typeOnly = sqlTypeAndLength.Substring(0, sqlTypeAndLength.IndexOf('('));
 				if (_typesWithLength.Any(p => p == typeOnly.ToLower()))
 				{
-					int.TryParse(Regex.Match(sqlTypeAndLength, "(?<=\\()\\s*(?'myInt'\\d*)").Groups["myInt"].Value, out len);
+					int.TryParse(Regex.Match(sqlTypeAndLength, "(?<=\\()\\s*(?'myInt'\\d*)").Groups["myInt"].Value, out length);
 				}
 			}
 			else
 			{
 				typeOnly = sqlTypeAndLength;
 			}
-			string csType = GetClrTypeName(typeOnly, out string normalizedType);
 
-			qp.CsType = csType;
-			qp.DbType = normalizedType;
-			qp.Length = len;
-			qp.CsName = name;
+			Type clrType = MsSqlServerTypeMapper.Instance.Map(typeOnly, true);
+
+			qp.ClrType = clrType;
+			qp.DbType = MsSqlDbType.Normalize(typeOnly);
+			qp.Length = length;
+			qp.CsName = CSharpCodeHelper.GetValidVariableName(name);
 			qp.DbName = '@' + name;
 		}
 	}

@@ -8,6 +8,25 @@ namespace SqlFirst.Providers.MsSqlServer
 	/// <inheritdoc />
 	public class MsSqlServerFieldInfoProvider : IFieldInfoProvider
 	{
+		/// <inheritdoc />
+		public FieldDetails GetFieldDetails(DataRow fieldMetadata)
+		{
+			var result = new FieldDetails();
+			foreach (DataColumn column in fieldMetadata.Table.Columns)
+			{
+				if (column == null)
+				{
+					continue;
+				}
+
+				string columnName = column.ColumnName;
+				object value = fieldMetadata[column];
+				FillFromColumn(result, columnName, value);
+			}
+
+			return result;
+		}
+
 		[SuppressMessage("ReSharper", "RedundantEmptySwitchSection")]
 		private void FillFromColumn(FieldDetails details, string columnName, object value)
 		{
@@ -109,25 +128,6 @@ namespace SqlFirst.Providers.MsSqlServer
 					// do nothing
 					break;
 			}
-		}
-
-		/// <inheritdoc />
-		public FieldDetails GetFieldDetails(DataRow fieldMetadata)
-		{
-			var result = new FieldDetails();
-			foreach (DataColumn column in fieldMetadata.Table.Columns)
-			{
-				if (column == null)
-				{
-					continue;
-				}
-
-				string columnName = column.ColumnName;
-				object value = fieldMetadata[column];
-				FillFromColumn(result, columnName, value);
-			}
-
-			return result;
 		}
 	}
 }
