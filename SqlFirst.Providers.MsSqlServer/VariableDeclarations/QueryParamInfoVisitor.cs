@@ -50,22 +50,30 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<IQueryParamInfo> VisitSize(SizeContext context)
+		public override IEnumerable<IQueryParamInfo> VisitLength(LengthContext context)
 		{
-			string sizeString = context.GetRuleContexts<IntContext>().Single().GetText();
+			var maxValueContext = new Lazy<MaxValueContext>(() => context.GetRuleContext<MaxValueContext>(0));
+			var intContext = new Lazy<IntValueContext>(() => context.GetRuleContext<IntValueContext>(0));
 
-			_current.Length = int.Parse(sizeString);
+			if (intContext.Value != null)
+			{
+				_current.Length = intContext.Value.GetText();
+			}
+			else if (maxValueContext.Value != null)
+			{
+				_current.Length = maxValueContext.Value.GetText();
+			}
 
-			return base.VisitSize(context);
+			return base.VisitLength(context);
 		}
 
 		/// <inheritdoc />
 		public override IEnumerable<IQueryParamInfo> VisitValue(ValueContext context)
 		{
-			var stringContext = new Lazy<StringContext>(() => context.GetChild<StringContext>(0));
-			var intContext = new Lazy<IntContext>(() => context.GetChild<IntContext>(0));
-			var floatContext = new Lazy<FloatContext>(() => context.GetChild<FloatContext>(0));
-
+			var stringContext = new Lazy<StringValueContext>(() => context.GetRuleContext<StringValueContext>(0));
+			var intContext = new Lazy<IntValueContext>(() => context.GetRuleContext<IntValueContext>(0));
+			var floatContext = new Lazy<FloatValueContext>(() => context.GetRuleContext<FloatValueContext>(0));
+			
 			if (stringContext.Value != null)
 			{
 				_current.DefaultValue = stringContext.Value.GetText()?.Trim('\'');

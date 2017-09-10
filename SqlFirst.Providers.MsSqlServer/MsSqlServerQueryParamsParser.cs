@@ -50,11 +50,14 @@ namespace SqlFirst.Providers.MsSqlServer
 						// ignore global variables
 						if (dataReader.GetString(1).Substring(0, 2) != "@@")
 						{
+							string dbName = dataReader.GetString(1);
+							string dbType = dataReader.GetString(3);
+							
 							var info = new QueryParamInfo
 							{
-								DbName = dataReader.GetString(1),
-								DbType = dataReader.GetString(3),
-								Length = dataReader.GetInt16(4)
+								DbName = dbName.TrimStart('@'),
+								DbType = MsSqlDbType.Normalize(dbType),
+								Length = MsSqlDbType.GetLength(dbType),
 							};
 
 							yield return info;

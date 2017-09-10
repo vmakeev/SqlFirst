@@ -66,6 +66,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="MsSqlDbTypeTests.cs" />
     <Compile Include="MsSqlServerQueryParamsParserTests.cs" />
     <Compile Include="Queries\Query.cs" />
     <Compile Include="MsSqlServerSchemaFetcherTests.cs" />
@@ -98,6 +99,12 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Queries\SelectDateWithNamedOrdinal.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingAndPartOfParameters.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingNoParameters.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />

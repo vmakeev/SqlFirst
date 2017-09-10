@@ -14,6 +14,11 @@ namespace SqlFirst.Core.Parsing
 
 		public static string GetQuerySection(this string query, string section)
 		{
+			if (query == null)
+			{
+				throw new System.ArgumentNullException(nameof(query));
+			}
+
 			if (!_sectionsRegexCache.TryGetValue(section, out Regex regex))
 			{
 				regex = CreateSectionRegex(section);

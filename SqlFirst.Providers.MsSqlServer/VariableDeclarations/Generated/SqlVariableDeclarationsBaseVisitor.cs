@@ -11,10 +11,6 @@
 // Generated from c:\users\keeper\documents\visual studio 2015\Projects\ClassLibrary1\ClassLibrary1\SqlVariableDeclarations.g4 by ANTLR 4.6.4
 
 // Unreachable code detected
-
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
-
 #pragma warning disable 0162
 // The variable '...' is assigned but its value is never used
 #pragma warning disable 0219
@@ -24,7 +20,12 @@ using Antlr4.Runtime.Tree;
 #pragma warning disable 419
 
 namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated {
-	/// <summary>
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
+using IToken = Antlr4.Runtime.IToken;
+using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
+
+/// <summary>
 /// This class provides an empty implementation of <see cref="ISqlVariableDeclarationsVisitor{Result}"/>,
 /// which can be extended to create a visitor which only needs to handle a subset
 /// of the available methods.
@@ -122,7 +123,7 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	public virtual Result VisitValue([NotNull] SqlVariableDeclarationsParser.ValueContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.string"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.stringValue"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -130,10 +131,10 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitString([NotNull] SqlVariableDeclarationsParser.StringContext context) { return VisitChildren(context); }
+	public virtual Result VisitStringValue([NotNull] SqlVariableDeclarationsParser.StringValueContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.int"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.intValue"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -141,10 +142,10 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitInt([NotNull] SqlVariableDeclarationsParser.IntContext context) { return VisitChildren(context); }
+	public virtual Result VisitIntValue([NotNull] SqlVariableDeclarationsParser.IntValueContext context) { return VisitChildren(context); }
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.float"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.floatValue"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
 	/// on <paramref name="context"/>.
@@ -152,7 +153,7 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	public virtual Result VisitFloat([NotNull] SqlVariableDeclarationsParser.FloatContext context) { return VisitChildren(context); }
+	public virtual Result VisitFloatValue([NotNull] SqlVariableDeclarationsParser.FloatValueContext context) { return VisitChildren(context); }
 
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.variable"/>.
@@ -199,6 +200,28 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	public virtual Result VisitSize([NotNull] SqlVariableDeclarationsParser.SizeContext context) { return VisitChildren(context); }
 
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.length"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitLength([NotNull] SqlVariableDeclarationsParser.LengthContext context) { return VisitChildren(context); }
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.maxValue"/>.
+	/// <para>
+	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
+	/// on <paramref name="context"/>.
+	/// </para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	public virtual Result VisitMaxValue([NotNull] SqlVariableDeclarationsParser.MaxValueContext context) { return VisitChildren(context); }
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.identifier"/>.
 	/// <para>
 	/// The default implementation returns the result of calling <see cref="AbstractParseTreeVisitor{Result}.VisitChildren(IRuleNode)"/>
@@ -209,4 +232,4 @@ public partial class SqlVariableDeclarationsBaseVisitor<Result> : AbstractParseT
 	/// <return>The visitor result.</return>
 	public virtual Result VisitIdentifier([NotNull] SqlVariableDeclarationsParser.IdentifierContext context) { return VisitChildren(context); }
 }
-} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
+} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated

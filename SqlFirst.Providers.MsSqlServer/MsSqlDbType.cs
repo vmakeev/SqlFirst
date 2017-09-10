@@ -1,4 +1,5 @@
 ﻿using System.Diagnostics.CodeAnalysis;
+using System.Text.RegularExpressions;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
@@ -71,7 +72,32 @@ namespace SqlFirst.Providers.MsSqlServer
 
 		public static string Normalize(string type)
 		{
-			return type?.ToLowerInvariant();
+			string result = type?.ToLowerInvariant();
+
+			int parenthesisPosition = result?.LastIndexOf('(') ?? -1;
+			if (parenthesisPosition >= 0)
+			{
+				// ReSharper disable once PossibleNullReferenceException
+				result = result.Substring(0, parenthesisPosition);
+			}
+
+			return result?.Trim();
+		}
+
+		private static readonly Regex _sizeRegex = new Regex(".*\\((?<size>[^\\)]+)\\)", RegexOptions.Compiled);
+
+		public static string GetLength(string type)
+		{
+			if (string.IsNullOrEmpty(type))
+			{
+				return null;
+			}
+
+			Match match = _sizeRegex.Match(type);
+
+			return match.Success 
+				? match.Groups["size"]?.Value?.Trim() 
+				: null;
 		}
 	}
 }

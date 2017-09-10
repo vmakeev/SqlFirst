@@ -11,12 +11,6 @@
 // Generated from c:\users\keeper\documents\visual studio 2015\Projects\ClassLibrary1\ClassLibrary1\SqlVariableDeclarations.g4 by ANTLR 4.6.4
 
 // Unreachable code detected
-
-using Antlr4.Runtime;
-using Antlr4.Runtime.Atn;
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
-
 #pragma warning disable 0162
 // The variable '...' is assigned but its value is never used
 #pragma warning disable 0219
@@ -26,30 +20,38 @@ using Antlr4.Runtime.Tree;
 #pragma warning disable 419
 
 namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated {
-	[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.4")]
+using Antlr4.Runtime;
+using Antlr4.Runtime.Atn;
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
+using System.Collections.Generic;
+using DFA = Antlr4.Runtime.Dfa.DFA;
+
+[System.CodeDom.Compiler.GeneratedCode("ANTLR", "4.6.4")]
 [System.CLSCompliant(false)]
 public partial class SqlVariableDeclarationsParser : Parser {
 	public const int
-		DECLARE=1, INT=2, FLOAT=3, STRING=4, IDENTIFIER=5, VARIABLESIGN=6, LINEBREAK=7, 
-		EQUATION=8, SPACE=9, TAB=10, OPEN_PRTH=11, CLOSE_PRTH=12, SEMICOLON=13, 
-		SINGLELINE_COMMENTARY=14, MULTILINE_COMMENTATY=15;
+		DECLARE=1, MAX=2, INT=3, FLOAT=4, STRING=5, IDENTIFIER=6, VARIABLESIGN=7, 
+		LINEBREAK=8, EQUATION=9, SPACE=10, TAB=11, OPEN_PRTH=12, CLOSE_PRTH=13, 
+		SEMICOLON=14, SINGLELINE_COMMENTARY=15, MULTILINE_COMMENTATY=16;
 	public const int
 		RULE_root = 0, RULE_element = 1, RULE_declaration = 2, RULE_commentary = 3, 
 		RULE_spaces = 4, RULE_space = 5, RULE_assignment = 6, RULE_value = 7, 
-		RULE_string = 8, RULE_int = 9, RULE_float = 10, RULE_variable = 11, RULE_type = 12, 
-		RULE_typeName = 13, RULE_size = 14, RULE_identifier = 15;
+		RULE_stringValue = 8, RULE_intValue = 9, RULE_floatValue = 10, RULE_variable = 11, 
+		RULE_type = 12, RULE_typeName = 13, RULE_size = 14, RULE_length = 15, 
+		RULE_maxValue = 16, RULE_identifier = 17;
 	public static readonly string[] ruleNames = {
 		"root", "element", "declaration", "commentary", "spaces", "space", "assignment", 
-		"value", "string", "int", "float", "variable", "type", "typeName", "size", 
-		"identifier"
+		"value", "stringValue", "intValue", "floatValue", "variable", "type", 
+		"typeName", "size", "length", "maxValue", "identifier"
 	};
 
 	private static readonly string[] _LiteralNames = {
-		null, null, null, null, null, null, "'@'", null, "'='", "' '", "'\t'", 
+		null, null, null, null, null, null, null, "'@'", null, "'='", "' '", "'\t'", 
 		"'('", "')'", "';'"
 	};
 	private static readonly string[] _SymbolicNames = {
-		null, "DECLARE", "INT", "FLOAT", "STRING", "IDENTIFIER", "VARIABLESIGN", 
+		null, "DECLARE", "MAX", "INT", "FLOAT", "STRING", "IDENTIFIER", "VARIABLESIGN", 
 		"LINEBREAK", "EQUATION", "SPACE", "TAB", "OPEN_PRTH", "CLOSE_PRTH", "SEMICOLON", 
 		"SINGLELINE_COMMENTARY", "MULTILINE_COMMENTATY"
 	};
@@ -131,22 +133,22 @@ public partial class SqlVariableDeclarationsParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 35;
+			State = 39;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,0,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 32; element();
+					State = 36; element();
 					}
 					} 
 				}
-				State = 37;
+				State = 41;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,0,_ctx);
 			}
-			State = 38; Match(Eof);
+			State = 42; Match(Eof);
 			}
 		}
 		catch (RecognitionException re) {
@@ -187,27 +189,27 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		ElementContext _localctx = new ElementContext(_ctx, State);
 		EnterRule(_localctx, 2, RULE_element);
 		try {
-			State = 43;
+			State = 47;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,1,_ctx) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 40; declaration();
+				State = 44; declaration();
 				}
 				break;
 
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 41; commentary();
+				State = 45; commentary();
 				}
 				break;
 
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 42; space();
+				State = 46; space();
 				}
 				break;
 			}
@@ -260,23 +262,23 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 45; Match(DECLARE);
-			State = 46; spaces();
-			State = 47; variable();
-			State = 48; spaces();
-			State = 49; type();
+			State = 49; Match(DECLARE);
 			State = 50; spaces();
-			State = 54;
+			State = 51; variable();
+			State = 52; spaces();
+			State = 53; type();
+			State = 54; spaces();
+			State = 58;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,2,_ctx) ) {
 			case 1:
 				{
-				State = 51; assignment();
-				State = 52; spaces();
+				State = 55; assignment();
+				State = 56; spaces();
 				}
 				break;
 			}
-			State = 56; Match(SEMICOLON);
+			State = 60; Match(SEMICOLON);
 			}
 		}
 		catch (RecognitionException re) {
@@ -313,7 +315,7 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 58;
+			State = 62;
 			_la = _input.La(1);
 			if ( !(_la==SINGLELINE_COMMENTARY || _la==MULTILINE_COMMENTATY) ) {
 			_errHandler.RecoverInline(this);
@@ -365,18 +367,18 @@ public partial class SqlVariableDeclarationsParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 63;
+			State = 67;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,3,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 60; space();
+					State = 64; space();
 					}
 					} 
 				}
-				State = 65;
+				State = 69;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,3,_ctx);
 			}
@@ -417,7 +419,7 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 66;
+			State = 70;
 			_la = _input.La(1);
 			if ( !((((_la) & ~0x3f) == 0 && ((1L << _la) & ((1L << LINEBREAK) | (1L << SPACE) | (1L << TAB))) != 0)) ) {
 			_errHandler.RecoverInline(this);
@@ -469,9 +471,9 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 68; Match(EQUATION);
-			State = 69; spaces();
-			State = 70; value();
+			State = 72; Match(EQUATION);
+			State = 73; spaces();
+			State = 74; value();
 			}
 		}
 		catch (RecognitionException re) {
@@ -486,14 +488,14 @@ public partial class SqlVariableDeclarationsParser : Parser {
 	}
 
 	public partial class ValueContext : ParserRuleContext {
-		public StringContext @string() {
-			return GetRuleContext<StringContext>(0);
+		public StringValueContext stringValue() {
+			return GetRuleContext<StringValueContext>(0);
 		}
-		public IntContext @int() {
-			return GetRuleContext<IntContext>(0);
+		public IntValueContext intValue() {
+			return GetRuleContext<IntValueContext>(0);
 		}
-		public FloatContext @float() {
-			return GetRuleContext<FloatContext>(0);
+		public FloatValueContext floatValue() {
+			return GetRuleContext<FloatValueContext>(0);
 		}
 		public ValueContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -512,27 +514,27 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		ValueContext _localctx = new ValueContext(_ctx, State);
 		EnterRule(_localctx, 14, RULE_value);
 		try {
-			State = 75;
+			State = 79;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,4,_ctx) ) {
 			case 1:
 				EnterOuterAlt(_localctx, 1);
 				{
-				State = 72; @string();
+				State = 76; stringValue();
 				}
 				break;
 
 			case 2:
 				EnterOuterAlt(_localctx, 2);
 				{
-				State = 73; @int();
+				State = 77; intValue();
 				}
 				break;
 
 			case 3:
 				EnterOuterAlt(_localctx, 3);
 				{
-				State = 74; @float();
+				State = 78; floatValue();
 				}
 				break;
 			}
@@ -548,28 +550,28 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		return _localctx;
 	}
 
-	public partial class StringContext : ParserRuleContext {
+	public partial class StringValueContext : ParserRuleContext {
 		public ITerminalNode STRING() { return GetToken(SqlVariableDeclarationsParser.STRING, 0); }
-		public StringContext(ParserRuleContext parent, int invokingState)
+		public StringValueContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_string; } }
+		public override int RuleIndex { get { return RULE_stringValue; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISqlVariableDeclarationsVisitor<TResult> typedVisitor = visitor as ISqlVariableDeclarationsVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitString(this);
+			if (typedVisitor != null) return typedVisitor.VisitStringValue(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public StringContext @string() {
-		StringContext _localctx = new StringContext(_ctx, State);
-		EnterRule(_localctx, 16, RULE_string);
+	public StringValueContext stringValue() {
+		StringValueContext _localctx = new StringValueContext(_ctx, State);
+		EnterRule(_localctx, 16, RULE_stringValue);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 77; Match(STRING);
+			State = 81; Match(STRING);
 			}
 		}
 		catch (RecognitionException re) {
@@ -583,28 +585,28 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		return _localctx;
 	}
 
-	public partial class IntContext : ParserRuleContext {
+	public partial class IntValueContext : ParserRuleContext {
 		public ITerminalNode INT() { return GetToken(SqlVariableDeclarationsParser.INT, 0); }
-		public IntContext(ParserRuleContext parent, int invokingState)
+		public IntValueContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_int; } }
+		public override int RuleIndex { get { return RULE_intValue; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISqlVariableDeclarationsVisitor<TResult> typedVisitor = visitor as ISqlVariableDeclarationsVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitInt(this);
+			if (typedVisitor != null) return typedVisitor.VisitIntValue(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public IntContext @int() {
-		IntContext _localctx = new IntContext(_ctx, State);
-		EnterRule(_localctx, 18, RULE_int);
+	public IntValueContext intValue() {
+		IntValueContext _localctx = new IntValueContext(_ctx, State);
+		EnterRule(_localctx, 18, RULE_intValue);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 79; Match(INT);
+			State = 83; Match(INT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -618,28 +620,28 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		return _localctx;
 	}
 
-	public partial class FloatContext : ParserRuleContext {
+	public partial class FloatValueContext : ParserRuleContext {
 		public ITerminalNode FLOAT() { return GetToken(SqlVariableDeclarationsParser.FLOAT, 0); }
-		public FloatContext(ParserRuleContext parent, int invokingState)
+		public FloatValueContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
 		{
 		}
-		public override int RuleIndex { get { return RULE_float; } }
+		public override int RuleIndex { get { return RULE_floatValue; } }
 		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
 			ISqlVariableDeclarationsVisitor<TResult> typedVisitor = visitor as ISqlVariableDeclarationsVisitor<TResult>;
-			if (typedVisitor != null) return typedVisitor.VisitFloat(this);
+			if (typedVisitor != null) return typedVisitor.VisitFloatValue(this);
 			else return visitor.VisitChildren(this);
 		}
 	}
 
 	[RuleVersion(0)]
-	public FloatContext @float() {
-		FloatContext _localctx = new FloatContext(_ctx, State);
-		EnterRule(_localctx, 20, RULE_float);
+	public FloatValueContext floatValue() {
+		FloatValueContext _localctx = new FloatValueContext(_ctx, State);
+		EnterRule(_localctx, 20, RULE_floatValue);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 81; Match(FLOAT);
+			State = 85; Match(FLOAT);
 			}
 		}
 		catch (RecognitionException re) {
@@ -677,8 +679,8 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 83; Match(VARIABLESIGN);
-			State = 84; identifier();
+			State = 87; Match(VARIABLESIGN);
+			State = 88; identifier();
 			}
 		}
 		catch (RecognitionException re) {
@@ -721,14 +723,14 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 86; typeName();
-			State = 90;
+			State = 90; typeName();
+			State = 94;
 			_errHandler.Sync(this);
 			switch ( Interpreter.AdaptivePredict(_input,5,_ctx) ) {
 			case 1:
 				{
-				State = 87; spaces();
-				State = 88; size();
+				State = 91; spaces();
+				State = 92; size();
 				}
 				break;
 			}
@@ -778,20 +780,20 @@ public partial class SqlVariableDeclarationsParser : Parser {
 			int _alt;
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 92; identifier();
-			State = 98;
+			State = 96; identifier();
+			State = 102;
 			_errHandler.Sync(this);
 			_alt = Interpreter.AdaptivePredict(_input,6,_ctx);
 			while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber ) {
 				if ( _alt==1 ) {
 					{
 					{
-					State = 93; spaces();
-					State = 94; identifier();
+					State = 97; spaces();
+					State = 98; identifier();
 					}
 					} 
 				}
-				State = 100;
+				State = 104;
 				_errHandler.Sync(this);
 				_alt = Interpreter.AdaptivePredict(_input,6,_ctx);
 			}
@@ -816,8 +818,8 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		public SpacesContext spaces(int i) {
 			return GetRuleContext<SpacesContext>(i);
 		}
-		public IntContext @int() {
-			return GetRuleContext<IntContext>(0);
+		public LengthContext length() {
+			return GetRuleContext<LengthContext>(0);
 		}
 		public ITerminalNode CLOSE_PRTH() { return GetToken(SqlVariableDeclarationsParser.CLOSE_PRTH, 0); }
 		public SizeContext(ParserRuleContext parent, int invokingState)
@@ -839,11 +841,99 @@ public partial class SqlVariableDeclarationsParser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 101; Match(OPEN_PRTH);
-			State = 102; spaces();
-			State = 103; @int();
-			State = 104; spaces();
-			State = 105; Match(CLOSE_PRTH);
+			State = 105; Match(OPEN_PRTH);
+			State = 106; spaces();
+			State = 107; length();
+			State = 108; spaces();
+			State = 109; Match(CLOSE_PRTH);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class LengthContext : ParserRuleContext {
+		public IntValueContext intValue() {
+			return GetRuleContext<IntValueContext>(0);
+		}
+		public MaxValueContext maxValue() {
+			return GetRuleContext<MaxValueContext>(0);
+		}
+		public LengthContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_length; } }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ISqlVariableDeclarationsVisitor<TResult> typedVisitor = visitor as ISqlVariableDeclarationsVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitLength(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public LengthContext length() {
+		LengthContext _localctx = new LengthContext(_ctx, State);
+		EnterRule(_localctx, 30, RULE_length);
+		try {
+			State = 113;
+			_errHandler.Sync(this);
+			switch ( Interpreter.AdaptivePredict(_input,7,_ctx) ) {
+			case 1:
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 111; intValue();
+				}
+				break;
+
+			case 2:
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 112; maxValue();
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class MaxValueContext : ParserRuleContext {
+		public ITerminalNode MAX() { return GetToken(SqlVariableDeclarationsParser.MAX, 0); }
+		public MaxValueContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_maxValue; } }
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			ISqlVariableDeclarationsVisitor<TResult> typedVisitor = visitor as ISqlVariableDeclarationsVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitMaxValue(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public MaxValueContext maxValue() {
+		MaxValueContext _localctx = new MaxValueContext(_ctx, State);
+		EnterRule(_localctx, 32, RULE_maxValue);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 115; Match(MAX);
 			}
 		}
 		catch (RecognitionException re) {
@@ -874,11 +964,11 @@ public partial class SqlVariableDeclarationsParser : Parser {
 	[RuleVersion(0)]
 	public IdentifierContext identifier() {
 		IdentifierContext _localctx = new IdentifierContext(_ctx, State);
-		EnterRule(_localctx, 30, RULE_identifier);
+		EnterRule(_localctx, 34, RULE_identifier);
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 107; Match(IDENTIFIER);
+			State = 117; Match(IDENTIFIER);
 			}
 		}
 		catch (RecognitionException re) {
@@ -893,43 +983,46 @@ public partial class SqlVariableDeclarationsParser : Parser {
 	}
 
 	public static readonly string _serializedATN =
-		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\x11p\x4\x2\t\x2"+
+		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\x12z\x4\x2\t\x2"+
 		"\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x4\t\t"+
 		"\t\x4\n\t\n\x4\v\t\v\x4\f\t\f\x4\r\t\r\x4\xE\t\xE\x4\xF\t\xF\x4\x10\t"+
-		"\x10\x4\x11\t\x11\x3\x2\a\x2$\n\x2\f\x2\xE\x2\'\v\x2\x3\x2\x3\x2\x3\x3"+
-		"\x3\x3\x3\x3\x5\x3.\n\x3\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3"+
-		"\x4\x3\x4\x5\x4\x39\n\x4\x3\x4\x3\x4\x3\x5\x3\x5\x3\x6\a\x6@\n\x6\f\x6"+
-		"\xE\x6\x43\v\x6\x3\a\x3\a\x3\b\x3\b\x3\b\x3\b\x3\t\x3\t\x3\t\x5\tN\n\t"+
-		"\x3\n\x3\n\x3\v\x3\v\x3\f\x3\f\x3\r\x3\r\x3\r\x3\xE\x3\xE\x3\xE\x3\xE"+
-		"\x5\xE]\n\xE\x3\xF\x3\xF\x3\xF\x3\xF\a\xF\x63\n\xF\f\xF\xE\xF\x66\v\xF"+
-		"\x3\x10\x3\x10\x3\x10\x3\x10\x3\x10\x3\x10\x3\x11\x3\x11\x3\x11\x2\x2"+
-		"\x2\x12\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x10\x2\x12\x2\x14\x2\x16"+
-		"\x2\x18\x2\x1A\x2\x1C\x2\x1E\x2 \x2\x2\x4\x3\x2\x10\x11\x4\x2\t\t\v\f"+
-		"h\x2%\x3\x2\x2\x2\x4-\x3\x2\x2\x2\x6/\x3\x2\x2\x2\b<\x3\x2\x2\x2\n\x41"+
-		"\x3\x2\x2\x2\f\x44\x3\x2\x2\x2\xE\x46\x3\x2\x2\x2\x10M\x3\x2\x2\x2\x12"+
-		"O\x3\x2\x2\x2\x14Q\x3\x2\x2\x2\x16S\x3\x2\x2\x2\x18U\x3\x2\x2\x2\x1AX"+
-		"\x3\x2\x2\x2\x1C^\x3\x2\x2\x2\x1Eg\x3\x2\x2\x2 m\x3\x2\x2\x2\"$\x5\x4"+
-		"\x3\x2#\"\x3\x2\x2\x2$\'\x3\x2\x2\x2%#\x3\x2\x2\x2%&\x3\x2\x2\x2&(\x3"+
-		"\x2\x2\x2\'%\x3\x2\x2\x2()\a\x2\x2\x3)\x3\x3\x2\x2\x2*.\x5\x6\x4\x2+."+
-		"\x5\b\x5\x2,.\x5\f\a\x2-*\x3\x2\x2\x2-+\x3\x2\x2\x2-,\x3\x2\x2\x2.\x5"+
-		"\x3\x2\x2\x2/\x30\a\x3\x2\x2\x30\x31\x5\n\x6\x2\x31\x32\x5\x18\r\x2\x32"+
-		"\x33\x5\n\x6\x2\x33\x34\x5\x1A\xE\x2\x34\x38\x5\n\x6\x2\x35\x36\x5\xE"+
-		"\b\x2\x36\x37\x5\n\x6\x2\x37\x39\x3\x2\x2\x2\x38\x35\x3\x2\x2\x2\x38\x39"+
-		"\x3\x2\x2\x2\x39:\x3\x2\x2\x2:;\a\xF\x2\x2;\a\x3\x2\x2\x2<=\t\x2\x2\x2"+
-		"=\t\x3\x2\x2\x2>@\x5\f\a\x2?>\x3\x2\x2\x2@\x43\x3\x2\x2\x2\x41?\x3\x2"+
-		"\x2\x2\x41\x42\x3\x2\x2\x2\x42\v\x3\x2\x2\x2\x43\x41\x3\x2\x2\x2\x44\x45"+
-		"\t\x3\x2\x2\x45\r\x3\x2\x2\x2\x46G\a\n\x2\x2GH\x5\n\x6\x2HI\x5\x10\t\x2"+
-		"I\xF\x3\x2\x2\x2JN\x5\x12\n\x2KN\x5\x14\v\x2LN\x5\x16\f\x2MJ\x3\x2\x2"+
-		"\x2MK\x3\x2\x2\x2ML\x3\x2\x2\x2N\x11\x3\x2\x2\x2OP\a\x6\x2\x2P\x13\x3"+
-		"\x2\x2\x2QR\a\x4\x2\x2R\x15\x3\x2\x2\x2ST\a\x5\x2\x2T\x17\x3\x2\x2\x2"+
-		"UV\a\b\x2\x2VW\x5 \x11\x2W\x19\x3\x2\x2\x2X\\\x5\x1C\xF\x2YZ\x5\n\x6\x2"+
-		"Z[\x5\x1E\x10\x2[]\x3\x2\x2\x2\\Y\x3\x2\x2\x2\\]\x3\x2\x2\x2]\x1B\x3\x2"+
-		"\x2\x2^\x64\x5 \x11\x2_`\x5\n\x6\x2`\x61\x5 \x11\x2\x61\x63\x3\x2\x2\x2"+
-		"\x62_\x3\x2\x2\x2\x63\x66\x3\x2\x2\x2\x64\x62\x3\x2\x2\x2\x64\x65\x3\x2"+
-		"\x2\x2\x65\x1D\x3\x2\x2\x2\x66\x64\x3\x2\x2\x2gh\a\r\x2\x2hi\x5\n\x6\x2"+
-		"ij\x5\x14\v\x2jk\x5\n\x6\x2kl\a\xE\x2\x2l\x1F\x3\x2\x2\x2mn\a\a\x2\x2"+
-		"n!\x3\x2\x2\x2\t%-\x38\x41M\\\x64";
+		"\x10\x4\x11\t\x11\x4\x12\t\x12\x4\x13\t\x13\x3\x2\a\x2(\n\x2\f\x2\xE\x2"+
+		"+\v\x2\x3\x2\x3\x2\x3\x3\x3\x3\x3\x3\x5\x3\x32\n\x3\x3\x4\x3\x4\x3\x4"+
+		"\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x3\x4\x5\x4=\n\x4\x3\x4\x3\x4\x3\x5\x3"+
+		"\x5\x3\x6\a\x6\x44\n\x6\f\x6\xE\x6G\v\x6\x3\a\x3\a\x3\b\x3\b\x3\b\x3\b"+
+		"\x3\t\x3\t\x3\t\x5\tR\n\t\x3\n\x3\n\x3\v\x3\v\x3\f\x3\f\x3\r\x3\r\x3\r"+
+		"\x3\xE\x3\xE\x3\xE\x3\xE\x5\xE\x61\n\xE\x3\xF\x3\xF\x3\xF\x3\xF\a\xFg"+
+		"\n\xF\f\xF\xE\xFj\v\xF\x3\x10\x3\x10\x3\x10\x3\x10\x3\x10\x3\x10\x3\x11"+
+		"\x3\x11\x5\x11t\n\x11\x3\x12\x3\x12\x3\x13\x3\x13\x3\x13\x2\x2\x2\x14"+
+		"\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x10\x2\x12\x2\x14\x2\x16\x2\x18"+
+		"\x2\x1A\x2\x1C\x2\x1E\x2 \x2\"\x2$\x2\x2\x4\x3\x2\x11\x12\x4\x2\n\n\f"+
+		"\rq\x2)\x3\x2\x2\x2\x4\x31\x3\x2\x2\x2\x6\x33\x3\x2\x2\x2\b@\x3\x2\x2"+
+		"\x2\n\x45\x3\x2\x2\x2\fH\x3\x2\x2\x2\xEJ\x3\x2\x2\x2\x10Q\x3\x2\x2\x2"+
+		"\x12S\x3\x2\x2\x2\x14U\x3\x2\x2\x2\x16W\x3\x2\x2\x2\x18Y\x3\x2\x2\x2\x1A"+
+		"\\\x3\x2\x2\x2\x1C\x62\x3\x2\x2\x2\x1Ek\x3\x2\x2\x2 s\x3\x2\x2\x2\"u\x3"+
+		"\x2\x2\x2$w\x3\x2\x2\x2&(\x5\x4\x3\x2\'&\x3\x2\x2\x2(+\x3\x2\x2\x2)\'"+
+		"\x3\x2\x2\x2)*\x3\x2\x2\x2*,\x3\x2\x2\x2+)\x3\x2\x2\x2,-\a\x2\x2\x3-\x3"+
+		"\x3\x2\x2\x2.\x32\x5\x6\x4\x2/\x32\x5\b\x5\x2\x30\x32\x5\f\a\x2\x31.\x3"+
+		"\x2\x2\x2\x31/\x3\x2\x2\x2\x31\x30\x3\x2\x2\x2\x32\x5\x3\x2\x2\x2\x33"+
+		"\x34\a\x3\x2\x2\x34\x35\x5\n\x6\x2\x35\x36\x5\x18\r\x2\x36\x37\x5\n\x6"+
+		"\x2\x37\x38\x5\x1A\xE\x2\x38<\x5\n\x6\x2\x39:\x5\xE\b\x2:;\x5\n\x6\x2"+
+		";=\x3\x2\x2\x2<\x39\x3\x2\x2\x2<=\x3\x2\x2\x2=>\x3\x2\x2\x2>?\a\x10\x2"+
+		"\x2?\a\x3\x2\x2\x2@\x41\t\x2\x2\x2\x41\t\x3\x2\x2\x2\x42\x44\x5\f\a\x2"+
+		"\x43\x42\x3\x2\x2\x2\x44G\x3\x2\x2\x2\x45\x43\x3\x2\x2\x2\x45\x46\x3\x2"+
+		"\x2\x2\x46\v\x3\x2\x2\x2G\x45\x3\x2\x2\x2HI\t\x3\x2\x2I\r\x3\x2\x2\x2"+
+		"JK\a\v\x2\x2KL\x5\n\x6\x2LM\x5\x10\t\x2M\xF\x3\x2\x2\x2NR\x5\x12\n\x2"+
+		"OR\x5\x14\v\x2PR\x5\x16\f\x2QN\x3\x2\x2\x2QO\x3\x2\x2\x2QP\x3\x2\x2\x2"+
+		"R\x11\x3\x2\x2\x2ST\a\a\x2\x2T\x13\x3\x2\x2\x2UV\a\x5\x2\x2V\x15\x3\x2"+
+		"\x2\x2WX\a\x6\x2\x2X\x17\x3\x2\x2\x2YZ\a\t\x2\x2Z[\x5$\x13\x2[\x19\x3"+
+		"\x2\x2\x2\\`\x5\x1C\xF\x2]^\x5\n\x6\x2^_\x5\x1E\x10\x2_\x61\x3\x2\x2\x2"+
+		"`]\x3\x2\x2\x2`\x61\x3\x2\x2\x2\x61\x1B\x3\x2\x2\x2\x62h\x5$\x13\x2\x63"+
+		"\x64\x5\n\x6\x2\x64\x65\x5$\x13\x2\x65g\x3\x2\x2\x2\x66\x63\x3\x2\x2\x2"+
+		"gj\x3\x2\x2\x2h\x66\x3\x2\x2\x2hi\x3\x2\x2\x2i\x1D\x3\x2\x2\x2jh\x3\x2"+
+		"\x2\x2kl\a\xE\x2\x2lm\x5\n\x6\x2mn\x5 \x11\x2no\x5\n\x6\x2op\a\xF\x2\x2"+
+		"p\x1F\x3\x2\x2\x2qt\x5\x14\v\x2rt\x5\"\x12\x2sq\x3\x2\x2\x2sr\x3\x2\x2"+
+		"\x2t!\x3\x2\x2\x2uv\a\x4\x2\x2v#\x3\x2\x2\x2wx\a\b\x2\x2x%\x3\x2\x2\x2"+
+		"\n)\x31<\x45Q`hs";
 	public static readonly ATN _ATN =
 		new ATNDeserializer().Deserialize(_serializedATN.ToCharArray());
 }
-} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
+} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated

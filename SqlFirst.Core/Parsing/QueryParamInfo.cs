@@ -16,6 +16,6 @@ namespace SqlFirst.Core.Parsing
 		public object DefaultValue { get; set; }
 
 		/// <inheritdoc />
-		public int Length { get; set; }
+		public string Length { get; set; }
 	}
 }

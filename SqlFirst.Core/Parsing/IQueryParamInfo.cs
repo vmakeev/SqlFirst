@@ -7,9 +7,9 @@ namespace SqlFirst.Core.Parsing
 	public interface IQueryParamInfo
 	{
 		/// <summary>
-		/// Длина
+		/// Объявленная длина
 		/// </summary>
-		int Length { get; set; }
+		string Length { get; set; }
 
 		/// <summary>
 		/// Имя параметра в запроса

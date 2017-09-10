@@ -11,10 +11,6 @@
 // Generated from c:\users\keeper\documents\visual studio 2015\Projects\ClassLibrary1\ClassLibrary1\SqlVariableDeclarations.g4 by ANTLR 4.6.4
 
 // Unreachable code detected
-
-using Antlr4.Runtime.Misc;
-using Antlr4.Runtime.Tree;
-
 #pragma warning disable 0162
 // The variable '...' is assigned but its value is never used
 #pragma warning disable 0219
@@ -24,7 +20,11 @@ using Antlr4.Runtime.Tree;
 #pragma warning disable 419
 
 namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated {
-	/// <summary>
+using Antlr4.Runtime.Misc;
+using Antlr4.Runtime.Tree;
+using IToken = Antlr4.Runtime.IToken;
+
+/// <summary>
 /// This interface defines a complete generic visitor for a parse tree produced
 /// by <see cref="SqlVariableDeclarationsParser"/>.
 /// </summary>
@@ -89,25 +89,25 @@ public interface ISqlVariableDeclarationsVisitor<Result> : IParseTreeVisitor<Res
 	Result VisitValue([NotNull] SqlVariableDeclarationsParser.ValueContext context);
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.string"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.stringValue"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitString([NotNull] SqlVariableDeclarationsParser.StringContext context);
+	Result VisitStringValue([NotNull] SqlVariableDeclarationsParser.StringValueContext context);
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.int"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.intValue"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitInt([NotNull] SqlVariableDeclarationsParser.IntContext context);
+	Result VisitIntValue([NotNull] SqlVariableDeclarationsParser.IntValueContext context);
 
 	/// <summary>
-	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.float"/>.
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.floatValue"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
-	Result VisitFloat([NotNull] SqlVariableDeclarationsParser.FloatContext context);
+	Result VisitFloatValue([NotNull] SqlVariableDeclarationsParser.FloatValueContext context);
 
 	/// <summary>
 	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.variable"/>.
@@ -138,10 +138,24 @@ public interface ISqlVariableDeclarationsVisitor<Result> : IParseTreeVisitor<Res
 	Result VisitSize([NotNull] SqlVariableDeclarationsParser.SizeContext context);
 
 	/// <summary>
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.length"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLength([NotNull] SqlVariableDeclarationsParser.LengthContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.maxValue"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitMaxValue([NotNull] SqlVariableDeclarationsParser.MaxValueContext context);
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="SqlVariableDeclarationsParser.identifier"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitIdentifier([NotNull] SqlVariableDeclarationsParser.IdentifierContext context);
 }
-} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
+} // namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated
