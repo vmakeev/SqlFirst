@@ -22,5 +22,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 		public static string SelectDateWithOrdinal => GetQueryText();
 
 		public static string SelectDateWithNamedOrdinal => GetQueryText();
+
+		public static string SelectGuidAndDateWithPagingAssignmentAndComments => GetQueryText();
 	}
 }

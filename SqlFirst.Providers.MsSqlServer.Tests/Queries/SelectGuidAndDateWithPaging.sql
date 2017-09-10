@@ -1,4 +1,4 @@
-declare @userKey varchar(255);
+﻿declare @userKey varchar(255);
 declare @skip int;
 declare @take int;
 

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Data;
+using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Core
 {
@@ -8,21 +9,6 @@ namespace SqlFirst.Core
 	/// </summary>
 	public interface IDatabaseProvider
 	{
-		/// <summary>
-		/// Возвращает информацию об уже объявленных параметрах, присутствующих в тексте запроса
-		/// </summary>
-		/// <param name="queryText">Текст запроса</param>
-		/// <returns>Информация о параметрах</returns>
-		List<IQueryParamInfo> GetDeclaredParameters(string queryText);
-
-		/// <summary>
-		/// Возвращает информацию о необъявленных параметрах, присутствующих в тексте запроса
-		/// </summary>
-		/// <param name="queryText">Текст запроса</param>
-		/// <param name="connectionString">Строка подключения к БД</param>
-		/// <returns>Информация о параметрах</returns>
-		List<IQueryParamInfo> GetUndeclaredParameters(string queryText, string connectionString);
-
 		/// <summary>
 		/// Добавляет необъявленные параметры, присутствующие в теле запроса, для успешного выполнения команды
 		/// </summary>

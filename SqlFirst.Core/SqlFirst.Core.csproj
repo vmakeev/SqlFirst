@@ -18,4 +18,11 @@
     <DocumentationFile>bin\Debug\netstandard2.0\SqlFirst.Core.xml</DocumentationFile>
   </PropertyGroup>
 
+  <ItemGroup>
+    <None Update="Parsing\SqlVariableDeclarations.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>SqlFirst.Core.Parsing</CustomToolNamespace>
+    </None>
+  </ItemGroup>
+
 </Project>

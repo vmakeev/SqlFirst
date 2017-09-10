@@ -129,4 +129,5 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			ordinal.DbType.ShouldBe(MsSqlDbType.Int);
 		}
 	}
+
 }
