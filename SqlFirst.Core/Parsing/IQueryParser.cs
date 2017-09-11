@@ -5,7 +5,7 @@ namespace SqlFirst.Core.Parsing
 	/// <summary>
 	/// Парсер параметров запроса
 	/// </summary>
-	public interface IQueryParamsParser
+	public interface IQueryParser
 	{
 		/// <summary>
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
@@ -21,5 +21,13 @@ namespace SqlFirst.Core.Parsing
 		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Информация о параметрах</returns>
 		IEnumerable<IQueryParamInfo> GetUndeclaredParameters(string queryText, string connectionString);
+
+		/// <summary>
+		/// Возвращает подробную информацию о возвращаемых запросом значениях
+		/// </summary>
+		/// <param name="queryText">Собственно запрос</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
+		/// <returns>Подробная информация о возвращаемых запросом значениях</returns>
+		IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString);
 	}
 }

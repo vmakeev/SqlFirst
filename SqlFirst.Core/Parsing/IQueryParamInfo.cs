@@ -9,21 +9,21 @@ namespace SqlFirst.Core.Parsing
 		/// <summary>
 		/// Объявленная длина
 		/// </summary>
-		string Length { get; set; }
+		string Length { get; }
 
 		/// <summary>
 		/// Имя параметра в запроса
 		/// </summary>
-		string DbName { get; set; }
+		string DbName { get; }
 
 		/// <summary>
 		/// Тип параметра в БД
 		/// </summary>
-		string DbType { get; set; }
+		string DbType { get; }
 
 		/// <summary>
 		/// Значение по умолчанию, указанное в запросе
 		/// </summary>
-		object DefaultValue { get; set; }
+		object DefaultValue { get; }
 	}
 }

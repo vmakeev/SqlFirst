@@ -2,6 +2,7 @@
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using SqlFirst.Core;
+using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
@@ -9,7 +10,7 @@ namespace SqlFirst.Providers.MsSqlServer
 	public class MsSqlServerFieldInfoProvider : IFieldInfoProvider
 	{
 		/// <inheritdoc />
-		public FieldDetails GetFieldDetails(DataRow fieldMetadata)
+		public IFieldDetails GetFieldDetails(DataRow fieldMetadata)
 		{
 			var result = new FieldDetails();
 			foreach (DataColumn column in fieldMetadata.Table.Columns)

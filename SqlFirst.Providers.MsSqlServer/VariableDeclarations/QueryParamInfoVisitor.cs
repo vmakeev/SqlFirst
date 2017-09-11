@@ -9,7 +9,7 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 {
 	public class QueryParamInfoVisitor : SqlVariableDeclarationsBaseVisitor<IEnumerable<IQueryParamInfo>>
 	{
-		private IQueryParamInfo _current;
+		private QueryParamInfo _current;
 		private List<IQueryParamInfo> _results;
 
 		/// <inheritdoc />

@@ -1,4 +1,5 @@
 ﻿using System.Data;
+using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Core
 {
@@ -12,6 +13,6 @@ namespace SqlFirst.Core
 		/// </summary>
 		/// <param name="fieldMetadata">Метаданные поля</param>
 		/// <returns>Данные о поле</returns>
-		FieldDetails GetFieldDetails(DataRow fieldMetadata);
+		IFieldDetails GetFieldDetails(DataRow fieldMetadata);
 	}
 }

@@ -28,5 +28,9 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 		public static string SelectGuidAndDateWithPagingNoParameters => GetQueryText();
 
 		public static string SelectGuidAndDateWithPagingAndPartOfParameters => GetQueryText();
+
+		public static string SelectNotUniqueFieldsWithJoin => GetQueryText();
+
+		public static string SelectNotUniqueNamedFieldsWithJoin => GetQueryText();
 	}
 }

@@ -11,9 +11,29 @@ using SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
-	public class MsSqlServerQueryParamsParser : QueryParamsParser
+	public class MsSqlServerQueryParser : QueryParser
 	{
 		private readonly Lazy<IDatabaseProvider> _databaseProvider = new Lazy<IDatabaseProvider>(() => new MsSqlServerDatabaseProvider());
+		private readonly Lazy<IFieldInfoProvider> _fieldInfoProvider = new Lazy<IFieldInfoProvider>(() => new MsSqlServerFieldInfoProvider());
+
+		/// <inheritdoc />
+		public override IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString)
+		{
+			DataTable schemaTable = GetQuerySchema(queryText, connectionString);
+			
+			if (schemaTable == null)
+			{
+				yield break;
+			}
+
+			for (int i = 0; i <= schemaTable.Rows.Count - 1; i++)
+			{
+				DataRow fieldMetadata = schemaTable.Rows[i];
+				IFieldDetails fieldDetails = _fieldInfoProvider.Value.GetFieldDetails(fieldMetadata);
+
+				yield return fieldDetails;
+			}
+		}
 
 		/// <inheritdoc />
 		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration)
@@ -52,7 +72,7 @@ namespace SqlFirst.Providers.MsSqlServer
 						{
 							string dbName = dataReader.GetString(1);
 							string dbType = dataReader.GetString(3);
-							
+
 							var info = new QueryParamInfo
 							{
 								DbName = dbName.TrimStart('@'),
@@ -62,6 +82,30 @@ namespace SqlFirst.Providers.MsSqlServer
 
 							yield return info;
 						}
+					}
+				}
+			}
+		}
+
+		/// <summary>
+		/// Возвращает схему запроса
+		/// </summary>
+		/// <param name="queryText">Текст запроса</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
+		/// <returns>Таблица со схемой запроса</returns>
+		private DataTable GetQuerySchema(string queryText, string connectionString)
+		{
+			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
+			{
+				connection.Open();
+				using (IDbCommand command = connection.CreateCommand())
+				{
+					command.CommandText = queryText;
+					_databaseProvider.Value.PrepareParametersForSchemaFetching(command);
+					using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
+					{
+						DataTable dtSchema = dataReader.GetSchemaTable();
+						return dtSchema;
 					}
 				}
 			}

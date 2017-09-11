@@ -1,4 +1,4 @@
-﻿grammar SqlVariableDeclarations;
+grammar SqlVariableDeclarations;
 
 root	:	element* EOF
 	;
@@ -27,19 +27,21 @@ assignment
 	:	EQUATION spaces value
 	;
 	
-value	:	string
-	|	int
-	|	float
+value	:	stringValue
+	|	intValue
+	|	floatValue
 	;	
 	
-string
+stringValue
 	:	STRING
 	;
 	
-int	:	INT
+intValue
+        :	INT
 	;	
 	
-float	:	FLOAT
+floatValue
+        :	FLOAT
 	;		
 
 variable:	VARIABLESIGN identifier
@@ -52,14 +54,26 @@ typeName
 	:	identifier (spaces identifier)*
 	;
 	
-size	:	OPEN_PRTH spaces int spaces CLOSE_PRTH
+size	:	OPEN_PRTH spaces length spaces CLOSE_PRTH
 	;	
+
+length
+        :   intValue
+        |   maxValue
+        ;
+
+maxValue
+        :   MAX
+        ;
 		
 identifier	
 	:	IDENTIFIER
 	;	
 	
 DECLARE	:	('DECLARE'|'declare'|'Declare')
+	;
+	
+MAX	:	('MAX'|'max'|'Max')
 	;
 
 INT	:	DIGIT (DIGIT)*

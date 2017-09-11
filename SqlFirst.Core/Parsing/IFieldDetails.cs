@@ -1,108 +1,105 @@
 ﻿using System;
 
-namespace SqlFirst.Core
+namespace SqlFirst.Core.Parsing
 {
-	/// <summary>
-	/// Информация о поле
-	/// </summary>
-	public class FieldDetails
+	public interface IFieldDetails
 	{
 		/// <summary>
 		/// Имя столбца в таблице
 		/// </summary>
-		public string ColumnName { get; set; }
+		string ColumnName { get; }
 
 		/// <summary>
-		/// Индекс столбда в БД
+		/// Индекс столбца в БД
 		/// </summary>
-		public int ColumnOrdinal { get; set; }
+		int ColumnOrdinal { get; }
 
 		/// <summary>
 		/// Размер столбца
 		/// </summary>
-		public int ColumnSize { get; set; }
+		int ColumnSize { get; }
 
 		/// <summary>
 		/// Числовая точность поля
 		/// </summary>
-		public int NumericPrecision { get; set; }
+		int NumericPrecision { get; }
 
 		/// <summary>
 		/// Точность дробной части
 		/// </summary>
-		public int NumericScale { get; set; }
+		int NumericScale { get; }
 
 		/// <summary>
 		/// Признак уникальности поля
 		/// </summary>
-		public bool IsUnique { get; set; }
+		bool IsUnique { get; }
 
 		/// <summary>
 		/// Имя столбца в схеме таблицы
 		/// </summary>
-		public string BaseColumnName { get; set; }
+		string BaseColumnName { get; }
 
 		/// <summary>
 		/// Имя таблицы в схеме таблицы
 		/// </summary>
-		public string BaseTableName { get; set; }
+		string BaseTableName { get; }
 
 		/// <summary>
 		/// Разрешено ли значение Null
 		/// </summary>
-		public bool AllowDbNull { get; set; }
+		bool AllowDbNull { get; }
 
 		/// <summary>
 		/// Тип поставщика данных столбца
 		/// </summary>
-		public int ProviderType { get; set; }
+		int ProviderType { get; }
 
 		/// <summary>
 		/// Признак идентификатора
 		/// </summary>
-		public bool IsIdentity { get; set; }
+		bool IsIdentity { get; }
 
 		/// <summary>
 		/// Признак наличия автоинкремента
 		/// </summary>
-		public bool IsAutoIncrement { get; set; }
+		bool IsAutoIncrement { get; }
 
 		/// <summary>
 		/// Признак содержания сведений о версии строки
 		/// </summary>
-		public bool IsRowVersion { get; set; }
+		bool IsRowVersion { get; }
 
 		/// <summary>
 		/// Признак содержания большого объема данных в поле
 		/// </summary>
-		public bool IsLong { get; set; }
+		bool IsLong { get; }
 
 		/// <summary>
 		/// Признак доступности только на чтение
 		/// </summary>
-		public bool IsReadOnly { get; set; }
+		bool IsReadOnly { get; }
 
 		/// <summary>
 		/// Тип данных столбца, специфичный для конкретного поставщика данных
 		/// </summary>
-		public string ProviderSpecificDataType { get; set; }
+		string ProviderSpecificDataType { get; }
 
 		/// <summary>
 		/// Имя типа данных БД
 		/// </summary>
-		public string DbType { get; set; }
+		string DbType { get; }
 
 		/// <summary>
 		/// Имя типа данных CLR
 		/// </summary>
-		public Type ClrType { get; set; }
+		Type ClrType { get; }
 
-		public string UdtAssemblyQualifiedName { get; set; }
+		string UdtAssemblyQualifiedName { get; }
 
-		public int NewVersionedProviderType { get; set; }
+		int NewVersionedProviderType { get; }
 
-		public bool IsColumnSet { get; set; }
+		bool IsColumnSet { get; }
 
-		public int NonVersionedProviderType { get; set; }
+		int NonVersionedProviderType { get; }
 	}
 }
