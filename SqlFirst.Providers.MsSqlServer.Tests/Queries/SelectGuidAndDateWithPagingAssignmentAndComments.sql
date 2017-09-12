@@ -15,7 +15,7 @@ declare @take int;
 --end
 
 select CaseId, CreateDateUtc
-from CaseSubscribes with(nolock)
+from CaseSubscriptions with(nolock)
 where UserKey = @userKey
 order by CreateDateUtc desc
 offset @skip rows

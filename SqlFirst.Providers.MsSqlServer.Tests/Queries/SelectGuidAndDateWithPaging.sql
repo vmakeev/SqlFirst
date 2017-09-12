@@ -3,7 +3,7 @@ declare @skip int;
 declare @take int;
 
 select CaseId, CreateDateUtc
-from CaseSubscribes with(nolock)
+from CaseSubscriptions with(nolock)
 where UserKey = @userKey
 order by CreateDateUtc desc
 offset @skip rows
