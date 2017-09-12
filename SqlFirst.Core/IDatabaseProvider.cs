@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Data;
-using SqlFirst.Core.Parsing;
+﻿using System.Data;
 
 namespace SqlFirst.Core
 {
@@ -9,19 +7,6 @@ namespace SqlFirst.Core
 	/// </summary>
 	public interface IDatabaseProvider
 	{
-		/// <summary>
-		/// Добавляет необъявленные параметры, присутствующие в теле запроса, для успешного выполнения команды
-		/// </summary>
-		/// <param name="command">Комманда, в которую следует добавить параметры</param>
-		void PrepareParametersForSchemaFetching(IDbCommand command);
-
-		/// <summary>
-		/// Генерирует SQL с объявлением указанного набора параметров
-		/// </summary>
-		/// <param name="parameters">Набор параметров</param>
-		/// <returns></returns>
-		string BuildParameterDeclarations(List<IQueryParamInfo> parameters);
-
 		/// <summary>
 		/// Создает новое подключение к БД
 		/// </summary>

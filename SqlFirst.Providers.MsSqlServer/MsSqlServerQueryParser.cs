@@ -101,7 +101,6 @@ namespace SqlFirst.Providers.MsSqlServer
 				using (IDbCommand command = connection.CreateCommand())
 				{
 					command.CommandText = queryText;
-					_databaseProvider.Value.PrepareParametersForSchemaFetching(command);
 					using (IDataReader dataReader = command.ExecuteReader(CommandBehavior.SchemaOnly))
 					{
 						DataTable dtSchema = dataReader.GetSchemaTable();
