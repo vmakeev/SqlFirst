@@ -12,7 +12,7 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// <inheritdoc />
 		public IFieldDetails GetFieldDetails(DataRow fieldMetadata)
 		{
-			var result = new FieldDetails();
+			var result = new MsSqlServerFieldDetails();
 			foreach (DataColumn column in fieldMetadata.Table.Columns)
 			{
 				if (column == null)
@@ -29,7 +29,7 @@ namespace SqlFirst.Providers.MsSqlServer
 		}
 
 		[SuppressMessage("ReSharper", "RedundantEmptySwitchSection")]
-		private void FillFromColumn(FieldDetails details, string columnName, object value)
+		private void FillFromColumn(MsSqlServerFieldDetails details, string columnName, object value)
 		{
 			switch (columnName)
 			{

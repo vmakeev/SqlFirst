@@ -17,7 +17,9 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 
 		public static string SelectCount => GetQueryText();
 
-		public static string SelectTwoStringsWithJoin => GetQueryText();
+		public static string SelectTwoStringsWithLeftJoin => GetQueryText();
+
+		public static string SelectTwoStringsWithInnerJoin => GetQueryText();
 
 		public static string SelectDateWithOrdinal => GetQueryText();
 
@@ -29,8 +31,12 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 
 		public static string SelectGuidAndDateWithPagingAndPartOfParameters => GetQueryText();
 
-		public static string SelectNotUniqueFieldsWithJoin => GetQueryText();
+		public static string SelectNotUniqueFieldsWithLeftJoin => GetQueryText();
 
-		public static string SelectNotUniqueNamedFieldsWithJoin => GetQueryText();
+		public static string SelectNotUniqueFieldsWithInnerJoin => GetQueryText();
+
+		public static string SelectNotUniqueFieldsWithRightJoin => GetQueryText();
+
+		public static string SelectNotUniqueNamedFieldsWithInnerJoin => GetQueryText();
 	}
 }

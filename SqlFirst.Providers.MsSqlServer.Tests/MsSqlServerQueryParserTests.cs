@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using SqlFirst.Core.Parsing;
 using SqlFirst.Providers.MsSqlServer.Tests.Queries;
 using Xunit;
@@ -9,7 +8,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 {
 	public class MsSqlServerQueryParserTests
 	{
-		private const string CONNECTION_STRING = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
+		private const string ConnectionString = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
 
 		[Fact]
 		public void GetDeclaredParametersTest_1()
@@ -84,7 +83,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectGuidAndDateWithPaging;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, CONNECTION_STRING).ToArray();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
 
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.ShouldBeEmpty();
@@ -95,7 +94,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectGuidAndDateWithPagingNoParameters;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, CONNECTION_STRING).ToArray();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
 
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.Length.ShouldBe(3);
@@ -127,7 +126,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectGuidAndDateWithPagingAndPartOfParameters;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, CONNECTION_STRING).ToArray();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
 
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.Length.ShouldBe(1);
@@ -145,26 +144,22 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectGuidAndDateWithPaging;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails caseId = results[0];
 			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.BaseColumnName.ShouldBe("CaseId");
 			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.ClrType.ShouldBe(typeof(Guid));
 			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.IsUnique.ShouldBeFalse();
+			caseId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = results.Last();
+			IFieldDetails createDateUtc = results[1];
 			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.BaseColumnName.ShouldBe("CreateDateUtc");
 			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.ClrType.ShouldBe(typeof(DateTime));
 			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.IsUnique.ShouldBeFalse();
+			createDateUtc.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -172,39 +167,39 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectCount;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(1);
 
 			IFieldDetails count = results[0];
 			count.ColumnName.ShouldBe("column_0");
-			count.BaseColumnName.ShouldBeNull();
-			count.ClrType.ShouldBe(typeof(int));
+			count.AllowDbNull.ShouldBeTrue();
 			count.DbType.ShouldBe(MsSqlDbType.Int);
+			count.ColumnOrdinal.ShouldBe(0);
 		}
 
 		[Fact]
 		public void GetResultsTest_3()
 		{
-			string query = Query.SelectTwoStringsWithJoin;
+			string query = Query.SelectTwoStringsWithLeftJoin;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails userKey = results[0];
 			userKey.ColumnName.ShouldBe("UserKey");
-			userKey.BaseColumnName.ShouldBe("UserKey");
-			userKey.ClrType.ShouldBe(typeof(string));
+			userKey.AllowDbNull.ShouldBeFalse();
 			userKey.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			userKey.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails shardName = results[1];
 			shardName.ColumnName.ShouldBe("ShardName");
-			shardName.BaseColumnName.ShouldBe("ShardName");
-			shardName.ClrType.ShouldBe(typeof(string));
+			shardName.AllowDbNull.ShouldBeTrue(); // left join
 			shardName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			shardName.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -212,24 +207,22 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectDateWithOrdinal;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails createDateUtc = results[0];
 			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.BaseColumnName.ShouldBe("CreateDateUtc");
 			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.ClrType.ShouldBe(typeof(DateTime));
 			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.IsUnique.ShouldBeFalse();
+			createDateUtc.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails ordinal = results[1];
 			ordinal.ColumnName.ShouldBe("column_1");
-			ordinal.BaseColumnName.ShouldBeNull();
-			ordinal.ClrType.ShouldBe(typeof(int));
+			ordinal.AllowDbNull.ShouldBeFalse();
 			ordinal.DbType.ShouldBe(MsSqlDbType.Int);
+			ordinal.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -237,74 +230,138 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = Query.SelectDateWithNamedOrdinal;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails createDateUtc = results[0];
 			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.BaseColumnName.ShouldBe("CreateDateUtc");
 			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.ClrType.ShouldBe(typeof(DateTime));
 			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.IsUnique.ShouldBeFalse();
+			createDateUtc.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails ordinal = results[1];
 			ordinal.ColumnName.ShouldBe("answer");
-			ordinal.BaseColumnName.ShouldBe("answer");
-			ordinal.ClrType.ShouldBe(typeof(int));
+			ordinal.AllowDbNull.ShouldBeFalse();
 			ordinal.DbType.ShouldBe(MsSqlDbType.Int);
+			ordinal.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
 		public void GetResultsTest_6()
 		{
-			string query = Query.SelectNotUniqueFieldsWithJoin;
+			string query = Query.SelectNotUniqueFieldsWithLeftJoin;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails id1 = results[0];
 			id1.ColumnName.ShouldBe("Id");
-			id1.BaseColumnName.ShouldBe("Id");
-			id1.ClrType.ShouldBe(typeof(int));
+			id1.AllowDbNull.ShouldBeFalse();
 			id1.DbType.ShouldBe(MsSqlDbType.Int);
-			id1.IsIdentity.ShouldBeTrue();
+			id1.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails id2 = results[1];
 			id2.ColumnName.ShouldBe("Id");
-			id2.BaseColumnName.ShouldBe("Id");
-			id2.ClrType.ShouldBe(typeof(int));
+			id2.AllowDbNull.ShouldBeTrue();
 			id2.DbType.ShouldBe(MsSqlDbType.Int);
-			id2.IsIdentity.ShouldBeTrue();
+			id2.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
 		public void GetResultsTest_7()
 		{
-			string query = Query.SelectNotUniqueNamedFieldsWithJoin;
+			string query = Query.SelectNotUniqueNamedFieldsWithInnerJoin;
 			var queryParser = new MsSqlServerQueryParser();
-			IFieldDetails[] results = queryParser.GetResultDetails(query, CONNECTION_STRING).ToArray();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
 
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
 			IFieldDetails subscriptionId = results[0];
 			subscriptionId.ColumnName.ShouldBe("SubscriptionId");
-			subscriptionId.BaseColumnName.ShouldBe("SubscriptionId"); //todo: WAT?
-			subscriptionId.ClrType.ShouldBe(typeof(int));
+			subscriptionId.AllowDbNull.ShouldBeFalse();
 			subscriptionId.DbType.ShouldBe(MsSqlDbType.Int);
-			subscriptionId.IsIdentity.ShouldBeTrue();
+			subscriptionId.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails eventId = results[1];
 			eventId.ColumnName.ShouldBe("EventId");
-			eventId.BaseColumnName.ShouldBe("EventId");
-			eventId.ClrType.ShouldBe(typeof(int));
+			eventId.AllowDbNull.ShouldBeFalse();
 			eventId.DbType.ShouldBe(MsSqlDbType.Int);
-			eventId.IsIdentity.ShouldBeTrue();
+			eventId.ColumnOrdinal.ShouldBe(1);
+			eventId.ColumnName.ShouldBe("EventId");
+		}
+
+		[Fact]
+		public void GetResultsTest_8()
+		{
+			string query = Query.SelectTwoStringsWithInnerJoin;
+			var queryParser = new MsSqlServerQueryParser();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
+
+			results.ShouldNotBeEmpty();
+			results.Length.ShouldBe(2);
+
+			IFieldDetails userKey = results[0];
+			userKey.ColumnName.ShouldBe("UserKey");
+			userKey.AllowDbNull.ShouldBeFalse();
+			userKey.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			userKey.ColumnOrdinal.ShouldBe(0);
+
+			IFieldDetails shardName = results[1];
+			shardName.ColumnName.ShouldBe("ShardName");
+			shardName.AllowDbNull.ShouldBeFalse(); // inner join
+			shardName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			shardName.ColumnOrdinal.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetResultsTest_9()
+		{
+			string query = Query.SelectNotUniqueFieldsWithInnerJoin;
+			var queryParser = new MsSqlServerQueryParser();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
+
+			results.ShouldNotBeEmpty();
+			results.Length.ShouldBe(2);
+
+			IFieldDetails id1 = results[0];
+			id1.ColumnName.ShouldBe("Id");
+			id1.AllowDbNull.ShouldBeFalse();
+			id1.DbType.ShouldBe(MsSqlDbType.Int);
+			id1.ColumnOrdinal.ShouldBe(0);
+
+			IFieldDetails id2 = results[1];
+			id2.ColumnName.ShouldBe("Id");
+			id2.AllowDbNull.ShouldBeFalse();
+			id2.DbType.ShouldBe(MsSqlDbType.Int);
+			id2.ColumnOrdinal.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetResultsTest_10()
+		{
+			string query = Query.SelectNotUniqueFieldsWithRightJoin;
+			var queryParser = new MsSqlServerQueryParser();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
+
+			results.ShouldNotBeEmpty();
+			results.Length.ShouldBe(2);
+
+			IFieldDetails id1 = results[0];
+			id1.ColumnName.ShouldBe("Id");
+			id1.AllowDbNull.ShouldBeTrue();
+			id1.DbType.ShouldBe(MsSqlDbType.Int);
+			id1.ColumnOrdinal.ShouldBe(0);
+
+			IFieldDetails id2 = results[1];
+			id2.ColumnName.ShouldBe("Id");
+			id2.AllowDbNull.ShouldBeFalse();
+			id2.DbType.ShouldBe(MsSqlDbType.Int);
+			id2.ColumnOrdinal.ShouldBe(1);
 		}
 	}
 }

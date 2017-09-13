@@ -92,7 +92,7 @@
     <EmbeddedResource Include="Queries\SelectCount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectTwoStringsWithJoin.sql" />
+    <EmbeddedResource Include="Queries\SelectTwoStringsWithLeftJoin.sql" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Queries\SelectDateWithOrdinal.sql" />
@@ -110,10 +110,19 @@
     <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithJoin.sql" />
+    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithLeftJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueNamedFieldsWithJoin.sql" />
+    <EmbeddedResource Include="Queries\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectTwoStringsWithInnerJoin.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithInnerJoin.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithRightJoin.sql" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

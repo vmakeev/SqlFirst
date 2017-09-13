@@ -1,11 +1,12 @@
 ﻿using System;
+using SqlFirst.Core.Parsing;
 
-namespace SqlFirst.Core.Parsing
+namespace SqlFirst.Providers.MsSqlServer
 {
 	/// <summary>
 	/// Информация о поле
 	/// </summary>
-	public class FieldDetails : IFieldDetails
+	public class MsSqlServerFieldDetails : IFieldDetails
 	{
 		/// <summary>
 		/// Имя столбца в таблице
