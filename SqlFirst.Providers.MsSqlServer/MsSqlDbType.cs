@@ -77,8 +77,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			int parenthesisPosition = result?.LastIndexOf('(') ?? -1;
 			if (parenthesisPosition >= 0)
 			{
-				// ReSharper disable once PossibleNullReferenceException
-				result = result.Substring(0, parenthesisPosition);
+				result = result?.Substring(0, parenthesisPosition);
 			}
 
 			return result?.Trim();

@@ -25,9 +25,24 @@ namespace SqlFirst.Core.Parsing
 		/// <summary>
 		/// Возвращает подробную информацию о возвращаемых запросом значениях
 		/// </summary>
-		/// <param name="queryText">Собственно запрос</param>
+		/// <param name="queryText">Полный текст запроса</param>
 		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Подробная информация о возвращаемых запросом значениях</returns>
 		IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString);
+
+		/// <summary>
+		/// Возвращает базовую информацию о запросе
+		/// </summary>
+		/// <param name="queryText">Полный текст запроса</param>
+		/// <returns>Краткая информация о запросе</returns>
+		IQueryBaseInfo GetQueryBaseInfo(string queryText);
+
+		/// <summary>
+		/// Возвращает информацию о запросе
+		/// </summary>
+		/// <param name="queryText">Полный текст запроса</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
+		/// <returns>Краткая информация о запросе</returns>
+		IQueryInfo GetQueryInfo(string queryText, string connectionString);
 	}
 }

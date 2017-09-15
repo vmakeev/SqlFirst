@@ -3,7 +3,7 @@
 namespace SqlFirst.Core.Parsing
 {
 	/// <inheritdoc />
-	public abstract class QueryParser : IQueryParser
+	public abstract class QueryParserBase : IQueryParser
 	{
 		/// <inheritdoc />
 		public virtual IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText)
@@ -32,7 +32,13 @@ namespace SqlFirst.Core.Parsing
 
 		/// <inheritdoc />
 		public abstract IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString);
-		
+
+		/// <inheritdoc />
+		public abstract IQueryBaseInfo GetQueryBaseInfo(string queryText);
+
+		/// <inheritdoc />
+		public abstract IQueryInfo GetQueryInfo(string queryText, string connectionString);
+
 		/// <summary>
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
 		/// </summary>

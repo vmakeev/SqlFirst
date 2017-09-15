@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.IO;
+using System.Linq;
 using Antlr4.Runtime;
 using SqlFirst.Core;
 using SqlFirst.Core.Parsing;
@@ -11,16 +12,17 @@ using SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
-	public class MsSqlServerQueryParser : QueryParser
+	public class MsSqlServerQueryParser : QueryParserBase
 	{
 		private readonly Lazy<IDatabaseProvider> _databaseProvider = new Lazy<IDatabaseProvider>(() => new MsSqlServerDatabaseProvider());
 		private readonly Lazy<IFieldInfoProvider> _fieldInfoProvider = new Lazy<IFieldInfoProvider>(() => new MsSqlServerFieldInfoProvider());
+		private readonly Lazy<MsSqlServerCodeEmitter> _sqlCodeEmitter = new Lazy<MsSqlServerCodeEmitter>(() => new MsSqlServerCodeEmitter());
 
 		/// <inheritdoc />
 		public override IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString)
 		{
 			DataTable schemaTable = GetQuerySchema(queryText, connectionString);
-			
+
 			if (schemaTable == null)
 			{
 				yield break;
@@ -33,6 +35,57 @@ namespace SqlFirst.Providers.MsSqlServer
 
 				yield return fieldDetails;
 			}
+		}
+
+		/// <inheritdoc />
+		public override IQueryBaseInfo GetQueryBaseInfo(string queryText)
+		{
+			QueryType queryType;
+			string queryBody = queryText.GetQueryBody().Trim().ToLowerInvariant();
+
+			if (queryBody.StartsWith("select"))
+			{
+				queryType = QueryType.Read;
+			}
+			else if (queryBody.StartsWith("update"))
+			{
+				queryType = QueryType.Update;
+			}
+			else if (queryBody.StartsWith("insert"))
+			{
+				queryType = QueryType.Create;
+			}
+			else if (queryBody.StartsWith("delete"))
+			{
+				queryType = QueryType.Delete;
+			}
+			else
+			{
+				queryType = QueryType.Unknown;
+			}
+
+			return new MsSqlServerQueryBaseInfo { QueryType = queryType };
+		}
+
+		/// <inheritdoc />
+		public override IQueryInfo GetQueryInfo(string queryText, string connectionString)
+		{
+			IQueryBaseInfo baseInfo = GetQueryBaseInfo(queryText);
+
+			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText);
+			IEnumerable<IQueryParamInfo> undeclaredParameters = GetUndeclaredParameters(queryText, connectionString);
+			IEnumerable<IQueryParamInfo> parameters = declaredParameters.Concat(undeclaredParameters);
+
+			IEnumerable<IFieldDetails> results = GetResultDetails(queryText, connectionString);
+
+			IQueryInfo queryInfo = new MsSqlServerQueryInfo
+			{
+				QueryType = baseInfo.QueryType,
+				Parameters = parameters,
+				Results = results
+			};
+
+			return queryInfo;
 		}
 
 		/// <inheritdoc />
@@ -95,6 +148,13 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// <returns>Таблица со схемой запроса</returns>
 		private DataTable GetQuerySchema(string queryText, string connectionString)
 		{
+			IQueryParamInfo[] undeclaredParameters = GetUndeclaredParameters(queryText, connectionString).ToArray();
+			if (undeclaredParameters.Any())
+			{
+				string declarations = _sqlCodeEmitter.Value.EmitDeclarations(undeclaredParameters);
+				queryText = declarations + Environment.NewLine + queryText;
+			}
+
 			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
 			{
 				connection.Open();

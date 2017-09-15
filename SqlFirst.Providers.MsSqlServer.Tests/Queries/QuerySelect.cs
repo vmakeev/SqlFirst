@@ -4,11 +4,11 @@ using System.Runtime.CompilerServices;
 
 namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 {
-	internal static class Query
+	internal static class QuerySelect
 	{
 		private static string GetQueryText([CallerMemberName] string name = null)
 		{
-			Stream stream = typeof(Query).Assembly.GetManifestResourceStream($"SqlFirst.Providers.MsSqlServer.Tests.Queries.{name}.sql");
+			Stream stream = typeof(QuerySelect).Assembly.GetManifestResourceStream($"SqlFirst.Providers.MsSqlServer.Tests.Queries.Select.{name}.sql");
 			string queryText = new StreamReader(stream ?? throw new InvalidOperationException()).ReadToEnd();
 			return queryText;
 		}

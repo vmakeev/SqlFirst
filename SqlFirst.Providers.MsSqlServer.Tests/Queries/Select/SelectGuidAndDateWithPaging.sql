@@ -1,6 +1,11 @@
-﻿declare @userKey varchar(255);
+﻿
+-- begin queryParameters
+
+declare @userKey varchar(255);
 declare @skip int;
 declare @take int;
+
+-- end
 
 select CaseId, CreateDateUtc
 from CaseSubscriptions with(nolock)

@@ -67,7 +67,10 @@
   <ItemGroup>
     <Compile Include="MsSqlDbTypeTests.cs" />
     <Compile Include="MsSqlServerQueryParserTests.cs" />
-    <Compile Include="Queries\Query.cs" />
+    <Compile Include="Queries\QueryDelete.cs" />
+    <Compile Include="Queries\QueryInsert.cs" />
+    <Compile Include="Queries\QueryUpdate.cs" />
+    <Compile Include="Queries\QuerySelect.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -86,43 +89,53 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPaging.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPaging.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectCount.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectCount.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectTwoStringsWithLeftJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithLeftJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectDateWithOrdinal.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectDateWithOrdinal.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectDateWithNamedOrdinal.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectDateWithNamedOrdinal.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingAndPartOfParameters.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingAndPartOfParameters.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingNoParameters.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingNoParameters.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithLeftJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithLeftJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectTwoStringsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithInnerJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithInnerJoin.sql" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Queries\SelectNotUniqueFieldsWithRightJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithRightJoin.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\Update\UpdateDateByGuid.sql" />
+  </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\Delete\DeleteByGuid.sql" />
   </ItemGroup>
   <Import Project="$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets" Condition="Exists('$(VSToolsPath)\TeamTest\Microsoft.TestTools.targets')" />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
