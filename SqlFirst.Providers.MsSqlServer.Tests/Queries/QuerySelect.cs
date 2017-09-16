@@ -13,6 +13,14 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 			return queryText;
 		}
 
+		public static string SelectGuidAndDateWithUnknownUnnamedAndCustomSections => GetQueryText();
+
+		public static string SelectGuidAndDateWithUnknownAndCustomSections => GetQueryText();
+
+		public static string SelectGuidAndDateWithUnknownSections => GetQueryText();
+
+		public static string SelectGuidAndDateWithMiltipleSections => GetQueryText();
+
 		public static string SelectGuidAndDateWithPaging => GetQueryText();
 
 		public static string SelectCount => GetQueryText();

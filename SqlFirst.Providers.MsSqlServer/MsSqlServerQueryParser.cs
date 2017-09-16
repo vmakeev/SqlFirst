@@ -40,31 +40,39 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// <inheritdoc />
 		public override IQueryBaseInfo GetQueryBaseInfo(string queryText)
 		{
-			QueryType queryType;
-			string queryBody = queryText.GetQueryBody().Trim().ToLowerInvariant();
+			List<IQuerySection> sections = GetQuerySections(queryText).ToList();
 
-			if (queryBody.StartsWith("select"))
+			IQuerySection bodySection = sections.SingleOrDefault(querySection => querySection.Type == QuerySectionType.Body);
+
+			var queryType = QueryType.Unknown;
+
+			if (bodySection != null)
 			{
-				queryType = QueryType.Read;
-			}
-			else if (queryBody.StartsWith("update"))
-			{
-				queryType = QueryType.Update;
-			}
-			else if (queryBody.StartsWith("insert"))
-			{
-				queryType = QueryType.Create;
-			}
-			else if (queryBody.StartsWith("delete"))
-			{
-				queryType = QueryType.Delete;
-			}
-			else
-			{
-				queryType = QueryType.Unknown;
+				string queryBody = bodySection.Content.Trim().ToLowerInvariant();
+
+				if (queryBody.StartsWith("select"))
+				{
+					queryType = QueryType.Read;
+				}
+				else if (queryBody.StartsWith("update"))
+				{
+					queryType = QueryType.Update;
+				}
+				else if (queryBody.StartsWith("insert"))
+				{
+					queryType = QueryType.Create;
+				}
+				else if (queryBody.StartsWith("delete"))
+				{
+					queryType = QueryType.Delete;
+				}
 			}
 
-			return new MsSqlServerQueryBaseInfo { QueryType = queryType };
+			return new MsSqlServerQueryBaseInfo
+			{
+				Type = queryType,
+				Sections = sections
+			};
 		}
 
 		/// <inheritdoc />
@@ -80,9 +88,10 @@ namespace SqlFirst.Providers.MsSqlServer
 
 			IQueryInfo queryInfo = new MsSqlServerQueryInfo
 			{
-				QueryType = baseInfo.QueryType,
+				Type = baseInfo.Type,
 				Parameters = parameters,
-				Results = results
+				Results = results,
+				Sections = baseInfo.Sections
 			};
 
 			return queryInfo;

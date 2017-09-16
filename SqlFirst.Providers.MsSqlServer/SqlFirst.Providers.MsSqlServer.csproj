@@ -12,6 +12,7 @@
   <ItemGroup>
     <PackageReference Include="Antlr4" Version="4.6.4" />
     <PackageReference Include="System.Data.SqlClient" Version="4.4.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>

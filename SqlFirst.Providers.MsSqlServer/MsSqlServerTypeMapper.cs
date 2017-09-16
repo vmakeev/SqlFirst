@@ -88,7 +88,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					return typeof(Guid);
 
 				default:
-					throw new Exception("type not matched : " + dbType);
+					throw new ArgumentOutOfRangeException(nameof(dbType), dbType);
 			}
 		}
 	}

@@ -137,6 +137,12 @@ namespace SqlFirst.Core.Tests
 			CSharpCodeHelper.GetValidVariableName(input, policy).ShouldBe(output);
 		}
 
+		[Fact]
+		public void GetValidVariableNameWithInvalidFormatTests()
+		{
+			Assert.Throws<ArgumentOutOfRangeException>(() => CSharpCodeHelper.GetValidVariableName("variable", (VariableNamingPolicy)42));
+		}
+
 		[Theory]
 		[InlineData(typeof(int), "System.Int32")]
 		[InlineData(typeof(DateTime?), "System.Nullable<System.DateTime>")]

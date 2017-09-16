@@ -44,5 +44,28 @@ namespace SqlFirst.Core.Parsing
 		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Краткая информация о запросе</returns>
 		IQueryInfo GetQueryInfo(string queryText, string connectionString);
+
+		/// <summary>
+		/// Возвращает содержимое всех разделов запроса
+		/// </summary>
+		/// <param name="query">Полный текст файла SQL</param>
+		/// <returns>Список найденных разделов</returns>
+		IEnumerable<IQuerySection> GetQuerySections(string query);
+
+		/// <summary>
+		/// Возвращает содержимое разделов запроса с указанным именем
+		/// </summary>
+		/// <param name="query">Полный текст файла SQL</param>
+		/// <param name="sectionName">Имя раздела</param>
+		/// <returns>Список найденных разделов</returns>
+		IEnumerable<IQuerySection> GetQuerySections(string query, string sectionName);
+
+		/// <summary>
+		/// Возвращает содержимое разделов запроса с указанным типом
+		/// </summary>
+		/// <param name="query">Полный текст файла SQL</param>
+		/// <param name="sectionType">Тип раздела</param>
+		/// <returns>Список найденных разделов</returns>
+		IEnumerable<IQuerySection> GetQuerySections(string query, QuerySectionType sectionType);
 	}
 }

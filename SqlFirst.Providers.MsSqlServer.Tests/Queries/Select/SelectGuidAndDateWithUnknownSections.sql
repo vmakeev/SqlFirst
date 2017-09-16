@@ -1,7 +1,20 @@
-﻿-- begin variables
+﻿
+-- begin sqlFirstOptions
+
+-- enable Async
+
+-- end
+
+/*
+ Некоторое количество
+ произвольного 
+		текста
+*/
+
+-- begin variables
 
 declare @userKey varchar(MAX) ='test'; 
-declare @skip int = 42;
+declare @take int = 42;
 
 --end
 

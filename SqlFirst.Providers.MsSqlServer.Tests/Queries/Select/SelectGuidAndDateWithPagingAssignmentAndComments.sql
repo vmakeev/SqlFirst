@@ -1,5 +1,5 @@
 ﻿
---    begin    queryParameters
+--    begin    variables
 
 declare @userKey varchar(255) ='test' ; -- Это комментарий
 declare @skip int = 42;/*

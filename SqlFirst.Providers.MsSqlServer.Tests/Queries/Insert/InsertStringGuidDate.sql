@@ -1,5 +1,5 @@
 ﻿
--- begin queryParameters
+-- begin variables
 
 declare @userKey varchar(255);
 declare @caseId uniqueidentifier;

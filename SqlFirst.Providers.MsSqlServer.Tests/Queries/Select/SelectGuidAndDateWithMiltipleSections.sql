@@ -1,11 +1,21 @@
 ﻿
--- begin variables
+-- begin sqlFirstOptions
 
-declare @userKey varchar(255);
-declare @skip int;
-declare @take int;
+-- enable Async
 
 -- end
+
+-- begin variables
+
+declare @userKey varchar(MAX) ='test'; 
+
+--end
+
+-- begin variables
+
+declare @take int = 42;
+
+--end
 
 select CaseId, CreateDateUtc
 from CaseSubscriptions with(nolock)

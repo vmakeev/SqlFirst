@@ -3,12 +3,11 @@ using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
-	/// <inheritdoc />
-	internal class MsSqlServerQueryInfo : IQueryInfo
+	/// <summary>
+	/// Полная информация о запросе
+	/// </summary>
+	internal class MsSqlServerQueryInfo : MsSqlServerQueryBaseInfo, IQueryInfo
 	{
-		/// <inheritdoc />
-		public QueryType QueryType { get; set; }
-
 		/// <inheritdoc />
 		public IEnumerable<IQueryParamInfo> Parameters { get; set; }
 

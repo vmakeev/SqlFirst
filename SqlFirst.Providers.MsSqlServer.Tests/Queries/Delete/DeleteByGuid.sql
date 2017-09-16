@@ -1,5 +1,5 @@
 ﻿
--- begin queryParameters
+-- begin variables
 
 declare @caseId uniqueidentifier;
 
