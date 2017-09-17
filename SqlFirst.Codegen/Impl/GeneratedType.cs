@@ -3,31 +3,22 @@ using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Impl
 {
+	/// <inheritdoc />
 	public class GeneratedType : IGeneratedType
 	{
-		/// <summary>
-		/// Имя типа
-		/// </summary>
+		/// <inheritdoc />
 		public string TypeName { get; set; }
 
-		/// <summary>
-		/// Признак интерфейса
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsInterface { get; set; }
 
-		/// <summary>
-		/// Признак обобщенного типа
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsGeneric { get; set; }
 
-		/// <summary>
-		/// Список обобщенных параметров
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<IGenericArgument> GenericArguments { get; set; } = new IGenericArgument[0];
 
-		/// <summary>
-		/// Условия, накладываемые на Generic параметры
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<string> GenericConditions { get; set; } = new string[0];
 	}
 }

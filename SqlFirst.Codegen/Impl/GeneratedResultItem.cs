@@ -3,36 +3,25 @@ using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Impl
 {
+	/// <inheritdoc />
 	public class GeneratedResultItem : IGeneratedResultItem
 	{
-		/// <summary>
-		/// Перечень требуемых using'ов
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<string> Usings { get; set; } = new string[0];
 
-		/// <summary>
-		/// Пространство имен
-		/// </summary>
+		/// <inheritdoc />
 		public string Namespace { get; set; }
 
-		/// <summary>
-		/// Имя сгенерированного элемента
-		/// </summary>
+		/// <inheritdoc />
 		public string ItemName { get; set; }
 
-		/// <summary>
-		/// Модификаторы сгенерированного элемента
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<string> ItemModifiers { get; set; } = new string[0];
 
-		/// <summary>
-		/// Перечень базовых для 
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<IGeneratedType> BaseTypes { get; set; } = new IGeneratedType[0];
 
-		/// <summary>
-		/// Полный текст сгенерированного элемента
-		/// </summary>
+		/// <inheritdoc />
 		public string Item { get; set; }
 	}
 }

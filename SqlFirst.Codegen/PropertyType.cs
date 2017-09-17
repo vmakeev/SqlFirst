@@ -5,9 +5,14 @@
 	/// </summary>
 	public enum PropertyType
 	{
+		/// <summary>
+		/// Автосвойство
+		/// </summary>
 		Auto,
-		AutoReadOnly,
+
+		/// <summary>
+		/// Свойство с отдельным полем
+		/// </summary>
 		BackingField,
-		BackingFieldReadOnly,
 	}
 }

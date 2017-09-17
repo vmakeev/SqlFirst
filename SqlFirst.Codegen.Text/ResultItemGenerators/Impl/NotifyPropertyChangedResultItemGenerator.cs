@@ -8,14 +8,21 @@ using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 {
-	internal class NotifyPropertyChangedResultItemGenerator : PocoResultItemGenerator
+	/// <summary>
+	/// Генератор возвращаемого результата в виде класса, поддерживающего уведомление об изменении свойств
+	/// </summary>
+	internal class NotifyPropertyChangedResultItemGenerator : ResultItemGeneratorBase
 	{
-		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="NotifyPropertyChangedResultItemGenerator"/>
+		/// </summary>
+		/// <param name="propertiesGenerator">Генератор свойств</param>
 		public NotifyPropertyChangedResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)
 			: base(propertiesGenerator)
 		{
 		}
 
+		/// <inheritdoc />
 		protected override IEnumerable<string> GetCommonUsings()
 		{
 			foreach (string @using in base.GetCommonUsings())
@@ -26,9 +33,10 @@ namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 			yield return "System.ComponentModel";
 		}
 
-		protected override GeneratedResultItem GenerateResultItemInternal(ICodeGenerationContext context, IResultGenerationOptions options)
+		/// <inheritdoc />
+		protected override GeneratedResultItem GenerateResultItemInternal(ICodeGenerationContext context)
 		{
-			GeneratedResultItem result = base.GenerateResultItemInternal(context, options);
+			GeneratedResultItem result = base.GenerateResultItemInternal(context);
 
 			var baseTypes = new List<IGeneratedType>
 			{
@@ -46,6 +54,7 @@ namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 			return result;
 		}
 
+		/// <inheritdoc />
 		protected override string GetTemplate() => Snippet.NotifyPropertyChangedResultItem;
 	}
 }

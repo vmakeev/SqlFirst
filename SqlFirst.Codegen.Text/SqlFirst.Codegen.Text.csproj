@@ -6,26 +6,40 @@
 
   <ItemGroup>
     <None Remove="Snippets\AutoProperty.txt" />
+    <None Remove="Snippets\AutoPropertyVirtual.txt" />
     <None Remove="Snippets\BackingField.txt" />
     <None Remove="Snippets\BackingFieldProperty.txt" />
+    <None Remove="Snippets\BackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\NotifyPropertyChangedResultItem.txt" />
     <None Remove="Snippets\PocoResultItem.txt" />
+    <None Remove="Snippets\ReadOnlyAutoProperty.txt" />
+    <None Remove="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
     <None Remove="Snippets\ReadOnlyBackingFieldProperty.txt" />
-    <None Remove="Snippets\ReadOnlyProperty.txt" />
+    <None Remove="Snippets\ReadOnlyBackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\StructResultItem.txt" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Snippets\AutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\AutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\BackingField.txt" />
     <EmbeddedResource Include="Snippets\BackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\BackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\NotifyPropertyChangedResultItem.txt" />
     <EmbeddedResource Include="Snippets\PocoResultItem.txt" />
     <EmbeddedResource Include="Snippets\ReadOnlyAutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\ReadOnlyBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\ReadOnlyBackingFieldPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\StructResultItem.txt" />
   </ItemGroup>
 
   <ItemGroup>

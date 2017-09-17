@@ -3,21 +3,16 @@ using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Impl
 {
+	/// <inheritdoc />
 	public class GenericArgument : IGenericArgument
 	{
-		/// <summary>
-		/// Имя шаблона обобщенного параметра
-		/// </summary>
+		/// <inheritdoc />
 		public string GenericTemplateName { get; set; }
 
-		/// <summary>
-		/// Признак аргумента обобщенного типа
-		/// </summary>
+		/// <inheritdoc />
 		public bool IsGeneric { get; set; }
 
-		/// <summary>
-		/// Список обобщенных параметров
-		/// </summary>
+		/// <inheritdoc />
 		public IEnumerable<IGenericArgument> GenericArguments { get; set; } = new IGenericArgument[0];
 	}
 }

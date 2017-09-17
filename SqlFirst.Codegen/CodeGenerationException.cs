@@ -3,6 +3,9 @@ using System.Runtime.Serialization;
 
 namespace SqlFirst.Codegen
 {
+	/// <summary>
+	/// Возникает при ошибке генерации кода
+	/// </summary>
 	public class CodeGenerationException : ApplicationException
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.ApplicationException"></see> class.</summary>

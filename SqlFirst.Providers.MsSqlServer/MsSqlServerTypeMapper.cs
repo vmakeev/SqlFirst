@@ -6,8 +6,6 @@ namespace SqlFirst.Providers.MsSqlServer
 {
 	public class MsSqlServerTypeMapper : IDatabaseTypeMapper
 	{
-		internal static IDatabaseTypeMapper Instance { get; } = new MsSqlServerTypeMapper();
-
 		/// <inheritdoc />
 		public Type Map(string dbType, bool nullable)
 		{

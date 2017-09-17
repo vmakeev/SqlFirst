@@ -14,5 +14,10 @@
 		/// Тип свойств
 		/// </summary>
 		PropertyType PropertyType { get; }
+
+		/// <summary>
+		/// Модификаторы свойств
+		/// </summary>
+		PropertyModifiers PropertyModifiers { get; }
 	}
 }

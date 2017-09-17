@@ -7,22 +7,25 @@ using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 {
+	/// <summary>
+	/// Генератор автосвойств
+	/// </summary>
 	internal class AutoPropertiesGenerator : PropertiesGeneratorBase
 	{
-		private readonly IDatabaseTypeMapper _typeMapper;
-		private readonly bool _isReadOnly;
-
-		public AutoPropertiesGenerator(IDatabaseTypeMapper typeMapper, bool isReadOnly)
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="AutoPropertiesGenerator" />
+		/// </summary>
+		/// <param name="typeMapper">Преобразователь типов данных БД в типы CLR</param>
+		/// <param name="options">Параметры генерации свойств</param>
+		public AutoPropertiesGenerator(IDatabaseTypeMapper typeMapper, PropertyGenerationOptions options)
+			: base(typeMapper, options)
 		{
-			_typeMapper = typeMapper;
-			_isReadOnly = isReadOnly;
 		}
 
-		public override IEnumerable<GeneratedPropertyInfo> GenerateProperties(IEnumerable<IFieldDetails> results, PropertyType propertyType)
+		/// <inheritdoc />
+		public override IEnumerable<GeneratedPropertyInfo> GenerateProperties(IEnumerable<IFieldDetails> results)
 		{
-			string propertyTemplate = _isReadOnly
-				? Snippet.ReadOnlyAutoProperty
-				: Snippet.AutoProperty;
+			string propertyTemplate = GetPropertyTemplate(_options);
 
 			foreach (IFieldDetails fieldDetails in results)
 			{
@@ -43,6 +46,21 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 				var propertyPart = new GeneratedPropertyPart(property, false);
 				yield return new GeneratedPropertyInfo(new[] { usingString }, new[] { propertyPart });
 			}
+		}
+
+		/// <inheritdoc />
+		protected override string GetPropertyTemplate(PropertyGenerationOptions options)
+		{
+			if (_options.IsReadOnly)
+			{
+				return _options.IsVirtual
+					? Snippet.ReadOnlyAutoPropertyVirtual
+					: Snippet.ReadOnlyAutoProperty;
+			}
+
+			return _options.IsVirtual
+				? Snippet.AutoPropertyVirtual
+				: Snippet.AutoProperty;
 		}
 	}
 }

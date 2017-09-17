@@ -7,20 +7,25 @@ using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 {
+	/// <summary>
+	/// Генератор свойств c отдельным полем для чтения/записи данных
+	/// </summary>
 	internal class BackingFieldPropertiesGenerator : PropertiesGeneratorBase
 	{
-		private readonly IDatabaseTypeMapper _typeMapper;
-		private readonly bool _isReadOnly;
-
-		public BackingFieldPropertiesGenerator(IDatabaseTypeMapper typeMapper, bool isReadOnly)
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="BackingFieldPropertiesGenerator" />
+		/// </summary>
+		/// <param name="typeMapper">Преобразователь типов данных БД в типы CLR</param>
+		/// <param name="options">Параметры генерации свойств</param>
+		public BackingFieldPropertiesGenerator(IDatabaseTypeMapper typeMapper, PropertyGenerationOptions options)
+			: base(typeMapper, options)
 		{
-			_typeMapper = typeMapper;
-			_isReadOnly = isReadOnly;
 		}
 
-		public override IEnumerable<GeneratedPropertyInfo> GenerateProperties(IEnumerable<IFieldDetails> results, PropertyType propertyType)
+		/// <inheritdoc />
+		public override IEnumerable<GeneratedPropertyInfo> GenerateProperties(IEnumerable<IFieldDetails> results)
 		{
-			string propertyTemplate = GetPropertyTemplate(_isReadOnly);
+			string propertyTemplate = GetPropertyTemplate(_options);
 
 			string backingFieldTemplate = Snippet.BackingField;
 
@@ -52,10 +57,18 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 			}
 		}
 
-		protected virtual string GetPropertyTemplate(bool isReadOnly)
+		/// <inheritdoc />
+		protected override string GetPropertyTemplate(PropertyGenerationOptions options)
 		{
-			return isReadOnly
-				? Snippet.ReadOnlyBackingFieldProperty
+			if (options.IsReadOnly)
+			{
+				return _options.IsVirtual
+					? Snippet.ReadOnlyBackingFieldPropertyVirtual
+					: Snippet.ReadOnlyBackingFieldProperty;
+			}
+
+			return options.IsVirtual
+				? Snippet.BackingFieldPropertyVirtual
 				: Snippet.BackingFieldProperty;
 		}
 	}

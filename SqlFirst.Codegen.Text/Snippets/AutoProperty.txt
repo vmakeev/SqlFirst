@@ -1,1 +1,1 @@
-﻿public virtual $Type$ $Name$ { get; set; }
+﻿public $Type$ $Name$ { get; set; }

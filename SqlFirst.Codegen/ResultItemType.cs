@@ -1,7 +1,7 @@
 ﻿namespace SqlFirst.Codegen
 {
 	/// <summary>
-	/// Тип результата
+	/// Тип результата запроса
 	/// </summary>
 	public enum ResultItemType
 	{

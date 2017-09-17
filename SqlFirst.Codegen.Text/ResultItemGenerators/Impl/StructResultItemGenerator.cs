@@ -1,19 +1,23 @@
-﻿using System;
-using SqlFirst.Codegen.Text.PropertyGenerator;
+﻿using SqlFirst.Codegen.Text.PropertyGenerator;
+using SqlFirst.Codegen.Text.Snippets;
 
 namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 {
+	/// <summary>
+	/// Генератор возвращаемого результата в виде значимого типа
+	/// </summary>
 	internal class StructResultItemGenerator : ResultItemGeneratorBase
 	{
-		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="StructResultItemGenerator"/>
+		/// </summary>
+		/// <param name="propertiesGenerator">Генератор свойств</param>
 		public StructResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)
 			: base(propertiesGenerator)
 		{
 		}
 
-		public override IGeneratedResultItem GenerateResultItem(ICodeGenerationContext context, IResultGenerationOptions options)
-		{
-			throw new NotImplementedException();
-		}
+		/// <inheritdoc />
+		protected override string GetTemplate() => Snippet.StructResultItem;
 	}
 }
