@@ -91,11 +91,11 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.Item.ShouldBe(
 @"public partial class SelectSomeDataItem
 {
-	public string ObjectName { get; set; }
+	public virtual string ObjectName { get; set; }
 
-	public int? CurrentStage { get; set; }
+	public virtual int? CurrentStage { get; set; }
 
-	public bool IsCompleted { get; set; }
+	public virtual bool IsCompleted { get; set; }
 
 	internal void AfterLoad()
 	{
@@ -131,11 +131,11 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.Item.ShouldBe(
 @"public partial class SelectSomeDataItem
 {
-	public string ObjectName { get; internal set; }
+	public virtual string ObjectName { get; internal set; }
 
-	public int? CurrentStage { get; internal set; }
+	public virtual int? CurrentStage { get; internal set; }
 
-	public bool IsCompleted { get; internal set; }
+	public virtual bool IsCompleted { get; internal set; }
 
 	internal void AfterLoad()
 	{
@@ -175,19 +175,19 @@ namespace SqlFirst.Codegen.Text.Tests
 	private int? _currentStage;
 	private bool _isCompleted;
 
-	public string ObjectName
+	public virtual string ObjectName
 	{
 		get => _objectName;
 		set => _objectName = value;
 	}
 
-	public int? CurrentStage
+	public virtual int? CurrentStage
 	{
 		get => _currentStage;
 		set => _currentStage = value;
 	}
 
-	public bool IsCompleted
+	public virtual bool IsCompleted
 	{
 		get => _isCompleted;
 		set => _isCompleted = value;
@@ -231,19 +231,19 @@ namespace SqlFirst.Codegen.Text.Tests
 	private int? _currentStage;
 	private bool _isCompleted;
 
-	public string ObjectName
+	public virtual string ObjectName
 	{
 		get => _objectName;
 		internal set => _objectName = value;
 	}
 
-	public int? CurrentStage
+	public virtual int? CurrentStage
 	{
 		get => _currentStage;
 		internal set => _currentStage = value;
 	}
 
-	public bool IsCompleted
+	public virtual bool IsCompleted
 	{
 		get => _isCompleted;
 		internal set => _isCompleted = value;
@@ -295,7 +295,7 @@ namespace SqlFirst.Codegen.Text.Tests
 	private int? _currentStage;
 	private bool _isCompleted;
 
-	public string ObjectName
+	public virtual string ObjectName
 	{
 		get => _objectName;
 		set
@@ -310,7 +310,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 	}
 
-	public int? CurrentStage
+	public virtual int? CurrentStage
 	{
 		get => _currentStage;
 		set
@@ -325,7 +325,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 	}
 
-	public bool IsCompleted
+	public virtual bool IsCompleted
 	{
 		get => _isCompleted;
 		set
@@ -395,7 +395,7 @@ namespace SqlFirst.Codegen.Text.Tests
 	private int? _currentStage;
 	private bool _isCompleted;
 
-	public string ObjectName
+	public virtual string ObjectName
 	{
 		get => _objectName;
 		internal set
@@ -410,7 +410,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 	}
 
-	public int? CurrentStage
+	public virtual int? CurrentStage
 	{
 		get => _currentStage;
 		internal set
@@ -425,7 +425,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 	}
 
-	public bool IsCompleted
+	public virtual bool IsCompleted
 	{
 		get => _isCompleted;
 		internal set

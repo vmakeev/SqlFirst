@@ -1,4 +1,4 @@
-﻿public $Type$ $Name$
+﻿public virtual $Type$ $Name$
 {
 	get => $BackingFieldName$;
 	internal set => $BackingFieldName$ = value;

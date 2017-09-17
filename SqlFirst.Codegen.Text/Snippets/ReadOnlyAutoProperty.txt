@@ -1,1 +1,1 @@
-﻿public $Type$ $Name$ { get; internal set; }
+﻿public virtual $Type$ $Name$ { get; internal set; }
