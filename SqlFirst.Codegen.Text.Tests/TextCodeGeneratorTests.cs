@@ -357,5 +357,105 @@ namespace SqlFirst.Codegen.Text.Tests
 			#endregion
 			);
 		}
+
+		[Fact]
+		public void GenerateResultItemTest_INPC_BackingFieldReadOnlyProperty()
+		{
+			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.NotifyPropertyChanged, PropertyType.BackingFieldReadOnly);
+
+			var generator = new TextCodeGenerator(typeMapper);
+
+			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
+
+			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+
+			resultItem.ItemModifiers.Count().ShouldBe(2);
+			resultItem.ItemModifiers.ShouldContain("public");
+			resultItem.ItemModifiers.ShouldContain("partial");
+
+			resultItem.Usings.Count().ShouldBe(2);
+			resultItem.Usings.ShouldContain("System");
+			resultItem.Usings.ShouldContain("System.ComponentModel");
+
+			resultItem.BaseTypes.Count().ShouldBe(1);
+			IGeneratedType type = resultItem.BaseTypes.Single();
+			type.GenericArguments.ShouldBeEmpty();
+			type.GenericConditions.ShouldBeEmpty();
+			type.IsGeneric.ShouldBeFalse();
+			type.IsInterface.ShouldBeTrue();
+			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+
+			resultItem.Item.ShouldBe(
+			#region Too long result
+@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+{
+	private string _objectName;
+	private int? _currentStage;
+	private bool _isCompleted;
+
+	public string ObjectName
+	{
+		get => _objectName;
+		internal set
+		{
+			if (value == _objectName)
+			{
+				return;
+			}
+	
+			_objectName = value;
+			OnPropertyChanged(nameof(ObjectName));
+		}
+	}
+
+	public int? CurrentStage
+	{
+		get => _currentStage;
+		internal set
+		{
+			if (value == _currentStage)
+			{
+				return;
+			}
+	
+			_currentStage = value;
+			OnPropertyChanged(nameof(CurrentStage));
+		}
+	}
+
+	public bool IsCompleted
+	{
+		get => _isCompleted;
+		internal set
+		{
+			if (value == _isCompleted)
+			{
+				return;
+			}
+	
+			_isCompleted = value;
+			OnPropertyChanged(nameof(IsCompleted));
+		}
+	}
+
+	internal void AfterLoad()
+	{
+		AfterLoadInternal();
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected virtual void OnPropertyChanged(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	partial void AfterLoadInternal();
+}"
+			#endregion
+			);
+		}
 	}
 }

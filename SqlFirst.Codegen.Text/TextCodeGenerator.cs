@@ -49,12 +49,16 @@ namespace SqlFirst.Codegen.Text
 				case ResultItemType.Poco:
 					itemGenerator = new PocoResultItemGenerator(propertiesGenerator);
 					break;
-
-				case ResultItemType.NotifyPropertyChanged when options.PropertyType != PropertyType.BackingField:
-					throw new ArgumentException($"ResultItemType [{options.ItemType:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
-
+					
 				case ResultItemType.NotifyPropertyChanged:
-					itemGenerator = new NotifyPropertyChangedResultItemGenerator(propertiesGenerator);
+					if (options.PropertyType == PropertyType.BackingField || options.PropertyType == PropertyType.BackingFieldReadOnly)
+					{
+						itemGenerator = new NotifyPropertyChangedResultItemGenerator(propertiesGenerator);
+					}
+					else
+					{
+						throw new ArgumentException($"ResultItemType [{options.ItemType:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
+					}
 					break;
 
 				case ResultItemType.Struct:
