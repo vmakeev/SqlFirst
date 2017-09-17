@@ -1,40 +1,38 @@
 ﻿using System.Collections.Generic;
+using SqlFirst.Codegen.Trees;
 
-namespace SqlFirst.Codegen.Trees
+namespace SqlFirst.Codegen.Impl
 {
-	/// <summary>
-	/// Сгенерированный элемент
-	/// </summary>
-	public interface IGeneratedItem
+	public class GeneratedResultItem : IGeneratedResultItem
 	{
 		/// <summary>
 		/// Перечень требуемых using'ов
 		/// </summary>
-		IEnumerable<string> Usings { get; }
+		public IEnumerable<string> Usings { get; set; } = new string[0];
 
 		/// <summary>
 		/// Пространство имен
 		/// </summary>
-		string Namespace { get; }
+		public string Namespace { get; set; }
 
 		/// <summary>
 		/// Имя сгенерированного элемента
 		/// </summary>
-		string ItemName { get; }
+		public string ItemName { get; set; }
 
 		/// <summary>
 		/// Модификаторы сгенерированного элемента
 		/// </summary>
-		IEnumerable<string> ItemModifiers { get; }
+		public IEnumerable<string> ItemModifiers { get; set; } = new string[0];
 
 		/// <summary>
 		/// Перечень базовых для 
 		/// </summary>
-		IEnumerable<IGeneratedType> BaseTypes { get; set; }
+		public IEnumerable<IGeneratedType> BaseTypes { get; set; } = new IGeneratedType[0];
 
 		/// <summary>
 		/// Полный текст сгенерированного элемента
 		/// </summary>
-		string Item { get; }
+		public string Item { get; set; }
 	}
 }

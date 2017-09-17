@@ -5,6 +5,30 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Snippets\AutoProperty.txt" />
+    <None Remove="Snippets\BackingField.txt" />
+    <None Remove="Snippets\BackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedResultItem.txt" />
+    <None Remove="Snippets\PocoResultItem.txt" />
+    <None Remove="Snippets\ReadOnlyBackingFieldProperty.txt" />
+    <None Remove="Snippets\ReadOnlyProperty.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Snippets\AutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\BackingField.txt" />
+    <EmbeddedResource Include="Snippets\BackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\NotifyPropertyChangedResultItem.txt" />
+    <EmbeddedResource Include="Snippets\PocoResultItem.txt" />
+    <EmbeddedResource Include="Snippets\ReadOnlyAutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\ReadOnlyBackingFieldProperty.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
   </ItemGroup>
 

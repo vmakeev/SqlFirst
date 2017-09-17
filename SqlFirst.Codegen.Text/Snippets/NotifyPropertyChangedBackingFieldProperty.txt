@@ -1,0 +1,14 @@
+﻿public $Type$ $Name$
+{
+	get => $BackingFieldName$;
+	set
+	{
+		if (value == $BackingFieldName$)
+		{
+			return;
+		}
+
+		$BackingFieldName$ = value;
+		OnPropertyChanged(nameof($Name$));
+	}
+}
