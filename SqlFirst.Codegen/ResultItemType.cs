@@ -11,14 +11,9 @@
 		INVALID,
 
 		/// <summary>
-		/// Простой класс
+		/// Класс
 		/// </summary>
-		Poco,
-
-		/// <summary>
-		/// Класс с уведомлением об изменении свойств
-		/// </summary>
-		NotifyPropertyChanged,
+		Class,
 
 		/// <summary>
 		/// Структура

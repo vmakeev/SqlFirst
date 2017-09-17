@@ -27,7 +27,7 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 		{
 			string propertyTemplate = GetPropertyTemplate(_options);
 
-			string backingFieldTemplate = Snippet.BackingField;
+			string backingFieldTemplate = FieldSnippet.BackingField;
 
 			foreach (IFieldDetails fieldDetails in results)
 			{
@@ -63,13 +63,13 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 			if (options.IsReadOnly)
 			{
 				return _options.IsVirtual
-					? Snippet.ReadOnlyBackingFieldPropertyVirtual
-					: Snippet.ReadOnlyBackingFieldProperty;
+					? PropertySnippet.ReadOnlyBackingFieldPropertyVirtual
+					: PropertySnippet.ReadOnlyBackingFieldProperty;
 			}
 
 			return options.IsVirtual
-				? Snippet.BackingFieldPropertyVirtual
-				: Snippet.BackingFieldProperty;
+				? PropertySnippet.BackingFieldPropertyVirtual
+				: PropertySnippet.BackingFieldProperty;
 		}
 	}
 }

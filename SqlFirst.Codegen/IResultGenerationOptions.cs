@@ -11,6 +11,11 @@
 		ResultItemType ItemType { get; }
 
 		/// <summary>
+		/// Особые умения
+		/// </summary>
+		ResultItemAbilities ItemAbilities { get; }
+
+		/// <summary>
 		/// Тип свойств
 		/// </summary>
 		PropertyType PropertyType { get; }

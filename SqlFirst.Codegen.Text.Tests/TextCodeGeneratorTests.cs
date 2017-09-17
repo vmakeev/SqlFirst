@@ -25,10 +25,11 @@ namespace SqlFirst.Codegen.Text.Tests
 			return typeMapper;
 		}
 
-		private static IResultGenerationOptions GetDefaultResultGenerationOptions(ResultItemType resultItemType, PropertyType propertyType, PropertyModifiers propertyModifiers)
+		private static IResultGenerationOptions GetDefaultResultGenerationOptions(ResultItemType resultItemType, ResultItemAbilities itemAbilities, PropertyType propertyType, PropertyModifiers propertyModifiers)
 		{
 			var options = A.Fake<IResultGenerationOptions>(p => p.Strict());
 			A.CallTo(() => options.ItemType).Returns(resultItemType);
+			A.CallTo(() => options.ItemAbilities).Returns(itemAbilities);
 			A.CallTo(() => options.PropertyType).Returns(propertyType);
 			A.CallTo(() => options.PropertyModifiers).Returns(propertyModifiers);
 			return options;
@@ -72,7 +73,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.Auto, PropertyModifiers.Virtual);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.Virtual);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -112,7 +113,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.Auto, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -152,7 +153,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.BackingField, PropertyModifiers.Virtual);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.Virtual);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -208,7 +209,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.BackingField, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -259,12 +260,14 @@ namespace SqlFirst.Codegen.Text.Tests
 }");
 		}
 
+		//------------------------------------------------------------------
+
 		[Fact]
 		public void GenerateResultItemTest_Poco_AutoProperty()
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.Auto, PropertyModifiers.None);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.None);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -304,7 +307,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.Auto, PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -344,7 +347,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.BackingField, PropertyModifiers.None);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.None);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -400,7 +403,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Poco, PropertyType.BackingField, PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -451,12 +454,14 @@ namespace SqlFirst.Codegen.Text.Tests
 }");
 		}
 
+		//------------------------------------------------------------------
+
 		[Fact]
 		public void GenerateResultItemTest_INPC_BackingFieldProperty_Virtual()
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.Virtual);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.Virtual);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -556,7 +561,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.Virtual | PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -656,7 +661,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.None);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.None);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -756,7 +761,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Class, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -851,12 +856,14 @@ namespace SqlFirst.Codegen.Text.Tests
 			);
 		}
 		
+		//------------------------------------------------------------------
+
 		[Fact]
 		public void GenerateResultItemTest_Struct_AutoProperty()
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, PropertyType.Auto, PropertyModifiers.None);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.None);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -892,11 +899,11 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Fact]
-		public void GenerateResultItemTest_Struct_ReadOnlyAutoProperty()
+		public void GenerateResultItemTest_Struct_AutoProperty_ReadOnly()
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, PropertyType.Auto, PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.None, PropertyType.Auto, PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -936,7 +943,7 @@ namespace SqlFirst.Codegen.Text.Tests
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, PropertyType.BackingField, PropertyModifiers.None);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.None);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -988,11 +995,11 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Fact]
-		public void GenerateResultItemTest_Struct_ReadOnlyBackingFieldProperty()
+		public void GenerateResultItemTest_Struct_BackingFieldProperty_ReadOnly()
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
-			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, PropertyType.BackingField, PropertyModifiers.ReadOnly);
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.None, PropertyType.BackingField, PropertyModifiers.ReadOnly);
 
 			var generator = new TextCodeGenerator(typeMapper);
 
@@ -1010,7 +1017,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem
+				@"public partial struct SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -1037,6 +1044,202 @@ namespace SqlFirst.Codegen.Text.Tests
 	internal void AfterLoad()
 	{
 		AfterLoadInternal();
+	}
+
+	partial void AfterLoadInternal();
+}");
+		}
+
+		//------------------------------------------------------------------
+
+		[Fact]
+		public void GenerateResultItemTest_Struct_INPC_BackingFieldProperty()
+		{
+			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.None);
+
+			var generator = new TextCodeGenerator(typeMapper);
+
+			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
+
+			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+
+			resultItem.ItemModifiers.Count().ShouldBe(2);
+			resultItem.ItemModifiers.ShouldContain("public");
+			resultItem.ItemModifiers.ShouldContain("partial");
+
+			resultItem.Usings.Count().ShouldBe(2);
+			resultItem.Usings.ShouldContain("System");
+			resultItem.Usings.ShouldContain("System.ComponentModel");
+
+			resultItem.BaseTypes.Count().ShouldBe(1);
+			IGeneratedType type = resultItem.BaseTypes.Single();
+			type.GenericArguments.ShouldBeEmpty();
+			type.GenericConditions.ShouldBeEmpty();
+			type.IsGeneric.ShouldBeFalse();
+			type.IsInterface.ShouldBeTrue();
+			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+
+			resultItem.Item.ShouldBe(
+@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+{
+	private string _objectName;
+	private int? _currentStage;
+	private bool _isCompleted;
+
+	public string ObjectName
+	{
+		get => _objectName;
+		set
+		{
+			if (value == _objectName)
+			{
+				return;
+			}
+	
+			_objectName = value;
+			OnPropertyChanged(nameof(ObjectName));
+		}
+	}
+
+	public int? CurrentStage
+	{
+		get => _currentStage;
+		set
+		{
+			if (value == _currentStage)
+			{
+				return;
+			}
+	
+			_currentStage = value;
+			OnPropertyChanged(nameof(CurrentStage));
+		}
+	}
+
+	public bool IsCompleted
+	{
+		get => _isCompleted;
+		set
+		{
+			if (value == _isCompleted)
+			{
+				return;
+			}
+	
+			_isCompleted = value;
+			OnPropertyChanged(nameof(IsCompleted));
+		}
+	}
+
+	internal void AfterLoad()
+	{
+		AfterLoadInternal();
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected void OnPropertyChanged(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+	}
+
+	partial void AfterLoadInternal();
+}");
+		}
+
+		[Fact]
+		public void GenerateResultItemTest_Struct_INPC_BackingFieldProperty_ReadOnly()
+		{
+			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			IResultGenerationOptions options = GetDefaultResultGenerationOptions(ResultItemType.Struct, ResultItemAbilities.NotifyPropertyChanged, PropertyType.BackingField, PropertyModifiers.ReadOnly);
+
+			var generator = new TextCodeGenerator(typeMapper);
+
+			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
+
+			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+
+			resultItem.ItemModifiers.Count().ShouldBe(2);
+			resultItem.ItemModifiers.ShouldContain("public");
+			resultItem.ItemModifiers.ShouldContain("partial");
+
+			resultItem.Usings.Count().ShouldBe(2);
+			resultItem.Usings.ShouldContain("System");
+			resultItem.Usings.ShouldContain("System.ComponentModel");
+
+			resultItem.BaseTypes.Count().ShouldBe(1);
+			IGeneratedType type = resultItem.BaseTypes.Single();
+			type.GenericArguments.ShouldBeEmpty();
+			type.GenericConditions.ShouldBeEmpty();
+			type.IsGeneric.ShouldBeFalse();
+			type.IsInterface.ShouldBeTrue();
+			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+
+			resultItem.Item.ShouldBe(
+@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+{
+	private string _objectName;
+	private int? _currentStage;
+	private bool _isCompleted;
+
+	public string ObjectName
+	{
+		get => _objectName;
+		internal set
+		{
+			if (value == _objectName)
+			{
+				return;
+			}
+	
+			_objectName = value;
+			OnPropertyChanged(nameof(ObjectName));
+		}
+	}
+
+	public int? CurrentStage
+	{
+		get => _currentStage;
+		internal set
+		{
+			if (value == _currentStage)
+			{
+				return;
+			}
+	
+			_currentStage = value;
+			OnPropertyChanged(nameof(CurrentStage));
+		}
+	}
+
+	public bool IsCompleted
+	{
+		get => _isCompleted;
+		internal set
+		{
+			if (value == _isCompleted)
+			{
+				return;
+			}
+	
+			_isCompleted = value;
+			OnPropertyChanged(nameof(IsCompleted));
+		}
+	}
+
+	internal void AfterLoad()
+	{
+		AfterLoadInternal();
+	}
+
+	public event PropertyChangedEventHandler PropertyChanged;
+
+	protected void OnPropertyChanged(string propertyName)
+	{
+		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 	}
 
 	partial void AfterLoadInternal();

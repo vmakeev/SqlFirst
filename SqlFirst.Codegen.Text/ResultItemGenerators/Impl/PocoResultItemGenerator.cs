@@ -18,6 +18,6 @@ namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetTemplate() => Snippet.PocoResultItem;
+		protected override string GetTemplate() => ItemSnippet.PocoResultItem;
 	}
 }

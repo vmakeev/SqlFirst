@@ -9,15 +9,15 @@ using SqlFirst.Codegen.Trees;
 namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 {
 	/// <summary>
-	/// Генератор возвращаемого результата в виде класса, поддерживающего уведомление об изменении свойств
+	/// Генератор возвращаемого результата в виде структуры, поддерживающей уведомление об изменении свойств
 	/// </summary>
-	internal class NotifyPropertyChangedResultItemGenerator : ResultItemGeneratorBase
+	internal class NotifyPropertyChangedStructResultItemGenerator : ResultItemGeneratorBase
 	{
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="NotifyPropertyChangedResultItemGenerator"/>
+		/// Инициализирует новый экземпляр класса <see cref="NotifyPropertyChangedStructResultItemGenerator"/>
 		/// </summary>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
-		public NotifyPropertyChangedResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)
+		public NotifyPropertyChangedStructResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)
 			: base(propertiesGenerator)
 		{
 		}
@@ -55,6 +55,6 @@ namespace SqlFirst.Codegen.Text.ResultItemGenerators.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetTemplate() => Snippet.NotifyPropertyChangedResultItem;
+		protected override string GetTemplate() => ItemSnippet.NotifyPropertyChangedStructResultItem;
 	}
 }

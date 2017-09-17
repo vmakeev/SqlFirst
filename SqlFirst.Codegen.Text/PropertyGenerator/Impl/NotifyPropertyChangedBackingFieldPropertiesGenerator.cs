@@ -24,13 +24,13 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 			if (options.IsReadOnly)
 			{
 				return _options.IsVirtual
-					? Snippet.NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual
-					: Snippet.NotifyPropertyChangedReadOnlyBackingFieldProperty;
+					? PropertySnippet.NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual
+					: PropertySnippet.NotifyPropertyChangedReadOnlyBackingFieldProperty;
 			}
 
 			return _options.IsVirtual
-				? Snippet.NotifyPropertyChangedBackingFieldPropertyVirtual
-				: Snippet.NotifyPropertyChangedBackingFieldProperty;
+				? PropertySnippet.NotifyPropertyChangedBackingFieldPropertyVirtual
+				: PropertySnippet.NotifyPropertyChangedBackingFieldProperty;
 		}
 	}
 }

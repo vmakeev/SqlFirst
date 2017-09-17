@@ -42,37 +42,47 @@ namespace SqlFirst.Codegen.Text
 		/// <returns>Генератор результата выполнения запроса</returns>
 		private static ResultItemGeneratorBase GetResultItemGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
 		{
-			ResultItemGeneratorBase itemGenerator;
 			switch (options.ItemType)
 			{
-				case ResultItemType.Poco:
-					itemGenerator = new PocoResultItemGenerator(propertiesGenerator);
-					break;
-
-				case ResultItemType.NotifyPropertyChanged:
-					if (options.PropertyType == PropertyType.BackingField)
-					{
-						itemGenerator = new NotifyPropertyChangedResultItemGenerator(propertiesGenerator);
-					}
-					else
-					{
-						throw new CodeGenerationException($"ResultItemType [{options.ItemType:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
-					}
-					break;
+				case ResultItemType.Class:
+					return GetClassResultItemsGenerator(options, propertiesGenerator);
 
 				case ResultItemType.Struct:
-					if ((options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual)
-					{
-						throw new CodeGenerationException("Struct can not contains virtual properties");
-					}
-					itemGenerator = new StructResultItemGenerator(propertiesGenerator);
-					break;
+					return GetStructResultItemsGenerator(options, propertiesGenerator);
 
 				default:
 					throw new CodeGenerationException($"Unexpected options.ItemType [{options.ItemType:G}]");
 			}
+		}
 
-			return itemGenerator;
+		private static ResultItemGeneratorBase GetStructResultItemsGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
+		{
+			if ((options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual)
+			{
+				throw new CodeGenerationException("Struct can not contains virtual properties");
+			}
+
+			if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) != ResultItemAbilities.NotifyPropertyChanged)
+			{
+				return new StructResultItemGenerator(propertiesGenerator);
+			}
+
+			return new NotifyPropertyChangedStructResultItemGenerator(propertiesGenerator);
+		}
+
+		private static ResultItemGeneratorBase GetClassResultItemsGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
+		{
+			if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) != ResultItemAbilities.NotifyPropertyChanged)
+			{
+				return new PocoResultItemGenerator(propertiesGenerator);
+			}
+
+			if (options.PropertyType != PropertyType.BackingField)
+			{
+				throw new CodeGenerationException($"ResultItemType [{options.ItemType:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
+			}
+
+			return new NotifyPropertyChangedClassResultItemGenerator(propertiesGenerator);
 		}
 
 		/// <summary>
@@ -82,8 +92,6 @@ namespace SqlFirst.Codegen.Text
 		/// <returns>Генератор свойств</returns>
 		private PropertiesGeneratorBase GetPropertiesGenerator(IResultGenerationOptions options)
 		{
-			PropertiesGeneratorBase propertiesGenerator;
-
 			bool isReadOnly = (options.PropertyModifiers & PropertyModifiers.ReadOnly) == PropertyModifiers.ReadOnly;
 			bool isVirtual = (options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual;
 
@@ -92,20 +100,18 @@ namespace SqlFirst.Codegen.Text
 			switch (options.PropertyType)
 			{
 				case PropertyType.Auto:
-					propertiesGenerator = new AutoPropertiesGenerator(_typeMapper, propertyGenerationOptions);
-					break;
+					return new AutoPropertiesGenerator(_typeMapper, propertyGenerationOptions);
 
 				case PropertyType.BackingField:
-					propertiesGenerator = options.ItemType == ResultItemType.NotifyPropertyChanged
-						? new NotifyPropertyChangedBackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions)
-						: new BackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions);
-					break;
+					if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) == ResultItemAbilities.NotifyPropertyChanged)
+					{
+						return new NotifyPropertyChangedBackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions);
+					}
+					return new BackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions);
 
 				default:
 					throw new CodeGenerationException($"Unexpected options.propertyType [{options.PropertyType:G}]");
 			}
-
-			return propertiesGenerator;
 		}
 	}
 }

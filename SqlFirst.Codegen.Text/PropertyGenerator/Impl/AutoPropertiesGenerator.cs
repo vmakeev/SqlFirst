@@ -54,13 +54,13 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 			if (_options.IsReadOnly)
 			{
 				return _options.IsVirtual
-					? Snippet.ReadOnlyAutoPropertyVirtual
-					: Snippet.ReadOnlyAutoProperty;
+					? PropertySnippet.ReadOnlyAutoPropertyVirtual
+					: PropertySnippet.ReadOnlyAutoProperty;
 			}
 
 			return _options.IsVirtual
-				? Snippet.AutoPropertyVirtual
-				: Snippet.AutoProperty;
+				? PropertySnippet.AutoPropertyVirtual
+				: PropertySnippet.AutoProperty;
 		}
 	}
 }
