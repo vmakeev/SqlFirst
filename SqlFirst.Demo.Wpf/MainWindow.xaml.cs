@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Xml;
@@ -12,6 +13,7 @@ using SqlFirst.Codegen;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text;
 using SqlFirst.Core;
+using SqlFirst.Core.Impl;
 using SqlFirst.Demo.Wpf.Annotations;
 using SqlFirst.Demo.Wpf.HighlightSchemes;
 using SqlFirst.Providers.MsSqlServer;
@@ -62,40 +64,8 @@ namespace SqlFirst.Demo.Wpf
 				ResultItem = null;
 				QueryObject = null;
 
-				string query = SourceSql;
-
-				var parser = new MsSqlServerQueryParser();
-
-				IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-
-				var typeMapper = new MsSqlServerTypeMapper();
-
-				var codeGenerator = new TextCodeGenerator(typeMapper);
-
-				IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
-				{
-					["Namespace"] = Namespace,
-					["QueryName"] = QueryName
-				};
-				var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions);
-
-				ResultItemAbilities abilities = IsNotifyPropertyChanged ? ResultItemAbilities.NotifyPropertyChanged : ResultItemAbilities.None;
-				var modifiers = PropertyModifiers.None;
-				if (IsVirtualProperties)
-				{
-					modifiers |= PropertyModifiers.Virtual;
-				}
-				if (IsReadOnlyProperties)
-				{
-					modifiers |= PropertyModifiers.ReadOnly;
-				}
-
-				IResultGenerationOptions options = new ResultGenerationOptions(ResultItemType, abilities, PropertyType, modifiers);
-				IGeneratedResultItem item = codeGenerator.GenerateResultItem(context, options);
-
-				string code = codeGenerator.GenerateFile(new[] { item });
-
-				ResultItem = code;
+				FormattedSql = FormatSql(SourceSql);
+				ResultItem = GenerateResultItemCode(SourceSql);
 			}
 			catch (Exception ex)
 			{
@@ -109,6 +79,68 @@ namespace SqlFirst.Demo.Wpf
 
 				MessageBox.Show(message, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
 			}
+		}
+
+		private string FormatSql(string query)
+		{
+			var parser = new MsSqlServerQueryParser();
+			var emitter = new MsSqlServerCodeEmitter();
+
+			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+			List<IQuerySection> sections = parser.GetQuerySections(query).ToList();
+
+			IQuerySection[] allDeclarations = sections.Where(p => p.Type == QuerySectionType.Declarations).ToArray();
+			sections.RemoveAll(allDeclarations.Contains);
+
+			string declarations = emitter.EmitDeclarations(info.Parameters);
+
+			IQuerySection declarationsSection = new QuerySection(QuerySectionType.Declarations, declarations);
+			sections.Add(declarationsSection);
+
+			if (sections.All(p => p.Type != QuerySectionType.Options))
+			{
+				IQuerySection optionsSection = new QuerySection(QuerySectionType.Options, @"/* add SqlFirst options here */");
+				sections.Add(optionsSection);
+			}
+
+			string result = emitter.EmitQuery(sections);
+			return result;
+		}
+
+		private string GenerateResultItemCode(string query)
+		{
+			var parser = new MsSqlServerQueryParser();
+
+			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+
+			var typeMapper = new MsSqlServerTypeMapper();
+
+			var codeGenerator = new TextCodeGenerator(typeMapper);
+
+			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
+			{
+				["Namespace"] = Namespace,
+				["QueryName"] = QueryName
+			};
+			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions);
+
+			ResultItemAbilities abilities = IsNotifyPropertyChanged ? ResultItemAbilities.NotifyPropertyChanged : ResultItemAbilities.None;
+			var modifiers = PropertyModifiers.None;
+			if (IsVirtualProperties)
+			{
+				modifiers |= PropertyModifiers.Virtual;
+			}
+			if (IsReadOnlyProperties)
+			{
+				modifiers |= PropertyModifiers.ReadOnly;
+			}
+
+			IResultGenerationOptions options = new ResultGenerationOptions(ResultItemType, abilities, PropertyType, modifiers);
+			IGeneratedResultItem item = codeGenerator.GenerateResultItem(context, options);
+
+			string code = codeGenerator.GenerateFile(new[] { item });
+
+			return code;
 		}
 
 		#region Public
@@ -128,8 +160,11 @@ namespace SqlFirst.Demo.Wpf
 		private string _queryName = "My_Test_Query";
 
 		private string _sourceSql =
-			@"declare @userKey varchar(MAX) ='test'; 
-declare @skip int = 42;
+			@"-- begin variables 
+
+declare @userKey varchar(MAX) ='test'; 
+
+-- end
 
 select *
 from CaseSubscriptions with(nolock)

@@ -7,8 +7,8 @@
 		xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 		xmlns:wpf="clr-namespace:SqlFirst.Demo.Wpf"
-		mc:Ignorable="d" WindowStartupLocation="CenterScreen"
-        Title="MainWindow" Height="900" Width="1280">
+		mc:Ignorable="d" WindowStartupLocation="CenterScreen" WindowState="Maximized"
+        Title="MainWindow" Height="800" Width="1200">
 	<Grid>
 		<Grid.Resources>
 			<Style TargetType="TextBlock">
@@ -26,6 +26,8 @@
 				<Setter Property="BorderBrush" Value="Black"/>
 				<Setter Property="ShowLineNumbers" Value="True"/>
 				<Setter Property="LineNumbersForeground" Value="#FF2B91AF"/>
+				<Setter Property="VerticalScrollBarVisibility" Value="Auto"/>
+				<Setter Property="HorizontalScrollBarVisibility" Value="Auto"/>
 			</Style>
 
 			<Style TargetType="TextBox">
@@ -152,7 +154,7 @@
 		</Grid>
 
 		<StackPanel Grid.Row="4">
-			<Button Content="ВЫПОЛНИТЬ" Margin="3" Height="25" Click="Button_Click"/>
+			<Button Content="ВЫПОЛНИТЬ" Margin="3" Height="25" Click="Button_Click" Background="DeepSkyBlue"/>
 		</StackPanel>
 	</Grid>
 </Window>

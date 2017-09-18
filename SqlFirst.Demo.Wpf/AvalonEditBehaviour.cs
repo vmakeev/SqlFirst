@@ -58,7 +58,7 @@ namespace SqlFirst.Demo.Wpf
 			{
 				int caretOffset = editor.CaretOffset;
 				editor.Document.Text = dependencyPropertyChangedEventArgs.NewValue?.ToString() ?? string.Empty;
-				editor.CaretOffset = caretOffset;
+				editor.CaretOffset = Math.Min(caretOffset, editor.Document.Text?.Length ?? 0);
 			}
 		}
 	}
