@@ -25,10 +25,10 @@ namespace SqlFirst.Codegen.Trees
 		/// <summary>
 		/// Модификаторы сгенерированного элемента
 		/// </summary>
-		string ItemModifiers { get; }
+		IEnumerable<string> ItemModifiers { get; }
 
 		/// <summary>
-		/// Перечень базовых для 
+		/// Перечень базовых типов для сгенерированного
 		/// </summary>
 		IEnumerable<IGeneratedType> BaseTypes { get; set; }
 

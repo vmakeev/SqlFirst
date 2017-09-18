@@ -3,7 +3,7 @@
 namespace SqlFirst.Core
 {
 	/// <summary>
-	/// Interface that for mapping C# types onto SQL types.
+	/// Преобразователь типов данных БД в типы CLR
 	/// </summary>
 	public interface IDatabaseTypeMapper
 	{

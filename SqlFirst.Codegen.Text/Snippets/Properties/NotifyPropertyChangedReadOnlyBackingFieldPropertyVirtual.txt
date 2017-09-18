@@ -1,0 +1,14 @@
+﻿public virtual $Type$ $Name$
+{
+	get => $BackingFieldName$;
+	internal set
+	{
+		if (value == $BackingFieldName$)
+		{
+			return;
+		}
+
+		$BackingFieldName$ = value;
+		OnPropertyChanged(nameof($Name$));
+	}
+}

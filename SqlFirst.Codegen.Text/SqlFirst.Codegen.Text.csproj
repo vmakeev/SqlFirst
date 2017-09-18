@@ -5,6 +5,46 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Snippets\AutoProperty.txt" />
+    <None Remove="Snippets\AutoPropertyVirtual.txt" />
+    <None Remove="Snippets\BackingField.txt" />
+    <None Remove="Snippets\BackingFieldProperty.txt" />
+    <None Remove="Snippets\BackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\NotifyPropertyChangedResultItem.txt" />
+    <None Remove="Snippets\PocoResultItem.txt" />
+    <None Remove="Snippets\ReadOnlyAutoProperty.txt" />
+    <None Remove="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
+    <None Remove="Snippets\ReadOnlyBackingFieldProperty.txt" />
+    <None Remove="Snippets\ReadOnlyBackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\StructResultItem.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Properties\AutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\AutoPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Fields\BackingField.txt" />
+    <EmbeddedResource Include="Snippets\Properties\BackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\BackingFieldPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Properties\NotifyPropertyChangedBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Properties\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Items\NotifyPropertyChangedClassResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\PocoResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Properties\ReadOnlyAutoProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\ReadOnlyAutoPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Properties\ReadOnlyBackingFieldProperty.txt" />
+    <EmbeddedResource Include="Snippets\Properties\ReadOnlyBackingFieldPropertyVirtual.txt" />
+    <EmbeddedResource Include="Snippets\Items\StructResultItem.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
   </ItemGroup>
 

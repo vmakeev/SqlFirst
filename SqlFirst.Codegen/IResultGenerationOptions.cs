@@ -5,5 +5,24 @@
 	/// </summary>
 	public interface IResultGenerationOptions
 	{
+		/// <summary>
+		/// Тип объекта
+		/// </summary>
+		ResultItemType ItemType { get; }
+
+		/// <summary>
+		/// Особые умения
+		/// </summary>
+		ResultItemAbilities ItemAbilities { get; }
+
+		/// <summary>
+		/// Тип свойств
+		/// </summary>
+		PropertyType PropertyType { get; }
+
+		/// <summary>
+		/// Модификаторы свойств
+		/// </summary>
+		PropertyModifiers PropertyModifiers { get; }
 	}
 }

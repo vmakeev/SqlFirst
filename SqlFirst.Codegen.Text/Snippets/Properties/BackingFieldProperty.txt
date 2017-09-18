@@ -1,0 +1,5 @@
+﻿public $Type$ $Name$
+{
+	get => $BackingFieldName$;
+	set => $BackingFieldName$ = value;
+}
