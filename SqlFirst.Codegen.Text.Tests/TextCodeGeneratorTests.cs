@@ -4,7 +4,6 @@ using System.Linq;
 using FakeItEasy;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
-using SqlFirst.Core.Parsing;
 using Xunit;
 using Xunit.Should;
 
@@ -13,7 +12,7 @@ namespace SqlFirst.Codegen.Text.Tests
 	public class TextCodeGeneratorTests
 	{
 		#region Fixture
-		private const string QueryName = "SelectSomeData";
+		private const string QueryName = "SelectSomeDataQuery";
 		private const string MyTestNamespace = "MyTestNamespace";
 
 		private static IDatabaseTypeMapper GetDefaultDatabaseTypeMapper()

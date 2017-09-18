@@ -2,7 +2,6 @@
 using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using SqlFirst.Core;
-using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
@@ -78,10 +77,6 @@ namespace SqlFirst.Providers.MsSqlServer
 
 				case "AllowDBNull":
 					details.AllowDbNull = value.Unbox<bool>();
-					break;
-
-				case "ProviderType":
-					//details.ProviderType = value.Unbox<int>();
 					break;
 
 				case "IsIdentity":

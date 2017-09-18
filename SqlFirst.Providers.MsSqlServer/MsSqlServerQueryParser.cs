@@ -6,7 +6,7 @@ using System.IO;
 using System.Linq;
 using Antlr4.Runtime;
 using SqlFirst.Core;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core.Impl;
 using SqlFirst.Providers.MsSqlServer.VariableDeclarations;
 using SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated;
 
@@ -21,7 +21,17 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// <inheritdoc />
 		public override IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString)
 		{
-			DataTable schemaTable = GetQuerySchema(queryText, connectionString);
+			DataTable schemaTable;
+
+			try
+			{
+				schemaTable = GetQuerySchema(queryText, connectionString);
+			}
+			catch (Exception ex)
+			{
+				throw new QueryParsingException("Unable to determine query results", ex);
+			}
+
 
 			if (schemaTable == null)
 			{
@@ -100,17 +110,24 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// <inheritdoc />
 		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration)
 		{
-			using (TextReader textReader = new StringReader(parametersDeclaration))
+			try
 			{
-				var stream = new AntlrInputStream(textReader);
-				var lexer = new SqlVariableDeclarationsLexer(stream);
-				var tokens = new CommonTokenStream(lexer);
-				var parser = new SqlVariableDeclarationsParser(tokens)
+				using (TextReader textReader = new StringReader(parametersDeclaration))
 				{
-					ErrorHandler = new BailErrorStrategy()
-				};
+					var stream = new AntlrInputStream(textReader);
+					var lexer = new SqlVariableDeclarationsLexer(stream);
+					var tokens = new CommonTokenStream(lexer);
+					var parser = new SqlVariableDeclarationsParser(tokens)
+					{
+						ErrorHandler = new BailErrorStrategy()
+					};
 
-				return new QueryParamInfoVisitor().Visit(parser.root());
+					return new QueryParamInfoVisitor().Visit(parser.root());
+				}
+			}
+			catch (Exception ex)
+			{
+				throw new QueryParsingException("Unable to parse variable declarations section", ex);
 			}
 		}
 
@@ -120,17 +137,16 @@ namespace SqlFirst.Providers.MsSqlServer
 			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
 			{
 				IDbCommand command = connection.CreateCommand();
-				command.CommandText = "sp_describe_undeclared_parameters @tsql";
-				var parameter = new SqlParameter("@tsql", SqlDbType.NChar) { Value = queryText };
+				command.CommandText = "sp_describe_undeclared_parameters @queryText";
+				var parameter = new SqlParameter("@queryText", SqlDbType.NChar) { Value = queryText };
 				command.Parameters.Add(parameter);
 
 				connection.Open();
-				using (IDataReader dataReader = command.ExecuteReader())
+				using (IDataReader dataReader = ExecuteUndeclaredParametersReader(command)) // no other way to use catch + yield return
 				{
 					while (dataReader.Read())
 					{
-						// ignore global variables
-						if (dataReader.GetString(1).Substring(0, 2) != "@@")
+						if (!dataReader.GetString(1).StartsWith("@@"))
 						{
 							string dbName = dataReader.GetString(1);
 							string dbType = dataReader.GetString(3);
@@ -146,6 +162,18 @@ namespace SqlFirst.Providers.MsSqlServer
 						}
 					}
 				}
+			}
+		}
+
+		private static IDataReader ExecuteUndeclaredParametersReader(IDbCommand command)
+		{
+			try
+			{
+				return command.ExecuteReader();
+			}
+			catch (Exception ex)
+			{
+				throw new QueryParsingException("Unable to determine undeclared parameters", ex);
 			}
 		}
 

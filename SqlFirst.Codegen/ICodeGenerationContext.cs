@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
 
 namespace SqlFirst.Codegen
 {
@@ -21,6 +21,6 @@ namespace SqlFirst.Codegen
 		/// <summary>
 		/// Дополнительные параметры кодогенерации
 		/// </summary>
-		IDictionary<string, object> Options { get; }
+		IReadOnlyDictionary<string, object> Options { get; }
 	}
 }

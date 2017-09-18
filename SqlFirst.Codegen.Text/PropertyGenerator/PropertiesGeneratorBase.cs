@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using SqlFirst.Codegen.Text.PropertyGenerator.Impl;
 using SqlFirst.Core;
-using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Codegen.Text.PropertyGenerator
 {

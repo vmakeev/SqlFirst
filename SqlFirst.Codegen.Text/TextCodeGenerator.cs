@@ -1,8 +1,13 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using SqlFirst.Codegen.Text.PropertyGenerator;
 using SqlFirst.Codegen.Text.PropertyGenerator.Impl;
 using SqlFirst.Codegen.Text.ResultItemGenerators;
 using SqlFirst.Codegen.Text.ResultItemGenerators.Impl;
+using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text
@@ -32,6 +37,52 @@ namespace SqlFirst.Codegen.Text
 			PropertiesGeneratorBase propertiesGenerator = GetPropertiesGenerator(options);
 			ResultItemGeneratorBase itemGenerator = GetResultItemGenerator(options, propertiesGenerator);
 			return itemGenerator.GenerateResultItem(context);
+		}
+
+		/// <inheritdoc />
+		public string GenerateFile(IEnumerable<IGeneratedItem> generatedItems)
+		{
+			IGeneratedItem[] items = generatedItems.ToArray();
+
+			string usingSnipper = FileSnippet.Using;
+
+			IEnumerable<string> usings = items
+				.SelectMany(generatedItem => generatedItem.Usings)
+				.Distinct(StringComparer.InvariantCultureIgnoreCase)
+				.OrderBy(usingName => usingName)
+				.Select(usingName => usingSnipper.Replace("$Using$", usingName));
+
+			string usingsText = FileSnippet.Usings.Replace("$Usings$", string.Join(string.Empty, usings)).Trim();
+
+			IGrouping<string, (string Namespace, string Data)>[] namespaceDataItems = items
+				.Select(generatedItem => (Namespace: generatedItem.Namespace, Data: generatedItem.Item))
+				.GroupBy(item => item.Namespace).ToArray();
+
+
+			var namespaces = new StringBuilder();
+			string namespaceSnippet = FileSnippet.Namespace;
+			foreach (IGrouping<string, (string Namespace, string Data)> namespaceDataItem in namespaceDataItems)
+			{
+				string namespaceName = namespaceDataItem.Key;
+				string[] data = namespaceDataItem.Select(p => p.Data).ToArray();
+
+				string namespaceData = string.Join(Environment.NewLine + Environment.NewLine, data.Select(p => p.Indent("\t")));
+
+				string namespaceText = namespaceSnippet
+										.Replace("$Namespace$", namespaceName)
+										.Replace("$Data$", namespaceData);
+
+				namespaces.Append(namespaceText);
+			}
+
+			string namespacesText = namespaces.ToString();
+
+			string result = FileSnippet.DefaultFile
+				.Replace("$Usings$", usingsText)
+				.Replace("$Namespaces$", namespacesText)
+				.Trim();
+
+			return result;
 		}
 
 		/// <summary>
@@ -79,7 +130,7 @@ namespace SqlFirst.Codegen.Text
 
 			if (options.PropertyType != PropertyType.BackingField)
 			{
-				throw new CodeGenerationException($"ResultItemType [{options.ItemType:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
+				throw new CodeGenerationException($"Ability [{ResultItemAbilities.NotifyPropertyChanged:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
 			}
 
 			return new NotifyPropertyChangedClassResultItemGenerator(propertiesGenerator);

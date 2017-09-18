@@ -10,6 +10,10 @@
     <None Remove="Snippets\BackingField.txt" />
     <None Remove="Snippets\BackingFieldProperty.txt" />
     <None Remove="Snippets\BackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\Files\DefaultFile.txt" />
+    <None Remove="Snippets\Files\Namespace.txt" />
+    <None Remove="Snippets\Files\Using.txt" />
+    <None Remove="Snippets\Files\Usings.txt" />
     <None Remove="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
     <None Remove="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
     <None Remove="Snippets\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
@@ -25,6 +29,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Snippets\Files\Using.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Snippets\Files\DefaultFile.txt" />
+    <EmbeddedResource Include="Snippets\Files\Namespace.txt" />
+    <EmbeddedResource Include="Snippets\Files\Usings.txt" />
     <EmbeddedResource Include="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\AutoProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\AutoPropertyVirtual.txt" />

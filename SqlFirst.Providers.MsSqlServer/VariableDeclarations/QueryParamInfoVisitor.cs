@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
 using SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated;
 using static SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated.SqlVariableDeclarationsParser;
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.PropertyGenerator;
 using SqlFirst.Codegen.Trees;
@@ -53,11 +54,20 @@ namespace SqlFirst.Codegen.Text.ResultItemGenerators
 
 			string template = GetTemplate();
 
+			const string postfix = @"Query";
+			string queryName = context.GetQueryName();
+			if (queryName.EndsWith(postfix) && queryName.Length > postfix.Length)
+			{
+				queryName = queryName.Substring(0, queryName.Length - postfix.Length);
+			}
+
+			string itemName = CSharpCodeHelper.GetValidIdentifierName(queryName, NamingPolicy.Pascal) + "Item";
+
 			var result = new GeneratedResultItem
 			{
 				Namespace = targetNamespace,
 				ItemModifiers = new[] { Modifiers.Public, Modifiers.Partial },
-				ItemName = context.GetQueryName() + "Item",
+				ItemName = itemName,
 				BaseTypes = new IGeneratedType[0]
 			};
 

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
+using SqlFirst.Core.Impl;
 using Xunit;
 using Xunit.Should;
 

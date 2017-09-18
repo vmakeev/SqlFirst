@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
