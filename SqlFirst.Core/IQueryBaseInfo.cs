@@ -16,5 +16,10 @@ namespace SqlFirst.Core
 		/// Разделы запроса
 		/// </summary>
 		IEnumerable<IQuerySection> Sections { get; }
+
+		/// <summary>
+		/// Опции SqlFirst
+		/// </summary>
+		IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
 	}
 }

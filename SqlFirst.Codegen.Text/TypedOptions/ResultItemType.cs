@@ -1,4 +1,4 @@
-﻿namespace SqlFirst.Codegen
+﻿namespace SqlFirst.Codegen.Text.TypedOptions
 {
 	/// <summary>
 	/// Тип результата запроса

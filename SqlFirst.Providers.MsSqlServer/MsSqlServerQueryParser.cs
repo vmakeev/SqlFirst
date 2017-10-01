@@ -96,12 +96,15 @@ namespace SqlFirst.Providers.MsSqlServer
 
 			IEnumerable<IFieldDetails> results = GetResultDetails(queryText, connectionString);
 
+			IEnumerable<ISqlFirstOption> sqlFirstOptions = GetOptions(queryText);
+
 			IQueryInfo queryInfo = new MsSqlServerQueryInfo
 			{
 				Type = baseInfo.Type,
 				Parameters = parameters,
 				Results = results,
-				Sections = baseInfo.Sections
+				Sections = baseInfo.Sections,
+				SqlFirstOptions = sqlFirstOptions
 			};
 
 			return queryInfo;

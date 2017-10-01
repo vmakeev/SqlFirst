@@ -145,7 +145,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					sectionEnd = string.Empty;
 					break;
 				default:
-					throw new QueryParsingException($"Unexpected querySectionType: {section.Type:G}({section.Type:D})");
+					throw new QueryEmitException($"Unexpected querySectionType: {section.Type:G}({section.Type:D})");
 			}
 
 			string result = sectionStart + section.Content.Trim() + sectionEnd;
@@ -186,7 +186,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					return floatValue.ToString(CultureInfo.InvariantCulture);
 
 				default:
-					throw new QueryParsingException($"Valid defaultValue type expected, actual is [{value.GetType().Name}]");
+					throw new QueryEmitException($"Valid defaultValue type expected, actual is [{value.GetType().Name}]");
 			}
 		}
 

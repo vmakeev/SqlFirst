@@ -5,16 +5,16 @@ namespace SqlFirst.Core
 	/// <summary>
 	/// Полная информация о запросе
 	/// </summary>
-	public interface IQueryInfo: IQueryBaseInfo
+	public interface IQueryInfo : IQueryBaseInfo
 	{
 		/// <summary>
 		/// Параметры запроса
 		/// </summary>
-		IEnumerable<IQueryParamInfo> Parameters { get; set; }
+		IEnumerable<IQueryParamInfo> Parameters { get; }
 
 		/// <summary>
 		/// Результаты запроса
 		/// </summary>
-		IEnumerable<IFieldDetails> Results { get; set; }
+		IEnumerable<IFieldDetails> Results { get; }
 	}
 }

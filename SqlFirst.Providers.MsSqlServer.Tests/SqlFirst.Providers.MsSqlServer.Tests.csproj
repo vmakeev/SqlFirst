@@ -9,6 +9,7 @@
   <ItemGroup>
     <None Remove="Queries\Delete\DeleteByGuid.sql" />
     <None Remove="Queries\Insert\InsertStringGuidDate.sql" />
+    <None Remove="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
     <None Remove="Queries\Select\SelectCount.sql" />
     <None Remove="Queries\Select\SelectDateWithNamedOrdinal.sql" />
     <None Remove="Queries\Select\SelectDateWithOrdinal.sql" />
@@ -28,6 +29,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOption.sql" />
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
     <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownAndCustomSections.sql" />
   </ItemGroup>
 

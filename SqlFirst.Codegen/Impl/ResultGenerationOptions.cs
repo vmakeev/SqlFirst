@@ -1,27 +1,18 @@
-﻿namespace SqlFirst.Codegen.Impl
+﻿using System.Collections.Generic;
+using SqlFirst.Core;
+
+namespace SqlFirst.Codegen.Impl
 {
 	/// <inheritdoc />
 	public class ResultGenerationOptions : IResultGenerationOptions
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
-		public ResultGenerationOptions(ResultItemType itemType, ResultItemAbilities itemAbilities, PropertyType propertyType, PropertyModifiers propertyModifiers)
+		public ResultGenerationOptions(IEnumerable<ISqlFirstOption> sqlFirstOptions)
 		{
-			ItemType = itemType;
-			ItemAbilities = itemAbilities;
-			PropertyType = propertyType;
-			PropertyModifiers = propertyModifiers;
+			SqlFirstOptions = sqlFirstOptions;
 		}
 
 		/// <inheritdoc />
-		public ResultItemType ItemType { get; }
-
-		/// <inheritdoc />
-		public ResultItemAbilities ItemAbilities { get; }
-
-		/// <inheritdoc />
-		public PropertyType PropertyType { get; }
-
-		/// <inheritdoc />
-		public PropertyModifiers PropertyModifiers { get; }
+		public IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
 	}
 }

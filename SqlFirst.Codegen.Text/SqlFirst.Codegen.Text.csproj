@@ -56,6 +56,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Stateless" Version="4.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
   </ItemGroup>
 

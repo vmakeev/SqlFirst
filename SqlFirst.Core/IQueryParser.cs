@@ -68,5 +68,12 @@ namespace SqlFirst.Core
 		/// <param name="sectionType">Тип раздела</param>
 		/// <returns>Список найденных разделов</returns>
 		IEnumerable<IQuerySection> GetQuerySections(string query, QuerySectionType sectionType);
+
+		/// <summary>
+		/// Возвращает опции обработки запроса
+		/// </summary>
+		/// <param name="query">Полный текст файла SQL</param>
+		/// <returns>Опции обработки запроса</returns>
+		IEnumerable<ISqlFirstOption> GetOptions(string query);
 	}
 }

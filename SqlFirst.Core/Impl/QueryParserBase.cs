@@ -164,6 +164,35 @@ namespace SqlFirst.Core.Impl
 		}
 
 		/// <summary>
+		/// Возвращает опции обработки запроса
+		/// </summary>
+		/// <param name="query">Полный текст файла SQL</param>
+		/// <returns>Опции обработки запроса</returns>
+		public virtual IEnumerable<ISqlFirstOption> GetOptions(string query)
+		{
+			IQuerySection[] optionsSections = GetQuerySections(query, QuerySectionType.Options).ToArray();
+
+			string combinedOptions = string.Join(Environment.NewLine, optionsSections.Select(section => section.Content));
+
+			string[] singleLineOptions = combinedOptions
+				.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+				.Where(line => !string.IsNullOrWhiteSpace(line))
+				.Select(line => line.Trim())
+				.ToArray();
+
+			IEnumerable<string[]> splittedOptions = singleLineOptions
+				.Where(line => line.StartsWith("--", StringComparison.Ordinal))
+				.Select(line => line.Split(' ').Where(element => element != "--" && !string.IsNullOrWhiteSpace(element)).ToArray());
+
+			foreach (string[] splittedOption in splittedOptions)
+			{
+				string name = splittedOption.First().Trim('-').Trim();
+				IEnumerable<string> parameters = splittedOption.Skip(1).Select(parameter => parameter.Trim());
+				yield return new SqlFirstOption(name, parameters);
+			}
+		}
+
+		/// <summary>
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
 		/// </summary>
 		/// <param name="parametersDeclaration">Строка с объявленными переменными</param>

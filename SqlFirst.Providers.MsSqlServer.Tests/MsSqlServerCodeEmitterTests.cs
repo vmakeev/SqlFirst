@@ -210,7 +210,7 @@ test body");
 
 			var emitter = new MsSqlServerCodeEmitter();
 
-			Assert.Throws<ArgumentOutOfRangeException>(() => emitter.EmitQuery(sections));
+			Assert.Throws<QueryEmitException>(() => emitter.EmitQuery(sections));
 		}
 
 		[Fact]
@@ -265,7 +265,7 @@ test declarations_2
 		public void EmitValueThrowsTest(object value)
 		{
 			var emitter = new MsSqlServerCodeEmitter();
-			Assert.Throws<InvalidCastException>(() => emitter.EmitValue(value));
+			Assert.Throws<QueryEmitException>(() => emitter.EmitValue(value));
 		}
 
 		[Fact]

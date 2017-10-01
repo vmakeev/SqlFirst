@@ -7,6 +7,7 @@ using SqlFirst.Codegen.Text.PropertyGenerator.Impl;
 using SqlFirst.Codegen.Text.ResultItemGenerators;
 using SqlFirst.Codegen.Text.ResultItemGenerators.Impl;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.TypedOptions;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 
@@ -34,8 +35,10 @@ namespace SqlFirst.Codegen.Text
 		/// <inheritdoc />
 		public IGeneratedResultItem GenerateResultItem(ICodeGenerationContext context, IResultGenerationOptions options)
 		{
-			PropertiesGeneratorBase propertiesGenerator = GetPropertiesGenerator(options);
-			ResultItemGeneratorBase itemGenerator = GetResultItemGenerator(options, propertiesGenerator);
+			var itemOptions = new ItemOptions(options.SqlFirstOptions?.ToArray());
+
+			PropertiesGeneratorBase propertiesGenerator = GetPropertiesGenerator(itemOptions);
+			ResultItemGeneratorBase itemGenerator = GetResultItemGenerator(itemOptions, propertiesGenerator);
 			return itemGenerator.GenerateResultItem(context);
 		}
 
@@ -91,7 +94,7 @@ namespace SqlFirst.Codegen.Text
 		/// <param name="options">Параметры генерации</param>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
 		/// <returns>Генератор результата выполнения запроса</returns>
-		private static ResultItemGeneratorBase GetResultItemGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
+		private static ResultItemGeneratorBase GetResultItemGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
 		{
 			switch (options.ItemType)
 			{
@@ -106,7 +109,7 @@ namespace SqlFirst.Codegen.Text
 			}
 		}
 
-		private static ResultItemGeneratorBase GetStructResultItemsGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
+		private static ResultItemGeneratorBase GetStructResultItemsGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
 		{
 			if ((options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual)
 			{
@@ -121,7 +124,7 @@ namespace SqlFirst.Codegen.Text
 			return new NotifyPropertyChangedStructResultItemGenerator(propertiesGenerator);
 		}
 
-		private static ResultItemGeneratorBase GetClassResultItemsGenerator(IResultGenerationOptions options, PropertiesGeneratorBase propertiesGenerator)
+		private static ResultItemGeneratorBase GetClassResultItemsGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
 		{
 			if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) != ResultItemAbilities.NotifyPropertyChanged)
 			{
@@ -141,7 +144,7 @@ namespace SqlFirst.Codegen.Text
 		/// </summary>
 		/// <param name="options">Параметры генерации</param>
 		/// <returns>Генератор свойств</returns>
-		private PropertiesGeneratorBase GetPropertiesGenerator(IResultGenerationOptions options)
+		private PropertiesGeneratorBase GetPropertiesGenerator(ItemOptions options)
 		{
 			bool isReadOnly = (options.PropertyModifiers & PropertyModifiers.ReadOnly) == PropertyModifiers.ReadOnly;
 			bool isVirtual = (options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual;

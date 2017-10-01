@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace SqlFirst.Codegen
+namespace SqlFirst.Codegen.Text.TypedOptions
 {
 	/// <summary>
 	/// Модификаторы свойства

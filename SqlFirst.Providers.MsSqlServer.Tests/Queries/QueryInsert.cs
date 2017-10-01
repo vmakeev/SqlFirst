@@ -14,5 +14,9 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 		}
 
 		public static string InsertStringGuidDate => GetQueryText();
+
+		public static string InsertStringGuidDateWithOption => GetQueryText();
+
+		public static string InsertStringGuidDateWithOptions => GetQueryText();
 	}
 }
