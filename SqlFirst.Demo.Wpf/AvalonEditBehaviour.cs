@@ -48,6 +48,7 @@ namespace SqlFirst.Demo.Wpf
 			}
 		}
 
+		[SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
 		private static void PropertyChangedCallback(
 			DependencyObject dependencyObject,
 			DependencyPropertyChangedEventArgs dependencyPropertyChangedEventArgs)

@@ -123,19 +123,8 @@ namespace SqlFirst.Demo.Wpf
 				["QueryName"] = QueryName
 			};
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions);
-
-			ResultItemAbilities abilities = IsNotifyPropertyChanged ? ResultItemAbilities.NotifyPropertyChanged : ResultItemAbilities.None;
-			var modifiers = PropertyModifiers.None;
-			if (IsVirtualProperties)
-			{
-				modifiers |= PropertyModifiers.Virtual;
-			}
-			if (IsReadOnlyProperties)
-			{
-				modifiers |= PropertyModifiers.ReadOnly;
-			}
-
-			IResultGenerationOptions options = new ResultGenerationOptions(ResultItemType, abilities, PropertyType, modifiers);
+			
+			IResultGenerationOptions options = new ResultGenerationOptions(info.SqlFirstOptions);
 			IGeneratedResultItem item = codeGenerator.GenerateResultItem(context, options);
 
 			string code = codeGenerator.GenerateFile(new[] { item });
@@ -145,22 +134,18 @@ namespace SqlFirst.Demo.Wpf
 
 		#region Public
 
-		private ResultItemType _resultItemType = ResultItemType.Class;
-
-		private bool _isNotifyPropertyChanged;
-
-		private PropertyType _propertyType = PropertyType.Auto;
-
-		private bool _isVirtualProperties;
-
-		private bool _isReadOnlyProperties;
-
 		private string _namespace = "SqlFirst.Test.Namespace";
 
 		private string _queryName = "My_Test_Query";
 
 		private string _sourceSql =
-			@"-- begin variables 
+			@"-- begin sqlFirstOptions
+
+-- generate item class properties auto virtual
+
+-- end
+
+-- begin variables 
 
 declare @userKey varchar(MAX) ='test'; 
 
@@ -206,56 +191,6 @@ fetch next @take rows only";
 			{
 				_queryName = value;
 				OnPropertyChanged(nameof(QueryName));
-			}
-		}
-
-		public ResultItemType ResultItemType
-		{
-			get => _resultItemType;
-			set
-			{
-				_resultItemType = value;
-				OnPropertyChanged(nameof(ResultItemType));
-			}
-		}
-
-		public bool IsNotifyPropertyChanged
-		{
-			get => _isNotifyPropertyChanged;
-			set
-			{
-				_isNotifyPropertyChanged = value;
-				OnPropertyChanged(nameof(IsNotifyPropertyChanged));
-			}
-		}
-
-		public PropertyType PropertyType
-		{
-			get => _propertyType;
-			set
-			{
-				_propertyType = value;
-				OnPropertyChanged(nameof(PropertyType));
-			}
-		}
-
-		public bool IsVirtualProperties
-		{
-			get => _isVirtualProperties;
-			set
-			{
-				_isVirtualProperties = value;
-				OnPropertyChanged(nameof(IsVirtualProperties));
-			}
-		}
-
-		public bool IsReadOnlyProperties
-		{
-			get => _isReadOnlyProperties;
-			set
-			{
-				_isReadOnlyProperties = value;
-				OnPropertyChanged(nameof(IsReadOnlyProperties));
 			}
 		}
 

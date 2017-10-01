@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:codegen="clr-namespace:SqlFirst.Codegen;assembly=SqlFirst.Codegen"
 		xmlns:avalonedit="http://icsharpcode.net/sharpdevelop/avalonedit"
 		xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
 		xmlns:wpf="clr-namespace:SqlFirst.Demo.Wpf"
@@ -71,31 +70,6 @@
 
 			<TextBlock Text="Имя запроса:" Grid.Column="0" Grid.Row="2"/>
 			<TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding QueryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2"/>
-
-			<TextBlock Text="Тип результата:" Grid.Column="0" Grid.Row="3"/>
-			<ComboBox Grid.Row="3" Grid.Column="1" SelectedItem="{Binding ResultItemType, Mode=TwoWay}" VerticalContentAlignment="Center">
-				<ComboBox.Items>
-					<codegen:ResultItemType>Class</codegen:ResultItemType>
-					<codegen:ResultItemType>Struct</codegen:ResultItemType>
-				</ComboBox.Items>
-			</ComboBox>
-
-			<StackPanel Orientation="Vertical" Grid.Row="4" Grid.Column="1">
-				<CheckBox Content="Реализовать INotifyPropertyChanged" IsChecked="{Binding IsNotifyPropertyChanged, Mode=TwoWay}"/>
-			</StackPanel>
-
-			<TextBlock Text="Тип свойств:" Grid.Column="0" Grid.Row="5"/>
-			<ComboBox Grid.Row="5" Grid.Column="1" SelectedItem="{Binding PropertyType, Mode=TwoWay}" VerticalContentAlignment="Center">
-				<ComboBox.Items>
-					<codegen:PropertyType>Auto</codegen:PropertyType>
-					<codegen:PropertyType>BackingField</codegen:PropertyType>
-				</ComboBox.Items>
-			</ComboBox>
-
-			<StackPanel Orientation="Vertical" Grid.Row="6" Grid.Column="1">
-				<CheckBox Content="Объявить свойства виртуальными" IsChecked="{Binding IsVirtualProperties, Mode=TwoWay}"/>
-				<CheckBox Content="Свойства доступны только на чтение" IsChecked="{Binding IsReadOnlyProperties, Mode=TwoWay}"/>
-			</StackPanel>
 
 		</Grid>
 
