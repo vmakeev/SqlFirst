@@ -1,5 +1,6 @@
 ﻿using System.Linq;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
+using SqlFirst.Core.Impl;
 using SqlFirst.Providers.MsSqlServer.Tests.Queries;
 using Xunit;
 using Xunit.Should;

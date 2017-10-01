@@ -1,5 +1,4 @@
 ﻿using System.Data;
-using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Core
 {

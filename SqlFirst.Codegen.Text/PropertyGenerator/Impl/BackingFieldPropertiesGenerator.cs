@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Core;
-using SqlFirst.Core.Codegen;
-using SqlFirst.Core.Parsing;
 
 namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 {
@@ -39,8 +38,8 @@ namespace SqlFirst.Codegen.Text.PropertyGenerator.Impl
 
 				string usingString = csType.Namespace;
 				string csTypeString = CSharpCodeHelper.GetTypeBuiltInName(csType);
-				string csPropertyNameString = CSharpCodeHelper.GetValidVariableName(fieldDetails.ColumnName, VariableNamingPolicy.Pascal);
-				string csBackingFieldNameString = CSharpCodeHelper.GetValidVariableName(fieldDetails.ColumnName, VariableNamingPolicy.CamelCaseWithUnderscope);
+				string csPropertyNameString = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
+				string csBackingFieldNameString = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.CamelCaseWithUnderscope);
 
 				string backingField = backingFieldTemplate
 					.Replace("$Type$", csTypeString)

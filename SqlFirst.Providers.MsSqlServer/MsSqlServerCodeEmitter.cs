@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using SqlFirst.Core.Parsing;
+using SqlFirst.Core;
+using SqlFirst.Core.Impl;
 
 namespace SqlFirst.Providers.MsSqlServer
 {
@@ -144,7 +145,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					sectionEnd = string.Empty;
 					break;
 				default:
-					throw new ArgumentOutOfRangeException($"Unexpected querySectionType: {section.Type:G}({section.Type:D})", (Exception)null);
+					throw new QueryEmitException($"Unexpected querySectionType: {section.Type:G}({section.Type:D})");
 			}
 
 			string result = sectionStart + section.Content.Trim() + sectionEnd;
@@ -185,7 +186,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					return floatValue.ToString(CultureInfo.InvariantCulture);
 
 				default:
-					throw new InvalidCastException($"Valid defaultValue type expected, actual is [{value.GetType().Name}]");
+					throw new QueryEmitException($"Valid defaultValue type expected, actual is [{value.GetType().Name}]");
 			}
 		}
 
