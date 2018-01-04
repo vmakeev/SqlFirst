@@ -1,0 +1,22 @@
+﻿/// <summary>
+/// Выполняет ленивую загрузку списка элементов типа <see cref="$ItemType$"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Список элементов типа <see cref="$ItemType$"/></returns>
+public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$MethodParameters$, CancellationToken cancellationToken)
+{
+	DbCommand cmd = connection.CreateCommand();
+	cmd.CommandText = GetQueryText();
+$AddParameters$
+
+	async Task<IEnumerator<$ItemType$>> CreateEnumerator(DbCommand dbCommand)
+	{
+		DbDataReader reader = await dbCommand.ExecuteReaderAsync(cancellationToken);
+		return new DbAsyncEnumerator<$ItemType$>(reader, GetItemFromRecord, cancellationToken);
+	}
+
+	IEnumerable<$ItemType$> enumerable = new Enumerable<$ItemType$>(async () => await CreateEnumerator(cmd));
+	return Task.FromResult(enumerable);
+}

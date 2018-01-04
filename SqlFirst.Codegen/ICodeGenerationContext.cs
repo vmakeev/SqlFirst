@@ -22,5 +22,10 @@ namespace SqlFirst.Codegen
 		/// Дополнительные параметры кодогенерации
 		/// </summary>
 		IReadOnlyDictionary<string, object> Options { get; }
+
+		/// <summary>
+		/// Преобразователь типов БД в CLR
+		/// </summary>
+		IDatabaseTypeMapper TypeMapper { get; }
 	}
 }

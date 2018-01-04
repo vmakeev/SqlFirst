@@ -6,6 +6,7 @@ namespace SqlFirst.Codegen.Text.Snippets
 	internal static class FieldSnippet
 	{
 		public static string BackingField => GetSnippetText();
+		public static string ReadOnlyField => GetSnippetText();
 
 		private static string GetSnippetText([CallerMemberName] string name = null)
 		{

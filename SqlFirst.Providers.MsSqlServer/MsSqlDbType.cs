@@ -91,7 +91,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			{
 				return null;
 			}
-
+			
 			Match match = _sizeRegex.Match(type);
 
 			return match.Success 

@@ -1,0 +1,4 @@
+﻿$Modificators$ class $QueryName$
+{
+$Nested$$Consts$$Fields$$Properties$$Methods$
+}

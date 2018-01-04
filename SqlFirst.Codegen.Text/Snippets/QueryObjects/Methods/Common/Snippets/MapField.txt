@@ -1,0 +1,4 @@
+﻿if (record[$Index$] != null && record[$Index$] != DBNull.Value)
+{
+	result.$Property$ = ($PropertyType$)record[$Index$];
+}

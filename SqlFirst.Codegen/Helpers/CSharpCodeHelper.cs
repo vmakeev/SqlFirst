@@ -218,7 +218,7 @@ namespace SqlFirst.Codegen.Helpers
 
 		#region Long arrays
 
-		private static readonly string[] _reservedWords =
+		private static readonly HashSet<string> _reservedWords = new HashSet<string>
 		{
 			"abstract",
 			"as",

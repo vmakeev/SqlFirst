@@ -7,8 +7,9 @@ namespace SqlFirst.Codegen.Impl
 	public class CodeGenerationContext : ICodeGenerationContext
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
-		public CodeGenerationContext(IEnumerable<IQueryParamInfo> incomingParameters, IEnumerable<IFieldDetails> outgoingParameters, IReadOnlyDictionary<string, object> options)
+		public CodeGenerationContext(IEnumerable<IQueryParamInfo> incomingParameters, IEnumerable<IFieldDetails> outgoingParameters, IReadOnlyDictionary<string, object> options, IDatabaseTypeMapper typeMapper)
 		{
+			TypeMapper = typeMapper;
 			IncomingParameters = incomingParameters ?? throw new System.ArgumentNullException(nameof(incomingParameters));
 			OutgoingParameters = outgoingParameters ?? throw new System.ArgumentNullException(nameof(outgoingParameters));
 			Options = options ?? throw new System.ArgumentNullException(nameof(options));
@@ -22,5 +23,8 @@ namespace SqlFirst.Codegen.Impl
 
 		/// <inheritdoc />
 		public IReadOnlyDictionary<string, object> Options { get; }
+
+		/// <inheritdoc />
+		public IDatabaseTypeMapper TypeMapper { get; }
 	}
 }

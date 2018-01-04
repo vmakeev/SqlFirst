@@ -1,0 +1,24 @@
+﻿public class Enumerable<T> : IEnumerable<T>
+{
+	private readonly Func<Task<IEnumerator<T>>> _enumeratorFactory;
+
+	/// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+	public Enumerable(Func<Task<IEnumerator<T>>> enumeratorFactory)
+	{
+		_enumeratorFactory = enumeratorFactory;
+	}
+
+	/// <summary>Returns an enumerator that iterates through the collection.</summary>
+	/// <returns>An enumerator that can be used to iterate through the collection.</returns>
+	public IEnumerator<T> GetEnumerator()
+	{
+		return _enumeratorFactory.Invoke().GetAwaiter().GetResult();
+	}
+
+	/// <summary>Returns an enumerator that iterates through a collection.</summary>
+	/// <returns>An <see cref="T:System.Collections.IEnumerator" /> object that can be used to iterate through the collection.</returns>
+	IEnumerator IEnumerable.GetEnumerator()
+	{
+		return GetEnumerator();
+	}
+}

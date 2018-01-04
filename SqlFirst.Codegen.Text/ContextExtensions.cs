@@ -14,7 +14,7 @@ namespace SqlFirst.Codegen.Text
 		/// <returns>Пространство имен, в котором должны выполняться генерация</returns>
 		public static string GetNamespace(this ICodeGenerationContext context)
 		{
-			return context.GetOption<string>("Namespace");
+			return context.GetOption<string>("Namespace") ?? "DefaultNamespace";
 		}
 
 		/// <summary>
@@ -24,7 +24,37 @@ namespace SqlFirst.Codegen.Text
 		/// <returns>Имя оригинального запроса</returns>
 		public static string GetQueryName(this ICodeGenerationContext context)
 		{
-			return context.GetOption<string>("QueryName");
+			return context.GetOption<string>("QueryName") ?? "Query";
+		}
+
+		/// <summary>
+		/// Возвращает текст оригинального запроса
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <returns>Текст оригинального запроса</returns>
+		public static string GetQueryText(this ICodeGenerationContext context)
+		{
+			return context.GetOption<string>("QueryText");
+		}
+
+		/// <summary>
+		/// Возвращает имя генерируемого класса с результатом
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <returns>Имя генерируемого класса с результатом</returns>
+		public static string GetQueryResultItemName(this ICodeGenerationContext context)
+		{
+			return context.GetOption<string>("QueryResultItemName") ?? "QueryItem";
+		}
+
+		/// <summary>
+		/// Возвращает путь к файлу ресурса, содержащему текст SQL запроса
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <returns>Путь к файлу ресурса, содержащему текст SQL запроса</returns>
+		public static string GetResourcePath(this ICodeGenerationContext context)
+		{
+			return context.GetOption<string>("ResourcePath") ?? "DefaultNamespace.Query.sql";
 		}
 
 		/// <summary>
@@ -46,6 +76,7 @@ namespace SqlFirst.Codegen.Text
 				return null;
 			}
 
+			// todo: null check?
 			if (result is T typedResult)
 			{
 				return typedResult;

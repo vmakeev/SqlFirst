@@ -30,7 +30,7 @@ namespace SqlFirst.Codegen.Trees
 		/// <summary>
 		/// Перечень базовых типов для сгенерированного
 		/// </summary>
-		IEnumerable<IGeneratedType> BaseTypes { get; set; }
+		IEnumerable<IGeneratedType> BaseTypes { get; }
 
 		/// <summary>
 		/// Полный текст сгенерированного элемента

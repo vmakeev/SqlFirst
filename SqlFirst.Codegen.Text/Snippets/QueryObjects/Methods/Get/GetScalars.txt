@@ -1,0 +1,20 @@
+﻿/// <summary>
+/// Выполняет загрузку значения типа <see cref="$ItemType$"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$
+/// <returns>Значение типа  <see cref="$ItemType$"/></returns>
+public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$MethodParameters$)
+{
+	IDbCommand cmd = connection.CreateCommand();
+	cmd.CommandText = GetQueryText();
+$AddParameters$
+
+	using (IDataReader reader = cmd.ExecuteReader())
+	{
+		while (reader.Read())
+		{
+			yield return ($ItemType$)reader[0];
+		}
+	}
+}

@@ -1,0 +1,22 @@
+﻿/// <summary>
+/// Добавляет параметр к команде
+/// </summary>
+/// <param name="command">Команда SQL</param>
+/// <param name="parameterType">Тип параметра</param>
+/// <param name="parameterName">Имя параметра</param>
+/// <param name="value">Значение параметра</param>
+/// <param name="length">Длина параметра</param>
+protected virtual void AddParameter(IDbCommand command, SqlDbType parameterType, string parameterName, object value, int? length = null)
+{
+	SqlParameter sqlParameter;
+	if (length.HasValue && length.Value > 0)
+	{
+		sqlParameter = new SqlParameter(parameterName, parameterType, length.Value);
+	}
+	else
+	{
+		sqlParameter = new SqlParameter(parameterName, parameterType);
+	}
+	sqlParameter.Value = value ?? DBNull.Value;
+	command.Parameters.Add(sqlParameter);
+}

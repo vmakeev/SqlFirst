@@ -44,7 +44,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			var result = new List<IQuerySection>(sections);
 
 			// Тело запроса - в конец файла
-			IQuerySection body = sections.SingleOrDefault(section => section.Type == QuerySectionType.Body) 
+			IQuerySection body = sections.SingleOrDefault(section => section.Type == QuerySectionType.Body)
 				?? new QuerySection(QuerySectionType.Body, string.Empty);
 
 			if (result.IndexOf(body) != result.Count - 1)
@@ -239,6 +239,18 @@ namespace SqlFirst.Providers.MsSqlServer
 
 			IEnumerable<string> declarations = infos.Select(EmitDeclaration);
 			string result = string.Join(Environment.NewLine, declarations);
+			return result;
+		}
+
+		public string EmitOption(SqlFirstOption option)
+		{
+			return $"-- {option.Name} " + string.Join(" ", option.Parameters);
+		}
+		
+		public string EmitOptions(IEnumerable<SqlFirstOption> options)
+		{
+			IEnumerable<string> results = options.Select(EmitOption);
+			string result = string.Join(Environment.NewLine, results);
 			return result;
 		}
 	}

@@ -1,0 +1,1 @@
+﻿private readonly $Type$ $Name$ = $Value$;

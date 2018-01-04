@@ -1,0 +1,14 @@
+﻿/// <summary>
+/// Возвращает новый элемент, заполненный данными из <paramref name="record"/>
+/// </summary>
+/// <param name="record">Строка БД</param>
+/// <returns>Новый элемент, заполненный данными из <paramref name="record"/></returns>
+protected virtual $ItemType$ GetItemFromRecord(IDataRecord record)
+{
+	var result = new $ItemType$();
+
+$MapDataRecord$
+
+	result.AfterLoad();
+	return result;
+}

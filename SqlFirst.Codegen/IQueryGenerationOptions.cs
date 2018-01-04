@@ -8,6 +8,8 @@ namespace SqlFirst.Codegen
 	/// </summary>
 	public interface IQueryGenerationOptions
 	{
+		QueryType QueryType { get; }
+
 		IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
 	}
 }

@@ -1,0 +1,15 @@
+﻿/// <summary>
+/// Выполняет загрузку значения типа <see cref="$ItemType$"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$
+/// <returns>Значение типа  <see cref="$ItemType$"/></returns>
+public virtual $ItemType$ GetFirst(IDbConnection connection$MethodParameters$)
+{
+	IDbCommand cmd = connection.CreateCommand();
+	cmd.CommandText = GetQueryText();
+$AddParameters$
+
+	object value = cmd.ExecuteScalar();
+	return ($ItemType$)value;
+}

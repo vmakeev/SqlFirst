@@ -1,0 +1,8 @@
+﻿/// <summary>
+/// Возвращает текст запроса
+/// </summary>
+/// <returns>Текст запроса</returns>
+protected virtual string GetQueryText()
+{
+	return @"$QueryText$";
+}

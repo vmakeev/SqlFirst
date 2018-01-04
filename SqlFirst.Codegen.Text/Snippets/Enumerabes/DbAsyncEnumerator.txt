@@ -1,0 +1,35 @@
+﻿public class DbAsyncEnumerator<T> : AsyncEnumerator<T>
+{
+	private readonly DbDataReader _reader;
+	private readonly Func<IDataReader, T> _itemMapper;
+	private readonly CancellationToken _cancellationToken;
+
+	/// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+	public DbAsyncEnumerator(DbDataReader reader, Func<IDataRecord, T> itemMapper, CancellationToken cancellationToken)
+	{
+		_reader = reader;
+		_itemMapper = itemMapper;
+		_cancellationToken = cancellationToken;
+	}
+
+	protected override async Task<EnumerableItem<T>> Fetch()
+	{
+		bool isReadSuccess = await _reader.ReadAsync(_cancellationToken);
+		if (isReadSuccess)
+		{
+			return new EnumerableItem<T>
+			{
+				HasValue = true,
+				Value = _itemMapper.Invoke(_reader)
+			};
+		}
+
+		return new EnumerableItem<T> { HasValue = false };
+	}
+
+	protected override void Dispose(bool disposing)
+	{
+		_reader.Dispose();
+		base.Dispose(disposing);
+	}
+}

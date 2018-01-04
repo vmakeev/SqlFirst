@@ -10,8 +10,10 @@ using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using SqlFirst.Codegen;
+using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text;
+using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 using SqlFirst.Core.Impl;
 using SqlFirst.Demo.Wpf.Annotations;
@@ -66,6 +68,7 @@ namespace SqlFirst.Demo.Wpf
 
 				FormattedSql = FormatSql(SourceSql);
 				ResultItem = GenerateResultItemCode(SourceSql);
+				QueryObject = GenerateQueryObjectCode(SourceSql);
 			}
 			catch (Exception ex)
 			{
@@ -112,6 +115,10 @@ namespace SqlFirst.Demo.Wpf
 			var parser = new MsSqlServerQueryParser();
 
 			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+			if (info.Results.Count() == 1)
+			{
+				return string.Empty;
+			}
 
 			var typeMapper = new MsSqlServerTypeMapper();
 
@@ -120,16 +127,45 @@ namespace SqlFirst.Demo.Wpf
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
 			{
 				["Namespace"] = Namespace,
-				["QueryName"] = QueryName
+				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Item"
 			};
-			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions);
+			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
+
+			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
+			IGeneratedItem generatedItem = codeGenerator.GenerateResultItem(context, itemOptions);
+
+			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
+
+			return itemCode;
+		}
+
+		private string GenerateQueryObjectCode(string query)
+		{
+			var parser = new MsSqlServerQueryParser();
+
+			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+
+			var typeMapper = new MsSqlServerTypeMapper();
+
+			var codeGenerator = new TextCodeGenerator(typeMapper);
 			
-			IResultGenerationOptions options = new ResultGenerationOptions(info.SqlFirstOptions);
-			IGeneratedResultItem item = codeGenerator.GenerateResultItem(context, options);
+			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
+			{
+				["Namespace"] = Namespace,
+				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Item",
+				["QueryText"] = info.Sections.Single(p=>p.Type == QuerySectionType.Body).Content
+			};
 
-			string code = codeGenerator.GenerateFile(new[] { item });
+			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
 
-			return code;
+			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
+			IGeneratedItem generateQuery = codeGenerator.GenerateQueryObject(context, queryOptions);
+
+			string itemCode = codeGenerator.GenerateFile(new[] { generateQuery });
+
+			return itemCode;
 		}
 
 		#region Public

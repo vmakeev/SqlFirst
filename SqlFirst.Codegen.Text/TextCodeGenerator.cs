@@ -2,12 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using SqlFirst.Codegen.Text.PropertyGenerator;
-using SqlFirst.Codegen.Text.PropertyGenerator.Impl;
-using SqlFirst.Codegen.Text.ResultItemGenerators;
-using SqlFirst.Codegen.Text.ResultItemGenerators.Impl;
+using SqlFirst.Codegen.Text.QueryObject;
+using SqlFirst.Codegen.Text.ResultItem;
+using SqlFirst.Codegen.Text.ResultItem.Impl;
+using SqlFirst.Codegen.Text.ResultItem.PropertyGenerator;
+using SqlFirst.Codegen.Text.ResultItem.PropertyGenerator.Impl;
+using SqlFirst.Codegen.Text.ResultItem.TypedOptions;
 using SqlFirst.Codegen.Text.Snippets;
-using SqlFirst.Codegen.Text.TypedOptions;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 
@@ -29,7 +30,8 @@ namespace SqlFirst.Codegen.Text
 		/// <inheritdoc />
 		public IGeneratedQueryObject GenerateQueryObject(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
-			throw new NotImplementedException();
+			var queryGenerator = new QueryObjectGenerator();
+			return queryGenerator.GenerateQueryObject(context, options);
 		}
 
 		/// <inheritdoc />
@@ -47,13 +49,13 @@ namespace SqlFirst.Codegen.Text
 		{
 			IGeneratedItem[] items = generatedItems.ToArray();
 
-			string usingSnipper = FileSnippet.Using;
+			string usingSnippet = FileSnippet.Using;
 
 			IEnumerable<string> usings = items
 				.SelectMany(generatedItem => generatedItem.Usings)
 				.Distinct(StringComparer.InvariantCultureIgnoreCase)
 				.OrderBy(usingName => usingName)
-				.Select(usingName => usingSnipper.Replace("$Using$", usingName));
+				.Select(usingName => usingSnippet.Replace("$Using$", usingName));
 
 			string usingsText = FileSnippet.Usings.Replace("$Usings$", string.Join(string.Empty, usings)).Trim();
 

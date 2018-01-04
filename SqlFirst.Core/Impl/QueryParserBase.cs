@@ -175,18 +175,18 @@ namespace SqlFirst.Core.Impl
 			string combinedOptions = string.Join(Environment.NewLine, optionsSections.Select(section => section.Content));
 
 			string[] singleLineOptions = combinedOptions
-				.Split(new[] { Environment.NewLine }, StringSplitOptions.None)
+				.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None)
 				.Where(line => !string.IsNullOrWhiteSpace(line))
 				.Select(line => line.Trim())
 				.ToArray();
 
 			IEnumerable<string[]> splittedOptions = singleLineOptions
 				.Where(line => line.StartsWith("--", StringComparison.Ordinal))
-				.Select(line => line.Split(' ').Where(element => element != "--" && !string.IsNullOrWhiteSpace(element)).ToArray());
+				.Select(line => line.Split(' ', '\t').Where(element => element != "--" && !string.IsNullOrWhiteSpace(element)).ToArray());
 
 			foreach (string[] splittedOption in splittedOptions)
 			{
-				string name = splittedOption.First().Trim('-').Trim();
+				string name = splittedOption.First().TrimStart('-').Trim();
 				IEnumerable<string> parameters = splittedOption.Skip(1).Select(parameter => parameter.Trim());
 				yield return new SqlFirstOption(name, parameters);
 			}

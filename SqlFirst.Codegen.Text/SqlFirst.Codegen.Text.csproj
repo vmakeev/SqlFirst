@@ -21,11 +21,47 @@
     <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\NotifyPropertyChangedResultItem.txt" />
     <None Remove="Snippets\PocoResultItem.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryText.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\MapField.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetFirst.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetIEnumerable.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetIEnumerableAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetScalar.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetScalarAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\AddParameter.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\MethodParameter.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\XmlParam.txt" />
+    <None Remove="Snippets\Enumerabes\AsyncEnumerator.txt" />
+    <None Remove="Snippets\Enumerabes\DbAsyncEnumerator.txt" />
+    <None Remove="Snippets\Enumerabes\Enumerable.txt" />
+    <None Remove="Snippets\Enumerabes\EnumerableItem.txt" />
+    <None Remove="Snippets\QueryObjects\QueryObject.txt" />
     <None Remove="Snippets\ReadOnlyAutoProperty.txt" />
     <None Remove="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
     <None Remove="Snippets\ReadOnlyBackingFieldProperty.txt" />
     <None Remove="Snippets\ReadOnlyBackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\StructResultItem.txt" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Include="Snippets\Enumerabes\AsyncEnumerator.txt" />
+    <EmbeddedResource Include="Snippets\Enumerabes\DbAsyncEnumerator.txt" />
+    <EmbeddedResource Include="Snippets\Enumerabes\Enumerable.txt" />
+    <EmbeddedResource Include="Snippets\Enumerabes\EnumerableItem.txt" />
+    <EmbeddedResource Include="Snippets\Fields\ReadOnlyField.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalar.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\QueryObject.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,6 +89,15 @@
     <EmbeddedResource Include="Snippets\Properties\ReadOnlyBackingFieldProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\ReadOnlyBackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Items\StructResultItem.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\MapField.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetFirst.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetIEnumerable.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetIEnumerableAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\AddParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\MethodParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\XmlParam.txt" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,6 +106,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="QueryObject\Options\" />
   </ItemGroup>
 
 </Project>
