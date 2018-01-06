@@ -74,7 +74,7 @@ namespace SqlFirst.Codegen.Text.QueryObject
 
 		private static void BuildWithScalarOutput(QueryObjectTemplate result, bool useMultipleInsert)
 		{
-			result.AddAbility<MapDataRecordToScalarAbility>();
+			result.AddAbility<MapDataRecordToScalarAbility>(() => useMultipleInsert);
 			result.AddAbility<MapValueToScalarAbility>();
 
 			result.AddAbility<InsertSingleValuePlainWithScalarResultAbility>();

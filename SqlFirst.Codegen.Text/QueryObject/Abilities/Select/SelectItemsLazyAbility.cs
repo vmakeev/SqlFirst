@@ -31,7 +31,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
 			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append("System.Data", "System.Collections.Generic");
+			result.Usings = result.Usings.Append(
+				"System", 
+				"System.Data", 
+				"System.Collections.Generic");
 
 			return result;
 		}
