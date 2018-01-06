@@ -1,0 +1,4 @@
+﻿$Modificators$ struct $ItemName$
+{
+$Properties$
+}

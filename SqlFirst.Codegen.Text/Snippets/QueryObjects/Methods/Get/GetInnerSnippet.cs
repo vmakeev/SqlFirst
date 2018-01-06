@@ -7,7 +7,8 @@
 		{
 		}
 
-		public string AddParameter => GetSnippetText();
+		public string CallAddParameter => GetSnippetText();
+		public string CallAddParameterNumbered => GetSnippetText();
 		public string MethodParameter => GetSnippetText();
 		public string XmlParam => GetSnippetText();
 	}

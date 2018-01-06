@@ -1,0 +1,25 @@
+﻿/// <summary>
+/// Выполняет загрузку первого элемента типа <see cref="$ItemType$"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Первый элемент типа <see cref="$ItemType$"/></returns>
+public virtual async Task<$ItemType$> GetFirstAsync(DbConnection connection$MethodParameters$, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+$AddParameters$
+
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		{
+			if (await reader.ReadAsync(cancellationToken) != true)
+			{
+				return null;
+			}
+
+			return GetItemFromRecord(reader);
+		}
+	}
+}

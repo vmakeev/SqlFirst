@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 
@@ -18,6 +19,14 @@ namespace SqlFirst.Codegen.Text.QueryObject.Data
 			}
 		}
 
+		public void AddAbility<T>(Func<bool> predicate) where T : IQueryObjectAbility, new()
+		{
+			if (predicate())
+			{
+				AddAbility(new T());
+			}
+		}
+
 		public void AddAbility<T>() where T : IQueryObjectAbility, new()
 		{
 			AddAbility(new T());
@@ -29,7 +38,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Data
 			{
 				if (IsExists(ability.Name))
 				{
-					throw new CodeGenerationException($"Ability [{ability.Name}] already exists");
+					throw new CodeGenerationException($"Ability [{ability.Name}] already exists.");
 				}
 
 				_abilities.Add(ability);

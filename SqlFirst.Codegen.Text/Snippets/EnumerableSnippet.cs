@@ -13,7 +13,7 @@ namespace SqlFirst.Codegen.Text.Snippets
 		private static string GetSnippetText([CallerMemberName] string name = null)
 		{
 			string resourceName = $"SqlFirst.Codegen.Text.Snippets.Enumerabes.{name}.txt";
-			Stream stream = typeof(ItemSnippet).Assembly.GetManifestResourceStream(resourceName);
+			Stream stream = typeof(EnumerableSnippet).Assembly.GetManifestResourceStream(resourceName);
 			string queryText = new StreamReader(stream ?? throw new CodeGenerationException($"Resource not found: {resourceName}")).ReadToEnd();
 			return queryText;
 		}

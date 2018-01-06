@@ -31,6 +31,16 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 				aggregate.DbName = nextResult.DbName;
 			}
 
+			if (aggregate.SemanticName == null && nextResult.SemanticName != null)
+			{
+				aggregate.SemanticName = nextResult.SemanticName;
+			}
+
+			if (!aggregate.IsNumbered && nextResult.IsNumbered)
+			{
+				aggregate.IsNumbered = true;
+			}
+
 			if (aggregate.DbType == null && nextResult.DbType != null)
 			{
 				aggregate.DbType = nextResult.DbType;
@@ -49,9 +59,14 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 		{
 			string variableName = context.GetRuleContexts<SqlVariableDeclarationsParser.IdentifierContext>().Single().GetText();
 
+			string dbName = variableName;
+			(bool isNumbered, string semanticName) = QueryParamInfoNameHelper.GetNameSemantic(dbName);
+
 			return new QueryParamInfo
 			{
-				DbName = variableName
+				DbName = dbName,
+				IsNumbered = isNumbered,
+				SemanticName = semanticName
 			};
 		}
 

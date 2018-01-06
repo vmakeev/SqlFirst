@@ -113,12 +113,28 @@
 			</Grid.ColumnDefinitions>
 
 			<TextBlock Text="Результат запроса" Grid.Column="0" Grid.Row="0" HorizontalAlignment="Center"/>
-			<avalonedit:TextEditor IsReadOnly="True" Grid.Row="1" Grid.Column="0" x:Name="ResultItemEditor" >
-				<i:Interaction.Behaviors>
-					<wpf:AvalonEditBehaviour BindableText="{Binding ResultItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
-				</i:Interaction.Behaviors>
-			</avalonedit:TextEditor>
+            <Grid Grid.Row="1" Grid.Column="0">
+               <Grid.RowDefinitions>
+                   <RowDefinition Height="*"/>
+                   <RowDefinition Height="Auto"/>
+                   <RowDefinition Height="*"/>
+               </Grid.RowDefinitions>
 
+                <avalonedit:TextEditor IsReadOnly="True" Grid.Row="0" Grid.Column="0" x:Name="ResultItemEditor" >
+                    <i:Interaction.Behaviors>
+                        <wpf:AvalonEditBehaviour BindableText="{Binding ResultItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:Interaction.Behaviors>
+                </avalonedit:TextEditor>
+
+                <TextBlock Text="Аргумент запроса" Grid.Column="0" Grid.Row="1" HorizontalAlignment="Center"/>
+
+                <avalonedit:TextEditor IsReadOnly="True" Grid.Row="2" Grid.Column="0" x:Name="ParameterItemEditor" >
+                    <i:Interaction.Behaviors>
+                        <wpf:AvalonEditBehaviour BindableText="{Binding ParameterItem, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>
+                    </i:Interaction.Behaviors>
+                </avalonedit:TextEditor>
+            </Grid>
+			
 			<TextBlock Text="Объект запроса" Grid.Column="1" Grid.Row="0" HorizontalAlignment="Center"/>
 			<avalonedit:TextEditor IsReadOnly="True" Grid.Row="1" Grid.Column="1" x:Name="QueryObjectEditor" >
 				<i:Interaction.Behaviors>

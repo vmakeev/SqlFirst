@@ -6,15 +6,17 @@ $XmlParams$
 /// <returns>Список элементов типа <see cref="$ItemType$"/></returns>
 public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$MethodParameters$)
 {
-	IDbCommand cmd = connection.CreateCommand();
-	cmd.CommandText = GetQueryText();
+	using (IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
 $AddParameters$
 
-	using (IDataReader reader = cmd.ExecuteReader())
-	{
-		while (reader.Read())
+		using (IDataReader reader = cmd.ExecuteReader())
 		{
-			yield return GetItemFromRecord(reader);
+			while (reader.Read())
+			{
+				yield return GetItemFromRecord(reader);
+			}
 		}
 	}
 }

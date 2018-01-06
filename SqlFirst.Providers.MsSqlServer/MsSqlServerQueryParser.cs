@@ -151,14 +151,18 @@ namespace SqlFirst.Providers.MsSqlServer
 					{
 						if (!dataReader.GetString(1).StartsWith("@@"))
 						{
-							string dbName = dataReader.GetString(1);
+							string dbName = dataReader.GetString(1).TrimStart('@');
 							string dbType = dataReader.GetString(3);
+
+							(bool isNumbered, string semanticName) = QueryParamInfoNameHelper.GetNameSemantic(dbName);
 
 							var info = new QueryParamInfo
 							{
-								DbName = dbName.TrimStart('@'),
+								DbName = dbName,
 								DbType = MsSqlDbType.Normalize(dbType),
 								Length = MsSqlDbType.GetLength(dbType),
+								IsNumbered = isNumbered,
+								SemanticName = semanticName
 							};
 
 							yield return info;

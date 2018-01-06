@@ -33,10 +33,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 				mappingItems.AddLast(mapRecord);
 			}
 
-			string mappingsText = string.Join(Environment.NewLine, mappingItems).Indent("\t");
+			string mappingsText = string.Join(Environment.NewLine, mappingItems).Indent(QuerySnippet.Indent, 1);
 
 			string method = new StringBuilder(QuerySnippet.Methods.Common.GetItemFromRecord)
-				.Replace("$ItemType$", context.GetQueryResultItemName())
+				.Replace("$ItemType$", context.GetQueryResultItemTypeName())
 				.Replace("$MapDataRecord$", mappingsText)
 				.ToString();
 

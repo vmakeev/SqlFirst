@@ -13,7 +13,7 @@ namespace SqlFirst.Codegen.Text.Snippets
 		private static string GetSnippetText([CallerMemberName] string name = null)
 		{
 			string resourceName = $"SqlFirst.Codegen.Text.Snippets.Files.{name}.txt";
-			Stream stream = typeof(ItemSnippet).Assembly.GetManifestResourceStream(resourceName);
+			Stream stream = typeof(FileSnippet).Assembly.GetManifestResourceStream(resourceName);
 			string queryText = new StreamReader(stream ?? throw new CodeGenerationException($"Resource not found: {resourceName}")).ReadToEnd();
 			return queryText;
 		}

@@ -11,6 +11,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 {
 	internal abstract class QueryObjectAbilityBase : IQueryObjectAbility
 	{
+		protected virtual string GetParameterName(IQueryParamInfo paramInfo)
+		{
+			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
+		}
+
 		/// <inheritdoc />
 		public abstract IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data);
 
@@ -20,12 +25,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 		/// <inheritdoc />
 		public abstract string Name { get; }
 
-		protected string GetIncomingParameters(ICodeGenerationContext context)
+		protected virtual string GetIncomingParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
 		{
 			var parameters = new LinkedList<string>();
-			foreach (IQueryParamInfo paramInfo in context.IncomingParameters)
+			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
-				string name = CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
+				string name = GetParameterName(paramInfo);
 				Type type = context.TypeMapper.Map(paramInfo.DbType, true);
 				string typeName = CSharpCodeHelper.GetTypeBuiltInName(type);
 
@@ -40,12 +45,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 			return string.Join(", ", parameters);
 		}
 
-		protected string GetXmlParameters(ICodeGenerationContext context)
+		protected virtual string GetXmlParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
 		{
 			var parameters = new LinkedList<string>();
-			foreach (IQueryParamInfo paramInfo in context.IncomingParameters)
+			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
-				string name = CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
+				string name = GetParameterName(paramInfo);
 
 				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.XmlParam)
 					.Replace("$Description$", paramInfo.DbName) // todo: description?
@@ -58,12 +63,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 			return string.Join(Environment.NewLine, parameters);
 		}
 
-		protected string GetAddParameters(ICodeGenerationContext context)
+		protected virtual string GetAddParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
 		{
 			var parameters = new LinkedList<string>();
-			foreach (IQueryParamInfo paramInfo in context.IncomingParameters)
+			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
-				string name = CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
+				string name = GetParameterName(paramInfo);
 
 				// todo: добавить отдельный маппер
 				if (!Enum.TryParse(paramInfo.DbType, true, out SqlDbType sqlDbType))
@@ -71,7 +76,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 					throw new CodeGenerationException($"Can not map [{paramInfo.DbType}] to SqlDbType.");
 				}
 
-				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.AddParameter)
+				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.CallAddParameter)
 					.Replace("$SqlType$", sqlDbType.ToString("G"))
 					.Replace("$SqlName$", paramInfo.DbName)
 					.Replace("$Name$", name)

@@ -17,6 +17,11 @@ namespace SqlFirst.Core
 		string DbName { get; }
 
 		/// <summary>
+		/// Значимое имя параметра (без нумерации, если присутствует)
+		/// </summary>
+		string SemanticName { get; }
+
+		/// <summary>
 		/// Тип параметра в БД
 		/// </summary>
 		string DbType { get; }
@@ -25,5 +30,10 @@ namespace SqlFirst.Core
 		/// Значение по умолчанию, указанное в запросе
 		/// </summary>
 		object DefaultValue { get; }
+
+		/// <summary>
+		/// Является ли параметр запроса нумерованным
+		/// </summary>
+		bool IsNumbered { get; }
 	}
 }

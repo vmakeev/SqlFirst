@@ -17,9 +17,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			string xmlParameters = GetXmlParameters(context);
-			string methodParameters = GetIncomingParameters(context);
-			string addParameters = GetAddParameters(context).Indent("\t");
+			IQueryParamInfo[] parameters = context.IncomingParameters.ToArray();
+
+			string xmlParameters = GetXmlParameters(context, parameters);
+			string methodParameters = GetIncomingParameters(context, parameters);
+			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
 
 			IFieldDetails firstParameter = context.OutgoingParameters.FirstOrDefault();
 			if (firstParameter == null)

@@ -1,0 +1,1 @@
+﻿public virtual $Type$ $Name$ { get; set; } = $Value$;

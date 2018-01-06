@@ -1,0 +1,23 @@
+﻿/// <summary>
+/// Выполняет добавление строки в таблицу
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$/// <param name="items">Добавляемые записи</param>
+/// <returns>Количество обновленных строк</returns>
+public virtual int Add(IDbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText(items.Count);
+$AddParameters$
+		int $IndexVariableName$ = 0;
+		foreach($ParameterItemType$ $ParameterVariableName$ in items)
+		{
+$AddParametersNumbered$
+
+			$IndexVariableName$++;
+		}
+
+		return cmd.ExecuteNonQuery();
+	}
+}

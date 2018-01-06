@@ -1,0 +1,21 @@
+﻿/// <summary>
+/// Возвращает текст запроса для вставки <paramref name="rowsCount"/> записей
+/// </summary>
+/// <param name="rowsCount">Количество записей</param>
+/// <returns>Текст запроса для вставки <paramref name="rowsCount"/> записей</returns>
+private string GetQueryText(int rowsCount)
+{
+	const string queryTemplate = @"$QueryTemplate$";
+	const string valuesTemplate = @"$ValuesTemplate$";
+
+	if (rowsCount <= 0)
+	{
+		throw new ArgumentOutOfRangeException(nameof(rowsCount), rowsCount, $"{nameof(rowsCount)} must be greater than zero.");
+	}
+
+	IEnumerable<string> rowTemplates = Enumerable.Range(0, rowsCount).Select(index => string.Format(valuesTemplate, index));
+	string rowTemplatesString = string.Join(",\r\n", rowTemplates);
+
+	string queryText = string.Format(queryTemplate, rowTemplatesString);
+	return queryText;
+}

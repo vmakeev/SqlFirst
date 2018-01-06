@@ -7,10 +7,12 @@ $XmlParams$
 /// <returns>Значение типа  <see cref="$ItemType$"/></returns>
 public virtual async Task<$ItemType$> GetFirstAsync(DbConnection connection$MethodParameters$, CancellationToken cancellationToken)
 {
-	DbCommand cmd = connection.CreateCommand();
-	cmd.CommandText = GetQueryText();
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
 $AddParameters$
 
-	object value = await cmd.ExecuteScalarAsync(cancellationToken);
-	return ($ItemType$)value;
+		object value = await cmd.ExecuteScalarAsync(cancellationToken);
+		return ($ItemType$)value;
+	}
 }

@@ -11,7 +11,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		private const string ConnectionString = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
 
 		[Fact]
-		public void GetDeclaredParametersTest_1()
+		public void GetDeclaredParametersTest_Select_1()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAssignmentAndComments;
 			var queryParser = new MsSqlServerQueryParser();
@@ -43,7 +43,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetDeclaredParametersTest_2()
+		public void GetDeclaredParametersTest_Select_2()
 		{
 			string query = QuerySelect.SelectDateWithNamedOrdinal;
 			var queryParser = new MsSqlServerQueryParser();
@@ -54,7 +54,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetDeclaredParametersTest_3()
+		public void GetDeclaredParametersTest_Select_3()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAndPartOfParameters;
 			var queryParser = new MsSqlServerQueryParser();
@@ -79,7 +79,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetDeclaredParametersTest_4()
+		public void GetDeclaredParametersTest_Select_4()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
 			var queryParser = new MsSqlServerQueryParser();
@@ -104,7 +104,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetUndeclaredParametersTest_1()
+		public void GetUndeclaredParametersTest_Select_1()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPaging;
 			var queryParser = new MsSqlServerQueryParser();
@@ -115,7 +115,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetUndeclaredParametersTest_2()
+		public void GetUndeclaredParametersTest_Select_2()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingNoParameters;
 			var queryParser = new MsSqlServerQueryParser();
@@ -147,7 +147,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetUndeclaredParametersTest_3()
+		public void GetUndeclaredParametersTest_Select_3()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAndPartOfParameters;
 			var queryParser = new MsSqlServerQueryParser();
@@ -165,7 +165,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
-		public void GetUndeclaredParametersTest_4()
+		public void GetUndeclaredParametersTest_Select_4()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
 			var queryParser = new MsSqlServerQueryParser();
@@ -180,6 +180,29 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			take.DbType.ShouldBe(MsSqlDbType.Bigint);
 			take.Length.ShouldBeNull();
 			take.DefaultValue.ShouldBeNull();
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Insert_1()
+		{
+			string query = QueryInsert.InsertStringGuidDate;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.ShouldBeEmpty();
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Insert_2()
+		{
+			string query = QueryInsert.InsertStringGuidDateUndeclared;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.Length.ShouldBe(3);
+
 		}
 	}
 }

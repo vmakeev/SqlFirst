@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
-using SqlFirst.Codegen.Text.ResultItem.PropertyGenerator;
+using SqlFirst.Codegen.Text.Common.PropertyGenerator;
+using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.ResultItem
@@ -43,7 +44,7 @@ namespace SqlFirst.Codegen.Text.ResultItem
 		}
 
 		/// <summary>
-		/// Выполняет непосрезственную генерацию возвращаемого запросом результата
+		/// Выполняет непосредственную генерацию возвращаемого запросом результата
 		/// </summary>
 		/// <param name="context">Контекст генерации</param>
 		/// <returns>Сгенерированный код, описывающий результат запроса</returns>
@@ -52,8 +53,8 @@ namespace SqlFirst.Codegen.Text.ResultItem
 			string targetNamespace = context.GetNamespace();
 
 			string template = GetTemplate();
-			
-			string itemName = context.GetQueryResultItemName();
+
+			string itemName = context.GetQueryResultItemTypeName();
 
 			var result = new GeneratedResultItem
 			{
@@ -63,25 +64,25 @@ namespace SqlFirst.Codegen.Text.ResultItem
 				BaseTypes = new IGeneratedType[0]
 			};
 
-			GeneratedPropertyInfo[] propertiesInfo = _propertiesGenerator.GenerateProperties(context.OutgoingParameters).ToArray();
+			IEnumerable<CodeMemberInfo> memberInfos = context.OutgoingParameters.Select(info => CodeMemberInfo.FromFieldDetails(info, context.TypeMapper));
+			GeneratedPropertyInfo[] propertiesInfo = _propertiesGenerator.GenerateProperties(memberInfos).ToArray();
 
 			IEnumerable<string> allUsings = GetCommonUsings().Concat(propertiesInfo.SelectMany(p => p.Usings));
 			result.Usings = allUsings.Distinct().OrderBy(@using => @using);
 
 			string space = Environment.NewLine + Environment.NewLine;
-			const string indent = "\t";
 
 			IEnumerable<string> backingFields = propertiesInfo
 				.SelectMany(info => info.Properties)
 				.Where(propertyPart => propertyPart.IsBackingField)
 				.Select(propertyPart => propertyPart.Content);
-			string backingFieldsText = string.Join(Environment.NewLine, backingFields.Select(field => field.Indent(indent)));
+			string backingFieldsText = string.Join(Environment.NewLine, backingFields.Select(field => field.Indent(QuerySnippet.Indent, 1)));
 
 			IEnumerable<string> properties = propertiesInfo
 				.SelectMany(info => info.Properties)
 				.Where(propertyPart => !propertyPart.IsBackingField)
 				.Select(p => p.Content);
-			string propertiesText = string.Join(space, properties.Select(property => property.Indent(indent)));
+			string propertiesText = string.Join(space, properties.Select(property => property.Indent(QuerySnippet.Indent, 1)));
 
 			string fullPropertiesText = string.IsNullOrEmpty(backingFieldsText)
 				? propertiesText

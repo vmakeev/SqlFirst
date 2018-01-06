@@ -16,5 +16,6 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods
 		public string GetItemFromRecord => GetSnippetText();
 		public string GetQueryFromResourceCacheable => GetSnippetText();
 		public string GetQueryFromString => GetSnippetText();
+		public string GetQueryFromStringMultipleInsert => GetSnippetText();
 	}
 }

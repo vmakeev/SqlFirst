@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.QueryObject.Data;
@@ -10,9 +11,9 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	public class QueryObjectGenerator
 	{
-		private readonly string _doubleBreak = Environment.NewLine + Environment.NewLine;
+		private static readonly string _doubleBreak = Environment.NewLine + Environment.NewLine;
 
-		private string EmitCodeBlock(IEnumerable<string> codeItems, bool doubleSpacing = false)
+		private static string EmitCodeBlock(IEnumerable<string> codeItems, bool doubleSpacing = false)
 		{
 			string codeBlock = string.Join(doubleSpacing ? _doubleBreak : Environment.NewLine, codeItems);
 			if (!string.IsNullOrEmpty(codeBlock))
@@ -20,7 +21,7 @@ namespace SqlFirst.Codegen.Text.QueryObject
 				codeBlock += _doubleBreak;
 			}
 
-			return codeBlock.Indent("\t");
+			return codeBlock.Indent(QuerySnippet.Indent, 1);
 		}
 
 		public IGeneratedQueryObject GenerateQueryObject(ICodeGenerationContext context, IQueryGenerationOptions options)
@@ -55,7 +56,7 @@ namespace SqlFirst.Codegen.Text.QueryObject
 			return result;
 		}
 
-		private IQueryObjectData GenerateQueryObjectData(ICodeGenerationContext context, IQueryGenerationOptions options)
+		private static IQueryObjectData GenerateQueryObjectData(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
 			QueryObjectTemplate template = GetQueryTemplate(context, options);
 
@@ -65,21 +66,21 @@ namespace SqlFirst.Codegen.Text.QueryObject
 		}
 
 		// ReSharper disable UnusedParameter.Local
-		private void ApplyOptions(QueryObjectTemplate template, IQueryGenerationOptions options)
+		private static void ApplyOptions(QueryObjectTemplate template, IQueryGenerationOptions options)
 		{
 			// todo: process user generation options here
 		}
 
-		private QueryObjectTemplate GetQueryTemplate(ICodeGenerationContext context, IQueryGenerationOptions options)
+		[SuppressMessage("ReSharper", "SwitchStatementMissingSomeCases")]
+		private static QueryObjectTemplate GetQueryTemplate(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
 			switch (options.QueryType)
 			{
 				case QueryType.Create:
-					throw new NotImplementedException();
+					return InsertTemplateFactory.Build(context, options);
 
 				case QueryType.Read:
-					//todo: use options
-					return SelectTemplateBuilder.Build(context);
+					return SelectTemplateFactory.Build(context, options);
 
 				case QueryType.Update:
 					throw new NotImplementedException();

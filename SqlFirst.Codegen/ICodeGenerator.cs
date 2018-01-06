@@ -25,6 +25,14 @@ namespace SqlFirst.Codegen
 		IGeneratedResultItem GenerateResultItem(ICodeGenerationContext context, IResultGenerationOptions options);
 
 		/// <summary>
+		/// Выполняет генерацию объекта, представляющего входящий аргумент запроса
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <param name="options">Параметры генерации</param>
+		/// <returns>Сгенерированный объект</returns>
+		IGeneratedParameterItem GenerateParameterItem(ICodeGenerationContext context, IParameterGenerationOptions options);
+
+		/// <summary>
 		/// Выполняет генерацию файла
 		/// </summary>
 		/// <param name="generatedItems">Набор сгеренированных элементов, которые следует разместить в файле</param>

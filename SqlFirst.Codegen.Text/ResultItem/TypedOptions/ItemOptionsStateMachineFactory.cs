@@ -4,7 +4,7 @@ using Stateless;
 namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 {
 	/// <summary>
-	/// Фабрика по созданию конечных автоматов для настройки <see cref="ItemOptions"/>
+	/// Фабрика по созданию конечных автоматов для настройки <see cref="ResultItemOptions"/>
 	/// </summary>
 	internal static class ItemOptionsStateMachineFactory
 	{
@@ -50,7 +50,9 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 		{
 			public const string Generate = "generate";
 
-			public const string Item = "item";
+			public const string Result = "result";
+
+			public const string Parameter = "parameter";
 
 			public const string Class = "class";
 
@@ -72,20 +74,20 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 		}
 
 		/// <summary>
-		/// Создает конечный автомат для настройки <see cref="ItemOptions"/>
+		/// Создает конечный автомат для настройки <see cref="ResultItemOptions"/>
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>
-		/// <returns>Конечный автомат для настройки <see cref="ItemOptions"/></returns>
-		public static StateMachine<State, string> CreateStateMachine(ItemOptions options)
+		/// <returns>Конечный автомат для настройки <see cref="ResultItemOptions"/></returns>
+		public static StateMachine<State, string> Build(ResultItemOptions options)
 		{
 			var machine = new StateMachine<State, string>(State.Generate);
 
 			machine.Configure(State.Generate)
-					.Permit(Trigger.Item, State.Item);
+					.Permit(Trigger.Result, State.Item);
 
 			machine.Configure(State.Item)
-					.PermitReentry(Trigger.Struct, () => options.ItemType = ResultItemType.Struct)
-					.PermitReentry(Trigger.Class, () => options.ItemType = ResultItemType.Class)
+					.PermitReentry(Trigger.Struct, () => options.ItemType = ItemType.Struct)
+					.PermitReentry(Trigger.Class, () => options.ItemType = ItemType.Class)
 					.PermitReentry(Trigger.Immutable, () => options.PropertyModifiers |= PropertyModifiers.ReadOnly)
 					.PermitReentry(Trigger.NotifyPropertyChanged, () =>
 					{
@@ -111,7 +113,28 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 					.PermitReentry(Trigger.ReadOnly, () => options.PropertyModifiers |= PropertyModifiers.ReadOnly)
 					.PermitReentry(Trigger.Virtual, () => options.PropertyModifiers |= PropertyModifiers.Virtual);
 
-			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse result item generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+
+			return machine;
+		}
+
+		/// <summary>
+		/// Создает конечный автомат для настройки <see cref="ParameterItemOptions"/>
+		/// </summary>
+		/// <param name="options">Конфигурируемые опции</param>
+		/// <returns>Конечный автомат для настройки <see cref="ParameterItemOptions"/></returns>
+		public static StateMachine<State, string> Build(ParameterItemOptions options)
+		{
+			var machine = new StateMachine<State, string>(State.Generate);
+
+			machine.Configure(State.Generate)
+					.Permit(Trigger.Parameter, State.Item);
+
+			machine.Configure(State.Item)
+					.PermitReentry(Trigger.Struct, () => options.ItemType = ItemType.Struct)
+					.PermitReentry(Trigger.Class, () => options.ItemType = ItemType.Class);
+
+			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse parameter generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
 
 			return machine;
 		}

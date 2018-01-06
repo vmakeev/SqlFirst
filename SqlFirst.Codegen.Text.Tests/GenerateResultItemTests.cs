@@ -45,7 +45,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			return result;
 		}
 
-		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
+		private static ICodeGenerationContext GetDefaultCodeGenerationContext(IDatabaseTypeMapper typeMapper)
 		{
 			var optionsDictionary = new Dictionary<string, object>
 			{
@@ -75,21 +75,23 @@ namespace SqlFirst.Codegen.Text.Tests
 			var outgoingParameters = new[] { parameter1, parameter2, parameter3 };
 
 			A.CallTo(() => context.OutgoingParameters).Returns(outgoingParameters);
+
+			A.CallTo(() => context.TypeMapper).Returns(typeMapper);
 			return context;
 		}
 		#endregion
 
 		[Theory]
-		[InlineData("generate item class properties auto virtual")]
-		[InlineData("generate item class properties virtual")]
-		[InlineData("generate item properties virtual")]
+		[InlineData("generate result class properties auto virtual")]
+		[InlineData("generate result class properties virtual")]
+		[InlineData("generate result properties virtual")]
 		public void GenerateResultItemTest_Poco_AutoProperty_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -123,22 +125,22 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties auto virtual readonly")]
-		[InlineData("generate item class immutable properties auto virtual")]
-		[InlineData("generate item class properties virtual readonly")]
-		[InlineData("generate item properties virtual readonly")]
-		[InlineData("generate item immutable properties virtual readonly")]
-		[InlineData("generate item immutable properties virtual")]
-		[InlineData("generate item properties auto virtual readonly")]
-		[InlineData("generate item immutable properties auto virtual readonly")]
-		[InlineData("generate item immutable properties auto virtual")]
+		[InlineData("generate result class properties auto virtual readonly")]
+		[InlineData("generate result class immutable properties auto virtual")]
+		[InlineData("generate result class properties virtual readonly")]
+		[InlineData("generate result properties virtual readonly")]
+		[InlineData("generate result immutable properties virtual readonly")]
+		[InlineData("generate result immutable properties virtual")]
+		[InlineData("generate result properties auto virtual readonly")]
+		[InlineData("generate result immutable properties auto virtual readonly")]
+		[InlineData("generate result immutable properties auto virtual")]
 		public void GenerateResultItemTest_Poco_AutoProperty_ReadOnly_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -172,16 +174,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties backingField virtual")]
-		[InlineData("generate item properties backingField virtual")]
-		[InlineData("generate item properties virtual backingField")]
+		[InlineData("generate result class properties backingField virtual")]
+		[InlineData("generate result properties backingField virtual")]
+		[InlineData("generate result properties virtual backingField")]
 		public void GenerateResultItemTest_Poco_BackingFieldProperty_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -231,16 +233,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties backingField virtual readonly")]
-		[InlineData("generate item properties backingField virtual readonly")]
-		[InlineData("generate item properties readonly backingField virtual ")]
+		[InlineData("generate result class properties backingField virtual readonly")]
+		[InlineData("generate result properties backingField virtual readonly")]
+		[InlineData("generate result properties readonly backingField virtual ")]
 		public void GenerateResultItemTest_Poco_BackingFieldProperty_ReadOnly_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -292,19 +294,19 @@ namespace SqlFirst.Codegen.Text.Tests
 		//------------------------------------------------------------------
 
 		[Theory]
-		[InlineData("generate item class properties auto")]
-		[InlineData("generate item")]
+		[InlineData("generate result class properties auto")]
+		[InlineData("generate result")]
 		[InlineData("generate")]
 		[InlineData("")]
-		[InlineData("generate item properties auto")]
-		[InlineData("generate item properties")]
+		[InlineData("generate result properties auto")]
+		[InlineData("generate result properties")]
 		public void GenerateResultItemTest_Poco_AutoProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -338,17 +340,17 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties readonly auto")]
-		[InlineData("generate item class properties readonly")]
-		[InlineData("generate item properties readonly auto")]
-		[InlineData("generate item properties readonly")]
+		[InlineData("generate result class properties readonly auto")]
+		[InlineData("generate result class properties readonly")]
+		[InlineData("generate result properties readonly auto")]
+		[InlineData("generate result properties readonly")]
 		public void GenerateResultItemTest_Poco_AutoProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -382,15 +384,15 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties BackingField")]
-		[InlineData("generate item properties backingfield")]
+		[InlineData("generate result class properties BackingField")]
+		[InlineData("generate result properties backingfield")]
 		public void GenerateResultItemTest_Poco_BackingFieldProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -440,15 +442,15 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class properties BackingField ReadOnly")]
-		[InlineData("generate item properties BackingField ReadOnly")]
+		[InlineData("generate result class properties BackingField ReadOnly")]
+		[InlineData("generate result properties BackingField ReadOnly")]
 		public void GenerateResultItemTest_Poco_BackingFieldProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -500,16 +502,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		//------------------------------------------------------------------
 
 		[Theory]
-		[InlineData("generate item class inpc properties BackingField Virtual")]
-		[InlineData("generate item inpc properties BackingField Virtual")]
-		[InlineData("generate item  properties BackingField inpc Virtual")]
+		[InlineData("generate result class inpc properties BackingField Virtual")]
+		[InlineData("generate result inpc properties BackingField Virtual")]
+		[InlineData("generate result  properties BackingField inpc Virtual")]
 		public void GenerateResultItemTest_INPC_BackingFieldProperty_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -603,17 +605,17 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class inpc properties readonly backingfield virtual")]
-		[InlineData("generate item class  properties inpc readonly backingfield virtual")]
-		[InlineData("generate item inpc properties readonly backingfield virtual")]
-		[InlineData("generate item  properties readonly inpc backingfield virtual")]
+		[InlineData("generate result class inpc properties readonly backingfield virtual")]
+		[InlineData("generate result class  properties inpc readonly backingfield virtual")]
+		[InlineData("generate result inpc properties readonly backingfield virtual")]
+		[InlineData("generate result  properties readonly inpc backingfield virtual")]
 		public void GenerateResultItemTest_INPC_BackingFieldProperty_ReadOnly_Virtual(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -707,17 +709,17 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class inpc properties BackingField")]
-		[InlineData("generate item class properties BackingField inpc")]
-		[InlineData("generate item inpc properties BackingField")]
-		[InlineData("generate item properties inpc BackingField")]
+		[InlineData("generate result class inpc properties BackingField")]
+		[InlineData("generate result class properties BackingField inpc")]
+		[InlineData("generate result inpc properties BackingField")]
+		[InlineData("generate result properties inpc BackingField")]
 		public void GenerateResultItemTest_INPC_BackingFieldProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -811,17 +813,17 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item class inpc properties ReadOnly BackingField")]
-		[InlineData("generate item class  properties ReadOnly inpc BackingField")]
-		[InlineData("generate item inpc properties ReadOnly BackingField")]
-		[InlineData("generate item properties inpc ReadOnly BackingField")]
+		[InlineData("generate result class inpc properties ReadOnly BackingField")]
+		[InlineData("generate result class  properties ReadOnly inpc BackingField")]
+		[InlineData("generate result inpc properties ReadOnly BackingField")]
+		[InlineData("generate result properties inpc ReadOnly BackingField")]
 		public void GenerateResultItemTest_INPC_BackingFieldProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -917,16 +919,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		//------------------------------------------------------------------
 
 		[Theory]
-		[InlineData("generate item struct properties auto")]
-		[InlineData("generate item struct properties")]
-		[InlineData("generate item struct")]
+		[InlineData("generate result struct properties auto")]
+		[InlineData("generate result struct properties")]
+		[InlineData("generate result struct")]
 		public void GenerateResultItemTest_Struct_AutoProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -960,16 +962,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item struct properties auto ReadOnly")]
-		[InlineData("generate item struct properties ReadOnly")]
-		[InlineData("generate item struct immutable")]
+		[InlineData("generate result struct properties auto ReadOnly")]
+		[InlineData("generate result struct properties ReadOnly")]
+		[InlineData("generate result struct immutable")]
 		public void GenerateResultItemTest_Struct_AutoProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -1003,14 +1005,14 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item struct properties BackingField")]
+		[InlineData("generate result struct properties BackingField")]
 		public void GenerateResultItemTest_Struct_BackingFieldProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -1060,15 +1062,15 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item struct properties ReadOnly BackingField")]
-		[InlineData("generate item struct properties BackingField ReadOnly ")]
+		[InlineData("generate result struct properties ReadOnly BackingField")]
+		[InlineData("generate result struct properties BackingField ReadOnly ")]
 		public void GenerateResultItemTest_Struct_BackingFieldProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -1120,16 +1122,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		//------------------------------------------------------------------
 
 		[Theory]
-		[InlineData("generate item struct properties inpc BackingField")]
-		[InlineData("generate item struct inpc properties BackingField")]
-		[InlineData("generate item inpc struct properties BackingField")]
+		[InlineData("generate result struct properties inpc BackingField")]
+		[InlineData("generate result struct inpc properties BackingField")]
+		[InlineData("generate result inpc struct properties BackingField")]
 		public void GenerateResultItemTest_Struct_INPC_BackingFieldProperty(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
@@ -1220,16 +1222,16 @@ namespace SqlFirst.Codegen.Text.Tests
 		}
 
 		[Theory]
-		[InlineData("generate item struct properties ReadOnly inpc BackingField")]
-		[InlineData("generate item struct inpc properties ReadOnly  BackingField")]
-		[InlineData("generate item inpc struct  properties ReadOnly  BackingField")]
+		[InlineData("generate result struct properties ReadOnly inpc BackingField")]
+		[InlineData("generate result struct inpc properties ReadOnly  BackingField")]
+		[InlineData("generate result inpc struct  properties ReadOnly  BackingField")]
 		public void GenerateResultItemTest_Struct_INPC_BackingFieldProperty_ReadOnly(string optionsString)
 		{
 			IDatabaseTypeMapper typeMapper = GetDefaultDatabaseTypeMapper();
-			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			ICodeGenerationContext context = GetDefaultCodeGenerationContext(typeMapper);
 			IResultGenerationOptions options = GetDefaultResultGenerationOptions(optionsString);
 
-			var generator = new TextCodeGenerator(typeMapper);
+			var generator = new TextCodeGenerator();
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 

@@ -2,15 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using SqlFirst.Codegen.Text.ParameterItem;
 using SqlFirst.Codegen.Text.QueryObject;
 using SqlFirst.Codegen.Text.ResultItem;
-using SqlFirst.Codegen.Text.ResultItem.Impl;
-using SqlFirst.Codegen.Text.ResultItem.PropertyGenerator;
-using SqlFirst.Codegen.Text.ResultItem.PropertyGenerator.Impl;
 using SqlFirst.Codegen.Text.ResultItem.TypedOptions;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Trees;
-using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text
 {
@@ -19,14 +16,6 @@ namespace SqlFirst.Codegen.Text
 	/// </summary>
 	public class TextCodeGenerator : ICodeGenerator
 	{
-		private readonly IDatabaseTypeMapper _typeMapper;
-
-		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
-		public TextCodeGenerator(IDatabaseTypeMapper typeMapper)
-		{
-			_typeMapper = typeMapper;
-		}
-
 		/// <inheritdoc />
 		public IGeneratedQueryObject GenerateQueryObject(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
@@ -37,11 +26,19 @@ namespace SqlFirst.Codegen.Text
 		/// <inheritdoc />
 		public IGeneratedResultItem GenerateResultItem(ICodeGenerationContext context, IResultGenerationOptions options)
 		{
-			var itemOptions = new ItemOptions(options.SqlFirstOptions?.ToArray());
+			var itemOptions = new ResultItemOptions(options.SqlFirstOptions?.ToArray());
 
-			PropertiesGeneratorBase propertiesGenerator = GetPropertiesGenerator(itemOptions);
-			ResultItemGeneratorBase itemGenerator = GetResultItemGenerator(itemOptions, propertiesGenerator);
+			ResultItemGeneratorBase itemGenerator = ResultItemGeneratorFactory.Build(itemOptions);
 			return itemGenerator.GenerateResultItem(context);
+		}
+
+		/// <inheritdoc />
+		public IGeneratedParameterItem GenerateParameterItem(ICodeGenerationContext context, IParameterGenerationOptions options)
+		{
+			var itemOptions = new ParameterItemOptions(options.SqlFirstOptions?.ToArray());
+
+			ParameterItemGeneratorBase itemGenerator = ParameterItemGeneratorFactory.Build(itemOptions);
+			return itemGenerator.GenerateParameterItem(context);
 		}
 
 		/// <inheritdoc />
@@ -62,8 +59,7 @@ namespace SqlFirst.Codegen.Text
 			IGrouping<string, (string Namespace, string Data)>[] namespaceDataItems = items
 				.Select(generatedItem => (Namespace: generatedItem.Namespace, Data: generatedItem.Item))
 				.GroupBy(item => item.Namespace).ToArray();
-
-
+			
 			var namespaces = new StringBuilder();
 			string namespaceSnippet = FileSnippet.Namespace;
 			foreach (IGrouping<string, (string Namespace, string Data)> namespaceDataItem in namespaceDataItems)
@@ -71,7 +67,7 @@ namespace SqlFirst.Codegen.Text
 				string namespaceName = namespaceDataItem.Key;
 				string[] data = namespaceDataItem.Select(p => p.Data).ToArray();
 
-				string namespaceData = string.Join(Environment.NewLine + Environment.NewLine, data.Select(p => p.Indent("\t")));
+				string namespaceData = string.Join(Environment.NewLine + Environment.NewLine, data.Select(p => p.Indent(QuerySnippet.Indent, 1)));
 
 				string namespaceText = namespaceSnippet
 										.Replace("$Namespace$", namespaceName)
@@ -88,86 +84,6 @@ namespace SqlFirst.Codegen.Text
 				.Trim();
 
 			return result;
-		}
-
-		/// <summary>
-		/// Возвращает генератор результата выполнения запроса
-		/// </summary>
-		/// <param name="options">Параметры генерации</param>
-		/// <param name="propertiesGenerator">Генератор свойств</param>
-		/// <returns>Генератор результата выполнения запроса</returns>
-		private static ResultItemGeneratorBase GetResultItemGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
-		{
-			switch (options.ItemType)
-			{
-				case ResultItemType.Class:
-					return GetClassResultItemsGenerator(options, propertiesGenerator);
-
-				case ResultItemType.Struct:
-					return GetStructResultItemsGenerator(options, propertiesGenerator);
-
-				default:
-					throw new CodeGenerationException($"Unexpected options.ItemType [{options.ItemType:G}]");
-			}
-		}
-
-		private static ResultItemGeneratorBase GetStructResultItemsGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
-		{
-			if ((options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual)
-			{
-				throw new CodeGenerationException("Struct can not contains virtual properties");
-			}
-
-			if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) != ResultItemAbilities.NotifyPropertyChanged)
-			{
-				return new StructResultItemGenerator(propertiesGenerator);
-			}
-
-			return new NotifyPropertyChangedStructResultItemGenerator(propertiesGenerator);
-		}
-
-		private static ResultItemGeneratorBase GetClassResultItemsGenerator(ItemOptions options, PropertiesGeneratorBase propertiesGenerator)
-		{
-			if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) != ResultItemAbilities.NotifyPropertyChanged)
-			{
-				return new PocoResultItemGenerator(propertiesGenerator);
-			}
-
-			if (options.PropertyType != PropertyType.BackingField)
-			{
-				throw new CodeGenerationException($"Ability [{ResultItemAbilities.NotifyPropertyChanged:G}] is incompatible with PropertyType [{options.PropertyType:G}]");
-			}
-
-			return new NotifyPropertyChangedClassResultItemGenerator(propertiesGenerator);
-		}
-
-		/// <summary>
-		/// Возвращает генератор свойств
-		/// </summary>
-		/// <param name="options">Параметры генерации</param>
-		/// <returns>Генератор свойств</returns>
-		private PropertiesGeneratorBase GetPropertiesGenerator(ItemOptions options)
-		{
-			bool isReadOnly = (options.PropertyModifiers & PropertyModifiers.ReadOnly) == PropertyModifiers.ReadOnly;
-			bool isVirtual = (options.PropertyModifiers & PropertyModifiers.Virtual) == PropertyModifiers.Virtual;
-
-			var propertyGenerationOptions = new PropertyGenerationOptions(isReadOnly, isVirtual);
-
-			switch (options.PropertyType)
-			{
-				case PropertyType.Auto:
-					return new AutoPropertiesGenerator(_typeMapper, propertyGenerationOptions);
-
-				case PropertyType.BackingField:
-					if ((options.ItemAbilities & ResultItemAbilities.NotifyPropertyChanged) == ResultItemAbilities.NotifyPropertyChanged)
-					{
-						return new NotifyPropertyChangedBackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions);
-					}
-					return new BackingFieldPropertiesGenerator(_typeMapper, propertyGenerationOptions);
-
-				default:
-					throw new CodeGenerationException($"Unexpected options.propertyType [{options.PropertyType:G}]");
-			}
 		}
 	}
 }

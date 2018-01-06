@@ -7,16 +7,17 @@ $XmlParams$
 /// <returns>Список элементов типа <see cref="$ItemType$"/></returns>
 public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$MethodParameters$, CancellationToken cancellationToken)
 {
-	DbCommand cmd = connection.CreateCommand();
-	cmd.CommandText = GetQueryText();
+	async Task<IEnumerator<$ItemType$>> CreateEnumerator()
+	{	
+		// Command will be disposed in DbAsyncEnumerator.Dispose() method
+		DbCommand cmd = connection.CreateCommand();
+		cmd.CommandText = GetQueryText();
 $AddParameters$
 
-	async Task<IEnumerator<$ItemType$>> CreateEnumerator(DbCommand dbCommand)
-	{
-		DbDataReader reader = await dbCommand.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<$ItemType$>(reader, GetItemFromRecord, cancellationToken);
+		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
+		return new DbAsyncEnumerator<$ItemType$>(cmd, reader, GetItemFromRecord, cancellationToken);
 	}
 
-	IEnumerable<$ItemType$> enumerable = new Enumerable<$ItemType$>(async () => await CreateEnumerator(cmd));
+	IEnumerable<$ItemType$> enumerable = new Enumerable<$ItemType$>(async () => await CreateEnumerator());
 	return Task.FromResult(enumerable);
 }

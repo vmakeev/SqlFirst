@@ -6,17 +6,19 @@ $XmlParams$
 /// <returns>Первый элемент типа <see cref="$ItemType$"/></returns>
 public virtual $ItemType$ GetFirst(IDbConnection connection$MethodParameters$)
 {
-	IDbCommand cmd = connection.CreateCommand();
-	cmd.CommandText = GetQueryText();
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
 $AddParameters$
 
-	using (IDataReader reader = cmd.ExecuteReader())
-	{
-		if (!reader.Read())
+		using (IDataReader reader = cmd.ExecuteReader())
 		{
-			return null;
-		}
+			if (!reader.Read())
+			{
+				return null;
+			}
 
-		return GetItemFromRecord(reader);
+			return GetItemFromRecord(reader);
+		}
 	}
 }

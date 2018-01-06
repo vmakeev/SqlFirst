@@ -37,6 +37,7 @@ namespace SqlFirst.Demo.Wpf
 			RegisterHighlight(FormattedSqlEditor, Highlight.Sql);
 
 			RegisterHighlight(ResultItemEditor, Highlight.CSharp);
+			RegisterHighlight(ParameterItemEditor, Highlight.CSharp);
 			RegisterHighlight(QueryObjectEditor, Highlight.CSharp);
 		}
 
@@ -64,10 +65,12 @@ namespace SqlFirst.Demo.Wpf
 			{
 				FormattedSql = null;
 				ResultItem = null;
+				ParameterItem = null;
 				QueryObject = null;
 
 				FormattedSql = FormatSql(SourceSql);
 				ResultItem = GenerateResultItemCode(SourceSql);
+				ParameterItem = GenerateParameterItemCode(SourceSql);
 				QueryObject = GenerateQueryObjectCode(SourceSql);
 			}
 			catch (Exception ex)
@@ -115,25 +118,57 @@ namespace SqlFirst.Demo.Wpf
 			var parser = new MsSqlServerQueryParser();
 
 			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-			if (info.Results.Count() == 1)
+
+			if (info.Results.Count() <= 1)
 			{
 				return string.Empty;
 			}
 
 			var typeMapper = new MsSqlServerTypeMapper();
 
-			var codeGenerator = new TextCodeGenerator(typeMapper);
+			var codeGenerator = new TextCodeGenerator();
 
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
 			{
 				["Namespace"] = Namespace,
 				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Item"
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Result"
 			};
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
 
 			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
 			IGeneratedItem generatedItem = codeGenerator.GenerateResultItem(context, itemOptions);
+
+			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
+
+			return itemCode;
+		}
+
+		private string GenerateParameterItemCode(string query)
+		{
+			var parser = new MsSqlServerQueryParser();
+
+			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+
+			if (!info.Parameters.Any())
+			{
+				return string.Empty;
+			}
+
+			var typeMapper = new MsSqlServerTypeMapper();
+
+			var codeGenerator = new TextCodeGenerator();
+
+			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
+			{
+				["Namespace"] = Namespace,
+				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
+				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Parameter"
+			};
+			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
+
+			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
+			IGeneratedItem generatedItem = codeGenerator.GenerateParameterItem(context, itemOptions);
 
 			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
 
@@ -148,14 +183,15 @@ namespace SqlFirst.Demo.Wpf
 
 			var typeMapper = new MsSqlServerTypeMapper();
 
-			var codeGenerator = new TextCodeGenerator(typeMapper);
-			
+			var codeGenerator = new TextCodeGenerator();
+
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
 			{
 				["Namespace"] = Namespace,
 				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Item",
-				["QueryText"] = info.Sections.Single(p=>p.Type == QuerySectionType.Body).Content
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Result",
+				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Parameter",
+				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content
 			};
 
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
@@ -174,10 +210,11 @@ namespace SqlFirst.Demo.Wpf
 
 		private string _queryName = "My_Test_Query";
 
-		private string _sourceSql =
-			@"-- begin sqlFirstOptions
+		private static readonly IDictionary<QueryType, string> _samples = new Dictionary<QueryType, string>
+		{
+			[QueryType.Read] = @"-- begin sqlFirstOptions
 
--- generate item class properties auto virtual
+-- generate result class properties auto virtual
 
 -- end
 
@@ -192,11 +229,33 @@ from CaseSubscriptions with(nolock)
 where UserKey = @userKey
 order by CreateDateUtc desc
 offset @skip rows
-fetch next @take rows only";
+fetch next @take rows only",
+
+
+			[QueryType.Create] = @"-- begin sqlFirstOptions
+
+-- generate result class properties auto virtual
+-- generate parameter class
+
+-- end
+
+-- begin variables 
+
+declare @userKey_N varchar(MAX) ='test'; 
+
+-- end
+
+insert into caseevents (userKey, inn, ogrn, caseid, shardname, finddateutc) values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
+
+		};
+
+		private string _sourceSql = _samples[QueryType.Create];
 
 		private string _formattedSql;
 
 		private string _resultItem;
+
+		private string _parameterItem;
 
 		private string _queryObject;
 
@@ -257,6 +316,16 @@ fetch next @take rows only";
 			{
 				_resultItem = value;
 				OnPropertyChanged(nameof(ResultItem));
+			}
+		}
+
+		public string ParameterItem
+		{
+			get => _parameterItem;
+			set
+			{
+				_parameterItem = value;
+				OnPropertyChanged(nameof(ParameterItem));
 			}
 		}
 

@@ -42,9 +42,19 @@ namespace SqlFirst.Codegen.Text
 		/// </summary>
 		/// <param name="context">Контекст генерации кода</param>
 		/// <returns>Имя генерируемого класса с результатом</returns>
-		public static string GetQueryResultItemName(this ICodeGenerationContext context)
+		public static string GetQueryResultItemTypeName(this ICodeGenerationContext context)
 		{
 			return context.GetOption<string>("QueryResultItemName") ?? "QueryItem";
+		}
+
+		/// <summary>
+		/// Возвращает имя генерируемого класса, содержащего входящие параметры запроса
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <returns>Имя генерируемого класса, содержащего входящие параметры запроса</returns>
+		public static string GetQueryParameterItemTypeName(this ICodeGenerationContext context)
+		{
+			return context.GetOption<string>("QueryParameterItemName") ?? "QueryParameter";
 		}
 
 		/// <summary>
