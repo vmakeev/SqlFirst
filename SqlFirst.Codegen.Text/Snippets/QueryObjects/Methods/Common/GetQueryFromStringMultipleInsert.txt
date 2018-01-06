@@ -14,7 +14,7 @@ private string GetQueryText(int rowsCount)
 	}
 
 	IEnumerable<string> rowTemplates = Enumerable.Range(0, rowsCount).Select(index => string.Format(valuesTemplate, index));
-	string rowTemplatesString = string.Join(",\r\n", rowTemplates);
+	string rowTemplatesString = string.Join($",{Environment.NewLine}", rowTemplates);
 
 	string queryText = string.Format(queryTemplate, rowTemplatesString);
 	return queryText;

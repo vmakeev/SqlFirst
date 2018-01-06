@@ -1,10 +1,10 @@
 ﻿/// <summary>
-/// Выполняет добавление строки в таблицу
+/// Выполняет добавление строк в таблицу
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
 $XmlParams$/// <param name="items">Добавляемые записи</param>
 /// <param name="cancellationToken">Токен отмены</param>
-/// <returns>Количество обновленных строк</returns>
+/// <returns>Количество добавленных строк</returns>
 public virtual async Task<int> AddAsync(DbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
 {
 	using(DbCommand cmd = connection.CreateCommand())

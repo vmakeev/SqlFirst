@@ -3,8 +3,8 @@
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
 $XmlParams$/// <param name="items">Добавляемые записи</param>
-/// <returns>Количество добавленных строк</returns>
-public virtual int Add(IDbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items)
+/// <returns>$ResultItemDescription$</returns>
+public virtual IEnumerable<$ResultItemType$> Add(IDbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
@@ -18,6 +18,12 @@ $AddParametersNumbered$
 			$IndexVariableName$++;
 		}
 
-		return cmd.ExecuteNonQuery();
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			while (reader.Read())
+			{
+				yield return GetScalarFromRecord<$ResultItemType$>(reader);
+			}
+		}
 	}
 }

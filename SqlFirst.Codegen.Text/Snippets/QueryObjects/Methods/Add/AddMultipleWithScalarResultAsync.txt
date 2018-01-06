@@ -1,0 +1,30 @@
+﻿/// <summary>
+/// Выполняет добавление строк в таблицу и возвращает дополнительные данные
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams$/// <param name="items">Добавляемые записи</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>$ResultItemDescription$</returns>
+public virtual Task<IEnumerable<$ResultItemType$>> AddAsync(DbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
+{
+	async Task<IEnumerator<$ResultItemType$>> CreateEnumerator()
+	{	
+		// Command will be disposed in DbAsyncEnumerator.Dispose() method
+		DbCommand cmd = connection.CreateCommand();
+		cmd.CommandText = GetQueryText(items.Count);
+$AddParameters$
+		int $IndexVariableName$ = 0;
+		foreach($ParameterItemType$ $ParameterVariableName$ in items)
+		{
+$AddParametersNumbered$
+
+			$IndexVariableName$++;
+		}
+
+		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
+		return new DbAsyncEnumerator<$ResultItemType$>(cmd, reader, GetScalarFromRecord<$ResultItemType$>, cancellationToken);
+	}
+
+	IEnumerable<$ResultItemType$> enumerable = new Enumerable<$ResultItemType$>(async () => await CreateEnumerator());
+	return Task.FromResult(enumerable);
+}

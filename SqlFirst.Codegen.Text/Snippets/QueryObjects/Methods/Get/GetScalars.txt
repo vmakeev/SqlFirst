@@ -15,7 +15,7 @@ $AddParameters$
 		{
 			while (reader.Read())
 			{
-				yield return ($ItemType$)reader[0];
+				yield return GetScalarFromRecord<$ItemType$>(reader);
 			}
 		}
 	}

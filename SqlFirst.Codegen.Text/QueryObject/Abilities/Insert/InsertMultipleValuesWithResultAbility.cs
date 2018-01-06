@@ -12,7 +12,7 @@ using SqlFirst.Core.Impl;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
-	internal class InsertMultipleValuesAbility : QueryObjectAbilityBase
+	internal class InsertMultipleValuesWithResultAbility : QueryObjectAbilityBase
 	{
 		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 		private static string GetParameterName(ICodeGenerationContext context)
@@ -20,7 +20,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			return "item";
 		}
 
-		protected virtual string GetTemplate() => QuerySnippet.Methods.Add.AddMultiple;
+		protected virtual string GetTemplate() => QuerySnippet.Methods.Add.AddMultipleWithResult;
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -31,12 +31,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			const string indexVariableName = "index";
 			const string parameterVariableName = "item";
+			string resultItemType = context.GetQueryResultItemTypeName();
 			string parameterType = context.GetQueryParameterItemTypeName();
 			string notNumberedXmlString = GetXmlParameters(context, notNumberedParameters);
 			string notNumberedIncomingString = GetIncomingParameters(context, notNumberedParameters);
 			string notNumberedAddParametersString = GetAddParameters(context, notNumberedParameters).Indent(QuerySnippet.Indent, 2);
 			string numberedAddParametersString = GetAddParametersNumbered(context, indexVariableName, numberedParameters).Indent(QuerySnippet.Indent, 3);
-
+			
 			if (!string.IsNullOrEmpty(notNumberedXmlString))
 			{
 				notNumberedXmlString = notNumberedXmlString + Environment.NewLine;
@@ -55,6 +56,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 							.Replace("$IndexVariableName$", indexVariableName)
 							.Replace("$ParameterVariableName$", parameterVariableName)
 							.Replace("$AddParametersNumbered$", numberedAddParametersString)
+							.Replace("$ResultItemType$", resultItemType)
 							.ToString();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
@@ -102,6 +104,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		{
 			yield return KnownAbilityName.GetQueryTextMultipleInsert;
 			yield return KnownAbilityName.AddParameter;
+			yield return KnownAbilityName.GetItemFromRecord;
 		}
 
 		/// <inheritdoc />

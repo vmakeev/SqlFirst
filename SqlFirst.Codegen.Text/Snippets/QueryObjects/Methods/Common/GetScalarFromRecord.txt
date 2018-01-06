@@ -1,0 +1,17 @@
+﻿/// <summary>
+/// Возвращает значение из первого столбца <paramref name="record"/>
+/// </summary>
+/// <typeparam name="T">Тип значения</typeparam>
+/// <param name="record">Строка БД</param>
+/// <returns>Значение из первого столбца <paramref name="record"/></returns>
+protected virtual T GetScalarFromRecord<T>(IDataRecord record)
+{
+	if (record.FieldCount < 1)
+	{
+		throw new Exception("Data record contain no values.");
+	}
+
+	object valueObject = record[0];
+
+	return GetScalarFromValue<T>(valueObject);	
+}

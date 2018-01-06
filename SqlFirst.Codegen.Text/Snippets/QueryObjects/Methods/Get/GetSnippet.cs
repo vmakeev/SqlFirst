@@ -1,6 +1,6 @@
-﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get;
+﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get.Snippets;
 
-namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods
+namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get
 {
 	internal class GetSnippet : QueryObjectsSnippetBase
 	{

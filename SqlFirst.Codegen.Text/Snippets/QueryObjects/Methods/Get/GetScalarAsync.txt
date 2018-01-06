@@ -13,6 +13,6 @@ public virtual async Task<$ItemType$> GetFirstAsync(DbConnection connection$Meth
 $AddParameters$
 
 		object value = await cmd.ExecuteScalarAsync(cancellationToken);
-		return ($ItemType$)value;
+		return GetScalarFromValue<$ItemType$>(value);
 	}
 }

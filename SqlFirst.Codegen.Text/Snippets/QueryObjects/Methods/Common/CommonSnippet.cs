@@ -1,6 +1,6 @@
-﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common;
+﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets;
 
-namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods
+namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
 {
 	internal class CommonSnippet : QueryObjectsSnippetBase
 	{
@@ -14,6 +14,8 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods
 
 		public string AddParameter => GetSnippetText();
 		public string GetItemFromRecord => GetSnippetText();
+		public string GetScalarFromRecord => GetSnippetText();
+		public string GetScalarFromValue => GetSnippetText();
 		public string GetQueryFromResourceCacheable => GetSnippetText();
 		public string GetQueryFromString => GetSnippetText();
 		public string GetQueryFromStringMultipleInsert => GetSnippetText();

@@ -1,4 +1,4 @@
-﻿namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
+﻿namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 {
 	internal class CommonInnerSnippet : QueryObjectsSnippetBase
 	{

@@ -7,22 +7,19 @@ using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Core;
 
-namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
+namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
-	internal class SelectScalarAbility : QueryObjectAbilityBase
+	internal class InsertSingleValuePlainWithScalarResultAbility : QueryObjectAbilityBase
 	{
 		/// <inheritdoc />
-		public override string Name { get; } = "GetScalar";
+		protected override string GetParameterName(IQueryParamInfo paramInfo)
+		{
+			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.CamelCase);
+		}
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			IQueryParamInfo[] parameters = context.IncomingParameters.ToArray();
-
-			string xmlParameters = GetXmlParameters(context, parameters);
-			string methodParameters = GetIncomingParameters(context, parameters);
-			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
-
 			IFieldDetails firstParameter = context.OutgoingParameters.FirstOrDefault();
 			if (firstParameter == null)
 			{
@@ -31,13 +28,21 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 
 			Type scalarType = context.TypeMapper.Map(firstParameter.DbType, firstParameter.AllowDbNull);
 			string scalarTypeString = CSharpCodeHelper.GetTypeBuiltInName(scalarType);
+			string scalarTypeDescription = firstParameter.ColumnName;
 
-			string method = new StringBuilder(QuerySnippet.Methods.Get.GetScalar)
-				.Replace("$ItemType$", scalarTypeString)
-				.Replace("$XmlParams$", xmlParameters)
-				.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
-				.Replace("$AddParameters$", addParameters)
-				.ToString();
+			IQueryParamInfo[] parameters = context.IncomingParameters.ToArray();
+
+			string xmlParameters = GetXmlParameters(context, parameters);
+			string methodParameters = GetIncomingParameters(context, parameters);
+			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
+
+			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingleWithScalarResult)
+							.Replace("$XmlParams$", xmlParameters)
+							.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
+							.Replace("$AddParameters$", addParameters)
+							.Replace("$ResultItemType$", scalarTypeString)
+							.Replace("$ResultItemDescription$", scalarTypeDescription)
+							.ToString();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
@@ -56,5 +61,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetScalarFromValue;
 		}
+
+		/// <inheritdoc />
+		public override string Name { get; } = "InsertSingleValuePlain";
 	}
 }

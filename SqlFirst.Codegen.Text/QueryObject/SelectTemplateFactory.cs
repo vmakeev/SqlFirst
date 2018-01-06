@@ -55,6 +55,9 @@ namespace SqlFirst.Codegen.Text.QueryObject
 				result.AddAbility<NestedAsyncEnumerableAbility>();
 			}
 
+			result.AddAbility<MapDataRecordToScalarAbility>();
+			result.AddAbility<MapValueToScalarAbility>();
+
 			result.AddAbility<SelectScalarAbility>();
 			result.AddAbility<SelectScalarAsyncAbility>();
 

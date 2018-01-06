@@ -57,6 +57,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 		{
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
+			yield return KnownAbilityName.GetScalarFromValue;
 		}
 	}
 }

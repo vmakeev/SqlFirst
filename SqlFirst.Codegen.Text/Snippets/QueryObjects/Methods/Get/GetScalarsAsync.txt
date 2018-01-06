@@ -15,7 +15,7 @@ public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$Me
 $AddParameters$
 
 		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<$ItemType$>(cmd, reader, record => ($ItemType$)record[0], cancellationToken);
+		return new DbAsyncEnumerator<$ItemType$>(cmd, reader, GetScalarFromRecord<$ItemType$>, cancellationToken);
 	}
 
 	IEnumerable<$ItemType$> enumerable = new Enumerable<$ItemType$>(async () => await CreateEnumerator());

@@ -1,4 +1,6 @@
-﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods;
+﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Add;
+using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common;
+using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get;
 
 namespace SqlFirst.Codegen.Text.Snippets.QueryObjects
 {

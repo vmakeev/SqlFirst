@@ -1,0 +1,26 @@
+﻿/// <summary>
+/// Конвертирует значение <paramref name="valueObject"/> в <typeparamref name="T"/>
+/// </summary>
+/// <typeparam name="T">Тип значения</typeparam>
+/// <param name="valueObject">Строка БД</param>
+/// <returns>Значение <paramref name="valueObject"/>, сконвертированное в <typeparamref name="T"/></returns>
+protected virtual T GetScalarFromValue<T>(object valueObject)
+{
+	switch (valueObject)
+	{
+		case null:
+		// ReSharper disable once UnusedVariable
+		case DBNull dbNull:
+			return default(T);
+
+		case T value:
+			return value;
+
+		case IConvertible convertible:
+			return (T)Convert.ChangeType(convertible, typeof(T));
+
+		default:
+			// ReSharper disable once ConstantConditionalAccessQualifier
+			throw new InvalidCastException($"Can not convert {valueObject?.GetType().FullName ?? "null"} to {typeof(T).FullName}");
+	}
+}

@@ -25,10 +25,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			string methodParameters = GetIncomingParameters(context, parameters);
 			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
 
-			string intType = CSharpCodeHelper.GetTypeBuiltInName(typeof(int));
-
 			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingle)
-							.Replace("$ItemType$", intType)
 							.Replace("$XmlParams$", xmlParameters)
 							.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
 							.Replace("$AddParameters$", addParameters)

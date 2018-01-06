@@ -12,7 +12,7 @@ using SqlFirst.Core.Impl;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
-	internal class InsertMultipleValuesAbility : QueryObjectAbilityBase
+	internal class InsertMultipleValuesWithScalarResultAbility : QueryObjectAbilityBase
 	{
 		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
 		private static string GetParameterName(ICodeGenerationContext context)
@@ -20,11 +20,21 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			return "item";
 		}
 
-		protected virtual string GetTemplate() => QuerySnippet.Methods.Add.AddMultiple;
+		protected virtual string GetTemplate() => QuerySnippet.Methods.Add.AddMultipleWithScalarResult;
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
+			IFieldDetails firstParameter = context.OutgoingParameters.FirstOrDefault();
+			if (firstParameter == null)
+			{
+				throw new CodeGenerationException($"Query must have at least one outgoing parameter to use ability [{Name}] ({GetType().Name}).");
+			}
+
+			Type scalarType = context.TypeMapper.Map(firstParameter.DbType, firstParameter.AllowDbNull);
+			string scalarTypeString = CSharpCodeHelper.GetTypeBuiltInName(scalarType);
+			string scalarTypeDescription = firstParameter.ColumnName;
+
 			IQueryParamInfo[] allParameters = context.IncomingParameters.ToArray();
 			IQueryParamInfo[] numberedParameters = allParameters.Where(paramInfo => paramInfo.IsNumbered).ToArray();
 			IQueryParamInfo[] notNumberedParameters = allParameters.Where(paramInfo => !paramInfo.IsNumbered).ToArray();
@@ -36,7 +46,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			string notNumberedIncomingString = GetIncomingParameters(context, notNumberedParameters);
 			string notNumberedAddParametersString = GetAddParameters(context, notNumberedParameters).Indent(QuerySnippet.Indent, 2);
 			string numberedAddParametersString = GetAddParametersNumbered(context, indexVariableName, numberedParameters).Indent(QuerySnippet.Indent, 3);
-
+			
 			if (!string.IsNullOrEmpty(notNumberedXmlString))
 			{
 				notNumberedXmlString = notNumberedXmlString + Environment.NewLine;
@@ -55,6 +65,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 							.Replace("$IndexVariableName$", indexVariableName)
 							.Replace("$ParameterVariableName$", parameterVariableName)
 							.Replace("$AddParametersNumbered$", numberedAddParametersString)
+							.Replace("$ResultItemType$", scalarTypeString)
+							.Replace("$ResultItemDescription$", scalarTypeDescription)
 							.ToString();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
@@ -102,6 +114,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		{
 			yield return KnownAbilityName.GetQueryTextMultipleInsert;
 			yield return KnownAbilityName.AddParameter;
+			yield return KnownAbilityName.GetScalarFromRecord;
 		}
 
 		/// <inheritdoc />

@@ -12,6 +12,6 @@ public virtual $ItemType$ GetFirst(IDbConnection connection$MethodParameters$)
 $AddParameters$
 
 		object value = cmd.ExecuteScalar();
-		return ($ItemType$)value;
+		return GetScalarFromValue<$ItemType$>(value);
 	}
 }

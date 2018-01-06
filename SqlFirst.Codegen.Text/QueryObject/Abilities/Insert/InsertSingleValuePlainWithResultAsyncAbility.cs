@@ -8,7 +8,7 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
-	internal class InsertSingleValuePlainAsyncAbility : QueryObjectAbilityBase
+	internal class InsertSingleValuePlainWithResultAsyncAbility : QueryObjectAbilityBase
 	{
 		/// <inheritdoc />
 		protected override string GetParameterName(IQueryParamInfo paramInfo)
@@ -25,10 +25,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			string methodParameters = GetIncomingParameters(context, parameters);
 			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
 
-			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingleAsync)
-							.Replace("$XmlParams$", "$XmlParams$").Replace("$XmlParams$", xmlParameters)
+			string resultItemType = context.GetQueryResultItemTypeName();
+
+			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingleWithResultAsync)
+							.Replace("$XmlParams$", xmlParameters)
 							.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
-							.Replace("$AddParameters$", "$AddParameters$").Replace("$AddParameters$", addParameters)
+							.Replace("$AddParameters$", addParameters)
+							.Replace("$ResultItemType$", resultItemType)
 							.ToString();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
@@ -39,7 +42,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				"System.Data",
 				"System.Data.Common",
 				"System.Threading",
-				"System.Threading.Tasks");
+				"System.Threading.Tasks",
+				"System.Collections.Generic");
 
 			return result;
 		}
@@ -49,6 +53,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		{
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
+			yield return KnownAbilityName.GetItemFromRecord;
+			yield return KnownAbilityName.AsyncEnumerable;
 		}
 
 		/// <inheritdoc />
