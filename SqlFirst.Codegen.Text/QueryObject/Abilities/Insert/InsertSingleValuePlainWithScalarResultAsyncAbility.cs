@@ -52,8 +52,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				"System.Data",
 				"System.Data.Common",
 				"System.Threading",
-				"System.Threading.Tasks",
-				"System.Collections.Generic");
+				"System.Threading.Tasks");
 
 			return result;
 		}
@@ -63,7 +62,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		{
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
-			yield return KnownAbilityName.AsyncEnumerable;
 			yield return KnownAbilityName.GetScalarFromValue;
 		}
 

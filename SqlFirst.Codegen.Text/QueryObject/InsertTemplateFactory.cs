@@ -2,7 +2,6 @@
 using System.Linq;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
-using SqlFirst.Codegen.Text.QueryObject.Abilities.Nested;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 
 namespace SqlFirst.Codegen.Text.QueryObject
@@ -50,8 +49,6 @@ namespace SqlFirst.Codegen.Text.QueryObject
 
 		private static void BuildWithOutput(QueryObjectTemplate result, bool isScalarResult, bool useMultipleInsert)
 		{
-			result.AddAbility<NestedAsyncEnumerableAbility>();
-
 			if (isScalarResult)
 			{
 				BuildWithScalarOutput(result: result, useMultipleInsert: useMultipleInsert);

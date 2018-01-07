@@ -229,20 +229,18 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(4);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AsyncEnumerable);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(6);
+			result.Usings.Count().ShouldBe(5);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
 			result.Usings.ShouldContain("System.Data.Common");
 			result.Usings.ShouldContain("System.Threading");
 			result.Usings.ShouldContain("System.Threading.Tasks");
-			result.Usings.ShouldContain("System.Collections.Generic");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -344,20 +342,18 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(4);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AsyncEnumerable);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(6);
+			result.Usings.Count().ShouldBe(5);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
 			result.Usings.ShouldContain("System.Data.Common");
 			result.Usings.ShouldContain("System.Threading");
 			result.Usings.ShouldContain("System.Threading.Tasks");
-			result.Usings.ShouldContain("System.Collections.Generic");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
