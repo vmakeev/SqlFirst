@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Text;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.QueryObject.Options;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Core;
 
@@ -59,17 +60,9 @@ namespace SqlFirst.Codegen.Text.QueryObject
 		private static IQueryObjectData GenerateQueryObjectData(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
 			QueryObjectTemplate template = GetQueryTemplate(context, options);
-
-			ApplyOptions(template, options);
-
 			return template.GenerateData(context);
 		}
-
-		// ReSharper disable UnusedParameter.Local
-		private static void ApplyOptions(QueryObjectTemplate template, IQueryGenerationOptions options)
-		{
-			// todo: process user generation options here
-		}
+		
 
 		[SuppressMessage("ReSharper", "SwitchStatementMissingSomeCases")]
 		private static QueryObjectTemplate GetQueryTemplate(ICodeGenerationContext context, IQueryGenerationOptions options)
@@ -77,15 +70,20 @@ namespace SqlFirst.Codegen.Text.QueryObject
 			switch (options.QueryType)
 			{
 				case QueryType.Create:
-					return InsertTemplateFactory.Build(context, options);
+					var insertOptions = new InsertQueryObjectOptions(options.SqlFirstOptions);
+					return InsertTemplateFactory.Build(context, insertOptions);
 
 				case QueryType.Read:
-					return SelectTemplateFactory.Build(context, options);
+					var selectOptions = new SelectQueryObjectOptions(options.SqlFirstOptions);
+					return SelectTemplateFactory.Build(context, selectOptions);
 
 				case QueryType.Update:
 					throw new NotImplementedException();
 
 				case QueryType.Delete:
+					throw new NotImplementedException();
+
+				case QueryType.Merge:
 					throw new NotImplementedException();
 
 				default:

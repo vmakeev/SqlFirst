@@ -174,8 +174,4 @@
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="QueryObject\Options\" />
-  </ItemGroup>
-
 </Project>

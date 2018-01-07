@@ -76,6 +76,10 @@ namespace SqlFirst.Providers.MsSqlServer
 				{
 					queryType = QueryType.Delete;
 				}
+				else if (queryBody.StartsWith("merge"))
+				{
+					queryType = QueryType.Merge;
+				}
 			}
 
 			return new MsSqlServerQueryBaseInfo

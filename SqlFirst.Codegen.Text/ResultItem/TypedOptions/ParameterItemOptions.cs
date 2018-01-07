@@ -6,9 +6,9 @@ using Stateless;
 namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 {
 	/// <summary>
-	/// Параметры создания результата запроса после парсинга
+	/// Параметры создания аргумента запроса после парсинга
 	/// </summary>
-	internal class ResultItemOptions
+	internal class ParameterItemOptions
 	{
 		/// <summary>
 		/// Тип объекта
@@ -16,30 +16,15 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 		public ItemType ItemType { get; internal set; }
 
 		/// <summary>
-		/// Особые умения
-		/// </summary>
-		public ResultItemAbilities ItemAbilities { get; internal set; }
-
-		/// <summary>
-		/// Тип свойств
-		/// </summary>
-		public PropertyType PropertyType { get; internal set; }
-
-		/// <summary>
-		/// Модификаторы свойств
-		/// </summary>
-		public PropertyModifiers PropertyModifiers { get; internal set; }
-
-		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="ResultItemOptions" />
+		/// Инициализирует новый экземпляр класса <see cref="ParameterItemOptions" />
 		/// </summary>
 		/// <param name="options">Набор опций SqlFirst</param>
-		public ResultItemOptions(IEnumerable<ISqlFirstOption> options)
+		public ParameterItemOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			IEnumerable<ISqlFirstOption> target = options.Where(option =>
 				option.Parameters?.Length > 1 &&
 				option.Name?.ToLowerInvariant() == ItemOptionsStateMachineFactory.Trigger.Generate &&
-				option.Parameters.FirstOrDefault()?.ToLowerInvariant() == ItemOptionsStateMachineFactory.Trigger.Result);
+				option.Parameters.FirstOrDefault()?.ToLowerInvariant() == ItemOptionsStateMachineFactory.Trigger.Parameter);
 			
 			foreach (ISqlFirstOption option in target)
 			{
@@ -60,11 +45,6 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 			if (ItemType == ItemType.INVALID)
 			{
 				ItemType = ItemType.Class;
-			}
-
-			if (PropertyType == PropertyType.INVALID)
-			{
-				PropertyType = PropertyType.Auto;
 			}
 		}
 	}

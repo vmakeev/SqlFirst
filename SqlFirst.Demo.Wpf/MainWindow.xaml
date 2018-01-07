@@ -83,7 +83,16 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Исходный SQL запрос:" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14" Grid.Column="0"/>
+
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Text="Исходный SQL запрос:" HorizontalAlignment="Center" FontWeight="Bold" FontSize="14"/>
+
+                <TextBlock Text="Встроенные примеры:" HorizontalAlignment="Center" Margin="30,3,3,3"/>
+
+                <Button Content="SELECT" Margin="3" Click="ShowSelectSample"/>
+                <Button Content="INSERT" Margin="3" Click="ShowInsertSample"/>
+
+            </StackPanel>
             <avalonedit:TextEditor Grid.Row="1" Grid.Column="0" x:Name="SqlEditor" >
                 <i:Interaction.Behaviors>
                     <wpf:AvalonEditBehaviour BindableText="{Binding SourceSql, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"/>

@@ -33,6 +33,11 @@
 		/// <summary>
 		/// Удаление данных
 		/// </summary>
-		Delete
+		Delete,
+
+		/// <summary>
+		/// Объединение данных
+		/// </summary>
+		Merge
 	}
 }

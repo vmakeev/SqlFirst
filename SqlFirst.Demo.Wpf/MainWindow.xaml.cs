@@ -29,6 +29,143 @@ namespace SqlFirst.Demo.Wpf
 	{
 		private string _connectionString = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
 
+		private string _namespace = "SqlFirst.Test.Namespace";
+
+		private string _queryName = "My_Test_Query";
+
+		private static readonly IDictionary<QueryType, string> _samples = new Dictionary<QueryType, string>
+		{
+			[QueryType.Read] = @"-- begin sqlFirstOptions
+
+-- generate result class properties auto virtual
+-- use querytext string
+-- generate methods sync async get_first get_all
+
+-- end
+
+-- begin variables 
+
+declare @userKey varchar(MAX) ='test'; 
+
+-- end
+
+select *
+from CaseSubscriptions with(nolock)
+where UserKey = @userKey
+order by CreateDateUtc desc
+offset @skip rows
+fetch next @take rows only",
+
+			[QueryType.Create] = @"-- begin sqlFirstOptions
+
+-- generate result class properties auto virtual
+-- generate parameter class
+-- use querytext string
+-- generate methods sync async add_single add_multiple
+
+-- end
+
+-- begin variables 
+
+declare @userKey_N varchar(MAX) ='test'; 
+
+-- end
+
+insert into caseevents (userKey, inn, ogrn, caseid, shardname, finddateutc) 
+output inserted.id, inserted.userKey
+values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
+		};
+
+		private string _sourceSql = _samples[QueryType.Create];
+
+		private string _formattedSql;
+
+		private string _resultItem;
+
+		private string _parameterItem;
+
+		private string _queryObject;
+
+		public string ConnectionString
+		{
+			get => _connectionString;
+			set
+			{
+				_connectionString = value;
+				OnPropertyChanged(nameof(ConnectionString));
+			}
+		}
+
+		public string Namespace
+		{
+			get => _namespace;
+			set
+			{
+				_namespace = value;
+				OnPropertyChanged(nameof(Namespace));
+			}
+		}
+
+		public string QueryName
+		{
+			get => _queryName;
+			set
+			{
+				_queryName = value;
+				OnPropertyChanged(nameof(QueryName));
+			}
+		}
+
+		public string SourceSql
+		{
+			get => _sourceSql;
+			set
+			{
+				_sourceSql = value;
+				OnPropertyChanged(nameof(SourceSql));
+			}
+		}
+
+		public string FormattedSql
+		{
+			get => _formattedSql;
+			set
+			{
+				_formattedSql = value;
+				OnPropertyChanged(nameof(FormattedSql));
+			}
+		}
+
+		public string ResultItem
+		{
+			get => _resultItem;
+			set
+			{
+				_resultItem = value;
+				OnPropertyChanged(nameof(ResultItem));
+			}
+		}
+
+		public string ParameterItem
+		{
+			get => _parameterItem;
+			set
+			{
+				_parameterItem = value;
+				OnPropertyChanged(nameof(ParameterItem));
+			}
+		}
+
+		public string QueryObject
+		{
+			get => _queryObject;
+			set
+			{
+				_queryObject = value;
+				OnPropertyChanged(nameof(QueryObject));
+			}
+		}
+
 		public MainWindow()
 		{
 			InitializeComponent();
@@ -148,7 +285,7 @@ namespace SqlFirst.Demo.Wpf
 
 			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
 
-			if (!info.Parameters.Any())
+			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
 			{
 				return null;
 			}
@@ -266,141 +403,14 @@ namespace SqlFirst.Demo.Wpf
 			return itemCode;
 		}
 
-		#region Public
-
-		private string _namespace = "SqlFirst.Test.Namespace";
-
-		private string _queryName = "My_Test_Query";
-
-		private static readonly IDictionary<QueryType, string> _samples = new Dictionary<QueryType, string>
+		private void ShowSelectSample(object sender, RoutedEventArgs e)
 		{
-			[QueryType.Read] = @"-- begin sqlFirstOptions
-
--- generate result class properties auto virtual
-
--- end
-
--- begin variables 
-
-declare @userKey varchar(MAX) ='test'; 
-
--- end
-
-select *
-from CaseSubscriptions with(nolock)
-where UserKey = @userKey
-order by CreateDateUtc desc
-offset @skip rows
-fetch next @take rows only",
-
-			[QueryType.Create] = @"-- begin sqlFirstOptions
-
--- generate result class properties auto virtual
--- generate parameter class
-
--- end
-
--- begin variables 
-
-declare @userKey_N varchar(MAX) ='test'; 
-
--- end
-
-insert into caseevents (userKey, inn, ogrn, caseid, shardname, finddateutc) 
-output inserted.id, inserted.userKey
-values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
-		};
-
-		private string _sourceSql = _samples[QueryType.Create];
-
-		private string _formattedSql;
-
-		private string _resultItem;
-
-		private string _parameterItem;
-
-		private string _queryObject;
-
-		public string ConnectionString
-		{
-			get => _connectionString;
-			set
-			{
-				_connectionString = value;
-				OnPropertyChanged(nameof(ConnectionString));
-			}
+			SourceSql = _samples[QueryType.Read];
 		}
 
-		public string Namespace
+		private void ShowInsertSample(object sender, RoutedEventArgs e)
 		{
-			get => _namespace;
-			set
-			{
-				_namespace = value;
-				OnPropertyChanged(nameof(Namespace));
-			}
+			SourceSql = _samples[QueryType.Create];
 		}
-
-		public string QueryName
-		{
-			get => _queryName;
-			set
-			{
-				_queryName = value;
-				OnPropertyChanged(nameof(QueryName));
-			}
-		}
-
-		public string SourceSql
-		{
-			get => _sourceSql;
-			set
-			{
-				_sourceSql = value;
-				OnPropertyChanged(nameof(SourceSql));
-			}
-		}
-
-		public string FormattedSql
-		{
-			get => _formattedSql;
-			set
-			{
-				_formattedSql = value;
-				OnPropertyChanged(nameof(FormattedSql));
-			}
-		}
-
-		public string ResultItem
-		{
-			get => _resultItem;
-			set
-			{
-				_resultItem = value;
-				OnPropertyChanged(nameof(ResultItem));
-			}
-		}
-
-		public string ParameterItem
-		{
-			get => _parameterItem;
-			set
-			{
-				_parameterItem = value;
-				OnPropertyChanged(nameof(ParameterItem));
-			}
-		}
-
-		public string QueryObject
-		{
-			get => _queryObject;
-			set
-			{
-				_queryObject = value;
-				OnPropertyChanged(nameof(QueryObject));
-			}
-		}
-
-		#endregion
 	}
 }
