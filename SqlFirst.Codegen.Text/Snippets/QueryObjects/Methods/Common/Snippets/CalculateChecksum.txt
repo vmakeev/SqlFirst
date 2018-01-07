@@ -1,0 +1,41 @@
+﻿private int CalculateChecksum(string data)
+{
+	if (string.IsNullOrEmpty(data))
+	{
+		return 0;
+	}
+
+	byte[] bytes = Encoding.UTF8.GetBytes(data);
+
+	const ushort poly = 4129;
+	var table = new ushort[256];
+	const ushort initialValue = 0xffff;
+	ushort crc = initialValue;
+	for (int i = 0; i < table.Length; ++i)
+	{
+		ushort temp = 0;
+		ushort a = (ushort)(i << 8);
+		for (int j = 0; j < 8; ++j)
+		{
+			if (((temp ^ a) & 0x8000) != 0)
+			{
+				temp = (ushort)((temp << 1) ^ poly);
+			}
+			else
+			{
+				temp <<= 1;
+			}
+
+			a <<= 1;
+		}
+
+		table[i] = temp;
+	}
+
+	foreach (byte b in bytes)
+	{
+		crc = (ushort)((crc << 8) ^ table[(crc >> 8) ^ (0xff & b)]);
+	}
+
+	return crc;
+}

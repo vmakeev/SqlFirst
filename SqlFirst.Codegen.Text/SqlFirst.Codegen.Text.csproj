@@ -52,6 +52,7 @@
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryText.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetQueryTemplates.txt" />
@@ -115,6 +116,7 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromStringMultipleInsert.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\NumberedParameterInfo.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />

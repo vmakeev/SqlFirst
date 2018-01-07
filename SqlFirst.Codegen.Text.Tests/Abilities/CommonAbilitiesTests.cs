@@ -74,6 +74,10 @@ protected virtual void AddParameter(IDbCommand command, SqlDbType parameterType,
 			.Returns(true)
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryName" });
 
+			A.CallTo(() => options.TryGetValue("QueryText", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "SomeQueryText" });
+
 			A.CallTo(() => options.TryGetValue("ResourcePath", out _))
 			.Returns(true)
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryResourcePath" });
@@ -93,18 +97,62 @@ protected virtual void AddParameter(IDbCommand command, SqlDbType parameterType,
 			result.Properties.ShouldBeEmpty();
 
 			result.Fields.ShouldNotBeNull();
-			result.Fields.Count().ShouldBe(2);
+			result.Fields.Count().ShouldBe(3);
+			result.Fields.ShouldContain("private readonly int _queryTextChecksum = 39193;");
 			result.Fields.ShouldContain("private string _cachedSql;");
 			result.Fields.ShouldContain("private readonly object _cachedSqlLocker = new object();");
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(3);
+			result.Usings.Count().ShouldBe(4);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.IO");
+			result.Usings.ShouldContain("System.Text");
 			result.Usings.ShouldContain("System.Text.RegularExpressions");
 
 			result.Methods.ShouldNotBeNull();
-			result.Methods.Count().ShouldBe(1);
+			result.Methods.Count().ShouldBe(2);
+			result.Methods.ShouldContain(@"private int CalculateChecksum(string data)
+{
+	if (string.IsNullOrEmpty(data))
+	{
+		return 0;
+	}
+
+	byte[] bytes = Encoding.UTF8.GetBytes(data);
+
+	const ushort poly = 4129;
+	var table = new ushort[256];
+	const ushort initialValue = 0xffff;
+	ushort crc = initialValue;
+	for (int i = 0; i < table.Length; ++i)
+	{
+		ushort temp = 0;
+		ushort a = (ushort)(i << 8);
+		for (int j = 0; j < 8; ++j)
+		{
+			if (((temp ^ a) & 0x8000) != 0)
+			{
+				temp = (ushort)((temp << 1) ^ poly);
+			}
+			else
+			{
+				temp <<= 1;
+			}
+
+			a <<= 1;
+		}
+
+		table[i] = temp;
+	}
+
+	foreach (byte b in bytes)
+	{
+		crc = (ushort)((crc << 8) ^ table[(crc >> 8) ^ (0xff & b)]);
+	}
+
+	return crc;
+}");
+
 			result.Methods.ShouldContain(@"/// <summary>
 /// Возвращает текст запроса
 /// </summary>
@@ -120,6 +168,11 @@ protected virtual string GetQueryText()
 				using (Stream stream = typeof(TestQueryName).Assembly.GetManifestResourceStream(""TestQueryResourcePath""))
 				{
 					string sql = new StreamReader(stream ?? throw new InvalidOperationException(""Can not get manifest resource stream."")).ReadToEnd();
+					
+					if (CalculateChecksum(sql) != _queryTextChecksum)
+					{
+						throw new Exception($""{GetType().FullName}: query text was changed. Query object must be re-generated."");
+					}
 
 					const string sectionRegexPattern = @""--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n"";
 					const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;

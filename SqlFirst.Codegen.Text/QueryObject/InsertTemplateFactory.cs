@@ -22,8 +22,7 @@ namespace SqlFirst.Codegen.Text.QueryObject
 			var result = new QueryObjectTemplate();
 
 			result.AddAbility<GetQueryTextFromStringAbility>();
-			//result.AddAbility<GetMultipleInsertQueryTextPrecompiledAbility>(() => useMultipleInsert);
-			result.AddAbility<GetMultipleInsertQueryTextRuntimeCachedAbility>(() => useMultipleInsert);
+			result.AddAbility<GetMultipleInsertQueryTextPrecompiledAbility>(() => useMultipleInsert);
 			result.AddAbility<AddSqlConnectionParameterAbility>();
 
 			if (useOutputValues)

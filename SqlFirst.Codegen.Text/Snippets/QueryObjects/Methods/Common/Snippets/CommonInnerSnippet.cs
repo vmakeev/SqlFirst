@@ -16,5 +16,6 @@
 		public string GetNumberedParameters => GetSnippetText();
 
 		public string NumberedParameterInfo => GetSnippetText();
+		public string CalculateChecksum => GetSnippetText();
 	}
 }
