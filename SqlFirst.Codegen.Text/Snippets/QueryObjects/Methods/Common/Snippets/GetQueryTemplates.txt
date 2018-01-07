@@ -1,0 +1,29 @@
+﻿protected void GetQueryTemplates(string queryText, out string queryTemplate, out string valuesTemplate)
+{
+	if (string.IsNullOrEmpty(_cachedQueryTemplate) || string.IsNullOrEmpty(_cachedValuesTemplate))
+	{
+		lock (_queryTemplatesLocker)
+		{
+			string valuesSection = GetInsertedValuesSection(queryText);
+			if (string.IsNullOrEmpty(valuesSection))
+			{
+				throw new Exception("Unable to find inserted values in query text.");
+			}
+
+			string queryTemplateLocal = queryText.Replace(valuesSection, "{0}");
+			string valuesTemplateLocal = valuesSection;
+
+			IEnumerable<NumberedParameterInfo> numberedParameters = GetNumberedParameters(queryText);
+			foreach (NumberedParameterInfo numberedParameter in numberedParameters)
+			{
+				valuesTemplateLocal = valuesTemplateLocal.Replace(numberedParameter.DbName, numberedParameter.SemanticName + "_{0}");
+			}
+
+			_cachedQueryTemplate = queryTemplateLocal;
+			_cachedValuesTemplate = valuesTemplateLocal;
+		}
+	}
+
+	queryTemplate = _cachedQueryTemplate;
+	valuesTemplate = _cachedValuesTemplate;
+}

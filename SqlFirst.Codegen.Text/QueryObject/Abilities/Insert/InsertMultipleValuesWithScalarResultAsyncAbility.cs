@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using SqlFirst.Codegen.Text.QueryObject.Data;
+﻿using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
@@ -18,12 +17,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				"System.Threading.Tasks");
 
 			return result;
-		}
-
-		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies()
-		{
-			return base.GetDependencies().Append(KnownAbilityName.AsyncEnumerable);
 		}
 
 		/// <inheritdoc />

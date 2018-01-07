@@ -9,7 +9,7 @@ using SqlFirst.Core.Impl;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
-	internal class GetMultipleInsertQueryTextFromStringAbility : IQueryObjectAbility
+	internal class GetMultipleInsertQueryTextPrecompiledAbility : IQueryObjectAbility
 	{
 		private const string BalancedParenthesisRegexPattern = @"values[^\(]*(?<valueTemplate>\([^\(\)]*(((?<Open>\()[^\(\)]*)+((?<Close-Open>\))[^\(\)]*)+)*(?(Open)(?!))\))";
 		private const RegexOptions BalancedParenthesisRegexOptions = RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase;

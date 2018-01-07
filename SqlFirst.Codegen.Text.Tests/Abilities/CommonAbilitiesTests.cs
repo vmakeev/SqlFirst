@@ -9,11 +9,10 @@ using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Core;
 using Xunit;
 
-namespace SqlFirst.Codegen.Text.Tests
+namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class CommonAbilitiesTests
 	{
-
 		[Fact]
 		public void AddSqlConnectionParameterAbility_Test()
 		{
@@ -137,6 +136,54 @@ protected virtual string GetQueryText()
 		}
 
 		[Fact]
+		public void GetQueryTextFromStringAbility_Test()
+		{
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+
+			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
+
+			object _;
+			A.CallTo(() => options.TryGetValue("QueryName", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryName" });
+
+			A.CallTo(() => options.TryGetValue("QueryText", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryText" });
+
+			A.CallTo(() => context.Options).Returns(options);
+
+			var data = A.Dummy<IQueryObjectData>();
+
+			var ability = new GetQueryTextFromStringAbility();
+			IQueryObjectData result = ability.Apply(context, data);
+
+			ability.Name.ShouldBe(KnownAbilityName.GetQueryText);
+			ability.GetDependencies().ShouldBeEmpty();
+
+			result.Constants.ShouldBeEmpty();
+			result.Nested.ShouldBeEmpty();
+			result.Properties.ShouldBeEmpty();
+
+			result.Fields.ShouldNotBeNull();
+			result.Fields.Count().ShouldBe(0);
+
+			result.Usings.ShouldNotBeNull();
+			result.Usings.Count().ShouldBe(0);
+
+			result.Methods.ShouldNotBeNull();
+			result.Methods.Count().ShouldBe(1);
+			result.Methods.ShouldContain(@"/// <summary>
+/// Возвращает текст запроса
+/// </summary>
+/// <returns>Текст запроса</returns>
+protected virtual string GetQueryText()
+{
+	return @""TestQueryText"";
+}");
+		}
+
+		[Fact]
 		public void MapDataRecordToItemAbility_Test()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
@@ -209,6 +256,104 @@ protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
 }");
 		}
 
+		[Fact]
+		public void MapDataRecordToScalarAbility_Test()
+		{
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+
+			var data = A.Dummy<IQueryObjectData>();
+
+			var ability = new MapDataRecordToScalarAbility();
+			IQueryObjectData result = ability.Apply(context, data);
+
+			ability.Name.ShouldBe(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies().ShouldNotBeNull();
+			ability.GetDependencies().Count().ShouldBe(1);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+
+			result.Constants.ShouldBeEmpty();
+			result.Nested.ShouldBeEmpty();
+			result.Properties.ShouldBeEmpty();
+			result.Fields.ShouldBeEmpty();
+
+			result.Usings.ShouldNotBeNull();
+			result.Usings.Count().ShouldBe(2);
+			result.Usings.ShouldContain("System");
+			result.Usings.ShouldContain("System.Data");
+
+			result.Methods.ShouldNotBeNull();
+			result.Methods.Count().ShouldBe(1);
+			result.Methods.ShouldContain(@"/// <summary>
+/// Возвращает значение из первого столбца <paramref name=""record""/>
+/// </summary>
+/// <typeparam name=""T"">Тип значения</typeparam>
+/// <param name=""record"">Строка БД</param>
+/// <returns>Значение из первого столбца <paramref name=""record""/></returns>
+protected virtual T GetScalarFromRecord<T>(IDataRecord record)
+{
+	if (record.FieldCount < 1)
+	{
+		throw new Exception(""Data record contain no values."");
+	}
+
+	object valueObject = record[0];
+
+	return GetScalarFromValue<T>(valueObject);	
+}");
+		}
+
+		[Fact]
+		public void MapValueToScalarAbility_Test()
+		{
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+
+			var data = A.Dummy<IQueryObjectData>();
+
+			var ability = new MapValueToScalarAbility();
+			IQueryObjectData result = ability.Apply(context, data);
+
+			ability.Name.ShouldBe(KnownAbilityName.GetScalarFromValue);
+
+			ability.GetDependencies().ShouldBeEmpty();
+			result.Constants.ShouldBeEmpty();
+			result.Nested.ShouldBeEmpty();
+			result.Properties.ShouldBeEmpty();
+			result.Fields.ShouldBeEmpty();
+
+			result.Usings.ShouldNotBeNull();
+			result.Usings.Count().ShouldBe(2);
+			result.Usings.ShouldContain("System");
+			result.Usings.ShouldContain("System.Data");
+
+			result.Methods.ShouldNotBeNull();
+			result.Methods.Count().ShouldBe(1);
+			result.Methods.ShouldContain(@"/// <summary>
+/// Конвертирует значение <paramref name=""valueObject""/> в <typeparamref name=""T""/>
+/// </summary>
+/// <typeparam name=""T"">Тип значения</typeparam>
+/// <param name=""valueObject"">Строка БД</param>
+/// <returns>Значение <paramref name=""valueObject""/>, сконвертированное в <typeparamref name=""T""/></returns>
+protected virtual T GetScalarFromValue<T>(object valueObject)
+{
+	switch (valueObject)
+	{
+		case null:
+		// ReSharper disable once UnusedVariable
+		case DBNull dbNull:
+			return default(T);
+
+		case T value:
+			return value;
+
+		case IConvertible convertible:
+			return (T)Convert.ChangeType(convertible, typeof(T));
+
+		default:
+			// ReSharper disable once ConstantConditionalAccessQualifier
+			throw new InvalidCastException($""Can not convert {valueObject?.GetType().FullName ?? ""null""} to {typeof(T).FullName}"");
+	}
+}");
+		}
 
 	}
 }

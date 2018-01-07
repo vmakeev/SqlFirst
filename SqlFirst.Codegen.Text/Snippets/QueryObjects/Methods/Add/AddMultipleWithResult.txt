@@ -18,12 +18,16 @@ $AddParametersNumbered$
 			$IndexVariableName$++;
 		}
 
+		var result = new List<$ResultItemType$>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
 			while (reader.Read())
 			{
-				yield return GetItemFromRecord(reader);
+				$ResultItemType$ resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
 			}
 		}
+
+		return result;
 	}
 }

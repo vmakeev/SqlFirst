@@ -1,0 +1,12 @@
+﻿private string GetInsertedValuesSection(string query)
+{
+	MatchCollection matches = _balancedParenthesisRegex.Matches(query);
+	if (matches.Count == 0)
+	{
+		return null;
+	}
+
+	Match last = matches[matches.Count - 1];
+	string result = last.Groups["valueTemplate"].Value;
+	return result;
+}

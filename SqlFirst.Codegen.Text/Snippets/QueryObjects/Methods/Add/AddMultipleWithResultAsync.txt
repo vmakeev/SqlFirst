@@ -5,12 +5,10 @@
 $XmlParams$/// <param name="items">Добавляемые записи</param>
 /// <param name="cancellationToken">Токен отмены</param>
 /// <returns>Результаты выполнения запроса</returns>
-public virtual Task<IEnumerable<$ResultItemType$>> AddAsync(DbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
+public virtual async Task<IEnumerable<$ResultItemType$>> AddAsync(DbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
 {
-	async Task<IEnumerator<$ResultItemType$>> CreateEnumerator()
-	{	
-		// Command will be disposed in DbAsyncEnumerator.Dispose() method
-		DbCommand cmd = connection.CreateCommand();
+	using(DbCommand cmd = connection.CreateCommand())
+	{
 		cmd.CommandText = GetQueryText(items.Count);
 $AddParameters$
 		int $IndexVariableName$ = 0;
@@ -21,10 +19,16 @@ $AddParametersNumbered$
 			$IndexVariableName$++;
 		}
 
-		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<$ResultItemType$>(cmd, reader, GetItemFromRecord, cancellationToken);
-	}
+		var result = new List<$ResultItemType$>();
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		{
+			while (await reader.ReadAsync(cancellationToken))
+			{
+				$ResultItemType$ resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
+			}
+		}
 
-	IEnumerable<$ResultItemType$> enumerable = new Enumerable<$ResultItemType$>(async () => await CreateEnumerator());
-	return Task.FromResult(enumerable);
+		return result;
+	}	
 }

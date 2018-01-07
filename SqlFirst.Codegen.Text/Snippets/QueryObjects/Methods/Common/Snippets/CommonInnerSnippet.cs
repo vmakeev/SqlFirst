@@ -8,5 +8,13 @@
 		}
 
 		public string MapField => GetSnippetText();
+
+		public string GetQueryTemplates => GetSnippetText();
+
+		public string GetInsertedValuesSection => GetSnippetText();
+
+		public string GetNumberedParameters => GetSnippetText();
+
+		public string NumberedParameterInfo => GetSnippetText();
 	}
 }

@@ -8,7 +8,7 @@ using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Core;
 using Xunit;
 
-namespace SqlFirst.Codegen.Text.Tests
+namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class GetMultipleInsertQueryTextFromStringAbilityTests
 	{
@@ -61,7 +61,7 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			var data = A.Dummy<IQueryObjectData>();
 
-			var ability = new GetMultipleInsertQueryTextFromStringAbility();
+			var ability = new GetMultipleInsertQueryTextPrecompiledAbility();
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe("GetQueryTextMultipleInsert");

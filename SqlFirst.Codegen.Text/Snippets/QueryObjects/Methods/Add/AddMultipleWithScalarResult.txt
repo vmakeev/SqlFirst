@@ -17,13 +17,17 @@ $AddParametersNumbered$
 
 			$IndexVariableName$++;
 		}
-
+		
+		var result = new List<$ResultItemType$>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
 			while (reader.Read())
 			{
-				yield return GetScalarFromRecord<$ResultItemType$>(reader);
+				$ResultItemType$ resultItem = GetScalarFromRecord<$ResultItemType$>(reader);
+				result.Add(resultItem);
 			}
 		}
+
+		return result;
 	}
 }

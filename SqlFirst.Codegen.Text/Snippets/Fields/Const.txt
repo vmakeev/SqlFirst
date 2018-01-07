@@ -1,0 +1,1 @@
+﻿$Modificators$ const $Type$ $Name$ = $Value$;

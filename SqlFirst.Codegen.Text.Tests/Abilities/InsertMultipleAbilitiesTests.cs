@@ -9,7 +9,7 @@ using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Core;
 using Xunit;
 
-namespace SqlFirst.Codegen.Text.Tests
+namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class InsertMultipleAbilitiesTests
 	{
@@ -237,13 +237,17 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 			index++;
 		}
 
+		var result = new List<QueryItemTestName>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
 			while (reader.Read())
 			{
-				yield return GetItemFromRecord(reader);
+				QueryItemTestName resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
 			}
 		}
+
+		return result;
 	}
 }");
 		}
@@ -266,11 +270,10 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(4);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AsyncEnumerable);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -291,12 +294,10 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 /// <param name=""items"">Добавляемые записи</param>
 /// <param name=""cancellationToken"">Токен отмены</param>
 /// <returns>Результаты выполнения запроса</returns>
-public virtual Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
+public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
 {
-	async Task<IEnumerator<QueryItemTestName>> CreateEnumerator()
-	{	
-		// Command will be disposed in DbAsyncEnumerator.Dispose() method
-		DbCommand cmd = connection.CreateCommand();
+	using(DbCommand cmd = connection.CreateCommand())
+	{
 		cmd.CommandText = GetQueryText(items.Count);
 		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
 
@@ -309,12 +310,18 @@ public virtual Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection connec
 			index++;
 		}
 
-		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<QueryItemTestName>(cmd, reader, GetItemFromRecord, cancellationToken);
-	}
+		var result = new List<QueryItemTestName>();
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		{
+			while (await reader.ReadAsync(cancellationToken))
+			{
+				QueryItemTestName resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
+			}
+		}
 
-	IEnumerable<QueryItemTestName> enumerable = new Enumerable<QueryItemTestName>(async () => await CreateEnumerator());
-	return Task.FromResult(enumerable);
+		return result;
+	}	
 }");
 		}
 
@@ -371,14 +378,18 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 
 			index++;
 		}
-
+		
+		var result = new List<DateTime>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
 			while (reader.Read())
 			{
-				yield return GetScalarFromRecord<DateTime>(reader);
+				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
+				result.Add(resultItem);
 			}
 		}
+
+		return result;
 	}
 }");
 		}
@@ -401,11 +412,10 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(4);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AsyncEnumerable);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -426,12 +436,10 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 /// <param name=""items"">Добавляемые записи</param>
 /// <param name=""cancellationToken"">Токен отмены</param>
 /// <returns>FirstResult</returns>
-public virtual Task<IEnumerable<DateTime>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
+public virtual async Task<IEnumerable<DateTime>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
 {
-	async Task<IEnumerator<DateTime>> CreateEnumerator()
-	{	
-		// Command will be disposed in DbAsyncEnumerator.Dispose() method
-		DbCommand cmd = connection.CreateCommand();
+	using(DbCommand cmd = connection.CreateCommand())
+	{
 		cmd.CommandText = GetQueryText(items.Count);
 		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
 
@@ -443,13 +451,19 @@ public virtual Task<IEnumerable<DateTime>> AddAsync(DbConnection connection, Gui
 
 			index++;
 		}
+		
+		var result = new List<DateTime>();
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		{
+			while (await reader.ReadAsync(cancellationToken))
+			{
+				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
+				result.Add(resultItem);
+			}
+		}
 
-		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<DateTime>(cmd, reader, GetScalarFromRecord<DateTime>, cancellationToken);
+		return result;
 	}
-
-	IEnumerable<DateTime> enumerable = new Enumerable<DateTime>(async () => await CreateEnumerator());
-	return Task.FromResult(enumerable);
 }");
 		}
 	}
