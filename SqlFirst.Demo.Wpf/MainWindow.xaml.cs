@@ -9,16 +9,14 @@ using System.Xml;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using SqlFirst.Codegen;
-using SqlFirst.Codegen.Helpers;
-using SqlFirst.Codegen.Impl;
-using SqlFirst.Codegen.Text;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 using SqlFirst.Core.Impl;
 using SqlFirst.Demo.Wpf.Annotations;
 using SqlFirst.Demo.Wpf.HighlightSchemes;
+using SqlFirst.Demo.Wpf.Logic;
 using SqlFirst.Providers.MsSqlServer;
+using SqlFirst.Providers.Postgres;
 
 namespace SqlFirst.Demo.Wpf
 {
@@ -27,56 +25,21 @@ namespace SqlFirst.Demo.Wpf
 	/// </summary>
 	public partial class MainWindow : INotifyPropertyChanged
 	{
-		private string _connectionString = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
+		#region Private
+
+		private ProviderType _providerType = ProviderType.MsSqlServer;
+
+		private string _connectionStringMsSqlServer = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
+		private string _connectionStringPostgres = @"Server = 127.0.0.1; Port = 5432; Database = CasebookApi.Arbitrage.Tracking_dev; User Id = postgres;Password = postgres;";
 
 		private string _namespace = "SqlFirst.Test.Namespace";
 
 		private string _queryName = "My_Test_Query";
 
-		private static readonly IDictionary<QueryType, string> _samples = new Dictionary<QueryType, string>
-		{
-			[QueryType.Read] = @"-- begin sqlFirstOptions
+		private readonly GeneratorBase _generatorMsSqlServer = new MsSqlServerGenerator();
+		private readonly GeneratorBase _generatorPostgres = new PostgresGenerator();
 
--- generate result class properties auto virtual
--- use querytext string
--- generate methods sync async get_first get_all
-
--- end
-
--- begin variables 
-
-declare @userKey varchar(MAX) ='test'; 
-
--- end
-
-select *
-from caseevents with(nolock)
-where UserKey = @userKey
-order by finddateutc desc
-offset @skip rows
-fetch next @take rows only",
-
-			[QueryType.Create] = @"-- begin sqlFirstOptions
-
--- generate result class properties auto virtual
--- generate parameter class
--- use querytext string
--- generate methods sync async add_single add_multiple
-
--- end
-
--- begin variables 
-
-declare @userKey_N varchar(MAX) ='test'; 
-
--- end
-
-insert into caseevents (userKey, inn, ogrn, caseid, shardname, finddateutc) 
-output inserted.id, inserted.userKey
-values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
-		};
-
-		private string _sourceSql = _samples[QueryType.Create];
+		private string _sourceSql;
 
 		private string _formattedSql;
 
@@ -86,12 +49,74 @@ values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
 
 		private string _queryObject;
 
-		public string ConnectionString
+		#endregion
+
+		#region Public
+
+		public ProviderType ProviderType
 		{
-			get => _connectionString;
+			get => _providerType;
 			set
 			{
-				_connectionString = value;
+				if (_providerType != value)
+				{
+					_providerType = value;
+					OnPropertyChanged(nameof(ProviderType));
+					OnPropertyChanged(nameof(ConnectionString));
+				}
+			}
+		}
+
+		public GeneratorBase Generator
+		{
+			get
+			{
+				switch (_providerType)
+				{
+					case ProviderType.MsSqlServer:
+						return _generatorMsSqlServer;
+
+					case ProviderType.Postgres:
+						return _generatorPostgres;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+		}
+
+		public string ConnectionString
+		{
+			get
+			{
+				switch (_providerType)
+				{
+					case ProviderType.MsSqlServer:
+						return _connectionStringMsSqlServer;
+
+					case ProviderType.Postgres:
+						return _connectionStringPostgres;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+			}
+			set
+			{
+				switch (_providerType)
+				{
+					case ProviderType.MsSqlServer:
+						_connectionStringMsSqlServer = value;
+						break;
+
+					case ProviderType.Postgres:
+						_connectionStringPostgres = value;
+						break;
+
+					default:
+						throw new ArgumentOutOfRangeException();
+				}
+
 				OnPropertyChanged(nameof(ConnectionString));
 			}
 		}
@@ -166,10 +191,16 @@ values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
 			}
 		}
 
+		#endregion
+
 		public MainWindow()
 		{
 			InitializeComponent();
+
+			_sourceSql = Generator.Samples.GetSample(QueryType.Create);
+
 			DataContext = this;
+
 			RegisterHighlight(SqlEditor, Highlight.Sql);
 			RegisterHighlight(FormattedSqlEditor, Highlight.Sql);
 
@@ -205,10 +236,13 @@ values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
 				ParameterItem = null;
 				QueryObject = null;
 
+				string sql = SourceSql;
+				GeneratorParameters parameters = GetGeneratorParameters();
+
 				FormattedSql = FormatSql(SourceSql);
-				ResultItem = GenerateResultItemCode(SourceSql);
-				ParameterItem = GenerateParameterItemCode(SourceSql);
-				QueryObject = GenerateQueryObjectCode(SourceSql);
+				ResultItem = Generator.GenerateResultItemCode(sql, parameters);
+				ParameterItem = Generator.GenerateParameterItemCode(sql, parameters);
+				QueryObject = Generator.GenerateQueryObjectCode(sql, parameters);
 			}
 			catch (Exception ex)
 			{
@@ -228,13 +262,14 @@ values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
 		{
 			try
 			{
-				var generator = new TextCodeGenerator();
+				string sql = SourceSql;
+				GeneratorParameters parameters = GetGeneratorParameters();
 
-				IGeneratedItem resultItem = GenerateResultItem(SourceSql, generator);
-				IGeneratedItem parameterItem = GenerateParameterItem(SourceSql, generator);
-				IGeneratedItem queryObject = GenerateQueryObject(SourceSql, generator);
+				IGeneratedItem resultItem = Generator.GenerateResultItem(sql, parameters);
+				IGeneratedItem parameterItem = Generator.GenerateParameterItem(sql, parameters);
+				IGeneratedItem queryObject = Generator.GenerateQueryObject(sql, parameters);
 
-				string file = generator.GenerateFile(new[] { resultItem, parameterItem, queryObject }.Where(p => p != null));
+				string file = Generator.CodeGenerator.GenerateFile(new[] { resultItem, parameterItem, queryObject }.Where(p => p != null));
 				Clipboard.SetText(file);
 
 				MessageBox.Show("Все объекты помещены в буфер обмена", "Генерация", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -255,162 +290,70 @@ values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)"
 
 		private string FormatSql(string query)
 		{
-			var parser = new MsSqlServerQueryParser();
-			var emitter = new MsSqlServerCodeEmitter();
+			IQueryParser parser = Generator.QueryParser;
 
-			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-			List<IQuerySection> sections = parser.GetQuerySections(query).ToList();
-
-			IQuerySection[] allDeclarations = sections.Where(p => p.Type == QuerySectionType.Declarations).ToArray();
-			sections.RemoveAll(allDeclarations.Contains);
-
-			string declarations = emitter.EmitDeclarations(info.Parameters);
-
-			IQuerySection declarationsSection = new QuerySection(QuerySectionType.Declarations, declarations);
-			sections.Add(declarationsSection);
-
-			if (sections.All(p => p.Type != QuerySectionType.Options))
+			if (_providerType == ProviderType.MsSqlServer)
 			{
-				IQuerySection optionsSection = new QuerySection(QuerySectionType.Options, @"/* add SqlFirst options here */");
-				sections.Add(optionsSection);
-			}
+				var emitter = new MsSqlServerCodeEmitter();
 
-			string result = emitter.EmitQuery(sections);
-			return result;
+				IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
+				List<IQuerySection> sections = parser.GetQuerySections(query).ToList();
+
+				IQuerySection[] allDeclarations = sections.Where(p => p.Type == QuerySectionType.Declarations).ToArray();
+				sections.RemoveAll(allDeclarations.Contains);
+
+				string declarations = emitter.EmitDeclarations(info.Parameters);
+
+				IQuerySection declarationsSection = new QuerySection(QuerySectionType.Declarations, declarations);
+				sections.Add(declarationsSection);
+
+				if (sections.All(p => p.Type != QuerySectionType.Options))
+				{
+					IQuerySection optionsSection = new QuerySection(QuerySectionType.Options, @"/* add SqlFirst options here */");
+					sections.Add(optionsSection);
+				}
+
+				string result = emitter.EmitQuery(sections);
+				return result;
+			}
+			else
+			{
+				var emitter = new PostgresCodeEmitter();
+
+				List<IQuerySection> sections = parser.GetQuerySections(query).ToList();
+
+				IQuerySection[] allDeclarations = sections.Where(p => p.Type == QuerySectionType.Declarations).ToArray();
+				sections.RemoveAll(allDeclarations.Contains);
+
+				if (sections.All(p => p.Type != QuerySectionType.Options))
+				{
+					IQuerySection optionsSection = new QuerySection(QuerySectionType.Options, @"/* add SqlFirst options here */");
+					sections.Add(optionsSection);
+				}
+
+				string result = emitter.EmitQuery(sections);
+				return result;
+			}
 		}
 
-		private IGeneratedItem GenerateParameterItem(string query, ICodeGenerator codeGenerator)
+		private GeneratorParameters GetGeneratorParameters()
 		{
-			var parser = new MsSqlServerQueryParser();
-
-			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-
-			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
+			return new GeneratorParameters
 			{
-				return null;
-			}
-
-			var typeMapper = new MsSqlServerTypeMapper();
-
-			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
-			{
-				["Namespace"] = Namespace,
-				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
-				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Parameter"
+				ConnectionString = ConnectionString,
+				Namespace = Namespace,
+				QueryName = QueryName
 			};
-			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
-
-			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
-			IGeneratedItem generatedItem = codeGenerator.GenerateParameterItem(context, itemOptions);
-
-			return generatedItem;
-		}
-
-		private IGeneratedItem GenerateResultItem(string query, ICodeGenerator codeGenerator)
-		{
-			var parser = new MsSqlServerQueryParser();
-
-			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-
-			if (info.Results.Count() <= 1)
-			{
-				return null;
-			}
-
-			var typeMapper = new MsSqlServerTypeMapper();
-
-			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
-			{
-				["Namespace"] = Namespace,
-				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Result"
-			};
-			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
-
-			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
-			IGeneratedItem generatedItem = codeGenerator.GenerateResultItem(context, itemOptions);
-
-			return generatedItem;
-		}
-
-		private string GenerateResultItemCode(string query)
-		{
-			ICodeGenerator codeGenerator = new TextCodeGenerator();
-			IGeneratedItem generatedItem = GenerateResultItem(query, codeGenerator);
-
-			if (generatedItem == null)
-			{
-				return null;
-			}
-
-			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
-
-			return itemCode;
-		}
-
-		private string GenerateParameterItemCode(string query)
-		{
-			ICodeGenerator codeGenerator = new TextCodeGenerator();
-			IGeneratedItem generatedItem = GenerateParameterItem(query, codeGenerator);
-
-			if (generatedItem == null)
-			{
-				return null;
-			}
-
-			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
-
-			return itemCode;
-		}
-
-		private IGeneratedItem GenerateQueryObject(string query, ICodeGenerator codeGenerator)
-		{
-			var parser = new MsSqlServerQueryParser();
-
-			IQueryInfo info = parser.GetQueryInfo(query, ConnectionString);
-
-			var typeMapper = new MsSqlServerTypeMapper();
-
-			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
-			{
-				["Namespace"] = Namespace,
-				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Result",
-				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(QueryName, NamingPolicy.Pascal) + "Parameter",
-				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content
-			};
-
-			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, typeMapper);
-
-			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
-			IGeneratedItem generatedItem = codeGenerator.GenerateQueryObject(context, queryOptions);
-
-			return generatedItem;
-		}
-
-		private string GenerateQueryObjectCode(string query)
-		{
-			ICodeGenerator codeGenerator = new TextCodeGenerator();
-			IGeneratedItem generatedItem = GenerateQueryObject(query, codeGenerator);
-
-			if (generatedItem == null)
-			{
-				return null;
-			}
-
-			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
-
-			return itemCode;
 		}
 
 		private void ShowSelectSample(object sender, RoutedEventArgs e)
 		{
-			SourceSql = _samples[QueryType.Read];
+			SourceSql = Generator.Samples.GetSample(QueryType.Read);
 		}
 
 		private void ShowInsertSample(object sender, RoutedEventArgs e)
 		{
-			SourceSql = _samples[QueryType.Create];
+			SourceSql = Generator.Samples.GetSample(QueryType.Create);
 		}
 	}
 }

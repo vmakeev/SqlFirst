@@ -62,14 +62,22 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <TextBlock Text="Строка подключения к тестовой БД:" Grid.Column="0" Grid.Row="0"/>
-            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding ConnectionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0"/>
+            <TextBlock Text="Поставщик данных:" Grid.Column="0" Grid.Row="0"/>
+            <ComboBox Height="25" VerticalContentAlignment="Center" SelectedItem="{Binding ProviderType, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="0">
+                <ComboBox.Items>
+                    <wpf:ProviderType>MsSqlServer</wpf:ProviderType>
+                    <wpf:ProviderType>Postgres</wpf:ProviderType>
+                </ComboBox.Items>
+            </ComboBox>
 
-            <TextBlock Text="Пространство имен:" Grid.Column="0" Grid.Row="1"/>
-            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding Namespace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1"/>
+            <TextBlock Text="Строка подключения к тестовой БД:" Grid.Column="0" Grid.Row="1"/>
+            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding ConnectionString, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="1"/>
 
-            <TextBlock Text="Имя запроса:" Grid.Column="0" Grid.Row="2"/>
-            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding QueryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2"/>
+            <TextBlock Text="Пространство имен:" Grid.Column="0" Grid.Row="2"/>
+            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding Namespace, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="2"/>
+
+            <TextBlock Text="Имя запроса:" Grid.Column="0" Grid.Row="3"/>
+            <TextBox Height="25" VerticalContentAlignment="Center" Text="{Binding QueryName, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" Grid.Column="1" Grid.Row="3"/>
 
         </Grid>
 
