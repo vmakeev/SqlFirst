@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
+using MySpecificDatabaseTypes;
 using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
@@ -13,12 +14,32 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class InsertSingleAbilitiesTests
 	{
+		private static IProviderSpecificType GetProviderSpecificType(string value)
+		{
+			var result = A.Fake<IProviderSpecificType>(p => p.Strict());
+			A.CallTo(() => result.TypeName).Returns(typeof(MySpecificDbType).Name);
+			A.CallTo(() => result.ValueName).Returns(value);
+			A.CallTo(() => result.Usings).Returns(new[] { typeof(MySpecificDbType).Namespace });
+			return result;
+		}
+
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
 		{
+			var providerTypesInfo = A.Fake<IProviderTypesInfo>(p => p.Strict());
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyType).Returns(typeof(MySpecificDbType));
+			A.CallTo(() => providerTypesInfo.CommandParameterType).Returns(typeof(MySpecificParameterType));
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyName).Returns("MySpecificDbTypePropertyName");
+
+			var provider = A.Fake<IDatabaseProvider>(p => p.Strict());
+			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
+
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
 			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
 			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
 			A.CallTo(() => mapper.MapToClrType("date", false)).Returns(typeof(DateTime));
+			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier")).Returns(GetProviderSpecificType("MySpecificGuidType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("int")).Returns(GetProviderSpecificType("MySpecificIntType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("date")).Returns(GetProviderSpecificType("MySpecificDateType"));
 
 			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
@@ -74,9 +95,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(2);
+			result.Usings.Count().ShouldBe(3);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -92,8 +114,8 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, int? secondPa
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
 		return cmd.ExecuteNonQuery();
 	}
@@ -123,12 +145,13 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, int? secondPa
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(5);
+			result.Usings.Count().ShouldBe(6);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
 			result.Usings.ShouldContain("System.Data.Common");
 			result.Usings.ShouldContain("System.Threading");
 			result.Usings.ShouldContain("System.Threading.Tasks");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -145,8 +168,8 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 	using (DbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
@@ -177,9 +200,10 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(2);
+			result.Usings.Count().ShouldBe(3);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -195,8 +219,8 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
@@ -235,12 +259,13 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(5);
+			result.Usings.Count().ShouldBe(6);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
 			result.Usings.ShouldContain("System.Data.Common");
 			result.Usings.ShouldContain("System.Threading");
 			result.Usings.ShouldContain("System.Threading.Tasks");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -257,8 +282,8 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 	using(DbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{
@@ -297,9 +322,10 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(2);
+			result.Usings.Count().ShouldBe(3);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -315,8 +341,8 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 		
 		object value = cmd.ExecuteScalar();
 		return GetScalarFromValue<DateTime>(value);
@@ -348,12 +374,13 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
 
 			result.Usings.ShouldNotBeNull();
-			result.Usings.Count().ShouldBe(5);
+			result.Usings.Count().ShouldBe(6);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
 			result.Usings.ShouldContain("System.Data.Common");
 			result.Usings.ShouldContain("System.Threading");
 			result.Usings.ShouldContain("System.Threading.Tasks");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -370,8 +397,8 @@ public virtual async Task<DateTime> AddAsync(DbConnection connection, Guid? firs
 	using(DbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, SqlDbType.UniqueIdentifier, ""@FirstParam"", firstParam);
-		AddParameter(cmd, SqlDbType.Int, ""@SECOND_Param"", secondParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 		
 		object value = await cmd.ExecuteScalarAsync(cancellationToken);
 		return GetScalarFromValue<DateTime>(value);

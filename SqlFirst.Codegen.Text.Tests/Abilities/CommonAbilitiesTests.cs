@@ -6,17 +6,33 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using MySpecificDatabaseTypes;
 using SqlFirst.Core;
 using Xunit;
+
+
 
 namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class CommonAbilitiesTests
 	{
+
+
 		[Fact]
 		public void AddSqlConnectionParameterAbility_Test()
 		{
 			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+
+			var providerTypesInfo = A.Fake<IProviderTypesInfo>(p => p.Strict());
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyType).Returns(typeof(MySpecificDbType));
+			A.CallTo(() => providerTypesInfo.CommandParameterType).Returns(typeof(MySpecificParameterType));
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyName).Returns("MySpecificDbTypePropertyName");
+
+			var provider = A.Fake<IDatabaseProvider>(p => p.Strict());
+			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
+
+			A.CallTo(() => context.DatabaseProvider).Returns(provider);
+
 			var data = A.Dummy<IQueryObjectData>();
 
 			var ability = new AddSqlConnectionParameterAbility();
@@ -34,7 +50,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Usings.Count().ShouldBe(3);
 			result.Usings.ShouldContain("System");
 			result.Usings.ShouldContain("System.Data");
-			result.Usings.ShouldContain("System.Data.SqlClient");
+			result.Usings.ShouldContain("MySpecificDatabaseTypes");
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
@@ -46,19 +62,21 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 /// <param name=""parameterName"">Имя параметра</param>
 /// <param name=""value"">Значение параметра</param>
 /// <param name=""length"">Длина параметра</param>
-protected virtual void AddParameter(IDbCommand command, SqlDbType parameterType, string parameterName, object value, int? length = null)
+protected virtual void AddParameter(IDbCommand command, MySpecificDbType parameterType, string parameterName, object value, int? length = null)
 {
-	SqlParameter sqlParameter;
+	var parameter = new MySpecificParameterType
+	{
+		ParameterName = parameterName,
+		MySpecificDbTypePropertyName = parameterType,
+		Value = value ?? DBNull.Value
+	};
+
 	if (length.HasValue && length.Value > 0)
 	{
-		sqlParameter = new SqlParameter(parameterName, parameterType, length.Value);
+		parameter.Size = length.Value;
 	}
-	else
-	{
-		sqlParameter = new SqlParameter(parameterName, parameterType);
-	}
-	sqlParameter.Value = value ?? DBNull.Value;
-	command.Parameters.Add(sqlParameter);
+	
+	command.Parameters.Add(parameter);
 }");
 		}
 
