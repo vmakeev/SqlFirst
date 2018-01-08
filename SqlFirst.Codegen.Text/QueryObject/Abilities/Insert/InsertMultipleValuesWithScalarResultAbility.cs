@@ -31,7 +31,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				throw new CodeGenerationException($"Query must have at least one outgoing parameter to use ability [{Name}] ({GetType().Name}).");
 			}
 
-			Type scalarType = context.TypeMapper.Map(firstParameter.DbType, firstParameter.AllowDbNull);
+			Type scalarType = context.TypeMapper.MapToClrType(firstParameter.DbType, firstParameter.AllowDbNull);
 			string scalarTypeString = CSharpCodeHelper.GetTypeBuiltInName(scalarType);
 			string scalarTypeDescription = firstParameter.ColumnName;
 

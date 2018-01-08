@@ -85,7 +85,8 @@ namespace SqlFirst.Providers.MsSqlServer
 			return new MsSqlServerQueryBaseInfo
 			{
 				Type = queryType,
-				Sections = sections
+				Sections = sections,
+				SqlFirstOptions = GetOptions(queryText)
 			};
 		}
 
@@ -100,15 +101,13 @@ namespace SqlFirst.Providers.MsSqlServer
 
 			IEnumerable<IFieldDetails> results = GetResultDetails(queryText, connectionString);
 
-			IEnumerable<ISqlFirstOption> sqlFirstOptions = GetOptions(queryText);
-
 			IQueryInfo queryInfo = new MsSqlServerQueryInfo
 			{
 				Type = baseInfo.Type,
 				Parameters = parameters,
 				Results = results,
 				Sections = baseInfo.Sections,
-				SqlFirstOptions = sqlFirstOptions
+				SqlFirstOptions = baseInfo.SqlFirstOptions
 			};
 
 			return queryInfo;

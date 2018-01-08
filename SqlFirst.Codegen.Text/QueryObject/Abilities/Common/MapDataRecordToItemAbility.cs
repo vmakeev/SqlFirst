@@ -21,7 +21,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			foreach (IFieldDetails fieldDetails in context.OutgoingParameters)
 			{
 				string propertyName = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
-				Type propertyType = context.TypeMapper.Map(fieldDetails.DbType, fieldDetails.AllowDbNull);
+				Type propertyType = context.TypeMapper.MapToClrType(fieldDetails.DbType, fieldDetails.AllowDbNull);
 				string propertyTypeString = CSharpCodeHelper.GetTypeBuiltInName(propertyType);
 
 				string mapRecord = new StringBuilder(QuerySnippet.Methods.Common.Snippets.MapField)

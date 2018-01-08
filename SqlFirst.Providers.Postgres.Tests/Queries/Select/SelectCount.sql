@@ -1,0 +1,2 @@
+﻿select count(*)
+from CaseSubscriptions

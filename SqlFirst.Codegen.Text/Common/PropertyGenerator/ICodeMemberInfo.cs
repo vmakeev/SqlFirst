@@ -78,7 +78,7 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 				throw new ArgumentNullException(paramName: nameof(typeMapper));
 			}
 
-			Type type = typeMapper.Map(details.DbType, details.AllowDbNull);
+			Type type = typeMapper.MapToClrType(details.DbType, details.AllowDbNull);
 			var result = new CodeMemberInfo(type, details.ColumnName);
 			return result;
 		}
@@ -95,7 +95,7 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 				throw new ArgumentNullException(paramName: nameof(typeMapper));
 			}
 
-			Type type = typeMapper.Map(info.DbType, true);
+			Type type = typeMapper.MapToClrType(info.DbType, true);
 
 			CodeMemberInfo result = info.DefaultValue != null 
 				? new CodeMemberInfo(type, info.SemanticName, info.DefaultValue) 

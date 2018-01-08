@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Data;
 
 namespace SqlFirst.Core
 {
@@ -13,6 +14,13 @@ namespace SqlFirst.Core
 		/// <param name="dbType">Название типа данных в БД</param>
 		/// <param name="nullable">Поддерживается ли значение null</param>
 		/// <returns>Имя типа CLR</returns>
-		Type Map(string dbType, bool nullable);
+		Type MapToClrType(string dbType, bool nullable);
+
+		/// <summary>
+		/// Возвращает <see cref="DbType"/>, который может быть безопасно использован для представления указанного типа данных в БД
+		/// </summary>
+		/// <param name="dbType">Название типа данных в БД</param>
+		/// <returns><see cref="DbType"/></returns>
+		DbType MapToDbType(string dbType);
 	}
 }

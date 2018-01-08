@@ -20,9 +20,9 @@ namespace SqlFirst.Codegen.Text.Tests
 		private static IDatabaseTypeMapper GetDefaultDatabaseTypeMapper()
 		{
 			var typeMapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => typeMapper.Map("varchar", true)).Returns(typeof(string));
-			A.CallTo(() => typeMapper.Map("int", true)).Returns(typeof(int?));
-			A.CallTo(() => typeMapper.Map("bit", false)).Returns(typeof(bool));
+			A.CallTo(() => typeMapper.MapToClrType("varchar", true)).Returns(typeof(string));
+			A.CallTo(() => typeMapper.MapToClrType("int", true)).Returns(typeof(int?));
+			A.CallTo(() => typeMapper.MapToClrType("bit", false)).Returns(typeof(bool));
 			return typeMapper;
 		}
 

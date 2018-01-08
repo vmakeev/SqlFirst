@@ -240,8 +240,8 @@ protected virtual string GetQueryText()
 		public void MapDataRecordToItemAbility_Test()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.Map("dummyDbType1", false)).Returns(typeof(Guid));
-			A.CallTo(() => mapper.Map("dummyDbType2", true)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("dummyDbType1", false)).Returns(typeof(Guid));
+			A.CallTo(() => mapper.MapToClrType("dummyDbType2", true)).Returns(typeof(int?));
 
 			var firstParameter = A.Fake<IFieldDetails>(p => p.Strict());
 			A.CallTo(() => firstParameter.ColumnName).Returns("FirstParam");

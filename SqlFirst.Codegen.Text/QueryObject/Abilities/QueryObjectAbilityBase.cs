@@ -31,7 +31,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string name = GetParameterName(paramInfo);
-				Type type = context.TypeMapper.Map(paramInfo.DbType, true);
+				Type type = context.TypeMapper.MapToClrType(paramInfo.DbType, true);
 				string typeName = CSharpCodeHelper.GetTypeBuiltInName(type);
 
 				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.MethodParameter)

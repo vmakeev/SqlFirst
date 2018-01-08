@@ -50,9 +50,9 @@ declare @userKey varchar(MAX) ='test';
 -- end
 
 select *
-from CaseSubscriptions with(nolock)
+from caseevents with(nolock)
 where UserKey = @userKey
-order by CreateDateUtc desc
+order by finddateutc desc
 offset @skip rows
 fetch next @take rows only",
 
