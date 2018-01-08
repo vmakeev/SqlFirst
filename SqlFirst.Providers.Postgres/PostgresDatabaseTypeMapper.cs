@@ -136,6 +136,147 @@ namespace SqlFirst.Providers.Postgres
 			}
 		}
 
+		/// <summary>
+		/// Возвращает <see cref="IProviderSpecificType"/>, который может быть безопасно использован для представления указанного типа данных в БД
+		/// </summary>
+		/// <param name="dbType">Название типа данных в БД</param>
+		/// <returns><see cref="IProviderSpecificType"/></returns>
+		public IProviderSpecificType MapToProviderSpecificType(string dbType)
+		{
+			switch (PostgresDbType.Normalize(dbType))
+			{
+				case PostgresDbType.Int8:
+				case PostgresDbType.Bigint:
+				case PostgresDbType.Bigserial:
+				case PostgresDbType.Serial8:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Bigint);
+
+				case PostgresDbType.Integer:
+				case PostgresDbType.Int:
+				case PostgresDbType.Int4:
+				case PostgresDbType.Serial:
+				case PostgresDbType.Serial4:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Integer);
+
+				case PostgresDbType.Smallint:
+				case PostgresDbType.Int2:
+				case PostgresDbType.Smallserial:
+				case PostgresDbType.Serial2:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Smallint);
+
+				case PostgresDbType.Money:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Money);
+
+				case PostgresDbType.Decimal:
+				case PostgresDbType.Numeric:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Numeric);
+
+				case PostgresDbType.Real:
+				case PostgresDbType.Float4:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Real);
+
+				case PostgresDbType.DoublePrecision:
+				case PostgresDbType.Float8:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Double);
+
+				case PostgresDbType.CharacterVarying:
+				case PostgresDbType.Varchar:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Varchar);
+
+				case PostgresDbType.Json:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Json);
+
+				case PostgresDbType.Jsonb:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Jsonb);
+
+				case PostgresDbType.Text:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Text);
+
+				case PostgresDbType.Xml:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Xml);
+
+				case PostgresDbType.Date:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Date);
+
+				case PostgresDbType.Time:
+				case PostgresDbType.TimeWithoutTimeZone:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Time);
+
+				case PostgresDbType.TimeWithTimeZone:
+				case PostgresDbType.TimeTZ:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.TimeTz);
+
+				case PostgresDbType.Timestamp:
+				case PostgresDbType.TimestampWithoutTimeZone:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Timestamp);
+
+				case PostgresDbType.TimestampWithTimeZone:
+				case PostgresDbType.TimestampTZ:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.TimestampTz);
+
+				case PostgresDbType.Interval:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Interval);
+
+				case PostgresDbType.Guid:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Uuid);
+
+				case PostgresDbType.Bit:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Bit);
+
+				case PostgresDbType.BitVarying:
+				case PostgresDbType.Varbit:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Varbit);
+
+				case PostgresDbType.Boolean:
+				case PostgresDbType.Bool:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Boolean);
+
+				case PostgresDbType.Bytea:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Bytea);
+
+				case PostgresDbType.Character:
+				case PostgresDbType.Char:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Char);
+
+				case PostgresDbType.Box:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Box);
+
+				case PostgresDbType.Cidr:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Cidr);
+
+				case PostgresDbType.Circle:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Circle);
+
+				case PostgresDbType.Line:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Line);
+
+				case PostgresDbType.Lseg:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.LSeg);
+
+				case PostgresDbType.Point:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Point);
+
+				case PostgresDbType.Macaddr:
+				case PostgresDbType.Macaddr8:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.MacAddr);
+
+				case PostgresDbType.Path:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Path);
+
+				case PostgresDbType.Polygon:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.Polygon);
+
+				case PostgresDbType.Tsquery:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.TsQuery);
+
+				case PostgresDbType.Tsvector:
+					return new NpgsqlProviderSpecificType(NpgsqlDbType.TsVector);
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(dbType), dbType, $"Unsupported {typeof(PostgresDbType)}: {dbType}");
+			}
+		}
+
 		private static Type GetBaseType(string dbType)
 		{
 			int.TryParse(PostgresDbType.GetLength(dbType), out int typeLength);

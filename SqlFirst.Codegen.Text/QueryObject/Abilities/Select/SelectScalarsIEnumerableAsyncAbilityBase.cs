@@ -27,7 +27,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 
 			string xmlParameters = GetXmlParameters(context, parameters);
 			string methodParameters = GetIncomingParameters(context, parameters);
-			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
+			string addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings).Indent(QuerySnippet.Indent, 2);
 
 			IFieldDetails firstParameter = context.OutgoingParameters.FirstOrDefault();
 			if (firstParameter == null)
@@ -54,7 +54,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 				"System.Data",
 				"System.Data.Common",
 				"System.Threading",
-				"System.Threading.Tasks");
+				"System.Threading.Tasks")
+				.Concat(parameterSpecificUsings);
 
 			return result;
 		}

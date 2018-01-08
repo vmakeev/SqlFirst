@@ -4,7 +4,7 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Providers.Postgres
 {
-	internal class PostgresDatabaseProvider: IDatabaseProvider
+	public class PostgresDatabaseProvider : IDatabaseProvider
 	{
 		/// <summary>
 		/// Создает новое подключение к БД
@@ -15,5 +15,10 @@ namespace SqlFirst.Providers.Postgres
 		{
 			return new NpgsqlConnection(connectionString);
 		}
+
+		/// <summary>
+		/// Информация о специфичных для провайдера
+		/// </summary>
+		public IProviderTypesInfo ProviderTypesInfo { get; } = PostgresProviderTypesInfo.Instance;
 	}
 }

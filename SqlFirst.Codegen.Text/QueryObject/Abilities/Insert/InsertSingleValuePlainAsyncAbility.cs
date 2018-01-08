@@ -23,7 +23,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			string xmlParameters = GetXmlParameters(context, parameters);
 			string methodParameters = GetIncomingParameters(context, parameters);
-			string addParameters = GetAddParameters(context, parameters).Indent(QuerySnippet.Indent, 2);
+			string addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings).Indent(QuerySnippet.Indent, 2);
 
 			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingleAsync)
 							.Replace("$XmlParams$", "$XmlParams$").Replace("$XmlParams$", xmlParameters)
@@ -39,7 +39,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				"System.Data",
 				"System.Data.Common",
 				"System.Threading",
-				"System.Threading.Tasks");
+				"System.Threading.Tasks")
+				.Concat(parameterSpecificUsings);
 
 			return result;
 		}

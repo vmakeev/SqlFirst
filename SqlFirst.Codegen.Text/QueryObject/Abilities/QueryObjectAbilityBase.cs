@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
+using System.Linq;
 using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
@@ -63,21 +63,21 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 			return string.Join(Environment.NewLine, parameters);
 		}
 
-		protected virtual string GetAddParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
+		protected virtual string GetAddParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
 		{
+			specificUsings = Enumerable.Empty<string>();
+
 			var parameters = new LinkedList<string>();
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string name = GetParameterName(paramInfo);
 
-				// todo: добавить отдельный маппер
-				if (!Enum.TryParse(paramInfo.DbType, true, out SqlDbType sqlDbType))
-				{
-					throw new CodeGenerationException($"Can not map [{paramInfo.DbType}] to SqlDbType.");
-				}
+				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType);
+				specificUsings = specificUsings.Concat(dbType.Usings);
 
 				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.CallAddParameter)
-					.Replace("$SqlType$", sqlDbType.ToString("G"))
+					.Replace("$ParameterTypeTypeName$", dbType.TypeName)
+					.Replace("$SqlType$", dbType.ValueName)
 					.Replace("$SqlName$", paramInfo.DbName)
 					.Replace("$Name$", name)
 					.ToString();
@@ -85,6 +85,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 				parameters.AddLast(parameter);
 			}
 
+			specificUsings = specificUsings.Distinct().ToArray();
 			return string.Join(Environment.NewLine, parameters);
 		}
 	}

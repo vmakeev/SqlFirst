@@ -10,5 +10,10 @@ namespace SqlFirst.Providers.MsSqlServer
 		{
 			return new SqlConnection(connectionString);
 		}
+
+		/// <summary>
+		/// Информация о специфичных для провайдера
+		/// </summary>
+		public IProviderTypesInfo ProviderTypesInfo { get; } = MsSqlServerProviderTypesInfo.Instance;
 	}
 }

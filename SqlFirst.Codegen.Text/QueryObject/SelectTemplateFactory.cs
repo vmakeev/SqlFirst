@@ -9,7 +9,6 @@ using SqlFirst.Codegen.Text.QueryObject.Options;
 
 namespace SqlFirst.Codegen.Text.QueryObject
 {
-	//todo: use options
 	internal static class SelectTemplateFactory
 	{
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]

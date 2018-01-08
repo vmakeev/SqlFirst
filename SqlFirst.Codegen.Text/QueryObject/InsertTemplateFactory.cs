@@ -9,7 +9,6 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	internal static class InsertTemplateFactory
 	{
-		//todo: use options
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static QueryObjectTemplate Build(ICodeGenerationContext context, InsertQueryObjectOptions options)
 		{

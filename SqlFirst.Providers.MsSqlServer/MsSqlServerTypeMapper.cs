@@ -19,11 +19,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			return baseType;
 		}
 
-		/// <summary>
-		/// Возвращает <see cref="DbType"/>, который может быть безопасно использован для представления указанного типа данных в БД
-		/// </summary>
-		/// <param name="dbType">Название типа данных в БД</param>
-		/// <returns><see cref="DbType"/></returns>
+		/// <inheritdoc />
 		public DbType MapToDbType(string dbType)
 		{
 			switch (MsSqlDbType.Normalize(dbType))
@@ -87,6 +83,100 @@ namespace SqlFirst.Providers.MsSqlServer
 
 				case MsSqlDbType.UniqueIdentifier:
 					return DbType.Guid;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(dbType), dbType);
+			}
+		}
+
+		/// <inheritdoc />
+		public IProviderSpecificType MapToProviderSpecificType(string dbType)
+		{
+			switch (MsSqlDbType.Normalize(dbType))
+			{
+				case MsSqlDbType.Char:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Char);
+
+				case MsSqlDbType.NChar:
+					return new MsSqlServerProviderSpecificType(SqlDbType.NChar);
+
+				case MsSqlDbType.NText:
+					return new MsSqlServerProviderSpecificType(SqlDbType.NText);
+
+				case MsSqlDbType.NVarChar:
+					return new MsSqlServerProviderSpecificType(SqlDbType.NVarChar);
+
+				case MsSqlDbType.VarChar:
+					return new MsSqlServerProviderSpecificType(SqlDbType.VarChar);
+
+				case MsSqlDbType.Text:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Text);
+
+				case MsSqlDbType.Xml:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Xml);
+
+				case MsSqlDbType.DateTime:
+					return new MsSqlServerProviderSpecificType(SqlDbType.DateTime);
+
+				case MsSqlDbType.DateTime2:
+					return new MsSqlServerProviderSpecificType(SqlDbType.DateTime2);
+
+				case MsSqlDbType.SmallDateTime:
+					return new MsSqlServerProviderSpecificType(SqlDbType.SmallDateTime);
+
+				case MsSqlDbType.Time:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Time);
+
+				case MsSqlDbType.Date:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Date);
+
+				case MsSqlDbType.Binary:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Binary);
+
+				case MsSqlDbType.Image:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Image);
+
+				case MsSqlDbType.Timestamp:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Timestamp);
+
+				case MsSqlDbType.VarBinary:
+					return new MsSqlServerProviderSpecificType(SqlDbType.VarBinary);
+
+				case MsSqlDbType.SmallMoney:
+					return new MsSqlServerProviderSpecificType(SqlDbType.SmallMoney);
+
+				case MsSqlDbType.Decimal:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Decimal);
+
+				case MsSqlDbType.Money:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Money);
+
+				case MsSqlDbType.Bit:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Bit);
+
+				case MsSqlDbType.Bigint:
+					return new MsSqlServerProviderSpecificType(SqlDbType.BigInt);
+
+				case MsSqlDbType.DateTimeOffset:
+					return new MsSqlServerProviderSpecificType(SqlDbType.DateTimeOffset);
+
+				case MsSqlDbType.Real:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Real);
+
+				case MsSqlDbType.Float:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Float);
+
+				case MsSqlDbType.Smallint:
+					return new MsSqlServerProviderSpecificType(SqlDbType.SmallInt);
+
+				case MsSqlDbType.Tinyint:
+					return new MsSqlServerProviderSpecificType(SqlDbType.TinyInt);
+
+				case MsSqlDbType.Int:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Int);
+
+				case MsSqlDbType.UniqueIdentifier:
+					return new MsSqlServerProviderSpecificType(SqlDbType.UniqueIdentifier);
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dbType), dbType);

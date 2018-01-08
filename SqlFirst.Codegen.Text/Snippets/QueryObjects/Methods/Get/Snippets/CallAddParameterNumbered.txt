@@ -1,1 +1,1 @@
-﻿AddParameter(cmd, SqlDbType.$SqlType$, string.Format("@$SqlName$", $IndexVariableName$), $Name$);
+﻿AddParameter(cmd, $ParameterTypeTypeName$.$SqlType$, string.Format("@$SqlName$", $IndexVariableName$), $Name$);

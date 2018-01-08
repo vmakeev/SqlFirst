@@ -1,1 +1,1 @@
-﻿AddParameter(cmd, SqlDbType.$SqlType$, "@$SqlName$", $Name$);
+﻿AddParameter(cmd, $ParameterTypeTypeName$.$SqlType$, "@$SqlName$", $Name$);

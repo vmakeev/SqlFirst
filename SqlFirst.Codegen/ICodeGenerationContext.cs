@@ -27,5 +27,10 @@ namespace SqlFirst.Codegen
 		/// Преобразователь типов БД в CLR
 		/// </summary>
 		IDatabaseTypeMapper TypeMapper { get; }
+
+		/// <summary>
+		/// Поставщик данных БД
+		/// </summary>
+		IDatabaseProvider DatabaseProvider { get; }
 	}
 }

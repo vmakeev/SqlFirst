@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
@@ -34,8 +33,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			string parameterType = context.GetQueryParameterItemTypeName();
 			string notNumberedXmlString = GetXmlParameters(context, notNumberedParameters);
 			string notNumberedIncomingString = GetIncomingParameters(context, notNumberedParameters);
-			string notNumberedAddParametersString = GetAddParameters(context, notNumberedParameters).Indent(QuerySnippet.Indent, 2);
-			string numberedAddParametersString = GetAddParametersNumbered(context, indexVariableName, numberedParameters).Indent(QuerySnippet.Indent, 3);
+			string notNumberedAddParametersString = GetAddParameters(context, notNumberedParameters, out IEnumerable<string> numberedUsings).Indent(QuerySnippet.Indent, 2);
+			string numberedAddParametersString = GetAddParametersNumbered(context, indexVariableName, numberedParameters, out IEnumerable<string> notNumberedUsings).Indent(QuerySnippet.Indent, 3);
 
 			if (!string.IsNullOrEmpty(notNumberedXmlString))
 			{
@@ -59,17 +58,21 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
+			IEnumerable<string> specificParametersUsings = numberedUsings.Concat(notNumberedUsings).Distinct();
+
 			result.Methods = result.Methods.Append(method);
 			result.Usings = result.Usings.Append(
 				"System",
 				"System.Data",
-				"System.Collections.Generic");
+				"System.Collections.Generic")
+				.Concat(specificParametersUsings);
 
 			return result;
 		}
 
-		private string GetAddParametersNumbered(ICodeGenerationContext context, string indexVariableName, IEnumerable<IQueryParamInfo> targetParameters)
+		private string GetAddParametersNumbered(ICodeGenerationContext context, string indexVariableName, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
 		{
+			specificUsings = Enumerable.Empty<string>();
 			string variableName = GetParameterName(context);
 
 			var parameters = new LinkedList<string>();
@@ -78,14 +81,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				string propertyName = CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.Pascal);
 				string fullName = $"{variableName}.{propertyName}";
 
-				// todo: добавить отдельный маппер
-				if (!Enum.TryParse(paramInfo.DbType, true, out SqlDbType sqlDbType))
-				{
-					throw new CodeGenerationException($"Can not map [{paramInfo.DbType}] to SqlDbType.");
-				}
+				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType);
+				specificUsings = specificUsings.Concat(dbType.Usings);
 
 				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.CallAddParameterNumbered)
-									.Replace("$SqlType$", sqlDbType.ToString("G"))
+									.Replace("$ParameterTypeTypeName$", dbType.TypeName)
+									.Replace("$SqlType$", dbType.ValueName)
 									.Replace("$SqlName$", QueryParamInfoNameHelper.GetNumberedNameTemplate(paramInfo.SemanticName))
 									.Replace("$IndexVariableName$", indexVariableName)
 									.Replace("$Name$", fullName)

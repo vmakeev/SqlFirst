@@ -13,5 +13,11 @@ namespace SqlFirst.Core
 		/// <param name="connectionString">Строка подключения</param>
 		/// <returns>Подключение к БД</returns>
 		IDbConnection GetConnection(string connectionString);
+
+		/// <summary>
+		/// Информация о специфичных для провайдера
+		/// </summary>
+		IProviderTypesInfo ProviderTypesInfo { get; }
+
 	}
 }

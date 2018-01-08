@@ -6,17 +6,19 @@
 /// <param name="parameterName">Имя параметра</param>
 /// <param name="value">Значение параметра</param>
 /// <param name="length">Длина параметра</param>
-protected virtual void AddParameter(IDbCommand command, SqlDbType parameterType, string parameterName, object value, int? length = null)
+protected virtual void AddParameter(IDbCommand command, $ParameterTypeTypeName$ parameterType, string parameterName, object value, int? length = null)
 {
-	SqlParameter sqlParameter;
+	var parameter = new $ParameterTypeName$
+	{
+		ParameterName = parameterName,
+		$ParameterSpecificDbTypePropertyName$ = parameterType,
+		Value = value ?? DBNull.Value
+	};
+
 	if (length.HasValue && length.Value > 0)
 	{
-		sqlParameter = new SqlParameter(parameterName, parameterType, length.Value);
+		parameter.Size = length.Value;
 	}
-	else
-	{
-		sqlParameter = new SqlParameter(parameterName, parameterType);
-	}
-	sqlParameter.Value = value ?? DBNull.Value;
-	command.Parameters.Add(sqlParameter);
+	
+	command.Parameters.Add(parameter);
 }
