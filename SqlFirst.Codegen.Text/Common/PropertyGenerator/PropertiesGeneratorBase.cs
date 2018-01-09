@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 {
@@ -32,6 +33,6 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 		/// <param name="options">Параметры генерации свойств</param>
 		/// <param name="hasDefaultValue">Имеет ли свойство значение по умолчанию</param>
 		/// <returns>Шаблон свойства</returns>
-		protected abstract string GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue);
+		protected abstract IRenderableTemplate GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue);
 	}
 }

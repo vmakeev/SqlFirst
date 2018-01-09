@@ -1,31 +1,33 @@
 ﻿
+using SqlFirst.Codegen.Text.Templating;
+
 namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Add
 {
-	internal class AddSnippet : QueryObjectsSnippetBase
+	internal class AddSnippet : SqlFirstSnippet
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public AddSnippet()
-			: base("Methods.Add")
+			: base("QueryObjects.Methods.Add")
 		{
 		}
 
-		public string AddSingle => GetSnippetText();
-		public string AddSingleAsync => GetSnippetText();
+		public IRenderableTemplate AddSingle => GetRenderableTemplate();
+		public IRenderableTemplate AddSingleAsync => GetRenderableTemplate();
 
-		public string AddSingleWithResult => GetSnippetText();
-		public string AddSingleWithResultAsync => GetSnippetText();
+		public IRenderableTemplate AddSingleWithResult => GetRenderableTemplate();
+		public IRenderableTemplate AddSingleWithResultAsync => GetRenderableTemplate();
 
-		public string AddSingleWithScalarResult => GetSnippetText();
-		public string AddSingleWithScalarResultAsync => GetSnippetText();
+		public IRenderableTemplate AddSingleWithScalarResult => GetRenderableTemplate();
+		public IRenderableTemplate AddSingleWithScalarResultAsync => GetRenderableTemplate();
 
-		public string AddMultiple => GetSnippetText();
-		public string AddMultipleAsync => GetSnippetText();
+		public IRenderableTemplate AddMultiple => GetRenderableTemplate();
+		public IRenderableTemplate AddMultipleAsync => GetRenderableTemplate();
 
-		public string AddMultipleWithResult => GetSnippetText();
-		public string AddMultipleWithResultAsync => GetSnippetText();
+		public IRenderableTemplate AddMultipleWithResult => GetRenderableTemplate();
+		public IRenderableTemplate AddMultipleWithResultAsync => GetRenderableTemplate();
 
-		public string AddMultipleWithScalarResult => GetSnippetText();
-		public string AddMultipleWithScalarResultAsync => GetSnippetText();
+		public IRenderableTemplate AddMultipleWithScalarResult => GetRenderableTemplate();
+		public IRenderableTemplate AddMultipleWithScalarResultAsync => GetRenderableTemplate();
 
 	}
 }

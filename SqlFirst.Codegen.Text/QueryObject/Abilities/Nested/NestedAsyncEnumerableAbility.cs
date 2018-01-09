@@ -10,16 +10,16 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Nested
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			string externalControlledEnumerable = EnumerableSnippet.Enumerable;
-			string asyncEnumerator = EnumerableSnippet.AsyncEnumerator;
-			string dbAsyncEnumerator = EnumerableSnippet.DbAsyncEnumerator;
-			string enumerableItem = EnumerableSnippet.EnumerableItem;
+			string externalControlledEnumerable = Snippet.Enumerable.Enumerable.Render();
+			string asyncEnumerator = Snippet.Enumerable.AsyncEnumerator.Render();
+			string dbAsyncEnumerator = Snippet.Enumerable.DbAsyncEnumerator.Render();
+			string enumerableItem = Snippet.Enumerable.EnumerableItem.Render();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
-			result.Nested = result.Nested.Append(externalControlledEnumerable, asyncEnumerator, dbAsyncEnumerator, enumerableItem);
+			result.Nested = result.Nested.AppendItems(externalControlledEnumerable, asyncEnumerator, dbAsyncEnumerator, enumerableItem);
 
-			result.Usings = result.Usings.Append(
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Collections",
 				"System.Collections.Generic",

@@ -5,7 +5,7 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	internal static class EnumerableExtensions
 	{
-		public static IEnumerable<T> Append<T>(this IEnumerable<T> source, params T[] values)
+		public static IEnumerable<T> AppendItems<T>(this IEnumerable<T> source, params T[] values)
 		{
 			return source.Concat(values);
 		}

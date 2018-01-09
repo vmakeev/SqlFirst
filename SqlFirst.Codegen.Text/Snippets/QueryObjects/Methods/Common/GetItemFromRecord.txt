@@ -7,7 +7,7 @@ protected virtual $ItemType$ GetItemFromRecord(IDataRecord record)
 {
 	var result = new $ItemType$();
 
-$MapDataRecord$
+$1|MapDataRecord|\r\n$
 
 	result.AfterLoad();
 	return result;

@@ -1,1 +1,1 @@
-﻿$Modificators$ $Type$ $Name$ = $Value$;
+﻿$Modificators| $ $Type$ $Name$ = $Value$;

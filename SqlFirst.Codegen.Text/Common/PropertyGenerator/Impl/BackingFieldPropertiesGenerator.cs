@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.Snippets;
-using SqlFirst.Codegen.Text.Snippets.Properties;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 {
@@ -23,12 +23,12 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 		public override IEnumerable<GeneratedPropertyInfo> GenerateProperties(IEnumerable<ICodeMemberInfo> properties)
 		{
 			// ignore default value
-			string propertyTemplate = GetPropertyTemplate(_options, false);
+			IRenderableTemplate propertyTemplate = GetPropertyTemplate(_options, false);
 
 			foreach (ICodeMemberInfo memberInfo in properties)
 			{
 				// default value is here
-				string backingFieldTemplate = GetBackingFieldTemplate(memberInfo.HasDefaultValue);
+				IRenderableTemplate backingFieldTemplate = GetBackingFieldTemplate(memberInfo.HasDefaultValue);
 
 				string usingString = memberInfo.Type.Namespace;
 				string csTypeString = CSharpCodeHelper.GetTypeBuiltInName(memberInfo.Type);
@@ -36,15 +36,19 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 				string csBackingFieldNameString = CSharpCodeHelper.GetValidIdentifierName(memberInfo.Name, NamingPolicy.CamelCaseWithUnderscope);
 				string defaultValueString = CSharpCodeHelper.GetValidValue(memberInfo.Type, memberInfo.DefaultValue);
 
-				string backingField = backingFieldTemplate
-					.Replace("$Type$", csTypeString)
-					.Replace("$Name$", csBackingFieldNameString)
-					.Replace("$Value$", defaultValueString);
+				string backingField = backingFieldTemplate.Render(new
+				{
+					Type = csTypeString,
+					Name = csBackingFieldNameString,
+					Value = defaultValueString
+				});
 
-				string property = propertyTemplate
-					.Replace("$Type$", csTypeString)
-					.Replace("$BackingFieldName$", csBackingFieldNameString)
-					.Replace("$Name$", csPropertyNameString);
+				string property = propertyTemplate.Render(new
+				{
+					Type = csTypeString,
+					BackingFieldName = csBackingFieldNameString,
+					Name = csPropertyNameString
+				});
 
 				var backingFieldPart = new GeneratedPropertyPart(backingField, true);
 				var propertyPart = new GeneratedPropertyPart(property, false);
@@ -52,26 +56,26 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 			}
 		}
 
-		private string GetBackingFieldTemplate(bool hasDefaultValue)
+		private IRenderableTemplate GetBackingFieldTemplate(bool hasDefaultValue)
 		{
 			return hasDefaultValue
-				? FieldSnippet.BackingFieldWithValue
-				: FieldSnippet.BackingField;
+				? Snippet.Field.BackingFieldWithValue
+				: Snippet.Field.BackingField;
 		}
 
 		/// <inheritdoc />
-		protected override string GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
+		protected override IRenderableTemplate GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
 		{
 			if (options.IsReadOnly)
 			{
 				return _options.IsVirtual
-					? PropertySnippet.BackingField.ReadOnly.ReadOnlyBackingFieldPropertyVirtual
-					: PropertySnippet.BackingField.ReadOnly.ReadOnlyBackingFieldProperty;
+					? Snippet.Property.BackingField.ReadOnly.ReadOnlyBackingFieldPropertyVirtual
+					: Snippet.Property.BackingField.ReadOnly.ReadOnlyBackingFieldProperty;
 			}
 
 			return options.IsVirtual
-				? PropertySnippet.BackingField.BackingFieldPropertyVirtual
-				: PropertySnippet.BackingField.BackingFieldProperty;
+				? Snippet.Property.BackingField.BackingFieldPropertyVirtual
+				: Snippet.Property.BackingField.BackingFieldProperty;
 		}
 	}
 }

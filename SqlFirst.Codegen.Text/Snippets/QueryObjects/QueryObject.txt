@@ -1,4 +1,8 @@
-﻿$Modificators$ class $QueryName$
+﻿$Modificators| $ class $QueryName$
 {
-$Nested$$Consts$$Fields$$Properties$$Methods$
+$1|Nested|\r\n\r\n$~
+$1|Consts|\r\n$~
+$1|Fields|\r\n$~
+$1|Properties|\r\n\r\n$~
+$1|Methods|\r\n\r\n$~
 }

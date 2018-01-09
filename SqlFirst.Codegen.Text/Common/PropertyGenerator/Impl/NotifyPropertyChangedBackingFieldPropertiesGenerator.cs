@@ -1,4 +1,5 @@
-﻿using SqlFirst.Codegen.Text.Snippets.Properties;
+﻿using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 {
@@ -17,18 +18,18 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
+		protected override IRenderableTemplate GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
 		{
 			if (options.IsReadOnly)
 			{
 				return _options.IsVirtual
-					? PropertySnippet.BackingField.NotifyPropertyChanged.ReadOnly.NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual
-					: PropertySnippet.BackingField.NotifyPropertyChanged.ReadOnly.NotifyPropertyChangedReadOnlyBackingFieldProperty;
+					? Snippet.Property.BackingField.NotifyPropertyChanged.ReadOnly.NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual
+					: Snippet.Property.BackingField.NotifyPropertyChanged.ReadOnly.NotifyPropertyChangedReadOnlyBackingFieldProperty;
 			}
 
 			return _options.IsVirtual
-				? PropertySnippet.BackingField.NotifyPropertyChanged.NotifyPropertyChangedBackingFieldPropertyVirtual
-				: PropertySnippet.BackingField.NotifyPropertyChanged.NotifyPropertyChangedBackingFieldProperty;
+				? Snippet.Property.BackingField.NotifyPropertyChanged.NotifyPropertyChangedBackingFieldPropertyVirtual
+				: Snippet.Property.BackingField.NotifyPropertyChanged.NotifyPropertyChangedBackingFieldProperty;
 		}
 	}
 }

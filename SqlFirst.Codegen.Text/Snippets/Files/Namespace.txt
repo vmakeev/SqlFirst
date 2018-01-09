@@ -1,4 +1,4 @@
 ﻿namespace $Namespace$
 {
-$Data$
+$1|Data|\r\n\r\n$
 }

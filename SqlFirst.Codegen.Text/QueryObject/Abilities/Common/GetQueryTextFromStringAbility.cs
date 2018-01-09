@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 
@@ -21,11 +20,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 				.Replace("\"", "\"\"")
 				.Replace(@"\", @"\\");
 
-			var methodBuilder = new StringBuilder(QuerySnippet.Methods.Common.GetQueryFromString);
-			methodBuilder.Replace("$QueryText$", preparedQueryText);
+			string method = Snippet.Query.Methods.Common.GetQueryFromString.Render(new { QueryText = preparedQueryText });
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.Append(methodBuilder.ToString());
+			result.Methods = result.Methods.AppendItems(method);
 			return result;
 		}
 

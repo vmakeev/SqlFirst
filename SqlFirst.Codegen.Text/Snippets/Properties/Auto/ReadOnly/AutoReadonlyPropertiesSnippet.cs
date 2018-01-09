@@ -1,19 +1,21 @@
-﻿namespace SqlFirst.Codegen.Text.Snippets.Properties.Auto.ReadOnly
+﻿using SqlFirst.Codegen.Text.Templating;
+
+namespace SqlFirst.Codegen.Text.Snippets.Properties.Auto.ReadOnly
 {
-	internal class AutoReadonlyPropertiesSnippet : PropertiesSnippetBase
+	internal class AutoReadonlyPropertiesSnippet : SqlFirstSnippet
 	{
-		public string ReadOnlyAutoProperty => GetSnippetText();
+		public IRenderableTemplate ReadOnlyAutoProperty => GetRenderableTemplate();
 
-		public string ReadOnlyAutoPropertyVirtual => GetSnippetText();
+		public IRenderableTemplate ReadOnlyAutoPropertyVirtual => GetRenderableTemplate();
 
-		public string ReadOnlyAutoPropertyWithDefault => GetSnippetText();
+		public IRenderableTemplate ReadOnlyAutoPropertyWithDefault => GetRenderableTemplate();
 
-		public string ReadOnlyAutoPropertyVirtualWithDefault => GetSnippetText();
+		public IRenderableTemplate ReadOnlyAutoPropertyVirtualWithDefault => GetRenderableTemplate();
 
 
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public AutoReadonlyPropertiesSnippet()
-			: base("Auto.ReadOnly")
+			: base("Properties.Auto.ReadOnly")
 		{
 		}
 	}

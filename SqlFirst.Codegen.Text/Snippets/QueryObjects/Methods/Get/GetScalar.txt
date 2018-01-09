@@ -2,14 +2,14 @@
 /// Выполняет загрузку значения типа <see cref="$ItemType$"/>
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$
+$XmlParams`\r\n`|\r\n$~
 /// <returns>Значение типа  <see cref="$ItemType$"/></returns>
-public virtual $ItemType$ GetFirst(IDbConnection connection$MethodParameters$)
+public virtual $ItemType$ GetFirst(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
 
 		object value = cmd.ExecuteScalar();
 		return GetScalarFromValue<$ItemType$>(value);

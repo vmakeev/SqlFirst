@@ -2,18 +2,20 @@
 /// Выполняет добавление строк в таблицу
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$/// <param name="items">Добавляемые записи</param>
+$XmlParams`\r\n`|\r\n$~
+/// <param name="items">Добавляемые записи</param>
 /// <returns>$ResultItemDescription$</returns>
-public virtual IEnumerable<$ResultItemType$> Add(IDbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items)
+public virtual IEnumerable<$ResultItemType$> Add(IDbConnection connection$`, `MethodParameters|, $, ICollection<$ParameterItemType$> items)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText(items.Count);
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
+
 		int $IndexVariableName$ = 0;
 		foreach($ParameterItemType$ $ParameterVariableName$ in items)
 		{
-$AddParametersNumbered$
+$3|AddParametersNumbered|\r\n$
 
 			$IndexVariableName$++;
 		}

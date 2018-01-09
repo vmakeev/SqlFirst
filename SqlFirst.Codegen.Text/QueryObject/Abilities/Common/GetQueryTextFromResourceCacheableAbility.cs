@@ -5,6 +5,7 @@ using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 {
@@ -55,50 +56,98 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			var methodBuilder = new StringBuilder(QuerySnippet.Methods.Common.GetQueryFromResourceCacheable);
+			(string checksumFieldName, IRenderable checksumField) = GetChecksumField(context.GetQueryText());
+			(string cacheFieldName, IRenderable cacheField) = GetCacheField();
+			(string lockerFieldName, IRenderable lockerField) = GetLockerField();
 
-			string queryText = context.GetQueryText();
-			int queryTextHash = CalculateChecksum(queryText);
-
-			string checksumFieldName = CSharpCodeHelper.GetValidIdentifierName("queryTextChecksum", NamingPolicy.CamelCaseWithUnderscope);
-			string hashCodeFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(int));
-			string hashCodeField = new StringBuilder(FieldSnippet.ReadOnlyField)
-				.Replace("$Type$", hashCodeFieldType)
-				.Replace("$Name$", checksumFieldName)
-				.Replace("$Value$", queryTextHash.ToString(CultureInfo.InvariantCulture))
-				.ToString();
-
-			string cacheFieldName = CSharpCodeHelper.GetValidIdentifierName("cachedSql", NamingPolicy.CamelCaseWithUnderscope);
-			string cacheFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
-			string cacheField = new StringBuilder(FieldSnippet.BackingField)
-				.Replace("$Type$", cacheFieldType)
-				.Replace("$Name$", cacheFieldName)
-				.ToString();
-
-			string lockerFieldName = CSharpCodeHelper.GetValidIdentifierName("cachedSqlLocker", NamingPolicy.CamelCaseWithUnderscope);
-			string lockerFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(object));
-			string lockerFieldValue = $"new {lockerFieldType}()";
-			string lockerField = new StringBuilder(FieldSnippet.ReadOnlyField)
-				.Replace("$Type$", lockerFieldType)
-				.Replace("$Name$", lockerFieldName)
-				.Replace("$Value$", lockerFieldValue)
-				.ToString();
-
-			methodBuilder.Replace("$QueryName$", context.GetQueryName());
-			methodBuilder.Replace("$QuerySqlFullPath$", context.GetResourcePath());
-			methodBuilder.Replace("$ChecksumName$", checksumFieldName);
-			methodBuilder.Replace("$LockerName$", lockerFieldName);
-			methodBuilder.Replace("$CacheName$", cacheFieldName);
+			IRenderable primaryMethod = GetPrimaryMethod(context, checksumFieldName, cacheFieldName, lockerFieldName);
+			IRenderable calculateChecksumMethod = GetCalculateChecksumMethod();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Fields = result.Fields.Append(cacheField, lockerField, hashCodeField);
-			result.Methods = result.Methods.Append(QuerySnippet.Methods.Common.Snippets.CalculateChecksum, methodBuilder.ToString());
-			result.Usings = result.Usings.Append(
+			result.Fields = result.Fields.AppendItems(cacheField.Render(), lockerField.Render(), checksumField.Render());
+			result.Methods = result.Methods.AppendItems(calculateChecksumMethod.Render(), primaryMethod.Render());
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.IO",
 				"System.Text",
 				"System.Text.RegularExpressions");
 			return result;
+		}
+
+		private IRenderable GetCalculateChecksumMethod()
+		{
+			return Snippet.Query.Methods.Common.Snippets.CalculateChecksum;
+		}
+
+		private static IRenderable GetPrimaryMethod(ICodeGenerationContext context, string checksumFieldName, string cacheFieldName, string lockerFieldName)
+		{
+			IRenderableTemplate template = Snippet.Query.Methods.Common.GetQueryFromResourceCacheable;
+			var model = new
+			{
+				QueryName = context.GetQueryName(),
+				QuerySqlFullPath = context.GetResourcePath(),
+				ChecksumName = checksumFieldName,
+				LockerName = lockerFieldName,
+				CacheName = cacheFieldName
+			};
+			return Renderable.Create(template, model);
+		}
+
+		private (string checksumFieldName, IRenderable checksumField) GetChecksumField(string queryText)
+		{
+			int queryTextHash = CalculateChecksum(queryText);
+
+			string checksumFieldName = CSharpCodeHelper.GetValidIdentifierName("queryTextChecksum", NamingPolicy.CamelCaseWithUnderscope);
+			string hashCodeFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(int));
+
+			IRenderableTemplate template = Snippet.Field.ReadOnlyField;
+			var model = new
+			{
+				Type = hashCodeFieldType,
+				Name = checksumFieldName,
+				Value = queryTextHash.ToString(CultureInfo.InvariantCulture)
+			};
+
+			IRenderable hashCodeField = Renderable.Create(template, model);
+
+			return (checksumFieldName, hashCodeField);
+		}
+
+		private (string cacheFieldName, IRenderable cacheField) GetCacheField()
+		{
+			string cacheFieldName = CSharpCodeHelper.GetValidIdentifierName("cachedSql", NamingPolicy.CamelCaseWithUnderscope);
+			string cacheFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
+
+			IRenderableTemplate template = Snippet.Field.BackingField;
+			var model = new
+			{
+				Type = cacheFieldType,
+				Name = cacheFieldName
+			};
+
+			IRenderable cacheField = Renderable.Create(template, model);
+
+			return (cacheFieldName, cacheField);
+		}
+
+		private (string lockerFieldName, IRenderable lockerField) GetLockerField()
+		{
+			string lockerFieldName = CSharpCodeHelper.GetValidIdentifierName("cachedSqlLocker", NamingPolicy.CamelCaseWithUnderscope);
+			string lockerFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(object));
+			string lockerFieldValue = $"new {lockerFieldType}()";
+
+			IRenderableTemplate template = Snippet.Field.ReadOnlyField;
+
+			var model = new
+			{
+				Type = lockerFieldType,
+				Name = lockerFieldName,
+				Value = lockerFieldValue
+			};
+
+			IRenderable lockerField = Renderable.Create(template, model);
+
+			return (lockerFieldName, lockerField);
 		}
 
 		/// <inheritdoc />

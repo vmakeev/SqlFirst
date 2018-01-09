@@ -4,6 +4,14 @@
     <TargetFramework>netstandard2.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <NoWarn>1701;1702;1705;IDE0037</NoWarn>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <NoWarn>1701;1702;1705;IDE0037;0037</NoWarn>
+  </PropertyGroup>
+
   <ItemGroup>
     <None Remove="Snippets\AutoProperty.txt" />
     <None Remove="Snippets\AutoPropertyVirtual.txt" />
@@ -17,7 +25,6 @@
     <None Remove="Snippets\Files\DefaultFile.txt" />
     <None Remove="Snippets\Files\Namespace.txt" />
     <None Remove="Snippets\Files\Using.txt" />
-    <None Remove="Snippets\Files\Usings.txt" />
     <None Remove="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
     <None Remove="Snippets\Items\PocoParameterItem.txt" />
     <None Remove="Snippets\Items\StructParameterItem.txt" />
@@ -70,10 +77,10 @@
     <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameterNumbered.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\MethodParameter.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\XmlParam.txt" />
-    <None Remove="Snippets\Enumerabes\AsyncEnumerator.txt" />
-    <None Remove="Snippets\Enumerabes\DbAsyncEnumerator.txt" />
-    <None Remove="Snippets\Enumerabes\Enumerable.txt" />
-    <None Remove="Snippets\Enumerabes\EnumerableItem.txt" />
+    <None Remove="Snippets\Enumerables\AsyncEnumerator.txt" />
+    <None Remove="Snippets\Enumerables\DbAsyncEnumerator.txt" />
+    <None Remove="Snippets\Enumerables\Enumerable.txt" />
+    <None Remove="Snippets\Enumerables\EnumerableItem.txt" />
     <None Remove="Snippets\QueryObjects\QueryObject.txt" />
     <None Remove="Snippets\ReadOnlyAutoProperty.txt" />
     <None Remove="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
@@ -83,17 +90,17 @@
   </ItemGroup>
 
   <ItemGroup>
-    <EmbeddedResource Include="Snippets\Enumerabes\AsyncEnumerator.txt" />
-    <EmbeddedResource Include="Snippets\Enumerabes\DbAsyncEnumerator.txt" />
-    <EmbeddedResource Include="Snippets\Enumerabes\Enumerable.txt" />
-    <EmbeddedResource Include="Snippets\Enumerabes\EnumerableItem.txt" />
+    <EmbeddedResource Include="Snippets\Enumerables\AsyncEnumerator.txt" />
+    <EmbeddedResource Include="Snippets\Enumerables\DbAsyncEnumerator.txt" />
+    <EmbeddedResource Include="Snippets\Enumerables\Enumerable.txt" />
+    <EmbeddedResource Include="Snippets\Enumerables\EnumerableItem.txt" />
     <EmbeddedResource Include="Snippets\Fields\Const.txt" />
     <EmbeddedResource Include="Snippets\Fields\FieldWithValue.txt" />
     <EmbeddedResource Include="Snippets\Fields\Field.txt" />
     <EmbeddedResource Include="Snippets\Fields\BackingFieldWithValue.txt" />
     <EmbeddedResource Include="Snippets\Fields\ReadOnlyField.txt" />
-    <EmbeddedResource Include="Snippets\Items\PocoParameterItem.txt" />
-    <EmbeddedResource Include="Snippets\Items\StructParameterItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Parameter\PocoParameterItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Parameter\StructParameterItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyWithDefault.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyVirtualWithDefault.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoPropertyVirtualWithDefault.txt" />
@@ -137,8 +144,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Snippets\Files\DefaultFile.txt" />
     <EmbeddedResource Include="Snippets\Files\Namespace.txt" />
-    <EmbeddedResource Include="Snippets\Files\Usings.txt" />
-    <EmbeddedResource Include="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Result\NotifyPropertyChangedStructResultItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Fields\BackingField.txt" />
@@ -148,13 +154,13 @@
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\ReadOnly\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\ReadOnly\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
-    <EmbeddedResource Include="Snippets\Items\NotifyPropertyChangedClassResultItem.txt" />
-    <EmbeddedResource Include="Snippets\Items\PocoResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Result\NotifyPropertyChangedClassResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Result\PocoResultItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\ReadOnly\ReadOnlyBackingFieldProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\ReadOnly\ReadOnlyBackingFieldPropertyVirtual.txt" />
-    <EmbeddedResource Include="Snippets\Items\StructResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Result\StructResultItem.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\MapField.txt" />

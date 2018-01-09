@@ -2,19 +2,21 @@
 /// Выполняет добавление строк в таблицу
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$/// <param name="items">Добавляемые записи</param>
+$XmlParams`\r\n`|\r\n$~
+/// <param name="items">Добавляемые записи</param>
 /// <param name="cancellationToken">Токен отмены</param>
 /// <returns>Количество добавленных строк</returns>
-public virtual async Task<int> AddAsync(DbConnection connection$MethodParameters$, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
+public virtual async Task<int> AddAsync(DbConnection connection$`, `MethodParameters|, $, ICollection<$ParameterItemType$> items, CancellationToken cancellationToken)
 {
 	using(DbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText(items.Count);
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
+
 		int $IndexVariableName$ = 0;
 		foreach($ParameterItemType$ $ParameterVariableName$ in items)
 		{
-$AddParametersNumbered$
+$3|AddParametersNumbered|\r\n$
 
 			$IndexVariableName$++;
 		}

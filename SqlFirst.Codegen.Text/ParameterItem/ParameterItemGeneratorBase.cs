@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
-using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 
@@ -52,10 +51,10 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 		protected virtual GeneratedParameterItem GenerateParameterItemInternal(ICodeGenerationContext context)
 		{
 			IQueryParamInfo[] targetParameters = context.IncomingParameters.Where(paramInfo => paramInfo.IsNumbered).ToArray();
-			
+
 			string targetNamespace = context.GetNamespace();
 
-			string template = GetTemplate();
+			IRenderableTemplate template = GetTemplate();
 
 			string itemName = context.GetQueryParameterItemTypeName();
 
@@ -73,28 +72,23 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 			IEnumerable<string> allUsings = GetCommonUsings().Concat(propertiesInfo.SelectMany(p => p.Usings));
 			result.Usings = allUsings.Distinct().OrderBy(@using => @using);
 
-			string space = Environment.NewLine + Environment.NewLine;
-
 			IEnumerable<string> backingFields = propertiesInfo
 												.SelectMany(info => info.Properties)
 												.Where(propertyPart => propertyPart.IsBackingField)
 												.Select(propertyPart => propertyPart.Content);
-			string backingFieldsText = string.Join(Environment.NewLine, backingFields.Select(field => field.Indent(QuerySnippet.Indent, 1)));
 
 			IEnumerable<string> properties = propertiesInfo
 											.SelectMany(info => info.Properties)
 											.Where(propertyPart => !propertyPart.IsBackingField)
 											.Select(p => p.Content);
-			string propertiesText = string.Join(space, properties.Select(property => property.Indent(QuerySnippet.Indent, 1)));
 
-			string fullPropertiesText = string.IsNullOrEmpty(backingFieldsText)
-				? propertiesText
-				: backingFieldsText + space + propertiesText;
-
-			string itemText = template
-							.Replace("$ItemName$", result.ItemName)
-							.Replace("$Modificators$", string.Join(" ", result.ItemModifiers))
-							.Replace("$Properties$", fullPropertiesText);
+			string itemText = template.Render(new
+			{
+				ItemName = result.ItemName,
+				Modificators = result.ItemModifiers.ToArray(),
+				Fields = backingFields,
+				Properties = properties
+			});
 
 			result.Item = itemText;
 
@@ -105,6 +99,6 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 		/// Возвращает шаблон кода для генерации объекта
 		/// </summary>
 		/// <returns>Шаблон кода для генерации объекта</returns>
-		protected abstract string GetTemplate();
+		protected abstract IRenderableTemplate GetTemplate();
 	}
 }

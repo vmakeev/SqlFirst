@@ -2,17 +2,17 @@
 /// Выполняет загрузку значения типа <see cref="$ItemType$"/>
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$
+$XmlParams`\r\n`|\r\n$~
 /// <param name="cancellationToken">Токен отмены</param>
 /// <returns>Значение типа  <see cref="$ItemType$"/></returns>
-public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$MethodParameters$, CancellationToken cancellationToken)
+public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$`, `MethodParameters|, $, CancellationToken cancellationToken)
 {
 	async Task<IEnumerator<$ItemType$>> CreateEnumerator()
 	{	
 		// Command will be disposed in DbAsyncEnumerator.Dispose() method
 		DbCommand cmd = connection.CreateCommand();
 		cmd.CommandText = GetQueryText();
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
 
 		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
 		return new DbAsyncEnumerator<$ItemType$>(cmd, reader, GetScalarFromRecord<$ItemType$>, cancellationToken);

@@ -1,15 +1,17 @@
-﻿namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get.Snippets
+﻿using SqlFirst.Codegen.Text.Templating;
+
+namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get.Snippets
 {
-	internal class GetInnerSnippet : QueryObjectsSnippetBase
+	internal class GetInnerSnippet : SqlFirstSnippet
 	{
 		public GetInnerSnippet()
-			: base("Methods.Get.Snippets")
+			: base("QueryObjects.Methods.Get.Snippets")
 		{
 		}
 
-		public string CallAddParameter => GetSnippetText();
-		public string CallAddParameterNumbered => GetSnippetText();
-		public string MethodParameter => GetSnippetText();
-		public string XmlParam => GetSnippetText();
+		public IRenderableTemplate CallAddParameter => GetRenderableTemplate();
+		public IRenderableTemplate CallAddParameterNumbered => GetRenderableTemplate();
+		public IRenderableTemplate MethodParameter => GetRenderableTemplate();
+		public IRenderableTemplate XmlParam => GetRenderableTemplate();
 	}
 }

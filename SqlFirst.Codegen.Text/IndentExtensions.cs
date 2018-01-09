@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SqlFirst.Codegen.Text
@@ -37,7 +38,9 @@ namespace SqlFirst.Codegen.Text
 					break;
 			}
 
-			string result = indentString + target.Replace(Environment.NewLine, Environment.NewLine + indentString);
+			string[] lines = target.Split(new[] { Environment.NewLine }, StringSplitOptions.None);
+			IEnumerable<string> indentedLines = lines.Select(line => string.IsNullOrWhiteSpace(line) ? line : indentString + line);
+			string result = string.Join(Environment.NewLine, indentedLines);
 
 			while (result.EndsWith(indent))
 			{

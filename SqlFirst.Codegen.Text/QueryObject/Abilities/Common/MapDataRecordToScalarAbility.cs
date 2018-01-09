@@ -9,11 +9,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			string method = QuerySnippet.Methods.Common.GetScalarFromRecord;
+			string method = Snippet.Query.Methods.Common.GetScalarFromRecord.Render();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Data");
 

@@ -550,7 +550,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -565,7 +565,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -580,7 +580,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}
@@ -654,7 +654,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -669,7 +669,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -684,7 +684,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}
@@ -758,7 +758,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -773,7 +773,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -788,7 +788,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}
@@ -862,7 +862,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -877,7 +877,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -892,7 +892,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}
@@ -1169,7 +1169,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -1184,7 +1184,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -1199,7 +1199,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}
@@ -1269,7 +1269,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_objectName = value;
 			OnPropertyChanged(nameof(ObjectName));
 		}
@@ -1284,7 +1284,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_currentStage = value;
 			OnPropertyChanged(nameof(CurrentStage));
 		}
@@ -1299,7 +1299,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			{
 				return;
 			}
-	
+
 			_isCompleted = value;
 			OnPropertyChanged(nameof(IsCompleted));
 		}

@@ -1,0 +1,5 @@
+﻿$Modificators| $ class $ItemName$
+{
+$1|Fields`\r\n\r\n`|\r\n$~
+$1|Properties`\r\n`|\r\n\r\n$~
+}

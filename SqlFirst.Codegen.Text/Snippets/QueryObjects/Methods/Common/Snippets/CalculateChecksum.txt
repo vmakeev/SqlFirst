@@ -1,4 +1,9 @@
-﻿private int CalculateChecksum(string data)
+﻿/// <summary>
+/// Вычисляет контрольную сумму строки по алгоритму CRC 8
+/// </summary>
+/// <param name="data">Искомая строка</param>
+/// <returns>Контрольная сумма строки</returns>
+private int CalculateChecksum(string data)
 {
 	if (string.IsNullOrEmpty(data))
 	{

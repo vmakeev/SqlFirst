@@ -4,6 +4,7 @@ using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.ResultItem.Impl
@@ -55,6 +56,6 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetTemplate() => ResultItemSnippet.NotifyPropertyChangedClassResultItem;
+		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Result.NotifyPropertyChangedClassResultItem;
 	}
 }

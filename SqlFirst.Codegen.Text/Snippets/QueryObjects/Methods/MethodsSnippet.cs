@@ -2,7 +2,7 @@
 using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common;
 using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get;
 
-namespace SqlFirst.Codegen.Text.Snippets.QueryObjects
+namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods
 {
 	internal class MethodsSnippet
 	{

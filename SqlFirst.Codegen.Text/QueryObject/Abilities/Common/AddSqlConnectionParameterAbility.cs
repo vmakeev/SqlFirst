@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Core;
@@ -18,19 +17,20 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			string parameterTypeName = info.CommandParameterType.Name;
 			string parameterSpecificDbTypePropertyName = info.CommandParameterSpecificDbTypePropertyName;
 
-			string method = new StringBuilder(QuerySnippet.Methods.Common.AddParameter)
-				.Replace("$ParameterTypeTypeName$", parameterTypeTypeName)
-				.Replace("$ParameterTypeName$", parameterTypeName)
-				.Replace("$ParameterSpecificDbTypePropertyName$", parameterSpecificDbTypePropertyName)
-				.ToString();
+			string method = Snippet.Query.Methods.Common.AddParameter.Render(new
+			{
+				ParameterTypeTypeName = parameterTypeTypeName,
+				ParameterTypeName = parameterTypeName,
+				ParameterSpecificDbTypePropertyName = parameterSpecificDbTypePropertyName
+			});
 
-			string[] usings = new[] { "System", "System.Data" }.Append(
+			string[] usings = new[] { "System", "System.Data" }.AppendItems(
 				info.CommandParameterSpecificDbTypePropertyType.Namespace,
 				info.CommandParameterType.Namespace).Distinct().ToArray();
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(usings);
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(usings);
 			return result;
 		}
 

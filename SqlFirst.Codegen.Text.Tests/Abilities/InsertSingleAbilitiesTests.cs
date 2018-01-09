@@ -229,7 +229,7 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 				return null;
 			}
 			
-			return GetItemFromRecord(reader);			
+			return GetItemFromRecord(reader);
 		}
 	}
 }");
@@ -292,7 +292,7 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 				return null;
 			}
 			
-			return GetItemFromRecord(reader);			
+			return GetItemFromRecord(reader);
 		}
 	}
 }");

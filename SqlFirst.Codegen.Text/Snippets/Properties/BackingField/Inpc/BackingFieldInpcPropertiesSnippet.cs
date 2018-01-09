@@ -1,18 +1,19 @@
 ﻿using SqlFirst.Codegen.Text.Snippets.Properties.BackingField.Inpc.ReadOnly;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Snippets.Properties.BackingField.Inpc
 {
-	internal class BackingFieldInpcPropertiesSnippet : PropertiesSnippetBase
+	internal class BackingFieldInpcPropertiesSnippet : SqlFirstSnippet
 	{
 		public BackingFieldInpcReadOnlyPropertiesSnippet ReadOnly { get; } = new BackingFieldInpcReadOnlyPropertiesSnippet();
 
-		public string NotifyPropertyChangedBackingFieldProperty => GetSnippetText();
+		public IRenderableTemplate NotifyPropertyChangedBackingFieldProperty => GetRenderableTemplate();
 
-		public string NotifyPropertyChangedBackingFieldPropertyVirtual => GetSnippetText();
+		public IRenderableTemplate NotifyPropertyChangedBackingFieldPropertyVirtual => GetRenderableTemplate();
 
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public BackingFieldInpcPropertiesSnippet()
-			: base("BackingField.Inpc")
+			: base("Properties.BackingField.Inpc")
 		{
 		}
 	}

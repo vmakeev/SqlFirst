@@ -1,4 +1,0 @@
-﻿$Modificators$ struct $ItemName$
-{
-$Properties$
-}

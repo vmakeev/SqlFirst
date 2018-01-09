@@ -1,5 +1,6 @@
 ﻿using SqlFirst.Codegen.Text.Common.PropertyGenerator;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.ResultItem.Impl
 {
@@ -18,6 +19,6 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetTemplate() => ResultItemSnippet.PocoResultItem;
+		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Result.PocoResultItem;
 	}
 }

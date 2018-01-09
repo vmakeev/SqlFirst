@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 using SqlFirst.Core.Impl;
 
@@ -19,7 +19,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			return "item";
 		}
 
-		protected virtual string GetTemplate() => QuerySnippet.Methods.Add.AddMultipleWithScalarResult;
+		protected virtual IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultipleWithScalarResult;
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -41,39 +41,31 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			const string indexVariableName = "index";
 			const string parameterVariableName = "item";
 			string parameterType = context.GetQueryParameterItemTypeName();
-			string notNumberedXmlString = GetXmlParameters(context, notNumberedParameters);
-			string notNumberedIncomingString = GetIncomingParameters(context, notNumberedParameters);
-			string notNumberedAddParametersString = GetAddParameters(context, notNumberedParameters, out IEnumerable<string> notNumberedUsings).Indent(QuerySnippet.Indent, 2);
-			string numberedAddParametersString = GetAddParametersNumbered(context, indexVariableName, numberedParameters, out IEnumerable<string> numberedUsings).Indent(QuerySnippet.Indent, 3);
 
-			if (!string.IsNullOrEmpty(notNumberedXmlString))
+			IEnumerable<IRenderable> notNumberedXml = GetXmlParameters(context, notNumberedParameters);
+			IEnumerable<IRenderable> notNumberedIncoming = GetIncomingParameters(context, notNumberedParameters);
+			IEnumerable<IRenderable> notNumberedAddParameters = GetAddParameters(context, notNumberedParameters, out IEnumerable<string> notNumberedUsings);
+			IEnumerable<IRenderable> numberedAddParameters = GetAddParametersNumbered(context, indexVariableName, numberedParameters, out IEnumerable<string> numberedUsings);
+
+			string method = GetTemplate().Render(new
 			{
-				notNumberedXmlString = notNumberedXmlString + Environment.NewLine;
-			}
-
-			if (!string.IsNullOrEmpty(notNumberedAddParametersString))
-			{
-				notNumberedAddParametersString = notNumberedAddParametersString + Environment.NewLine;
-			}
-
-			string method = new StringBuilder(GetTemplate())
-							.Replace("$XmlParams$", notNumberedXmlString)
-							.Replace("$MethodParameters$", string.IsNullOrEmpty(notNumberedIncomingString) ? string.Empty : ", " + notNumberedIncomingString)
-							.Replace("$ParameterItemType$", parameterType)
-							.Replace("$AddParameters$", notNumberedAddParametersString)
-							.Replace("$IndexVariableName$", indexVariableName)
-							.Replace("$ParameterVariableName$", parameterVariableName)
-							.Replace("$AddParametersNumbered$", numberedAddParametersString)
-							.Replace("$ResultItemType$", scalarTypeString)
-							.Replace("$ResultItemDescription$", scalarTypeDescription)
-							.ToString();
+				XmlParams = notNumberedXml,
+				MethodParameters = notNumberedIncoming,
+				ParameterItemType = parameterType,
+				AddParameters = notNumberedAddParameters,
+				IndexVariableName = indexVariableName,
+				ParameterVariableName = parameterVariableName,
+				AddParametersNumbered = numberedAddParameters,
+				ResultItemType = scalarTypeString,
+				ResultItemDescription = scalarTypeDescription
+			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
 			IEnumerable<string> specificParametersUsings = numberedUsings.Concat(notNumberedUsings).Distinct();
 
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Data",
 				"System.Collections.Generic")
@@ -82,33 +74,35 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			return result;
 		}
 
-		private string GetAddParametersNumbered(ICodeGenerationContext context, string indexVariableName, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
+		private IEnumerable<IRenderable> GetAddParametersNumbered(ICodeGenerationContext context, string indexVariableName, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
 		{
 			specificUsings = Enumerable.Empty<string>();
 			string variableName = GetParameterName(context);
 
-			var parameters = new LinkedList<string>();
+			IRenderableTemplate template = Snippet.Query.Methods.Get.Snippets.CallAddParameterNumbered;
+
+			var parameters = new LinkedList<IRenderable>();
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string propertyName = CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.Pascal);
 				string fullName = $"{variableName}.{propertyName}";
 
-
 				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType);
 				specificUsings = specificUsings.Concat(dbType.Usings);
 
-				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.CallAddParameterNumbered)
-									.Replace("$ParameterTypeTypeName$", dbType.TypeName)
-									.Replace("$SqlType$", dbType.ValueName)
-									.Replace("$SqlName$", QueryParamInfoNameHelper.GetNumberedNameTemplate(paramInfo.SemanticName))
-									.Replace("$IndexVariableName$", indexVariableName)
-									.Replace("$Name$", fullName)
-									.ToString();
+				var model = new
+				{
+					ParameterTypeTypeName = dbType.TypeName,
+					SqlType = dbType.ValueName,
+					SqlName = QueryParamInfoNameHelper.GetNumberedNameTemplate(paramInfo.SemanticName),
+					IndexVariableName = indexVariableName,
+					Name = fullName
+				};
 
-				parameters.AddLast(parameter);
+				parameters.AddLast(Renderable.Create(template, model));
 			}
 
-			return string.Join(Environment.NewLine, parameters);
+			return parameters;
 		}
 
 		/// <inheritdoc />

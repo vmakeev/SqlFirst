@@ -2,14 +2,14 @@
 /// Выполняет добавление строки в таблицу и возвращает дополнительные данные
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$
+$XmlParams`\r\n`|\r\n$~
 /// <returns>$ResultItemDescription$</returns>
-public virtual $ResultItemType$ Add(IDbConnection connection$MethodParameters$)
+public virtual $ResultItemType$ Add(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
 		
 		object value = cmd.ExecuteScalar();
 		return GetScalarFromValue<$ResultItemType$>(value);

@@ -1,27 +1,28 @@
 ﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get
 {
-	internal class GetSnippet : QueryObjectsSnippetBase
+	internal class GetSnippet : SqlFirstSnippet
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public GetSnippet()
-			: base("Methods.Get")
+			: base("QueryObjects.Methods.Get")
 		{
 		}
 
 		public GetInnerSnippet Snippets { get; } = new GetInnerSnippet();
 
-		public string GetFirst => GetSnippetText();
-		public string GetFirstAsync => GetSnippetText();
+		public IRenderableTemplate GetFirst => GetRenderableTemplate();
+		public IRenderableTemplate GetFirstAsync => GetRenderableTemplate();
 
-		public string GetIEnumerable => GetSnippetText();
-		public string GetIEnumerableAsync => GetSnippetText();
+		public IRenderableTemplate GetIEnumerable => GetRenderableTemplate();
+		public IRenderableTemplate GetIEnumerableAsync => GetRenderableTemplate();
 
-		public string GetScalar => GetSnippetText();
-		public string GetScalarAsync => GetSnippetText();
+		public IRenderableTemplate GetScalar => GetRenderableTemplate();
+		public IRenderableTemplate GetScalarAsync => GetRenderableTemplate();
 
-		public string GetScalars => GetSnippetText();
-		public string GetScalarsAsync => GetSnippetText();
+		public IRenderableTemplate GetScalars => GetRenderableTemplate();
+		public IRenderableTemplate GetScalarsAsync => GetRenderableTemplate();
 	}
 }

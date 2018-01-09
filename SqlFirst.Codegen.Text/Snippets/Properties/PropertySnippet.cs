@@ -3,10 +3,10 @@ using SqlFirst.Codegen.Text.Snippets.Properties.BackingField;
 
 namespace SqlFirst.Codegen.Text.Snippets.Properties
 {
-	internal static class PropertySnippet
+	internal class PropertySnippet
 	{
-		public static AutoPropertiesSnippet Auto { get; } = new AutoPropertiesSnippet();
+		public AutoPropertiesSnippet Auto { get; } = new AutoPropertiesSnippet();
 
-		public static BackingFieldPropertiesSnippet BackingField { get; } = new BackingFieldPropertiesSnippet();
+		public BackingFieldPropertiesSnippet BackingField { get; } = new BackingFieldPropertiesSnippet();
 	}
 }

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
@@ -29,104 +28,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			result.Fields = result.Fields.Concat(fields);
 			result.Nested = result.Nested.Concat(nested);
 			result.Methods = result.Methods.Concat(methods);
-			result.Usings = result.Usings.Append(
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Collections.Generic",
 				"System.Linq",
 				"System.Text.RegularExpressions");
 			return result;
-		}
-
-		private IEnumerable<string> GetFields()
-		{
-			string protectedModifiers = string.Join(" ", Modifiers.Protected, Modifiers.Static);
-			string protectedReadonlyModifiers = string.Join(" ", Modifiers.Protected, Modifiers.Static, Modifiers.Readonly);
-			string stringType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
-			string regexType = CSharpCodeHelper.GetTypeBuiltInName(typeof(Regex));
-			string objectType = CSharpCodeHelper.GetTypeBuiltInName(typeof(object));
-
-			var cachedQueryTemplate = new StringBuilder(FieldSnippet.Field);
-			cachedQueryTemplate.Replace("$Modificators$", protectedModifiers);
-			cachedQueryTemplate.Replace("$Type$", stringType);
-			cachedQueryTemplate.Replace("$Name$", "_cachedQueryTemplate");
-			yield return cachedQueryTemplate.ToString();
-
-			var cachedValuesTemplate = new StringBuilder(FieldSnippet.Field);
-			cachedValuesTemplate.Replace("$Modificators$", protectedModifiers);
-			cachedValuesTemplate.Replace("$Type$", stringType);
-			cachedValuesTemplate.Replace("$Name$", "_cachedValuesTemplate");
-			yield return cachedValuesTemplate.ToString();
-
-			var queryTemplatesLocker = new StringBuilder(FieldSnippet.FieldWithValue);
-			queryTemplatesLocker.Replace("$Modificators$", protectedReadonlyModifiers);
-			queryTemplatesLocker.Replace("$Type$", objectType);
-			queryTemplatesLocker.Replace("$Name$", "_queryTemplatesLocker");
-			queryTemplatesLocker.Replace("$Value$", "new object()");
-			yield return queryTemplatesLocker.ToString();
-
-			var balancedParenthesisRegex = new StringBuilder(FieldSnippet.FieldWithValue);
-			balancedParenthesisRegex.Replace("$Modificators$", protectedReadonlyModifiers);
-			balancedParenthesisRegex.Replace("$Type$", regexType);
-			balancedParenthesisRegex.Replace("$Name$", "_balancedParenthesisRegex");
-			balancedParenthesisRegex.Replace("$Value$", "new Regex(BalancedParenthesisRegexPattern, BalancedParenthesisRegexOptions)");
-			yield return balancedParenthesisRegex.ToString();
-
-			var numberedValueRegex = new StringBuilder(FieldSnippet.FieldWithValue);
-			numberedValueRegex.Replace("$Modificators$", protectedReadonlyModifiers);
-			numberedValueRegex.Replace("$Type$", regexType);
-			numberedValueRegex.Replace("$Name$", "_numberedValueRegex");
-			numberedValueRegex.Replace("$Value$", "new Regex(NumberedValueRegexPattern, NumberedValueRegexOptions)");
-			yield return numberedValueRegex.ToString();
-		}
-
-		private IEnumerable<string> GetConstants()
-		{
-			string modifiers = Modifiers.Private;
-			string stringType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
-			string regexOptionsType = CSharpCodeHelper.GetTypeBuiltInName(typeof(RegexOptions));
-
-			var bpRegexTemplate = new StringBuilder(FieldSnippet.Const);
-			bpRegexTemplate.Replace("$Modificators$", modifiers);
-			bpRegexTemplate.Replace("$Type$", stringType);
-			bpRegexTemplate.Replace("$Name$", "BalancedParenthesisRegexPattern");
-			// @"values[^\(]*(?<valueTemplate>\([^\(\)]*(((?<Open>\()[^\(\)]*)+((?<Close-Open>\))[^\(\)]*)+)*(?(Open)(?!))\))"
-			bpRegexTemplate.Replace("$Value$", "@\"values[^\\(]*(?<valueTemplate>\\([^\\(\\)]*(((?<Open>\\()[^\\(\\)]*)+((?<Close-Open>\\))[^\\(\\)]*)+)*(?(Open)(?!))\\))\"");
-			yield return bpRegexTemplate.ToString();
-
-			var bpRegexOptions = new StringBuilder(FieldSnippet.Const);
-			bpRegexOptions.Replace("$Modificators$", modifiers);
-			bpRegexOptions.Replace("$Type$", regexOptionsType);
-			bpRegexOptions.Replace("$Name$", "BalancedParenthesisRegexOptions");
-			bpRegexOptions.Replace("$Value$", "RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase");
-			yield return bpRegexOptions.ToString();
-
-			var nvRegexTemplate = new StringBuilder(FieldSnippet.Const);
-			nvRegexTemplate.Replace("$Modificators$", modifiers);
-			nvRegexTemplate.Replace("$Type$", stringType);
-			nvRegexTemplate.Replace("$Name$", "NumberedValueRegexPattern");
-			// @"\@(?<dbName>(?<semanticName>[a-zA-Z0-9_]+)_N)"
-			nvRegexTemplate.Replace("$Value$", "@\"\\@(?<dbName>(?<semanticName>[a-zA-Z0-9_]+)_N)\"");
-			yield return nvRegexTemplate.ToString();
-
-			var nvRegexOptions = new StringBuilder(FieldSnippet.Const);
-			nvRegexOptions.Replace("$Modificators$", modifiers);
-			nvRegexOptions.Replace("$Type$", regexOptionsType);
-			nvRegexOptions.Replace("$Name$", "NumberedValueRegexOptions");
-			nvRegexOptions.Replace("$Value$", "RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase");
-			yield return nvRegexOptions.ToString();
-		}
-
-		private IEnumerable<string> GetNestedClasses()
-		{
-			yield return QuerySnippet.Methods.Common.Snippets.NumberedParameterInfo;
-		}
-
-		private static IEnumerable<string> GetRequiredMethods()
-		{
-			yield return QuerySnippet.Methods.Common.Snippets.GetInsertedValuesSection;
-			yield return QuerySnippet.Methods.Common.Snippets.GetNumberedParameters;
-			yield return QuerySnippet.Methods.Common.Snippets.GetQueryTemplates;
-			yield return QuerySnippet.Methods.Common.GetQueryRuntimeGeneratedMultipleInsert;
 		}
 
 		/// <inheritdoc />
@@ -137,5 +44,68 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 		/// <inheritdoc />
 		public string Name { get; } = KnownAbilityName.GetQueryTextMultipleInsert;
+
+		private IEnumerable<string> GetFields()
+		{
+			string[] protectedModifiers = { Modifiers.Protected, Modifiers.Static };
+			string[] protectedReadonlyModifiers = { Modifiers.Protected, Modifiers.Static, Modifiers.Readonly };
+
+			string stringType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
+			string regexType = CSharpCodeHelper.GetTypeBuiltInName(typeof(Regex));
+			string objectType = CSharpCodeHelper.GetTypeBuiltInName(typeof(object));
+
+			yield return Snippet.Field.Field.Render(protectedModifiers, stringType, "_cachedQueryTemplate");
+			yield return Snippet.Field.Field.Render(protectedModifiers, stringType, "_cachedValuesTemplate");
+
+			yield return Snippet.Field.FieldWithValue.Render(protectedReadonlyModifiers, objectType, "_queryTemplatesLocker", "new object()");
+			yield return Snippet.Field.FieldWithValue.Render(protectedReadonlyModifiers, regexType, "_balancedParenthesisRegex",
+				"new Regex(BalancedParenthesisRegexPattern, BalancedParenthesisRegexOptions)");
+			yield return Snippet.Field.FieldWithValue.Render(protectedReadonlyModifiers, regexType, "_numberedValueRegex",
+				"new Regex(NumberedValueRegexPattern, NumberedValueRegexOptions)");
+		}
+
+		private IEnumerable<string> GetConstants()
+		{
+			string modifiers = Modifiers.Private;
+			string stringType = CSharpCodeHelper.GetTypeBuiltInName(typeof(string));
+			string regexOptionsType = CSharpCodeHelper.GetTypeBuiltInName(typeof(RegexOptions));
+
+			yield return Snippet.Field.Const.Render(
+				name: "BalancedParenthesisRegexPattern",
+				modifiers: modifiers,
+				type: stringType,
+				value: "@\"values[^\\(]*(?<valueTemplate>\\([^\\(\\)]*(((?<Open>\\()[^\\(\\)]*)+((?<Close-Open>\\))[^\\(\\)]*)+)*(?(Open)(?!))\\))\"");
+
+			yield return Snippet.Field.Const.Render(
+				name: "BalancedParenthesisRegexOptions",
+				modifiers: modifiers,
+				type: regexOptionsType,
+				value: "RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase");
+
+			yield return Snippet.Field.Const.Render(
+				name: "NumberedValueRegexPattern",
+				modifiers: modifiers,
+				type: stringType,
+				value: "@\"\\@(?<dbName>(?<semanticName>[a-zA-Z0-9_]+)_N)\"");
+
+			yield return Snippet.Field.Const.Render(
+				name: "NumberedValueRegexOptions",
+				modifiers: modifiers,
+				type: regexOptionsType,
+				value: "RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase");
+		}
+
+		private IEnumerable<string> GetNestedClasses()
+		{
+			yield return Snippet.Query.Methods.Common.Snippets.NumberedParameterInfo.Render();
+		}
+
+		private static IEnumerable<string> GetRequiredMethods()
+		{
+			yield return Snippet.Query.Methods.Common.Snippets.GetInsertedValuesSection.Render();
+			yield return Snippet.Query.Methods.Common.Snippets.GetNumberedParameters.Render();
+			yield return Snippet.Query.Methods.Common.Snippets.GetQueryTemplates.Render();
+			yield return Snippet.Query.Methods.Common.GetQueryRuntimeGeneratedMultipleInsert.Render();
+		}
 	}
 }

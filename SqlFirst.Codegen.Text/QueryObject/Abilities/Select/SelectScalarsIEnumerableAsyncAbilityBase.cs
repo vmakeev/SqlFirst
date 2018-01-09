@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
@@ -25,9 +25,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 		{
 			IQueryParamInfo[] parameters = context.IncomingParameters.ToArray();
 
-			string xmlParameters = GetXmlParameters(context, parameters);
-			string methodParameters = GetIncomingParameters(context, parameters);
-			string addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings).Indent(QuerySnippet.Indent, 2);
+			IEnumerable<IRenderable> xmlParameters = GetXmlParameters(context, parameters);
+			IEnumerable<IRenderable> methodParameters = GetIncomingParameters(context, parameters);
+			IEnumerable<IRenderable> addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings);
 
 			IFieldDetails firstParameter = context.OutgoingParameters.FirstOrDefault();
 			if (firstParameter == null)
@@ -38,17 +38,18 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 			Type scalarType = context.TypeMapper.MapToClrType(firstParameter.DbType, firstParameter.AllowDbNull);
 			string scalarTypeString = CSharpCodeHelper.GetTypeBuiltInName(scalarType);
 
-			string method = new StringBuilder(QuerySnippet.Methods.Get.GetScalarsAsync)
-				.Replace("$ItemType$", scalarTypeString)
-				.Replace("$XmlParams$", xmlParameters)
-				.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
-				.Replace("$AddParameters$", addParameters)
-				.ToString();
+			string method = Snippet.Query.Methods.Get.GetScalarsAsync.Render(new
+			{
+				ItemType = scalarTypeString,
+				XmlParams = xmlParameters,
+				MethodParameters = methodParameters,
+				AddParameters = addParameters
+			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Collections.Generic",
 				"System.Data",

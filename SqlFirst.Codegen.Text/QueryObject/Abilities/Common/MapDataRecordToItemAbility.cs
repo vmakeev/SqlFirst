@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
@@ -15,38 +15,38 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			var mappingItems = new LinkedList<string>();
+			IRenderable[] mappingItems = context.OutgoingParameters.Select((fieldDetails, index) => GetMapping(context, fieldDetails, index)).ToArray();
 
-			int index = 0;
-			foreach (IFieldDetails fieldDetails in context.OutgoingParameters)
+			string method = Snippet.Query.Methods.Common.GetItemFromRecord.Render(new
 			{
-				string propertyName = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
-				Type propertyType = context.TypeMapper.MapToClrType(fieldDetails.DbType, fieldDetails.AllowDbNull);
-				string propertyTypeString = CSharpCodeHelper.GetTypeBuiltInName(propertyType);
-
-				string mapRecord = new StringBuilder(QuerySnippet.Methods.Common.Snippets.MapField)
-					.Replace("$Index$", index++.ToString(CultureInfo.InvariantCulture))
-					.Replace("$Property$", propertyName)
-					.Replace("$PropertyType$", propertyTypeString)
-					.ToString();
-
-				mappingItems.AddLast(mapRecord);
-			}
-
-			string mappingsText = string.Join(Environment.NewLine, mappingItems).Indent(QuerySnippet.Indent, 1);
-
-			string method = new StringBuilder(QuerySnippet.Methods.Common.GetItemFromRecord)
-				.Replace("$ItemType$", context.GetQueryResultItemTypeName())
-				.Replace("$MapDataRecord$", mappingsText)
-				.ToString();
+				ItemType = context.GetQueryResultItemTypeName(),
+				MapDataRecord = mappingItems
+			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Data");
 
 			return result;
+		}
+
+		private IRenderable GetMapping(ICodeGenerationContext context, IFieldDetails fieldDetails, int index)
+		{
+			string propertyName = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
+			Type propertyType = context.TypeMapper.MapToClrType(fieldDetails.DbType, fieldDetails.AllowDbNull);
+			string propertyTypeString = CSharpCodeHelper.GetTypeBuiltInName(propertyType);
+
+			IRenderableTemplate template = Snippet.Query.Methods.Common.Snippets.MapField;
+			var model = new
+			{
+				Index = index.ToString(CultureInfo.InvariantCulture),
+				Property = propertyName,
+				PropertyType = propertyTypeString
+			};
+
+			return Renderable.Create(template, model);
 		}
 
 		/// <inheritdoc />

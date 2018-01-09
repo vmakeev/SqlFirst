@@ -2,14 +2,14 @@
 /// Выполняет ленивую загрузку списка элементов типа <see cref="$ItemType$"/>
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$
+$XmlParams`\r\n`|\r\n$~
 /// <returns>Список элементов типа <see cref="$ItemType$"/></returns>
-public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$MethodParameters$)
+public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using (IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
 
 		using (IDataReader reader = cmd.ExecuteReader())
 		{

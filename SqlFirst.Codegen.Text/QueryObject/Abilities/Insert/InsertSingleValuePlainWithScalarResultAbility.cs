@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
@@ -32,22 +32,23 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			IQueryParamInfo[] parameters = context.IncomingParameters.ToArray();
 
-			string xmlParameters = GetXmlParameters(context, parameters);
-			string methodParameters = GetIncomingParameters(context, parameters);
-			string addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings).Indent(QuerySnippet.Indent, 2);
+			IEnumerable<IRenderable> xmlParameters = GetXmlParameters(context, parameters);
+			IEnumerable<IRenderable> methodParameters = GetIncomingParameters(context, parameters);
+			IEnumerable<IRenderable> addParameters = GetAddParameters(context, parameters, out IEnumerable<string> parameterSpecificUsings);
 
-			string method = new StringBuilder(QuerySnippet.Methods.Add.AddSingleWithScalarResult)
-							.Replace("$XmlParams$", xmlParameters)
-							.Replace("$MethodParameters$", string.IsNullOrEmpty(methodParameters) ? string.Empty : ", " + methodParameters)
-							.Replace("$AddParameters$", addParameters)
-							.Replace("$ResultItemType$", scalarTypeString)
-							.Replace("$ResultItemDescription$", scalarTypeDescription)
-							.ToString();
+			string method = Snippet.Query.Methods.Add.AddSingleWithScalarResult.Render(new
+			{
+				XmlParams = xmlParameters,
+				MethodParameters = methodParameters,
+				AddParameters = addParameters,
+				ResultItemType = scalarTypeString,
+				ResultItemDescription = scalarTypeDescription
+			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
-			result.Methods = result.Methods.Append(method);
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Data")
 				.Concat(parameterSpecificUsings);

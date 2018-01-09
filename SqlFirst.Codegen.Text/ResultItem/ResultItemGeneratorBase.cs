@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
-using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.ResultItem
@@ -16,7 +15,7 @@ namespace SqlFirst.Codegen.Text.ResultItem
 		protected readonly PropertiesGeneratorBase _propertiesGenerator;
 
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="ResultItemGeneratorBase"/>
+		/// Инициализирует новый экземпляр класса <see cref="ResultItemGeneratorBase" />
 		/// </summary>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
 		protected ResultItemGeneratorBase(PropertiesGeneratorBase propertiesGenerator)
@@ -52,7 +51,7 @@ namespace SqlFirst.Codegen.Text.ResultItem
 		{
 			string targetNamespace = context.GetNamespace();
 
-			string template = GetTemplate();
+			IRenderableTemplate template = GetTemplate();
 
 			string itemName = context.GetQueryResultItemTypeName();
 
@@ -61,7 +60,7 @@ namespace SqlFirst.Codegen.Text.ResultItem
 				Namespace = targetNamespace,
 				ItemModifiers = new[] { Modifiers.Public, Modifiers.Partial },
 				ItemName = itemName,
-				BaseTypes = new IGeneratedType[0]
+				BaseTypes = Enumerable.Empty<IGeneratedType>()
 			};
 
 			IEnumerable<CodeMemberInfo> memberInfos = context.OutgoingParameters.Select(info => CodeMemberInfo.FromFieldDetails(info, context.TypeMapper));
@@ -70,30 +69,25 @@ namespace SqlFirst.Codegen.Text.ResultItem
 			IEnumerable<string> allUsings = GetCommonUsings().Concat(propertiesInfo.SelectMany(p => p.Usings));
 			result.Usings = allUsings.Distinct().OrderBy(@using => @using);
 
-			string space = Environment.NewLine + Environment.NewLine;
-
 			IEnumerable<string> backingFields = propertiesInfo
-				.SelectMany(info => info.Properties)
-				.Where(propertyPart => propertyPart.IsBackingField)
-				.Select(propertyPart => propertyPart.Content);
-			string backingFieldsText = string.Join(Environment.NewLine, backingFields.Select(field => field.Indent(QuerySnippet.Indent, 1)));
+												.SelectMany(info => info.Properties)
+												.Where(propertyPart => propertyPart.IsBackingField)
+												.Select(propertyPart => propertyPart.Content);
 
 			IEnumerable<string> properties = propertiesInfo
-				.SelectMany(info => info.Properties)
-				.Where(propertyPart => !propertyPart.IsBackingField)
-				.Select(p => p.Content);
-			string propertiesText = string.Join(space, properties.Select(property => property.Indent(QuerySnippet.Indent, 1)));
+											.SelectMany(info => info.Properties)
+											.Where(propertyPart => !propertyPart.IsBackingField)
+											.Select(p => p.Content);
 
-			string fullPropertiesText = string.IsNullOrEmpty(backingFieldsText)
-				? propertiesText
-				: backingFieldsText + space + propertiesText;
+			string item = template.Render(new
+			{
+				ItemName = result.ItemName,
+				Modificators = result.ItemModifiers,
+				Fields = backingFields,
+				Properties = properties
+			});
 
-			string itemText = template
-				.Replace("$ItemName$", result.ItemName)
-				.Replace("$Modificators$", string.Join(" ", result.ItemModifiers))
-				.Replace("$Properties$", fullPropertiesText);
-
-			result.Item = itemText;
+			result.Item = item;
 
 			return result;
 		}
@@ -102,6 +96,6 @@ namespace SqlFirst.Codegen.Text.ResultItem
 		/// Возвращает шаблон кода для генерации объекта
 		/// </summary>
 		/// <returns>Шаблон кода для генерации объекта</returns>
-		protected abstract string GetTemplate();
+		protected abstract IRenderableTemplate GetTemplate();
 	}
 }

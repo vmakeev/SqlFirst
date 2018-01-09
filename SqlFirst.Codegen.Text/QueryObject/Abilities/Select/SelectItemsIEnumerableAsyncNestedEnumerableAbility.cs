@@ -7,7 +7,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 		/// <inheritdoc />
 		public override IEnumerable<string> GetDependencies()
 		{
-			return base.GetDependencies().Append(KnownAbilityName.AsyncEnumerable);
+			return base.GetDependencies().AppendItems(KnownAbilityName.AsyncEnumerable);
 		}
 	}
 }

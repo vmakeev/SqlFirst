@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
@@ -59,13 +58,15 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			(string queryTemplate, string valuesTemplate) = GetQueryTemplates(context, queryText);
 
-			var methodBuilder = new StringBuilder(QuerySnippet.Methods.Common.GetQueryFromStringMultipleInsert);
-			methodBuilder.Replace("$QueryTemplate$", queryTemplate);
-			methodBuilder.Replace("$ValuesTemplate$", valuesTemplate);
+			string method = Snippet.Query.Methods.Common.GetQueryFromStringMultipleInsert.Render(new
+			{
+				QueryTemplate = queryTemplate,
+				ValuesTemplate = valuesTemplate
+			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.Append(methodBuilder.ToString());
-			result.Usings = result.Usings.Append(
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
 				"System",
 				"System.Collections.Generic",
 				"System.Linq");

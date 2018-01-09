@@ -1,21 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 {
 	internal abstract class QueryObjectAbilityBase : IQueryObjectAbility
 	{
-		protected virtual string GetParameterName(IQueryParamInfo paramInfo)
-		{
-			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
-		}
-
 		/// <inheritdoc />
 		public abstract IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data);
 
@@ -25,49 +20,52 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 		/// <inheritdoc />
 		public abstract string Name { get; }
 
-		protected virtual string GetIncomingParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
+		protected virtual string GetParameterName(IQueryParamInfo paramInfo)
 		{
-			var parameters = new LinkedList<string>();
+			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.DbName, NamingPolicy.CamelCase);
+		}
+
+		protected virtual IEnumerable<IRenderable> GetIncomingParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
+		{
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string name = GetParameterName(paramInfo);
 				Type type = context.TypeMapper.MapToClrType(paramInfo.DbType, true);
 				string typeName = CSharpCodeHelper.GetTypeBuiltInName(type);
 
-				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.MethodParameter)
-					.Replace("$Type$", typeName)
-					.Replace("$Name$", name)
-					.ToString();
+				IRenderableTemplate template = Snippet.Query.Methods.Get.Snippets.MethodParameter;
+				var model = new
+				{
+					Type = typeName,
+					Name = name
+				};
 
-				parameters.AddLast(parameter);
+				yield return Renderable.Create(template, model);
 			}
-
-			return string.Join(", ", parameters);
 		}
 
-		protected virtual string GetXmlParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
+		protected virtual IEnumerable<IRenderable> GetXmlParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
 		{
-			var parameters = new LinkedList<string>();
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string name = GetParameterName(paramInfo);
 
-				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.XmlParam)
-					.Replace("$Description$", paramInfo.DbName) // todo: description?
-					.Replace("$Name$", name)
-					.ToString();
+				IRenderableTemplate template = Snippet.Query.Methods.Get.Snippets.XmlParam;
+				var model = new
+				{
+					Description = paramInfo.DbName, // todo: description?,
+					Name = name
+				};
 
-				parameters.AddLast(parameter);
+				yield return Renderable.Create(template, model);
 			}
-
-			return string.Join(Environment.NewLine, parameters);
 		}
 
-		protected virtual string GetAddParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
+		protected virtual IEnumerable<IRenderable> GetAddParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
 		{
 			specificUsings = Enumerable.Empty<string>();
 
-			var parameters = new LinkedList<string>();
+			var results = new LinkedList<IRenderable>();
 			foreach (IQueryParamInfo paramInfo in targetParameters)
 			{
 				string name = GetParameterName(paramInfo);
@@ -75,18 +73,20 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType);
 				specificUsings = specificUsings.Concat(dbType.Usings);
 
-				string parameter = new StringBuilder(QuerySnippet.Methods.Get.Snippets.CallAddParameter)
-					.Replace("$ParameterTypeTypeName$", dbType.TypeName)
-					.Replace("$SqlType$", dbType.ValueName)
-					.Replace("$SqlName$", paramInfo.DbName)
-					.Replace("$Name$", name)
-					.ToString();
+				IRenderableTemplate template = Snippet.Query.Methods.Get.Snippets.CallAddParameter;
+				var model = new
+				{
+					ParameterTypeTypeName = dbType.TypeName,
+					SqlType = dbType.ValueName,
+					SqlName = paramInfo.DbName,
+					Name = name
+				};
 
-				parameters.AddLast(parameter);
+				results.AddLast(Renderable.Create(template, model));
 			}
 
 			specificUsings = specificUsings.Distinct().ToArray();
-			return string.Join(Environment.NewLine, parameters);
+			return results;
 		}
 	}
 }

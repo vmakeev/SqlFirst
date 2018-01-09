@@ -8,23 +8,20 @@ protected virtual string GetQueryText()
 	{
 		lock ($LockerName$)
 		{
-			if ($CacheName$ == null)
+			using (Stream stream = typeof($QueryName$).Assembly.GetManifestResourceStream("$QuerySqlFullPath$"))
 			{
-				using (Stream stream = typeof($QueryName$).Assembly.GetManifestResourceStream("$QuerySqlFullPath$"))
+				string sql = new StreamReader(stream ?? throw new InvalidOperationException("Can not get manifest resource stream.")).ReadToEnd();
+				
+				if (CalculateChecksum(sql) != $ChecksumName$)
 				{
-					string sql = new StreamReader(stream ?? throw new InvalidOperationException("Can not get manifest resource stream.")).ReadToEnd();
-					
-					if (CalculateChecksum(sql) != $ChecksumName$)
-					{
-						throw new Exception($"{GetType().FullName}: query text was changed. Query object must be re-generated.");
-					}
-
-					const string sectionRegexPattern = @"--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n";
-					const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-					sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
-
-					$CacheName$ = sql;
+					throw new Exception($"{GetType().FullName}: query text was changed. Query object must be re-generated.");
 				}
+
+				const string sectionRegexPattern = @"--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n";
+				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+				sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
+
+				$CacheName$ = sql;
 			}
 		}
 	}

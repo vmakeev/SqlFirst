@@ -1,6 +1,7 @@
-﻿$Modificators$ class $ItemName$
+﻿$Modificators| $ class $ItemName$
 {
-$Properties$
+$1|Fields`\r\n\r\n`|\r\n$~
+$1|Properties`\r\n`|\r\n\r\n$~
 
 	internal void AfterLoad()
 	{

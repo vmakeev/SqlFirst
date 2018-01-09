@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using SqlFirst.Codegen.Helpers;
-using SqlFirst.Codegen.Text.Snippets.Properties;
+using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 {
@@ -23,17 +24,19 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 		{
 			foreach (ICodeMemberInfo memberInfo in properties)
 			{
-				string propertyTemplate = GetPropertyTemplate(_options, memberInfo.HasDefaultValue);
+				IRenderableTemplate propertyTemplate = GetPropertyTemplate(_options, memberInfo.HasDefaultValue);
 
 				string usingString = memberInfo.Type.Namespace;
 				string csTypeString = CSharpCodeHelper.GetTypeBuiltInName(memberInfo.Type);
 				string csPropertyNameString = CSharpCodeHelper.GetValidIdentifierName(memberInfo.Name, NamingPolicy.Pascal);
 				string defaultValueString = CSharpCodeHelper.GetValidValue(memberInfo.Type, memberInfo.DefaultValue);
 
-				string property = propertyTemplate
-					.Replace("$Type$", csTypeString)
-					.Replace("$Name$", csPropertyNameString)
-					.Replace("$Value$", defaultValueString);
+				string property = propertyTemplate.Render(new
+				{
+					Type = csTypeString,
+					Name = csPropertyNameString,
+					Value = defaultValueString
+				});
 
 				var propertyPart = new GeneratedPropertyPart(property, false);
 				yield return new GeneratedPropertyInfo(new[] { usingString }, new[] { propertyPart });
@@ -41,33 +44,33 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
+		protected override IRenderableTemplate GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
 		{
 			if (hasDefaultValue)
 			{
 				if (_options.IsReadOnly)
 				{
 					return _options.IsVirtual
-						? PropertySnippet.Auto.ReadOnly.ReadOnlyAutoPropertyVirtualWithDefault
-						: PropertySnippet.Auto.ReadOnly.ReadOnlyAutoPropertyWithDefault;
+						? Snippet.Property.Auto.ReadOnly.ReadOnlyAutoPropertyVirtualWithDefault
+						: Snippet.Property.Auto.ReadOnly.ReadOnlyAutoPropertyWithDefault;
 				}
 
 				return _options.IsVirtual
-					? PropertySnippet.Auto.AutoPropertyVirtualWithDefault
-					: PropertySnippet.Auto.AutoPropertyWithDefault;
+					? Snippet.Property.Auto.AutoPropertyVirtualWithDefault
+					: Snippet.Property.Auto.AutoPropertyWithDefault;
 			}
 			else
 			{
 				if (_options.IsReadOnly)
 				{
 					return _options.IsVirtual
-						? PropertySnippet.Auto.ReadOnly.ReadOnlyAutoPropertyVirtual
-						: PropertySnippet.Auto.ReadOnly.ReadOnlyAutoProperty;
+						? Snippet.Property.Auto.ReadOnly.ReadOnlyAutoPropertyVirtual
+						: Snippet.Property.Auto.ReadOnly.ReadOnlyAutoProperty;
 				}
 
 				return _options.IsVirtual
-					? PropertySnippet.Auto.AutoPropertyVirtual
-					: PropertySnippet.Auto.AutoProperty;
+					? Snippet.Property.Auto.AutoPropertyVirtual
+					: Snippet.Property.Auto.AutoProperty;
 			}
 		}
 	}

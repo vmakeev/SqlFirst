@@ -2,14 +2,14 @@
 /// Выполняет добавление строки в таблицу
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
-$XmlParams$
+$XmlParams`\r\n`|\r\n$~
 /// <returns>Количество обновленных строк</returns>
-public virtual int Add(IDbConnection connection$MethodParameters$)
+public virtual int Add(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
 	{
 		cmd.CommandText = GetQueryText();
-$AddParameters$
+$2|AddParameters`\r\n`|\r\n$~
 
 		return cmd.ExecuteNonQuery();
 	}

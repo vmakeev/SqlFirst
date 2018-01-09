@@ -129,7 +129,12 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(2);
-			result.Methods.ShouldContain(@"private int CalculateChecksum(string data)
+			result.Methods.ShouldContain(@"/// <summary>
+/// Вычисляет контрольную сумму строки по алгоритму CRC 8
+/// </summary>
+/// <param name=""data"">Искомая строка</param>
+/// <returns>Контрольная сумма строки</returns>
+private int CalculateChecksum(string data)
 {
 	if (string.IsNullOrEmpty(data))
 	{
@@ -181,23 +186,20 @@ protected virtual string GetQueryText()
 	{
 		lock (_cachedSqlLocker)
 		{
-			if (_cachedSql == null)
+			using (Stream stream = typeof(TestQueryName).Assembly.GetManifestResourceStream(""TestQueryResourcePath""))
 			{
-				using (Stream stream = typeof(TestQueryName).Assembly.GetManifestResourceStream(""TestQueryResourcePath""))
+				string sql = new StreamReader(stream ?? throw new InvalidOperationException(""Can not get manifest resource stream."")).ReadToEnd();
+				
+				if (CalculateChecksum(sql) != _queryTextChecksum)
 				{
-					string sql = new StreamReader(stream ?? throw new InvalidOperationException(""Can not get manifest resource stream."")).ReadToEnd();
-					
-					if (CalculateChecksum(sql) != _queryTextChecksum)
-					{
-						throw new Exception($""{GetType().FullName}: query text was changed. Query object must be re-generated."");
-					}
-
-					const string sectionRegexPattern = @""--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n"";
-					const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-					sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
-
-					_cachedSql = sql;
+					throw new Exception($""{GetType().FullName}: query text was changed. Query object must be re-generated."");
 				}
+
+				const string sectionRegexPattern = @""--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n"";
+				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+				sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
+
+				_cachedSql = sql;
 			}
 		}
 	}

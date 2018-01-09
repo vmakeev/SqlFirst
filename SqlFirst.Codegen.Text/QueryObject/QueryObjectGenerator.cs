@@ -1,7 +1,5 @@
 using System;
-using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Text;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.QueryObject.Options;
@@ -12,19 +10,6 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	public class QueryObjectGenerator
 	{
-		private static readonly string _doubleBreak = Environment.NewLine + Environment.NewLine;
-
-		private static string EmitCodeBlock(IEnumerable<string> codeItems, bool doubleSpacing = false)
-		{
-			string codeBlock = string.Join(doubleSpacing ? _doubleBreak : Environment.NewLine, codeItems);
-			if (!string.IsNullOrEmpty(codeBlock))
-			{
-				codeBlock += _doubleBreak;
-			}
-
-			return codeBlock.Indent(QuerySnippet.Indent, 1);
-		}
-
 		public IGeneratedQueryObject GenerateQueryObject(ICodeGenerationContext context, IQueryGenerationOptions options)
 		{
 			var result = new GeneratedQueryObject
@@ -36,22 +21,18 @@ namespace SqlFirst.Codegen.Text.QueryObject
 
 			IQueryObjectData data = GenerateQueryObjectData(context, options);
 
-			string nested = EmitCodeBlock(data.Nested, true);
-			string constants = EmitCodeBlock(data.Constants);
-			string fields = EmitCodeBlock(data.Fields);
-			string properties = EmitCodeBlock(data.Properties, true);
-			string methods = EmitCodeBlock(data.Methods, true).TrimEnd();
+			string item = Snippet.Query.QueryObject.Render(new
+			{
+				Modificators = result.ItemModifiers,
+				QueryName = context.GetQueryName(),
+				Nested = data.Nested,
+				Consts = data.Constants,
+				Fields = data.Fields,
+				Properties = data.Properties,
+				Methods = data.Methods
+			});
 
-			var itemBuilder = new StringBuilder(QuerySnippet.QueryObject);
-			itemBuilder.Replace("$Modificators$", string.Join(" ", result.ItemModifiers));
-			itemBuilder.Replace("$QueryName$", context.GetQueryName());
-			itemBuilder.Replace("$Nested$", nested);
-			itemBuilder.Replace("$Consts$", constants);
-			itemBuilder.Replace("$Fields$", fields);
-			itemBuilder.Replace("$Properties$", properties);
-			itemBuilder.Replace("$Methods$", methods);
-
-			result.Item = itemBuilder.ToString();
+			result.Item = item;
 			result.Usings = data.Usings;
 
 			return result;
@@ -62,7 +43,6 @@ namespace SqlFirst.Codegen.Text.QueryObject
 			QueryObjectTemplate template = GetQueryTemplate(context, options);
 			return template.GenerateData(context);
 		}
-		
 
 		[SuppressMessage("ReSharper", "SwitchStatementMissingSomeCases")]
 		private static QueryObjectTemplate GetQueryTemplate(ICodeGenerationContext context, IQueryGenerationOptions options)

@@ -1,4 +1,0 @@
-﻿$Modificators$ class $ItemName$
-{
-$Properties$
-}

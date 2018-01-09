@@ -2,6 +2,7 @@
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.ParameterItem.Impl
@@ -42,6 +43,6 @@ namespace SqlFirst.Codegen.Text.ParameterItem.Impl
 		/// Возвращает шаблон кода для генерации объекта
 		/// </summary>
 		/// <returns>Шаблон кода для генерации объекта</returns>
-		protected override string GetTemplate() => ParameterItemSnippet.StructParameterItem;
+		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Parameter.StructParameterItem;
 	}
 }

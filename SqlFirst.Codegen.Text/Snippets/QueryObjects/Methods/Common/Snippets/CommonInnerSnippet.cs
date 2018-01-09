@@ -1,21 +1,23 @@
-﻿namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
+﻿using SqlFirst.Codegen.Text.Templating;
+
+namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 {
-	internal class CommonInnerSnippet : QueryObjectsSnippetBase
+	internal class CommonInnerSnippet : SqlFirstSnippet
 	{
 		public CommonInnerSnippet()
-			: base("Methods.Common.Snippets")
+			: base("QueryObjects.Methods.Common.Snippets")
 		{
 		}
 
-		public string MapField => GetSnippetText();
+		public IRenderableTemplate MapField => GetRenderableTemplate();
 
-		public string GetQueryTemplates => GetSnippetText();
+		public IRenderable GetQueryTemplates => GetRenderable();
 
-		public string GetInsertedValuesSection => GetSnippetText();
+		public IRenderable GetInsertedValuesSection => GetRenderable();
 
-		public string GetNumberedParameters => GetSnippetText();
+		public IRenderable GetNumberedParameters => GetRenderable();
 
-		public string NumberedParameterInfo => GetSnippetText();
-		public string CalculateChecksum => GetSnippetText();
+		public IRenderable NumberedParameterInfo => GetRenderable();
+		public IRenderableTemplate CalculateChecksum => GetRenderableTemplate();
 	}
 }

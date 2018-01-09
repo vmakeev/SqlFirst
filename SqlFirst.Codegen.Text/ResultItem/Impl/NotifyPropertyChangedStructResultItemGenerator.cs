@@ -3,7 +3,9 @@ using System.ComponentModel;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
+using SqlFirst.Codegen.Text.QueryObject;
 using SqlFirst.Codegen.Text.Snippets;
+using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.ResultItem.Impl
@@ -25,12 +27,7 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 		/// <inheritdoc />
 		protected override IEnumerable<string> GetCommonUsings()
 		{
-			foreach (string @using in base.GetCommonUsings())
-			{
-				yield return @using;
-			}
-
-			yield return "System.ComponentModel";
+			return base.GetCommonUsings().AppendItems("System.ComponentModel");
 		}
 
 		/// <inheritdoc />
@@ -55,6 +52,6 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 		}
 
 		/// <inheritdoc />
-		protected override string GetTemplate() => ResultItemSnippet.NotifyPropertyChangedStructResultItem;
+		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Result.NotifyPropertyChangedStructResultItem;
 	}
 }
