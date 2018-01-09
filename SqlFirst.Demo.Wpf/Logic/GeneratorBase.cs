@@ -126,7 +126,8 @@ namespace SqlFirst.Demo.Wpf.Logic
 				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal),
 				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Result",
 				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Parameter",
-				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content
+				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content,
+				["ResourcePath"] = $"{parameters.Namespace}.{parameters.QueryName}.sql"
 			};
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
 
