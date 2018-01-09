@@ -10,7 +10,7 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 	internal class PocoResultItemGenerator : ResultItemGeneratorBase
 	{
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="PocoResultItemGenerator"/>
+		/// Инициализирует новый экземпляр класса <see cref="PocoResultItemGenerator" />
 		/// </summary>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
 		public PocoResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)

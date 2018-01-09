@@ -96,7 +96,6 @@ namespace SqlFirst.Providers.Postgres
 
 			IEnumerable<IFieldDetails> results = GetResultDetails(queryText, connectionString);
 
-
 			IQueryInfo queryInfo = new PostgresQueryInfo
 			{
 				Type = baseInfo.Type,

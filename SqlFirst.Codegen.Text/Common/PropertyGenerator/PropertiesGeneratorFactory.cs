@@ -28,6 +28,7 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 					{
 						return new NotifyPropertyChangedBackingFieldPropertiesGenerator(propertyGenerationOptions);
 					}
+
 					return new BackingFieldPropertiesGenerator(propertyGenerationOptions);
 
 				default:

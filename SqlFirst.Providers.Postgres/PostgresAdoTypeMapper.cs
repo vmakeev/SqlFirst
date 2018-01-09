@@ -23,7 +23,6 @@ namespace SqlFirst.Providers.Postgres
 			return baseType;
 		}
 
-
 		private static Type GetBaseType(DbType dbType)
 		{
 			Type clrType;

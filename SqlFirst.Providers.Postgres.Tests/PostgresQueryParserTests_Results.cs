@@ -142,7 +142,6 @@ namespace SqlFirst.Providers.Postgres.Tests
 			id2.ColumnOrdinal.ShouldBe(1);
 		}
 
-
 		[Fact]
 		public void GetResultsTest_7()
 		{

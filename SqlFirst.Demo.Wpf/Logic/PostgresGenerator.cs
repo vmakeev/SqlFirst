@@ -5,7 +5,7 @@ using SqlFirst.Providers.Postgres;
 
 namespace SqlFirst.Demo.Wpf.Logic
 {
-	public class PostgresGenerator: GeneratorBase
+	public class PostgresGenerator : GeneratorBase
 	{
 		public override SamplesBase Samples { get; } = new PostgresSamples();
 

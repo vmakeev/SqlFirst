@@ -33,6 +33,7 @@ namespace SqlFirst.Codegen.Tests
 		}
 
 		[Theory]
+
 		#region A lot of test cases
 
 		#region CamelCase
@@ -132,6 +133,7 @@ namespace SqlFirst.Codegen.Tests
 		#endregion
 
 		#endregion
+
 		public void GetValidIdentifierNameWithFormatTests(NamingPolicy policy, string input, string output)
 		{
 			CSharpCodeHelper.GetValidIdentifierName(input, policy).ShouldBe(output);

@@ -168,6 +168,128 @@ namespace SqlFirst.Codegen.Helpers
 			return result;
 		}
 
+		public static string GetValidValue(Type targetType, object value)
+		{
+			if (value == null)
+			{
+				return "\"null\"";
+			}
+
+			string valueString = Convert.ToString(value, CultureInfo.InvariantCulture);
+
+			if (targetType == typeof(string))
+			{
+				return $"\"{valueString}\"";
+			}
+
+			if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
+			{
+				return $"DateTime.Parse(\"{valueString}\")";
+			}
+
+			if (targetType == typeof(Guid) || targetType == typeof(Guid?))
+			{
+				return $"Guid.Parse(\"{valueString}\")";
+			}
+
+			if (targetType == typeof(bool) || targetType == typeof(bool?))
+			{
+				if (!bool.TryParse(valueString, out bool boolValue))
+				{
+					throw new CodeGenerationException($"Unable to convert [{valueString}] to boolean.");
+				}
+
+				return boolValue.ToString().ToLowerInvariant();
+			}
+
+			if (targetType == typeof(int) ||
+				targetType == typeof(int?) ||
+				targetType == typeof(uint) ||
+				targetType == typeof(uint?) ||
+				targetType == typeof(long) ||
+				targetType == typeof(long?) ||
+				targetType == typeof(ulong) ||
+				targetType == typeof(ulong?) ||
+				targetType == typeof(byte) ||
+				targetType == typeof(byte?) ||
+				targetType == typeof(sbyte) ||
+				targetType == typeof(sbyte?) ||
+				targetType == typeof(decimal) ||
+				targetType == typeof(decimal?) ||
+				targetType == typeof(double) ||
+				targetType == typeof(double?) ||
+				targetType == typeof(float) ||
+				targetType == typeof(float?))
+			{
+				return valueString.Replace(",", ".");
+			}
+
+			throw new CodeGenerationException($"Unable generate value of type [{targetType.FullName}].");
+		}
+
+		public static string EscapeString(string input)
+		{
+			var literal = new StringBuilder(input.Length);
+			foreach (char c in input)
+			{
+				switch (c)
+				{
+					case '\'':
+						literal.Append(@"\'");
+						break;
+					case '\"':
+						literal.Append("\\\"");
+						break;
+					case '\\':
+						literal.Append(@"\\");
+						break;
+					case '\0':
+						literal.Append(@"\0");
+						break;
+					case '\a':
+						literal.Append(@"\a");
+						break;
+					case '\b':
+						literal.Append(@"\b");
+						break;
+					case '\f':
+						literal.Append(@"\f");
+						break;
+					case '\n':
+						literal.Append(@"\n");
+						break;
+					case '\r':
+						literal.Append(@"\r");
+						break;
+					case '\t':
+						literal.Append(@"\t");
+						break;
+					case '\v':
+						literal.Append(@"\v");
+						break;
+					default:
+						if (char.GetUnicodeCategory(c) != UnicodeCategory.Control)
+						{
+							literal.Append(c);
+						}
+						else
+						{
+							literal.Append(@"\u");
+							literal.Append(((ushort)c).ToString("x4"));
+						}
+
+						break;
+				}
+			}
+
+			return literal.ToString();
+		}
+
+		public static string EscapeStringVerbatium(string input)
+		{
+			return input.Replace("\"", "\"\"");
+		}
+
 		/// <summary>
 		/// Выполняет корректировку первого символа имени переменной, если имя не является корректным идентификатором C# по этой
 		/// причине
@@ -323,94 +445,5 @@ namespace SqlFirst.Codegen.Helpers
 		};
 
 		#endregion
-
-		public static string GetValidValue(Type targetType, object value)
-		{
-			if (value == null)
-			{
-				return "\"null\"";
-			}
-
-			string valueString = Convert.ToString(value, CultureInfo.InvariantCulture);
-
-			if (targetType == typeof(string))
-			{
-				return $"\"{valueString}\"";
-			}
-
-			if (targetType == typeof(DateTime) || targetType == typeof(DateTime?))
-			{
-				return $"DateTime.Parse(\"{valueString}\")";
-			}
-
-			if (targetType == typeof(Guid) || targetType == typeof(Guid?))
-			{
-				return $"Guid.Parse(\"{valueString}\")";
-			}
-
-			if (targetType == typeof(bool) || targetType == typeof(bool?))
-			{
-				if (!bool.TryParse(valueString, out bool boolValue))
-				{
-					throw new CodeGenerationException($"Unable to convert [{valueString}] to boolean.");
-				}
-
-				return boolValue.ToString().ToLowerInvariant();
-			}
-
-			if (targetType == typeof(int) || targetType == typeof(int?) ||
-				targetType == typeof(uint) || targetType == typeof(uint?) ||
-				targetType == typeof(long) || targetType == typeof(long?) ||
-				targetType == typeof(ulong) || targetType == typeof(ulong?) ||
-				targetType == typeof(byte) || targetType == typeof(byte?) ||
-				targetType == typeof(sbyte) || targetType == typeof(sbyte?) ||
-				targetType == typeof(decimal) || targetType == typeof(decimal?) ||
-				targetType == typeof(double) || targetType == typeof(double?) ||
-				targetType == typeof(float) || targetType == typeof(float?))
-			{
-				return valueString.Replace(",", ".");
-			}
-
-			throw new CodeGenerationException($"Unable generate value of type [{targetType.FullName}].");
-		}
-
-		public static string EscapeString(string input)
-		{
-			var literal = new StringBuilder(input.Length);
-			foreach (char c in input)
-			{
-				switch (c)
-				{
-					case '\'': literal.Append(@"\'"); break;
-					case '\"': literal.Append("\\\""); break;
-					case '\\': literal.Append(@"\\"); break;
-					case '\0': literal.Append(@"\0"); break;
-					case '\a': literal.Append(@"\a"); break;
-					case '\b': literal.Append(@"\b"); break;
-					case '\f': literal.Append(@"\f"); break;
-					case '\n': literal.Append(@"\n"); break;
-					case '\r': literal.Append(@"\r"); break;
-					case '\t': literal.Append(@"\t"); break;
-					case '\v': literal.Append(@"\v"); break;
-					default:
-						if (char.GetUnicodeCategory(c) != UnicodeCategory.Control)
-						{
-							literal.Append(c);
-						}
-						else
-						{
-							literal.Append(@"\u");
-							literal.Append(((ushort)c).ToString("x4"));
-						}
-						break;
-				}
-			}
-			return literal.ToString();
-		}
-
-		public static string EscapeStringVerbatium(string input)
-		{
-			return input.Replace("\"", "\"\"");
-		}
 	}
 }

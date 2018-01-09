@@ -12,13 +12,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
 	internal class InsertMultipleValuesAbility : QueryObjectAbilityBase
 	{
-		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
-		private static string GetParameterName(ICodeGenerationContext context)
-		{
-			return "item";
-		}
-
-		protected virtual IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultiple;
+		/// <inheritdoc />
+		public override string Name { get; } = "InsertMultipleValues";
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -40,7 +35,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			{
 				XmlParams = notNumberedXml,
 				MethodParameters = notNumberedIncoming,
-				ParameterItemType= parameterType,
+				ParameterItemType = parameterType,
 				AddParameters = notNumberedAddParameters,
 				IndexVariableName = indexVariableName,
 				ParameterVariableName = parameterVariableName,
@@ -53,15 +48,33 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Data",
-				"System.Collections.Generic")
-				.Concat(specificParametersUsings);
+									"System",
+									"System.Data",
+									"System.Collections.Generic")
+								.Concat(specificParametersUsings);
 
 			return result;
 		}
 
-		private IEnumerable<IRenderable> GetAddParametersNumbered(ICodeGenerationContext context, string indexVariableName, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
+		/// <inheritdoc />
+		public override IEnumerable<string> GetDependencies()
+		{
+			yield return KnownAbilityName.GetQueryTextMultipleInsert;
+			yield return KnownAbilityName.AddParameter;
+		}
+
+		protected virtual IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultiple;
+
+		[SuppressMessage("ReSharper", "UnusedParameter.Local")]
+		private static string GetParameterName(ICodeGenerationContext context)
+		{
+			return "item";
+		}
+
+		private IEnumerable<IRenderable> GetAddParametersNumbered(ICodeGenerationContext context,
+			string indexVariableName,
+			IEnumerable<IQueryParamInfo> targetParameters,
+			out IEnumerable<string> specificUsings)
 		{
 			specificUsings = Enumerable.Empty<string>();
 			string variableName = GetParameterName(context);
@@ -92,15 +105,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			return parameters;
 		}
-
-		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies()
-		{
-			yield return KnownAbilityName.GetQueryTextMultipleInsert;
-			yield return KnownAbilityName.AddParameter;
-		}
-
-		/// <inheritdoc />
-		public override string Name { get; } = "InsertMultipleValues";
 	}
 }

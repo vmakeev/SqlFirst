@@ -9,20 +9,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 	internal static class QueryOptionsStateMachineFactory
 	{
 		/// <summary>
-		/// Разрешает выполнить повторный вход в текущее состояние с выполнением определенного действия
-		/// </summary>
-		/// <typeparam name="TState">Тип состояния конечного автомата</typeparam>
-		/// <typeparam name="TTrigger">Тип триггера</typeparam>
-		/// <param name="config">Текущая конфигурация конечного автомата</param>
-		/// <param name="trigger">Разрешаемый триггер</param>
-		/// <param name="action">Выполняемое действие</param>
-		/// <returns></returns>
-		private static StateMachine<TState, TTrigger>.StateConfiguration PermitReentry<TState, TTrigger>(this StateMachine<TState, TTrigger>.StateConfiguration config, TTrigger trigger, Action action)
-		{
-			return config.PermitReentry(trigger).OnEntryFrom(trigger, action);
-		}
-
-		/// <summary>
 		/// Состояние автомата
 		/// </summary>
 		public enum State
@@ -84,10 +70,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 		}
 
 		/// <summary>
-		/// Создает конечный автомат для настройки <see cref="InsertQueryObjectOptions"/>
+		/// Создает конечный автомат для настройки <see cref="InsertQueryObjectOptions" />
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>
-		/// <returns>Конечный автомат для настройки <see cref="InsertQueryObjectOptions"/></returns>
+		/// <returns>Конечный автомат для настройки <see cref="InsertQueryObjectOptions" /></returns>
 		public static StateMachine<State, string> Build(InsertQueryObjectOptions options)
 		{
 			var machine = new StateMachine<State, string>(State.Start);
@@ -140,16 +126,17 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
 					.PermitReentry(Trigger.String, () => options.UseQueryTextResourceFile = false);
 
-			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse insert query generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+			machine.OnUnhandledTrigger((state, trigger) =>
+				throw new CodeGenerationException($"Can not parse insert query generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
 
 			return machine;
 		}
 
 		/// <summary>
-		/// Создает конечный автомат для настройки <see cref="SelectQueryObjectOptions"/>
+		/// Создает конечный автомат для настройки <see cref="SelectQueryObjectOptions" />
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>
-		/// <returns>Конечный автомат для настройки <see cref="SelectQueryObjectOptions"/></returns>
+		/// <returns>Конечный автомат для настройки <see cref="SelectQueryObjectOptions" /></returns>
 		public static StateMachine<State, string> Build(SelectQueryObjectOptions options)
 		{
 			var machine = new StateMachine<State, string>(State.Start);
@@ -202,11 +189,26 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
 					.PermitReentry(Trigger.String, () => options.UseQueryTextResourceFile = false);
 
-			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse select query generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+			machine.OnUnhandledTrigger((state, trigger) =>
+				throw new CodeGenerationException($"Can not parse select query generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
 
 			return machine;
 		}
 
-
+		/// <summary>
+		/// Разрешает выполнить повторный вход в текущее состояние с выполнением определенного действия
+		/// </summary>
+		/// <typeparam name="TState">Тип состояния конечного автомата</typeparam>
+		/// <typeparam name="TTrigger">Тип триггера</typeparam>
+		/// <param name="config">Текущая конфигурация конечного автомата</param>
+		/// <param name="trigger">Разрешаемый триггер</param>
+		/// <param name="action">Выполняемое действие</param>
+		/// <returns></returns>
+		private static StateMachine<TState, TTrigger>.StateConfiguration PermitReentry<TState, TTrigger>(this StateMachine<TState, TTrigger>.StateConfiguration config,
+			TTrigger trigger,
+			Action action)
+		{
+			return config.PermitReentry(trigger).OnEntryFrom(trigger, action);
+		}
 	}
 }

@@ -18,7 +18,7 @@ namespace SqlFirst.Providers.Postgres.Tests
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.ShouldBeEmpty();
 		}
-		
+
 		[Fact]
 		public void GetUndeclaredParametersTest_Select_1()
 		{
@@ -201,7 +201,6 @@ namespace SqlFirst.Providers.Postgres.Tests
 			createDateUtc.DbType.ShouldBe(PostgresDbType.Timestamp);
 			createDateUtc.Length.ShouldBeNull();
 			createDateUtc.DefaultValue.ShouldBeNull();
-
 		}
 	}
 }

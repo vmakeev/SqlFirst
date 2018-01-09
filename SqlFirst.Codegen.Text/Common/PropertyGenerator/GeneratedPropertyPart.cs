@@ -16,7 +16,7 @@
 		public string Content { get; }
 
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="GeneratedPropertyPart"/>
+		/// Инициализирует новый экземпляр класса <see cref="GeneratedPropertyPart" />
 		/// </summary>
 		/// <param name="content">Сгенерированный код</param>
 		/// <param name="isBackingField">Является ли фрагмент описанием поля для записи и чтения значений свойства</param>

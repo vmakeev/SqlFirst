@@ -25,9 +25,13 @@ namespace SqlFirst.Demo.Wpf.Logic
 					throw new ArgumentOutOfRangeException(nameof(queryType), queryType, null);
 			}
 		}
+
 		protected virtual string GetInsertQuery() => string.Empty;
+
 		protected virtual string GetSelectQuery() => string.Empty;
+
 		protected virtual string GetUpdateQuery() => string.Empty;
+
 		protected virtual string GetDeleteQuery() => string.Empty;
 	}
 }

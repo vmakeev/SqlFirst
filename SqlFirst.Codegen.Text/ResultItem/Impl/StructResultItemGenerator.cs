@@ -10,7 +10,7 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 	internal class StructResultItemGenerator : ResultItemGeneratorBase
 	{
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="StructResultItemGenerator"/>
+		/// Инициализирует новый экземпляр класса <see cref="StructResultItemGenerator" />
 		/// </summary>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
 		public StructResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)

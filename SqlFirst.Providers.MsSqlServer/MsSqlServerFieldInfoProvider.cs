@@ -37,6 +37,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					{
 						details.ColumnName = value.Unbox<string>();
 					}
+
 					break;
 
 				case "ColumnOrdinal":
@@ -45,6 +46,7 @@ namespace SqlFirst.Providers.MsSqlServer
 					{
 						details.ColumnName = "column_" + details.ColumnOrdinal;
 					}
+
 					break;
 
 				case "ColumnSize":

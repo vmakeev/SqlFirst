@@ -8,6 +8,31 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 {
 	internal class SelectQueryObjectOptions
 	{
+		/// <summary>
+		/// Генерировать ли запрос первого значения
+		/// </summary>
+		public bool? GenerateSelectFirstMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли запрос всех значений
+		/// </summary>
+		public bool? GenerateSelectAllMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли асинхронные методы
+		/// </summary>
+		public bool? GenerateAsyncMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли синхронные методы
+		/// </summary>
+		public bool? GenerateSyncMethods { get; set; }
+
+		/// <summary>
+		/// Использовать ли ресурсный файл для получения текста запроса
+		/// </summary>
+		public bool? UseQueryTextResourceFile { get; set; }
+
 		public SelectQueryObjectOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			if (options == null)
@@ -40,30 +65,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 				}
 			}
 		}
-
-		/// <summary>
-		/// Генерировать ли запрос первого значения
-		/// </summary>
-		public bool? GenerateSelectFirstMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли запрос всех значений
-		/// </summary>
-		public bool? GenerateSelectAllMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли асинхронные методы
-		/// </summary>
-		public bool? GenerateAsyncMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли синхронные методы
-		/// </summary>
-		public bool? GenerateSyncMethods { get; set; }
-
-		/// <summary>
-		/// Использовать ли ресурсный файл для получения текста запроса
-		/// </summary>
-		public bool? UseQueryTextResourceFile { get; set; }
 	}
 }

@@ -320,5 +320,4 @@ namespace SqlFirst.Providers.Postgres.Tests
 			createDateUtc.ColumnOrdinal.ShouldBe(1);
 		}
 	}
-
 }

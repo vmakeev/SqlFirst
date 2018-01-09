@@ -12,7 +12,6 @@ namespace SqlFirst.Codegen.Text.Snippets.Properties.Auto.ReadOnly
 
 		public IRenderableTemplate ReadOnlyAutoPropertyVirtualWithDefault => GetRenderableTemplate();
 
-
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public AutoReadonlyPropertiesSnippet()
 			: base("Properties.Auto.ReadOnly")

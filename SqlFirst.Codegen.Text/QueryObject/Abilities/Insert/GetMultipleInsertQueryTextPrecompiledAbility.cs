@@ -14,6 +14,38 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		private const RegexOptions BalancedParenthesisRegexOptions = RegexOptions.CultureInvariant | RegexOptions.Compiled | RegexOptions.IgnoreCase;
 		private static readonly Regex _balancedParenthesisRegex = new Regex(BalancedParenthesisRegexPattern, BalancedParenthesisRegexOptions);
 
+		/// <inheritdoc />
+		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
+		{
+			string queryText = context.GetQueryText();
+			if (string.IsNullOrEmpty(queryText))
+			{
+				throw new CodeGenerationException("Can not find query text at current code generation context.");
+			}
+
+			(string queryTemplate, string valuesTemplate) = GetQueryTemplates(context, queryText);
+
+			string method = Snippet.Query.Methods.Common.GetQueryFromStringMultipleInsert.Render(new
+			{
+				QueryTemplate = queryTemplate,
+				ValuesTemplate = valuesTemplate
+			});
+
+			QueryObjectData result = QueryObjectData.CreateFrom(data);
+			result.Methods = result.Methods.AppendItems(method);
+			result.Usings = result.Usings.AppendItems(
+				"System",
+				"System.Collections.Generic",
+				"System.Linq");
+			return result;
+		}
+
+		/// <inheritdoc />
+		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+
+		/// <inheritdoc />
+		public string Name { get; } = KnownAbilityName.GetQueryTextMultipleInsert;
+
 		private string GetInsertedValuesSection(string query)
 		{
 			MatchCollection matches = _balancedParenthesisRegex.Matches(query);
@@ -46,37 +78,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			return (queryTemplate, valuesTemplate);
 		}
-
-		/// <inheritdoc />
-		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
-		{
-			string queryText = context.GetQueryText();
-			if (string.IsNullOrEmpty(queryText))
-			{
-				throw new CodeGenerationException("Can not find query text at current code generation context.");
-			}
-
-			(string queryTemplate, string valuesTemplate) = GetQueryTemplates(context, queryText);
-
-			string method = Snippet.Query.Methods.Common.GetQueryFromStringMultipleInsert.Render(new
-			{
-				QueryTemplate = queryTemplate,
-				ValuesTemplate = valuesTemplate
-			});
-
-			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Methods = result.Methods.AppendItems(method);
-			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Collections.Generic",
-				"System.Linq");
-			return result;
-		}
-
-		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
-
-		/// <inheritdoc />
-		public string Name { get; } = KnownAbilityName.GetQueryTextMultipleInsert;
 	}
 }

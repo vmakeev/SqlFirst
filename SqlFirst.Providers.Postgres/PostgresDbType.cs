@@ -66,6 +66,7 @@ namespace SqlFirst.Providers.Postgres
 		public const string Guid = "uuid";
 		public const string Xml = "xml";
 
+		private static readonly Regex _sizeRegex = new Regex("\\((?<size>[^\\)]+)\\)", RegexOptions.Compiled);
 
 		public static string Normalize(string type)
 		{
@@ -84,8 +85,6 @@ namespace SqlFirst.Providers.Postgres
 
 			return result.Trim();
 		}
-
-		private static readonly Regex _sizeRegex = new Regex("\\((?<size>[^\\)]+)\\)", RegexOptions.Compiled);
 
 		public static string GetLength(string type)
 		{

@@ -11,50 +11,13 @@ namespace SqlFirst.Codegen.Text.Templating
 {
 	public class RenderableTemplate : IRenderableTemplate
 	{
-		#region Nested
-
-		protected class SnippetField
-		{
-			public string Placeholder { get; set; }
-
-			public string Name { get; set; }
-
-			public string EnumerableDelimiter { get; set; }
-
-			public byte IndentSize { get; set; }
-
-			public string Prefix { get; set; }
-
-			public string Postfix { get; set; }
-		}
-
-		private class PropertyEqualityComparer : IEqualityComparer<SnippetField>
-		{
-			/// <summary>Determines whether the specified objects are equal.</summary>
-			/// <param name="x">The first object of type T to compare.</param>
-			/// <param name="y">The second object of type T to compare.</param>
-			/// <returns>true if the specified objects are equal; otherwise, false.</returns>
-			public bool Equals(SnippetField x, SnippetField y)
-			{
-				return string.Equals(x?.Placeholder, y?.Placeholder);
-			}
-
-			/// <summary>Returns a hash code for the specified object.</summary>
-			/// <param name="obj">The <see cref="T:System.Object"></see> for which a hash code is to be returned.</param>
-			/// <returns>A hash code for the specified object.</returns>
-			/// <exception cref="T:System.ArgumentNullException">The type of <paramref name="obj">obj</paramref> is a reference type and <paramref name="obj">obj</paramref> is null.</exception>
-			public int GetHashCode(SnippetField obj)
-			{
-				return obj?.Placeholder.GetHashCode() ?? 0;
-			}
-		}
-
-		#endregion
-
 		private static readonly PropertyEqualityComparer _propertyEqualityComparer = new PropertyEqualityComparer();
 		private readonly string _template;
 
-		protected static readonly Regex _templatesRegex = new Regex(@"(?<placeholder>\$((?<indent>\d{1,2})\|)?(\`(?<prefix>[^\`]+)\`)?(?<name>[a-zA-Z0-9_]+)(\`(?<postfix>[^\`]+)\`)?(\|(?<delimiter>[^\$]*))?\$(~\r\n?)?)", RegexOptions.Compiled);
+		protected static readonly Regex _templatesRegex =
+			new Regex(@"(?<placeholder>\$((?<indent>\d{1,2})\|)?(\`(?<prefix>[^\`]+)\`)?(?<name>[a-zA-Z0-9_]+)(\`(?<postfix>[^\`]+)\`)?(\|(?<delimiter>[^\$]*))?\$(~\r\n?)?)",
+				RegexOptions.Compiled);
+
 		private readonly SnippetField[] _snippetFields;
 		private static readonly object[] _emptyArray = new object[0];
 
@@ -102,6 +65,11 @@ namespace SqlFirst.Codegen.Text.Templating
 			return sb.ToString();
 		}
 
+		public string Render()
+		{
+			return Render(null);
+		}
+
 		protected string GetValue(object modelValue, string enumerableDelimiter)
 		{
 			switch (modelValue)
@@ -122,6 +90,7 @@ namespace SqlFirst.Codegen.Text.Templating
 						string enumerableValueString = GetValue(enumerableValue, enumerableDelimiter);
 						buffer.AddLast(enumerableValueString);
 					}
+
 					return string.Join(enumerableDelimiter ?? string.Empty, buffer);
 
 				default:
@@ -161,16 +130,54 @@ namespace SqlFirst.Codegen.Text.Templating
 			var sb = new StringBuilder(value);
 
 			sb
-			.Replace(@"\r", "\r")
-			.Replace(@"\n", "\n")
-			.Replace(@"\t", "\t");
+				.Replace(@"\r", "\r")
+				.Replace(@"\n", "\n")
+				.Replace(@"\t", "\t");
 
 			return sb.ToString();
 		}
 
-		public string Render()
+		#region Nested
+
+		protected class SnippetField
 		{
-			return Render(null);
+			public string Placeholder { get; set; }
+
+			public string Name { get; set; }
+
+			public string EnumerableDelimiter { get; set; }
+
+			public byte IndentSize { get; set; }
+
+			public string Prefix { get; set; }
+
+			public string Postfix { get; set; }
 		}
+
+		private class PropertyEqualityComparer : IEqualityComparer<SnippetField>
+		{
+			/// <summary>Determines whether the specified objects are equal.</summary>
+			/// <param name="x">The first object of type T to compare.</param>
+			/// <param name="y">The second object of type T to compare.</param>
+			/// <returns>true if the specified objects are equal; otherwise, false.</returns>
+			public bool Equals(SnippetField x, SnippetField y)
+			{
+				return string.Equals(x?.Placeholder, y?.Placeholder);
+			}
+
+			/// <summary>Returns a hash code for the specified object.</summary>
+			/// <param name="obj">The <see cref="T:System.Object"></see> for which a hash code is to be returned.</param>
+			/// <returns>A hash code for the specified object.</returns>
+			/// <exception cref="T:System.ArgumentNullException">
+			/// The type of <paramref name="obj">obj</paramref> is a reference type
+			/// and <paramref name="obj">obj</paramref> is null.
+			/// </exception>
+			public int GetHashCode(SnippetField obj)
+			{
+				return obj?.Placeholder.GetHashCode() ?? 0;
+			}
+		}
+
+		#endregion
 	}
 }

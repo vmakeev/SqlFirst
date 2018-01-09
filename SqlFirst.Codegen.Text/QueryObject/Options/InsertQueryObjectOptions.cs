@@ -8,6 +8,31 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 {
 	internal class InsertQueryObjectOptions
 	{
+		/// <summary>
+		/// Генерировать ли добавление единичных записей
+		/// </summary>
+		public bool? GenerateAddSingleMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли добавление множественных записей
+		/// </summary>
+		public bool? GenerateAddMultipleMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли асинхронные методы
+		/// </summary>
+		public bool? GenerateAsyncMethods { get; set; }
+
+		/// <summary>
+		/// Генерировать ли синхронные методы
+		/// </summary>
+		public bool? GenerateSyncMethods { get; set; }
+
+		/// <summary>
+		/// Использовать ли ресурсный файл для получения текста запроса
+		/// </summary>
+		public bool? UseQueryTextResourceFile { get; set; }
+
 		public InsertQueryObjectOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			if (options == null)
@@ -40,30 +65,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Options
 				}
 			}
 		}
-
-		/// <summary>
-		/// Генерировать ли добавление единичных записей
-		/// </summary>
-		public bool? GenerateAddSingleMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли добавление множественных записей
-		/// </summary>
-		public bool? GenerateAddMultipleMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли асинхронные методы
-		/// </summary>
-		public bool? GenerateAsyncMethods { get; set; }
-
-		/// <summary>
-		/// Генерировать ли синхронные методы
-		/// </summary>
-		public bool? GenerateSyncMethods { get; set; }
-
-		/// <summary>
-		/// Использовать ли ресурсный файл для получения текста запроса
-		/// </summary>
-		public bool? UseQueryTextResourceFile { get; set; }
 	}
 }

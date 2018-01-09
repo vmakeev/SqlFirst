@@ -30,7 +30,6 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 	}
 
 	/// <inheritdoc />
-
 	internal class CodeMemberInfo : ICodeMemberInfo
 	{
 		/// <inheritdoc />
@@ -97,8 +96,8 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 
 			Type type = typeMapper.MapToClrType(info.DbType, true);
 
-			CodeMemberInfo result = info.DefaultValue != null 
-				? new CodeMemberInfo(type, info.SemanticName, info.DefaultValue) 
+			CodeMemberInfo result = info.DefaultValue != null
+				? new CodeMemberInfo(type, info.SemanticName, info.DefaultValue)
 				: new CodeMemberInfo(type, info.SemanticName);
 
 			return result;

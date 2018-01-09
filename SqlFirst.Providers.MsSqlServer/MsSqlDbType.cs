@@ -70,6 +70,8 @@ namespace SqlFirst.Providers.MsSqlServer
 
 		public const string UniqueIdentifier = "uniqueidentifier";
 
+		private static readonly Regex _sizeRegex = new Regex(".*\\((?<size>[^\\)]+)\\)", RegexOptions.Compiled);
+
 		public static string Normalize(string type)
 		{
 			string result = type?.ToLowerInvariant();
@@ -83,19 +85,17 @@ namespace SqlFirst.Providers.MsSqlServer
 			return result?.Trim();
 		}
 
-		private static readonly Regex _sizeRegex = new Regex(".*\\((?<size>[^\\)]+)\\)", RegexOptions.Compiled);
-
 		public static string GetLength(string type)
 		{
 			if (string.IsNullOrEmpty(type))
 			{
 				return null;
 			}
-			
+
 			Match match = _sizeRegex.Match(type);
 
-			return match.Success 
-				? match.Groups["size"]?.Value?.Trim() 
+			return match.Success
+				? match.Groups["size"]?.Value?.Trim()
 				: null;
 		}
 	}

@@ -7,6 +7,5 @@ namespace SqlFirst.Codegen
 	/// </summary>
 	public interface IGeneratedQueryObject : IGeneratedItem
 	{
-
 	}
 }

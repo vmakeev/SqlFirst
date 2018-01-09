@@ -113,6 +113,5 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			Assert.Throws<ArgumentNullException>(() => queryParser.GetQuerySections(null, QuerySectionName.Options).ToArray());
 			Assert.Throws<ArgumentNullException>(() => queryParser.GetQuerySections(null, null).ToArray());
 		}
-
 	}
 }

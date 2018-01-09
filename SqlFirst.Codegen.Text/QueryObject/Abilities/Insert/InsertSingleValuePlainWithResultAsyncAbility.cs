@@ -11,10 +11,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 	internal class InsertSingleValuePlainWithResultAsyncAbility : QueryObjectAbilityBase
 	{
 		/// <inheritdoc />
-		protected override string GetParameterName(IQueryParamInfo paramInfo)
-		{
-			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.CamelCase);
-		}
+		public override string Name { get; } = "InsertSingleValuePlainAsync";
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -33,19 +30,18 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				MethodParameters = methodParameters,
 				AddParameters = addParameters,
 				ResultItemType = resultItemType
-
 			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Data",
-				"System.Data.Common",
-				"System.Threading",
-				"System.Threading.Tasks")
-				.Concat(parameterSpecificUsings);
+									"System",
+									"System.Data",
+									"System.Data.Common",
+									"System.Threading",
+									"System.Threading.Tasks")
+								.Concat(parameterSpecificUsings);
 
 			return result;
 		}
@@ -59,6 +55,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		}
 
 		/// <inheritdoc />
-		public override string Name { get; } = "InsertSingleValuePlainAsync";
+		protected override string GetParameterName(IQueryParamInfo paramInfo)
+		{
+			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.CamelCase);
+		}
 	}
 }

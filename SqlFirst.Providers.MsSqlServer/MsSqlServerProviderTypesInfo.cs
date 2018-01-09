@@ -8,6 +8,8 @@ namespace SqlFirst.Providers.MsSqlServer
 	/// <inheritdoc />
 	internal class MsSqlServerProviderTypesInfo : IProviderTypesInfo
 	{
+		public static MsSqlServerProviderTypesInfo Instance { get; } = new MsSqlServerProviderTypesInfo();
+
 		private MsSqlServerProviderTypesInfo()
 		{
 		}
@@ -26,7 +28,5 @@ namespace SqlFirst.Providers.MsSqlServer
 
 		/// <inheritdoc />
 		public string CommandParameterSpecificDbTypePropertyName { get; } = nameof(SqlParameter.SqlDbType);
-
-		public static MsSqlServerProviderTypesInfo Instance { get; } = new MsSqlServerProviderTypesInfo();
 	}
 }

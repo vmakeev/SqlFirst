@@ -1,5 +1,4 @@
-﻿
-namespace SqlFirst.Core
+﻿namespace SqlFirst.Core
 {
 	/// <summary>
 	/// Информация о параметре запроса

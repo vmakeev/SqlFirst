@@ -12,48 +12,6 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class GetMultipleInsertQueryTextFromStringAbilityTests
 	{
-		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
-		{
-			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("int", false)).Returns(typeof(int));
-
-			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
-			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
-			A.CallTo(() => firstParameter.IsNumbered).Returns(false);
-			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
-			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
-
-			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
-			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param_N");
-			A.CallTo(() => secondParameter.IsNumbered).Returns(true);
-			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
-			A.CallTo(() => secondParameter.DbType).Returns("int");
-
-			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
-			A.CallTo(() => firstResult.ColumnName).Returns("Id");
-			A.CallTo(() => firstResult.AllowDbNull).Returns(false);
-			A.CallTo(() => firstResult.DbType).Returns("int");
-
-			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
-			A.CallTo(() => context.TypeMapper).Returns(mapper);
-			A.CallTo(() => context.IncomingParameters).Returns(new[] { firstParameter, secondParameter });
-
-			A.CallTo(() => context.OutgoingParameters).Returns(new[] { firstResult });
-
-			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
-
-			object _;
-			A.CallTo(() => options.TryGetValue("QueryText", out _))
-			.Returns(true)
-			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "insert into sometable (id, number) values (@FirstParam, @SECOND_Param_N)" });
-
-			A.CallTo(() => context.Options).Returns(options);
-
-			return context;
-		}
-
 		[Fact]
 		public void GetMultipleInsertQueryTextFromStringAbility_Test()
 		{
@@ -103,6 +61,48 @@ private string GetQueryText(int rowsCount)
 	string queryText = string.Format(queryTemplate, rowTemplatesString);
 	return queryText;
 }");
+		}
+
+		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
+		{
+			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("int", false)).Returns(typeof(int));
+
+			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
+			A.CallTo(() => firstParameter.IsNumbered).Returns(false);
+			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
+			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
+
+			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param_N");
+			A.CallTo(() => secondParameter.IsNumbered).Returns(true);
+			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
+			A.CallTo(() => secondParameter.DbType).Returns("int");
+
+			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
+			A.CallTo(() => firstResult.ColumnName).Returns("Id");
+			A.CallTo(() => firstResult.AllowDbNull).Returns(false);
+			A.CallTo(() => firstResult.DbType).Returns("int");
+
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+			A.CallTo(() => context.TypeMapper).Returns(mapper);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { firstParameter, secondParameter });
+
+			A.CallTo(() => context.OutgoingParameters).Returns(new[] { firstResult });
+
+			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
+
+			object _;
+			A.CallTo(() => options.TryGetValue("QueryText", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "insert into sometable (id, number) values (@FirstParam, @SECOND_Param_N)" });
+
+			A.CallTo(() => context.Options).Returns(options);
+
+			return context;
 		}
 	}
 }

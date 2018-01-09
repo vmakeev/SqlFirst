@@ -56,13 +56,6 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 			}
 		}
 
-		private IRenderableTemplate GetBackingFieldTemplate(bool hasDefaultValue)
-		{
-			return hasDefaultValue
-				? Snippet.Field.BackingFieldWithValue
-				: Snippet.Field.BackingField;
-		}
-
 		/// <inheritdoc />
 		protected override IRenderableTemplate GetPropertyTemplate(PropertyGenerationOptions options, bool hasDefaultValue)
 		{
@@ -76,6 +69,13 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl
 			return options.IsVirtual
 				? Snippet.Property.BackingField.BackingFieldPropertyVirtual
 				: Snippet.Property.BackingField.BackingFieldProperty;
+		}
+
+		private IRenderableTemplate GetBackingFieldTemplate(bool hasDefaultValue)
+		{
+			return hasDefaultValue
+				? Snippet.Field.BackingFieldWithValue
+				: Snippet.Field.BackingField;
 		}
 	}
 }

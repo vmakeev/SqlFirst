@@ -9,6 +9,14 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 	internal class QueryParamInfoVisitor : SqlVariableDeclarationsBaseVisitor<IEnumerable<IQueryParamInfo>>
 	{
 		/// <inheritdoc />
+		public override IEnumerable<IQueryParamInfo> VisitDeclaration(DeclarationContext context)
+		{
+			var declarationVisitor = new DeclarationVisitor();
+			IQueryParamInfo info = declarationVisitor.VisitDeclaration(context);
+			return new[] { info };
+		}
+
+		/// <inheritdoc />
 		protected override IEnumerable<IQueryParamInfo> AggregateResult(IEnumerable<IQueryParamInfo> aggregate, IEnumerable<IQueryParamInfo> nextResult)
 		{
 			if (aggregate == null)
@@ -22,14 +30,6 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 			}
 
 			return aggregate.Concat(nextResult);
-		}
-
-		/// <inheritdoc />
-		public override IEnumerable<IQueryParamInfo> VisitDeclaration(DeclarationContext context)
-		{
-			var declarationVisitor = new DeclarationVisitor();
-			IQueryParamInfo info = declarationVisitor.VisitDeclaration(context);
-			return new[] { info };
 		}
 	}
 }

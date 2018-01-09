@@ -11,7 +11,7 @@ namespace SqlFirst.Codegen.Helpers
 	internal static class AdjustTextCase
 	{
 		/// <summary>
-		/// Преобразует строку <paramref name="name"/> в стиль CamelCase
+		/// Преобразует строку <paramref name="name" /> в стиль CamelCase
 		/// </summary>
 		/// <param name="name">Искомая строка</param>
 		/// <returns>Преобразованная строка</returns>
@@ -43,7 +43,7 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
-		/// Преобразует строку <paramref name="name"/> в стиль Pascal
+		/// Преобразует строку <paramref name="name" /> в стиль Pascal
 		/// </summary>
 		/// <param name="name">Искомая строка</param>
 		/// <returns>Преобразованная строка</returns>
@@ -75,7 +75,7 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
-		/// Преобразует строку <paramref name="name"/> в верхний регистр с разделением значимых частей нижним подчеркиванием
+		/// Преобразует строку <paramref name="name" /> в верхний регистр с разделением значимых частей нижним подчеркиванием
 		/// </summary>
 		/// <param name="name">Искомая строка</param>
 		/// <returns>Преобразованная строка</returns>

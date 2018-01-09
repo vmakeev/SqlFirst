@@ -14,15 +14,6 @@ namespace SqlFirst.Core.Impl
 		/// </summary>
 		protected const string SectionRegexPattern = @"--\s*begin\s+(?<sectionName>[a-zA-Z0-9_]*)\s*\r?\n(?<content>.*?)\s*\r?\n\s*--\s*end\s*\r?\n";
 
-		/// <summary>
-		/// Создает регулярное выражение, возвращающее разделы запроса
-		/// </summary>
-		protected virtual Regex GetSectionsRegex()
-		{
-			const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-			return new Regex(SectionRegexPattern, regexOptions);
-		}
-
 		/// <inheritdoc />
 		public virtual IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText)
 		{
@@ -126,31 +117,6 @@ namespace SqlFirst.Core.Impl
 			yield return new QuerySection(QuerySectionType.Body, null, bodyContent);
 		}
 
-		/// <summary>
-		/// Возвращает тип раздела запроса по его имени
-		/// </summary>
-		/// <param name="sectionName">Имя раздела</param>
-		/// <returns></returns>
-		protected virtual QuerySectionType GetSectionType(string sectionName)
-		{
-			if (string.IsNullOrEmpty(sectionName))
-			{
-				return QuerySectionType.Unknown;
-			}
-
-			if (string.Equals(sectionName, QuerySectionName.Declarations, StringComparison.InvariantCultureIgnoreCase))
-			{
-				return QuerySectionType.Declarations;
-			}
-
-			if (string.Equals(sectionName, QuerySectionName.Options, StringComparison.InvariantCultureIgnoreCase))
-			{
-				return QuerySectionType.Options;
-			}
-
-			return QuerySectionType.Custom;
-		}
-
 		/// <inheritdoc />
 		public virtual IEnumerable<IQuerySection> GetQuerySections(string query, string sectionName)
 		{
@@ -175,14 +141,14 @@ namespace SqlFirst.Core.Impl
 			string combinedOptions = string.Join(Environment.NewLine, optionsSections.Select(section => section.Content));
 
 			string[] singleLineOptions = combinedOptions
-				.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None)
-				.Where(line => !string.IsNullOrWhiteSpace(line))
-				.Select(line => line.Trim())
-				.ToArray();
+										.Split(Environment.NewLine.ToCharArray(), StringSplitOptions.None)
+										.Where(line => !string.IsNullOrWhiteSpace(line))
+										.Select(line => line.Trim())
+										.ToArray();
 
 			IEnumerable<string[]> splittedOptions = singleLineOptions
-				.Where(line => line.StartsWith("--", StringComparison.Ordinal))
-				.Select(line => line.Split(' ', '\t').Where(element => element != "--" && !string.IsNullOrWhiteSpace(element)).ToArray());
+													.Where(line => line.StartsWith("--", StringComparison.Ordinal))
+													.Select(line => line.Split(' ', '\t').Where(element => element != "--" && !string.IsNullOrWhiteSpace(element)).ToArray());
 
 			foreach (string[] splittedOption in splittedOptions)
 			{
@@ -190,6 +156,40 @@ namespace SqlFirst.Core.Impl
 				IEnumerable<string> parameters = splittedOption.Skip(1).Select(parameter => parameter.Trim());
 				yield return new SqlFirstOption(name, parameters);
 			}
+		}
+
+		/// <summary>
+		/// Создает регулярное выражение, возвращающее разделы запроса
+		/// </summary>
+		protected virtual Regex GetSectionsRegex()
+		{
+			const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+			return new Regex(SectionRegexPattern, regexOptions);
+		}
+
+		/// <summary>
+		/// Возвращает тип раздела запроса по его имени
+		/// </summary>
+		/// <param name="sectionName">Имя раздела</param>
+		/// <returns></returns>
+		protected virtual QuerySectionType GetSectionType(string sectionName)
+		{
+			if (string.IsNullOrEmpty(sectionName))
+			{
+				return QuerySectionType.Unknown;
+			}
+
+			if (string.Equals(sectionName, QuerySectionName.Declarations, StringComparison.InvariantCultureIgnoreCase))
+			{
+				return QuerySectionType.Declarations;
+			}
+
+			if (string.Equals(sectionName, QuerySectionName.Options, StringComparison.InvariantCultureIgnoreCase))
+			{
+				return QuerySectionType.Options;
+			}
+
+			return QuerySectionType.Custom;
 		}
 
 		/// <summary>

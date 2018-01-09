@@ -44,12 +44,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Data",
-				"System.Data.Common",
-				"System.Threading",
-				"System.Threading.Tasks")
-				.Concat(parameterSpecificUsings);
+									"System",
+									"System.Data",
+									"System.Data.Common",
+									"System.Threading",
+									"System.Threading.Tasks")
+								.Concat(parameterSpecificUsings);
 
 			return result;
 		}

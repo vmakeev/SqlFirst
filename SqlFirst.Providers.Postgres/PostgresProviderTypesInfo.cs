@@ -8,6 +8,8 @@ namespace SqlFirst.Providers.Postgres
 	/// <inheritdoc />
 	internal class PostgresProviderTypesInfo : IProviderTypesInfo
 	{
+		public static PostgresProviderTypesInfo Instance { get; } = new PostgresProviderTypesInfo();
+
 		private PostgresProviderTypesInfo()
 		{
 		}
@@ -26,7 +28,5 @@ namespace SqlFirst.Providers.Postgres
 
 		/// <inheritdoc />
 		public string CommandParameterSpecificDbTypePropertyName { get; } = nameof(NpgsqlParameter.NpgsqlDbType);
-
-		public static PostgresProviderTypesInfo Instance { get; } = new PostgresProviderTypesInfo();
 	}
 }

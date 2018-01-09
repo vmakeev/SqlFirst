@@ -16,7 +16,7 @@
 		public GeneratedPropertyPart[] Properties { get; }
 
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="GeneratedPropertyInfo"/>
+		/// Инициализирует новый экземпляр класса <see cref="GeneratedPropertyInfo" />
 		/// </summary>
 		/// <param name="usings">Перечень требуемых импортов в коде</param>
 		/// <param name="properties">Фрагменты кода, сгенерированного для свойства</param>

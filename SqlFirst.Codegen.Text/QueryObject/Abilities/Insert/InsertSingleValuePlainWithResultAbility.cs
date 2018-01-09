@@ -11,10 +11,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 	internal class InsertSingleValuePlainWithResultAbility : QueryObjectAbilityBase
 	{
 		/// <inheritdoc />
-		protected override string GetParameterName(IQueryParamInfo paramInfo)
-		{
-			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.CamelCase);
-		}
+		public override string Name { get; } = "InsertSingleValuePlain";
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -39,9 +36,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Data")
-				.Concat(parameterSpecificUsings);
+									"System",
+									"System.Data")
+								.Concat(parameterSpecificUsings);
 
 			return result;
 		}
@@ -55,6 +52,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		}
 
 		/// <inheritdoc />
-		public override string Name { get; } = "InsertSingleValuePlain";
+		protected override string GetParameterName(IQueryParamInfo paramInfo)
+		{
+			return CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.CamelCase);
+		}
 	}
 }

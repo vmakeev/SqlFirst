@@ -11,6 +11,33 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 {
 	internal class GetQueryTextFromResourceCacheableAbility : IQueryObjectAbility
 	{
+		/// <inheritdoc />
+		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
+		{
+			(string checksumFieldName, IRenderable checksumField) = GetChecksumField(context.GetQueryText());
+			(string cacheFieldName, IRenderable cacheField) = GetCacheField();
+			(string lockerFieldName, IRenderable lockerField) = GetLockerField();
+
+			IRenderable primaryMethod = GetPrimaryMethod(context, checksumFieldName, cacheFieldName, lockerFieldName);
+			IRenderable calculateChecksumMethod = GetCalculateChecksumMethod();
+
+			QueryObjectData result = QueryObjectData.CreateFrom(data);
+			result.Fields = result.Fields.AppendItems(cacheField.Render(), lockerField.Render(), checksumField.Render());
+			result.Methods = result.Methods.AppendItems(calculateChecksumMethod.Render(), primaryMethod.Render());
+			result.Usings = result.Usings.AppendItems(
+				"System",
+				"System.IO",
+				"System.Text",
+				"System.Text.RegularExpressions");
+			return result;
+		}
+
+		/// <inheritdoc />
+		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+
+		/// <inheritdoc />
+		public string Name { get; } = KnownAbilityName.GetQueryText;
+
 		private int CalculateChecksum(string data)
 		{
 			if (string.IsNullOrEmpty(data))
@@ -51,27 +78,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			}
 
 			return crc;
-		}
-
-		/// <inheritdoc />
-		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
-		{
-			(string checksumFieldName, IRenderable checksumField) = GetChecksumField(context.GetQueryText());
-			(string cacheFieldName, IRenderable cacheField) = GetCacheField();
-			(string lockerFieldName, IRenderable lockerField) = GetLockerField();
-
-			IRenderable primaryMethod = GetPrimaryMethod(context, checksumFieldName, cacheFieldName, lockerFieldName);
-			IRenderable calculateChecksumMethod = GetCalculateChecksumMethod();
-
-			QueryObjectData result = QueryObjectData.CreateFrom(data);
-			result.Fields = result.Fields.AppendItems(cacheField.Render(), lockerField.Render(), checksumField.Render());
-			result.Methods = result.Methods.AppendItems(calculateChecksumMethod.Render(), primaryMethod.Render());
-			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.IO",
-				"System.Text",
-				"System.Text.RegularExpressions");
-			return result;
 		}
 
 		private IRenderable GetCalculateChecksumMethod()
@@ -149,11 +155,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 
 			return (lockerFieldName, lockerField);
 		}
-
-		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
-
-		/// <inheritdoc />
-		public string Name { get; } = KnownAbilityName.GetQueryText;
 	}
 }

@@ -2,22 +2,18 @@
 using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
+using MySpecificDatabaseTypes;
 using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Data;
-using MySpecificDatabaseTypes;
 using SqlFirst.Core;
 using Xunit;
-
-
 
 namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class CommonAbilitiesTests
 	{
-
-
 		[Fact]
 		public void AddSqlConnectionParameterAbility_Test()
 		{
@@ -427,6 +423,5 @@ protected virtual T GetScalarFromValue<T>(object valueObject)
 	}
 }");
 		}
-
 	}
 }

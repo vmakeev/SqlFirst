@@ -15,7 +15,7 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 	internal class NotifyPropertyChangedClassResultItemGenerator : ResultItemGeneratorBase
 	{
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="NotifyPropertyChangedClassResultItemGenerator"/>
+		/// Инициализирует новый экземпляр класса <see cref="NotifyPropertyChangedClassResultItemGenerator" />
 		/// </summary>
 		/// <param name="propertiesGenerator">Генератор свойств</param>
 		public NotifyPropertyChangedClassResultItemGenerator(PropertiesGeneratorBase propertiesGenerator)

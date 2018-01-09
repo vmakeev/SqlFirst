@@ -14,77 +14,6 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class InsertMultipleAbilitiesTests
 	{
-		private static IProviderSpecificType GetProviderSpecificType(string value)
-		{
-			var result = A.Fake<IProviderSpecificType>(p => p.Strict());
-			A.CallTo(() => result.TypeName).Returns(typeof(MySpecificDbType).Name);
-			A.CallTo(() => result.ValueName).Returns(value);
-			A.CallTo(() => result.Usings).Returns(new[] { typeof(MySpecificDbType).Namespace });
-			return result;
-		}
-
-		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
-		{
-			var providerTypesInfo = A.Fake<IProviderTypesInfo>(p => p.Strict());
-			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyType).Returns(typeof(MySpecificDbType));
-			A.CallTo(() => providerTypesInfo.CommandParameterType).Returns(typeof(MySpecificParameterType));
-			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyName).Returns("MySpecificDbTypePropertyName");
-
-			var provider = A.Fake<IDatabaseProvider>(p => p.Strict());
-			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
-
-			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("date", false)).Returns(typeof(DateTime));
-			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier")).Returns(GetProviderSpecificType("MySpecificGuidType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("int")).Returns(GetProviderSpecificType("MySpecificIntType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("date")).Returns(GetProviderSpecificType("MySpecificDateType"));
-
-			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
-			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
-			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
-			A.CallTo(() => firstParameter.IsNumbered).Returns(false);
-			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
-
-			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
-			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param_N");
-			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
-			A.CallTo(() => secondParameter.IsNumbered).Returns(true);
-			A.CallTo(() => secondParameter.DbType).Returns("int");
-
-			var thirdParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
-			A.CallTo(() => thirdParameter.DbName).Returns("ThirdParam_N");
-			A.CallTo(() => thirdParameter.SemanticName).Returns("ThirdParam");
-			A.CallTo(() => thirdParameter.IsNumbered).Returns(true);
-			A.CallTo(() => thirdParameter.DbType).Returns("date");
-
-			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
-			A.CallTo(() => firstResult.ColumnName).Returns("FirstResult");
-			A.CallTo(() => firstResult.DbType).Returns("date");
-			A.CallTo(() => firstResult.AllowDbNull).Returns(false);
-
-			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
-			A.CallTo(() => context.TypeMapper).Returns(mapper);
-			A.CallTo(() => context.IncomingParameters).Returns(new[] { firstParameter, secondParameter, thirdParameter });
-			A.CallTo(() => context.OutgoingParameters).Returns(new[] { firstResult });
-			A.CallTo(() => context.DatabaseProvider).Returns(provider);
-
-			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
-
-			object _;
-			A.CallTo(() => options.TryGetValue("QueryResultItemName", out _))
-			.Returns(true)
-			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "QueryItemTestName" });
-
-			A.CallTo(() => options.TryGetValue("QueryParameterItemName", out _))
-			.Returns(true)
-			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "QueryParamItemTestName" });
-
-			A.CallTo(() => context.Options).Returns(options);
-			return context;
-		}
-
 		[Fact]
 		public void InsertMultipleValuesAbility_Test()
 		{
@@ -493,6 +422,77 @@ public virtual async Task<IEnumerable<DateTime>> AddAsync(DbConnection connectio
 		return result;
 	}
 }");
+		}
+
+		private static IProviderSpecificType GetProviderSpecificType(string value)
+		{
+			var result = A.Fake<IProviderSpecificType>(p => p.Strict());
+			A.CallTo(() => result.TypeName).Returns(typeof(MySpecificDbType).Name);
+			A.CallTo(() => result.ValueName).Returns(value);
+			A.CallTo(() => result.Usings).Returns(new[] { typeof(MySpecificDbType).Namespace });
+			return result;
+		}
+
+		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
+		{
+			var providerTypesInfo = A.Fake<IProviderTypesInfo>(p => p.Strict());
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyType).Returns(typeof(MySpecificDbType));
+			A.CallTo(() => providerTypesInfo.CommandParameterType).Returns(typeof(MySpecificParameterType));
+			A.CallTo(() => providerTypesInfo.CommandParameterSpecificDbTypePropertyName).Returns("MySpecificDbTypePropertyName");
+
+			var provider = A.Fake<IDatabaseProvider>(p => p.Strict());
+			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
+
+			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("date", false)).Returns(typeof(DateTime));
+			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier")).Returns(GetProviderSpecificType("MySpecificGuidType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("int")).Returns(GetProviderSpecificType("MySpecificIntType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("date")).Returns(GetProviderSpecificType("MySpecificDateType"));
+
+			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
+			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
+			A.CallTo(() => firstParameter.IsNumbered).Returns(false);
+			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
+
+			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param_N");
+			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
+			A.CallTo(() => secondParameter.IsNumbered).Returns(true);
+			A.CallTo(() => secondParameter.DbType).Returns("int");
+
+			var thirdParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => thirdParameter.DbName).Returns("ThirdParam_N");
+			A.CallTo(() => thirdParameter.SemanticName).Returns("ThirdParam");
+			A.CallTo(() => thirdParameter.IsNumbered).Returns(true);
+			A.CallTo(() => thirdParameter.DbType).Returns("date");
+
+			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
+			A.CallTo(() => firstResult.ColumnName).Returns("FirstResult");
+			A.CallTo(() => firstResult.DbType).Returns("date");
+			A.CallTo(() => firstResult.AllowDbNull).Returns(false);
+
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+			A.CallTo(() => context.TypeMapper).Returns(mapper);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { firstParameter, secondParameter, thirdParameter });
+			A.CallTo(() => context.OutgoingParameters).Returns(new[] { firstResult });
+			A.CallTo(() => context.DatabaseProvider).Returns(provider);
+
+			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
+
+			object _;
+			A.CallTo(() => options.TryGetValue("QueryResultItemName", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "QueryItemTestName" });
+
+			A.CallTo(() => options.TryGetValue("QueryParameterItemName", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "QueryParamItemTestName" });
+
+			A.CallTo(() => context.Options).Returns(options);
+			return context;
 		}
 	}
 }

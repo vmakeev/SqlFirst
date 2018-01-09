@@ -4,24 +4,10 @@ using Stateless;
 namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 {
 	/// <summary>
-	/// Фабрика по созданию конечных автоматов для настройки <see cref="ResultItemOptions"/>
+	/// Фабрика по созданию конечных автоматов для настройки <see cref="ResultItemOptions" />
 	/// </summary>
 	internal static class ItemOptionsStateMachineFactory
 	{
-		/// <summary>
-		/// Разрешает выполнить повторный вход в текущее состояние с выполнением определенного действия
-		/// </summary>
-		/// <typeparam name="TState">Тип состояния конечного автомата</typeparam>
-		/// <typeparam name="TTrigger">Тип триггера</typeparam>
-		/// <param name="config">Текущая конфигурация конечного автомата</param>
-		/// <param name="trigger">Разрешаемый триггер</param>
-		/// <param name="action">Выполняемое действие</param>
-		/// <returns></returns>
-		private static StateMachine<TState, TTrigger>.StateConfiguration PermitReentry<TState, TTrigger>(this StateMachine<TState, TTrigger>.StateConfiguration config, TTrigger trigger, Action action)
-		{
-			return config.PermitReentry(trigger).OnEntryFrom(trigger, action);
-		}
-
 		/// <summary>
 		/// Состояние автомата
 		/// </summary>
@@ -74,10 +60,10 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 		}
 
 		/// <summary>
-		/// Создает конечный автомат для настройки <see cref="ResultItemOptions"/>
+		/// Создает конечный автомат для настройки <see cref="ResultItemOptions" />
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>
-		/// <returns>Конечный автомат для настройки <see cref="ResultItemOptions"/></returns>
+		/// <returns>Конечный автомат для настройки <see cref="ResultItemOptions" /></returns>
 		public static StateMachine<State, string> Build(ResultItemOptions options)
 		{
 			var machine = new StateMachine<State, string>(State.Generate);
@@ -113,16 +99,17 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 					.PermitReentry(Trigger.ReadOnly, () => options.PropertyModifiers |= PropertyModifiers.ReadOnly)
 					.PermitReentry(Trigger.Virtual, () => options.PropertyModifiers |= PropertyModifiers.Virtual);
 
-			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse result item generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+			machine.OnUnhandledTrigger((state, trigger) =>
+				throw new CodeGenerationException($"Can not parse result item generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
 
 			return machine;
 		}
 
 		/// <summary>
-		/// Создает конечный автомат для настройки <see cref="ParameterItemOptions"/>
+		/// Создает конечный автомат для настройки <see cref="ParameterItemOptions" />
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>
-		/// <returns>Конечный автомат для настройки <see cref="ParameterItemOptions"/></returns>
+		/// <returns>Конечный автомат для настройки <see cref="ParameterItemOptions" /></returns>
 		public static StateMachine<State, string> Build(ParameterItemOptions options)
 		{
 			var machine = new StateMachine<State, string>(State.Generate);
@@ -134,10 +121,26 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 					.PermitReentry(Trigger.Struct, () => options.ItemType = ItemType.Struct)
 					.PermitReentry(Trigger.Class, () => options.ItemType = ItemType.Class);
 
-			machine.OnUnhandledTrigger((state, trigger) => throw new CodeGenerationException($"Can not parse parameter generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+			machine.OnUnhandledTrigger((state, trigger) =>
+				throw new CodeGenerationException($"Can not parse parameter generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
 
 			return machine;
 		}
 
+		/// <summary>
+		/// Разрешает выполнить повторный вход в текущее состояние с выполнением определенного действия
+		/// </summary>
+		/// <typeparam name="TState">Тип состояния конечного автомата</typeparam>
+		/// <typeparam name="TTrigger">Тип триггера</typeparam>
+		/// <param name="config">Текущая конфигурация конечного автомата</param>
+		/// <param name="trigger">Разрешаемый триггер</param>
+		/// <param name="action">Выполняемое действие</param>
+		/// <returns></returns>
+		private static StateMachine<TState, TTrigger>.StateConfiguration PermitReentry<TState, TTrigger>(this StateMachine<TState, TTrigger>.StateConfiguration config,
+			TTrigger trigger,
+			Action action)
+		{
+			return config.PermitReentry(trigger).OnEntryFrom(trigger, action);
+		}
 	}
 }

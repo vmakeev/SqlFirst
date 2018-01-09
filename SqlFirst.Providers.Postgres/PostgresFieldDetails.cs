@@ -9,16 +9,6 @@ namespace SqlFirst.Providers.Postgres
 	public class PostgresFieldDetails : IFieldDetails
 	{
 		/// <summary>
-		/// Имя столбца в таблице
-		/// </summary>
-		public string ColumnName { get; set; }
-
-		/// <summary>
-		/// Индекс столбда в БД
-		/// </summary>
-		public int ColumnOrdinal { get; set; }
-
-		/// <summary>
 		/// Размер столбца
 		/// </summary>
 		public int ColumnSize { get; set; }
@@ -47,11 +37,6 @@ namespace SqlFirst.Providers.Postgres
 		/// Имя таблицы в схеме таблицы
 		/// </summary>
 		public string BaseTableName { get; set; }
-
-		/// <summary>
-		/// Разрешено ли значение Null
-		/// </summary>
-		public bool AllowDbNull { get; set; }
 
 		/// <summary>
 		/// Тип поставщика данных столбца
@@ -89,11 +74,6 @@ namespace SqlFirst.Providers.Postgres
 		public string ProviderSpecificDataType { get; set; }
 
 		/// <summary>
-		/// Имя типа данных БД
-		/// </summary>
-		public string DbType { get; set; }
-
-		/// <summary>
 		/// Имя типа данных CLR
 		/// </summary>
 		public Type ClrType { get; set; }
@@ -105,5 +85,25 @@ namespace SqlFirst.Providers.Postgres
 		public bool IsColumnSet { get; set; }
 
 		public int NonVersionedProviderType { get; set; }
+
+		/// <summary>
+		/// Имя столбца в таблице
+		/// </summary>
+		public string ColumnName { get; set; }
+
+		/// <summary>
+		/// Индекс столбда в БД
+		/// </summary>
+		public int ColumnOrdinal { get; set; }
+
+		/// <summary>
+		/// Разрешено ли значение Null
+		/// </summary>
+		public bool AllowDbNull { get; set; }
+
+		/// <summary>
+		/// Имя типа данных БД
+		/// </summary>
+		public string DbType { get; set; }
 	}
 }

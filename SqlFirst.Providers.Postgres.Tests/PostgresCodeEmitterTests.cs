@@ -21,7 +21,7 @@ namespace SqlFirst.Providers.Postgres.Tests
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin sqlFirstOptions
+				@"-- begin sqlFirstOptions
 
 test options
 
@@ -45,7 +45,6 @@ test body");
 				new QuerySection(QuerySectionType.Body, "test body_2"),
 				new QuerySection(QuerySectionType.Custom, "myCusTom1", "myCustom1_2"),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new PostgresCodeEmitter();
@@ -54,7 +53,7 @@ test body");
 
 			// fuck my eyes...
 			query.ShouldBe(
-@"some useless text 1
+				@"some useless text 1
 
 -- begin sqlFirstOptions
 
@@ -92,7 +91,6 @@ test body_2");
 				new QuerySection(QuerySectionType.Options, "test options_1"),
 				new QuerySection(QuerySectionType.Unknown, "some useless text"),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new PostgresCodeEmitter();
@@ -100,7 +98,7 @@ test body_2");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin sqlFirstOptions
+				@"-- begin sqlFirstOptions
 
 test options_1
 test options_2
@@ -121,7 +119,6 @@ test body");
 				new QuerySection(QuerySectionType.Options, "test options_1"),
 				new QuerySection(QuerySectionType.Unknown, string.Empty),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new PostgresCodeEmitter();
@@ -129,7 +126,7 @@ test body");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin sqlFirstOptions
+				@"-- begin sqlFirstOptions
 
 test options_1
 test options_2
@@ -147,7 +144,6 @@ test body");
 				new QuerySection(QuerySectionType.Body, "test body"),
 				new QuerySection(QuerySectionType.Options, string.Empty),
 				new QuerySection(QuerySectionType.Unknown, string.Empty),
-
 			};
 
 			var emitter = new PostgresCodeEmitter();
@@ -155,7 +151,7 @@ test body");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"test body");
+				@"test body");
 		}
 
 		[Fact]
@@ -182,7 +178,6 @@ test body");
 			{
 				new QuerySection(QuerySectionType.Options, "some options"),
 				new QuerySection(QuerySectionType.Declarations, "test declarations_1"),
-
 			};
 
 			var emitter = new PostgresCodeEmitter();
@@ -190,6 +185,5 @@ test body");
 			// declarations not upported
 			Assert.Throws<QueryEmitException>(() => emitter.EmitQuery(sections));
 		}
-
 	}
 }

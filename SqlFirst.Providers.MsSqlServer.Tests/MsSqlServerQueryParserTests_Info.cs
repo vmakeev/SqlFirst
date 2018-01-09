@@ -263,7 +263,6 @@ declare @take int = 42;");
 			result.Type.ShouldBe(QueryType.Read);
 		}
 
-
 		[Fact]
 		public void GetQueryInfoTest_1()
 		{
@@ -426,5 +425,4 @@ declare @take int = 42;");
 			createDateUtc.ColumnOrdinal.ShouldBe(1);
 		}
 	}
-
 }

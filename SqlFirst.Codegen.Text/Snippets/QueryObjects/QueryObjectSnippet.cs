@@ -5,14 +5,14 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects
 {
 	internal class QueryObjectSnippet : SqlFirstSnippet
 	{
+		public IRenderableTemplate QueryObject => GetRenderableTemplate();
+
+		public MethodsSnippet Methods { get; } = new MethodsSnippet();
+
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public QueryObjectSnippet()
 			: base("QueryObjects")
 		{
 		}
-
-		public IRenderableTemplate QueryObject => GetRenderableTemplate();
-
-		public MethodsSnippet Methods { get; }  = new MethodsSnippet();
 	}
 }

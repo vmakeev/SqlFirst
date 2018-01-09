@@ -32,6 +32,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			return result;
 		}
 
+		/// <inheritdoc />
+		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+
+		/// <inheritdoc />
+		public string Name { get; } = KnownAbilityName.GetItemFromRecord;
+
 		private IRenderable GetMapping(ICodeGenerationContext context, IFieldDetails fieldDetails, int index)
 		{
 			string propertyName = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
@@ -48,11 +54,5 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 
 			return Renderable.Create(template, model);
 		}
-
-		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
-
-		/// <inheritdoc />
-		public string Name { get; } = KnownAbilityName.GetItemFromRecord;
 	}
 }

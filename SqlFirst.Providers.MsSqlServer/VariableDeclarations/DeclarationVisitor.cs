@@ -9,52 +9,6 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 	internal class DeclarationVisitor : SqlVariableDeclarationsBaseVisitor<QueryParamInfo>
 	{
 		/// <inheritdoc />
-		protected override QueryParamInfo AggregateResult(QueryParamInfo aggregate, QueryParamInfo nextResult)
-		{
-			if (aggregate == null)
-			{
-				return nextResult;
-			}
-
-			if (nextResult == null)
-			{
-				return aggregate;
-			}
-
-			if (aggregate.Length == null && nextResult.Length != null)
-			{
-				aggregate.Length = nextResult.Length;
-			}
-
-			if (aggregate.DbName == null && nextResult.DbName != null)
-			{
-				aggregate.DbName = nextResult.DbName;
-			}
-
-			if (aggregate.SemanticName == null && nextResult.SemanticName != null)
-			{
-				aggregate.SemanticName = nextResult.SemanticName;
-			}
-
-			if (!aggregate.IsNumbered && nextResult.IsNumbered)
-			{
-				aggregate.IsNumbered = true;
-			}
-
-			if (aggregate.DbType == null && nextResult.DbType != null)
-			{
-				aggregate.DbType = nextResult.DbType;
-			}
-
-			if (aggregate.DefaultValue == null && nextResult.DefaultValue != null)
-			{
-				aggregate.DefaultValue = nextResult.DefaultValue;
-			}
-
-			return aggregate;
-		}
-
-		/// <inheritdoc />
 		public override QueryParamInfo VisitVariable(SqlVariableDeclarationsParser.VariableContext context)
 		{
 			string variableName = context.GetRuleContexts<SqlVariableDeclarationsParser.IdentifierContext>().Single().GetText();
@@ -139,6 +93,52 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 			}
 
 			return result;
+		}
+
+		/// <inheritdoc />
+		protected override QueryParamInfo AggregateResult(QueryParamInfo aggregate, QueryParamInfo nextResult)
+		{
+			if (aggregate == null)
+			{
+				return nextResult;
+			}
+
+			if (nextResult == null)
+			{
+				return aggregate;
+			}
+
+			if (aggregate.Length == null && nextResult.Length != null)
+			{
+				aggregate.Length = nextResult.Length;
+			}
+
+			if (aggregate.DbName == null && nextResult.DbName != null)
+			{
+				aggregate.DbName = nextResult.DbName;
+			}
+
+			if (aggregate.SemanticName == null && nextResult.SemanticName != null)
+			{
+				aggregate.SemanticName = nextResult.SemanticName;
+			}
+
+			if (!aggregate.IsNumbered && nextResult.IsNumbered)
+			{
+				aggregate.IsNumbered = true;
+			}
+
+			if (aggregate.DbType == null && nextResult.DbType != null)
+			{
+				aggregate.DbType = nextResult.DbType;
+			}
+
+			if (aggregate.DefaultValue == null && nextResult.DefaultValue != null)
+			{
+				aggregate.DefaultValue = nextResult.DefaultValue;
+			}
+
+			return aggregate;
 		}
 	}
 }

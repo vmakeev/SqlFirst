@@ -40,7 +40,7 @@ namespace SqlFirst.Codegen.Text.ResultItem.TypedOptions
 				option.Parameters?.Length > 1 &&
 				option.Name?.ToLowerInvariant() == ItemOptionsStateMachineFactory.Trigger.Generate &&
 				option.Parameters.FirstOrDefault()?.ToLowerInvariant() == ItemOptionsStateMachineFactory.Trigger.Result);
-			
+
 			foreach (ISqlFirstOption option in target)
 			{
 				StateMachine<ItemOptionsStateMachineFactory.State, string> machine = ItemOptionsStateMachineFactory.Build(this);

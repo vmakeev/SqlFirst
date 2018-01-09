@@ -6,7 +6,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 {
 	internal class InsertMultipleValuesWithScalarResultAsyncAbility : InsertMultipleValuesWithScalarResultAbility
 	{
-		protected override IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultipleWithScalarResultAsync;
+		/// <inheritdoc />
+		public override string Name { get; } = "InsertMultipleValuesAsync";
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -20,7 +21,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			return result;
 		}
 
-		/// <inheritdoc />
-		public override string Name { get; } = "InsertMultipleValuesAsync";
+		protected override IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultipleWithScalarResultAsync;
 	}
 }

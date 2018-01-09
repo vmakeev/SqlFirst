@@ -44,9 +44,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
-				"System",
-				"System.Data")
-				.Concat(parameterSpecificUsings);
+									"System",
+									"System.Data")
+								.Concat(parameterSpecificUsings);
 
 			return result;
 		}

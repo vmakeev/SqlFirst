@@ -5,7 +5,7 @@ using SqlFirst.Providers.MsSqlServer;
 
 namespace SqlFirst.Demo.Wpf.Logic
 {
-	public class MsSqlServerGenerator: GeneratorBase
+	public class MsSqlServerGenerator : GeneratorBase
 	{
 		public override SamplesBase Samples { get; } = new MsSqlSamples();
 

@@ -202,7 +202,6 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.Length.ShouldBe(3);
-
 		}
 	}
 }

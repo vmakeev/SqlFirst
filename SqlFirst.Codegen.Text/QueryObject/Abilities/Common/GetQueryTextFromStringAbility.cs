@@ -17,8 +17,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			}
 
 			string preparedQueryText = queryText
-				.Replace("\"", "\"\"")
-				.Replace(@"\", @"\\");
+										.Replace("\"", "\"\"")
+										.Replace(@"\", @"\\");
 
 			string method = Snippet.Query.Methods.Common.GetQueryFromString.Render(new { QueryText = preparedQueryText });
 

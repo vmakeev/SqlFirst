@@ -36,6 +36,7 @@ namespace SqlFirst.Providers.Postgres
 					{
 						details.ColumnName = value.Unbox<string>();
 					}
+
 					break;
 
 				case "ColumnOrdinal":
@@ -44,6 +45,7 @@ namespace SqlFirst.Providers.Postgres
 					{
 						details.ColumnName = "column_" + details.ColumnOrdinal;
 					}
+
 					break;
 
 				case "ColumnSize":

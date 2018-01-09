@@ -5,7 +5,7 @@
 		string Render(T model);
 	}
 
-	public interface IRenderableTemplate: IRenderable
+	public interface IRenderableTemplate : IRenderable
 	{
 		string Render(object model);
 	}

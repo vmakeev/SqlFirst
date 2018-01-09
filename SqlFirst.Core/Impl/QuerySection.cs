@@ -7,6 +7,38 @@ namespace SqlFirst.Core.Impl
 	[DebuggerDisplay("{Type} [{Name}] => {Content}")]
 	public class QuerySection : IQuerySection
 	{
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="QuerySection" />
+		/// </summary>
+		/// <param name="type">Тип раздела</param>
+		/// <param name="name">Имя раздела</param>
+		/// <param name="content">Содержимое раздела</param>
+		public QuerySection(QuerySectionType type, string name, string content)
+		{
+			Type = type;
+			Name = name;
+			Content = content;
+		}
+
+		/// <summary>
+		/// Инициализирует новый экземпляр класса <see cref="QuerySection" />
+		/// </summary>
+		/// <param name="type">Тип раздела</param>
+		/// <param name="content">Содержимое раздела</param>
+		public QuerySection(QuerySectionType type, string content)
+			: this(type, GetKnownName(type), content)
+		{
+		}
+
+		/// <inheritdoc />
+		public QuerySectionType Type { get; }
+
+		/// <inheritdoc />
+		public string Name { get; }
+
+		/// <inheritdoc />
+		public string Content { get; }
+
 		private static string GetKnownName(QuerySectionType type)
 		{
 			switch (type)
@@ -28,37 +60,5 @@ namespace SqlFirst.Core.Impl
 					return null;
 			}
 		}
-
-		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="QuerySection"/>
-		/// </summary>
-		/// <param name="type">Тип раздела</param>
-		/// <param name="name">Имя раздела</param>
-		/// <param name="content">Содержимое раздела</param>
-		public QuerySection(QuerySectionType type, string name, string content)
-		{
-			Type = type;
-			Name = name;
-			Content = content;
-		}
-
-		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="QuerySection"/>
-		/// </summary>
-		/// <param name="type">Тип раздела</param>
-		/// <param name="content">Содержимое раздела</param>
-		public QuerySection(QuerySectionType type, string content)
-			: this(type, GetKnownName(type), content)
-		{
-		}
-
-		/// <inheritdoc />
-		public QuerySectionType Type { get; }
-
-		/// <inheritdoc />
-		public string Name { get; }
-
-		/// <inheritdoc />
-		public string Content { get; }
 	}
 }

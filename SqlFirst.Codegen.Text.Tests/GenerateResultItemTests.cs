@@ -12,75 +12,6 @@ namespace SqlFirst.Codegen.Text.Tests
 {
 	public class GenerateResultItemTests
 	{
-		#region Fixture
-		private const string QueryItemName = "SelectSomeDataItem";
-		private const string QueryName = "SelectSomeData";
-		private const string MyTestNamespace = "MyTestNamespace";
-
-		private static IDatabaseTypeMapper GetDefaultDatabaseTypeMapper()
-		{
-			var typeMapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => typeMapper.MapToClrType("varchar", true)).Returns(typeof(string));
-			A.CallTo(() => typeMapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => typeMapper.MapToClrType("bit", false)).Returns(typeof(bool));
-			return typeMapper;
-		}
-
-		private static IResultGenerationOptions GetDefaultResultGenerationOptions(params string[] options)
-		{
-			var result = A.Fake<IResultGenerationOptions>(p => p.Strict());
-
-			var defaultOptions = new List<ISqlFirstOption>();
-
-			foreach (string option in options)
-			{
-				if (!string.IsNullOrEmpty(option))
-				{
-					string[] array = option.Split(' ').Where(p => !string.IsNullOrEmpty(p)).ToArray();
-					defaultOptions.Add(new SqlFirstOption(array[0], array.Skip(1)));
-				}
-			}
-
-			A.CallTo(() => result.SqlFirstOptions).Returns(defaultOptions);
-			return result;
-		}
-
-		private static ICodeGenerationContext GetDefaultCodeGenerationContext(IDatabaseTypeMapper typeMapper)
-		{
-			var optionsDictionary = new Dictionary<string, object>
-			{
-				["Namespace"] = MyTestNamespace,
-				["QueryName"] = QueryName,
-				["QueryResultItemName"] = QueryItemName,
-			};
-
-			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
-			A.CallTo(() => context.Options).Returns(optionsDictionary);
-
-			var parameter1 = A.Fake<IFieldDetails>(p => p.Strict());
-			A.CallTo(() => parameter1.DbType).Returns("varchar");
-			A.CallTo(() => parameter1.AllowDbNull).Returns(true);
-			A.CallTo(() => parameter1.ColumnName).Returns("OBJECT_Name");
-
-			var parameter2 = A.Fake<IFieldDetails>(p => p.Strict());
-			A.CallTo(() => parameter2.DbType).Returns("int");
-			A.CallTo(() => parameter2.AllowDbNull).Returns(true);
-			A.CallTo(() => parameter2.ColumnName).Returns("currentStage");
-
-			var parameter3 = A.Fake<IFieldDetails>(p => p.Strict());
-			A.CallTo(() => parameter3.DbType).Returns("bit");
-			A.CallTo(() => parameter3.AllowDbNull).Returns(false);
-			A.CallTo(() => parameter3.ColumnName).Returns("Is_Completed");
-
-			var outgoingParameters = new[] { parameter1, parameter2, parameter3 };
-
-			A.CallTo(() => context.OutgoingParameters).Returns(outgoingParameters);
-
-			A.CallTo(() => context.TypeMapper).Returns(typeMapper);
-			return context;
-		}
-		#endregion
-
 		[Theory]
 		[InlineData("generate result class properties auto virtual")]
 		[InlineData("generate result class properties virtual")]
@@ -107,7 +38,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	public virtual string ObjectName { get; set; }
 
@@ -156,7 +87,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	public virtual string ObjectName { get; internal set; }
 
@@ -199,7 +130,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -258,7 +189,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -322,7 +253,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	public string ObjectName { get; set; }
 
@@ -366,7 +297,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	public string ObjectName { get; internal set; }
 
@@ -408,7 +339,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -466,7 +397,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial class SelectSomeDataItem
+				@"public partial class SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -534,8 +465,10 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-			#region Too long result
-@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+
+				#region Too long result
+
+				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -600,7 +533,9 @@ namespace SqlFirst.Codegen.Text.Tests
 
 	partial void AfterLoadInternal();
 }"
-			#endregion
+
+				#endregion
+
 			);
 		}
 
@@ -638,8 +573,10 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-			#region Too long result
-@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+
+				#region Too long result
+
+				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -704,7 +641,9 @@ namespace SqlFirst.Codegen.Text.Tests
 
 	partial void AfterLoadInternal();
 }"
-			#endregion
+
+				#endregion
+
 			);
 		}
 
@@ -742,8 +681,10 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-			#region Too long result
-@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+
+				#region Too long result
+
+				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -808,7 +749,9 @@ namespace SqlFirst.Codegen.Text.Tests
 
 	partial void AfterLoadInternal();
 }"
-			#endregion
+
+				#endregion
+
 			);
 		}
 
@@ -846,8 +789,10 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-			#region Too long result
-@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+
+				#region Too long result
+
+				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -912,7 +857,9 @@ namespace SqlFirst.Codegen.Text.Tests
 
 	partial void AfterLoadInternal();
 }"
-			#endregion
+
+				#endregion
+
 			);
 		}
 
@@ -944,7 +891,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem
+				@"public partial struct SelectSomeDataItem
 {
 	public string ObjectName { get; set; }
 
@@ -987,7 +934,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem
+				@"public partial struct SelectSomeDataItem
 {
 	public string ObjectName { get; internal set; }
 
@@ -1028,7 +975,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.ShouldBeEmpty();
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem
+				@"public partial struct SelectSomeDataItem
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -1154,7 +1101,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+				@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -1254,7 +1201,7 @@ namespace SqlFirst.Codegen.Text.Tests
 			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
 
 			resultItem.Item.ShouldBe(
-@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+				@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
 {
 	private string _objectName;
 	private int? _currentStage;
@@ -1320,5 +1267,76 @@ namespace SqlFirst.Codegen.Text.Tests
 	partial void AfterLoadInternal();
 }");
 		}
+
+		#region Fixture
+
+		private const string QueryItemName = "SelectSomeDataItem";
+		private const string QueryName = "SelectSomeData";
+		private const string MyTestNamespace = "MyTestNamespace";
+
+		private static IDatabaseTypeMapper GetDefaultDatabaseTypeMapper()
+		{
+			var typeMapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
+			A.CallTo(() => typeMapper.MapToClrType("varchar", true)).Returns(typeof(string));
+			A.CallTo(() => typeMapper.MapToClrType("int", true)).Returns(typeof(int?));
+			A.CallTo(() => typeMapper.MapToClrType("bit", false)).Returns(typeof(bool));
+			return typeMapper;
+		}
+
+		private static IResultGenerationOptions GetDefaultResultGenerationOptions(params string[] options)
+		{
+			var result = A.Fake<IResultGenerationOptions>(p => p.Strict());
+
+			var defaultOptions = new List<ISqlFirstOption>();
+
+			foreach (string option in options)
+			{
+				if (!string.IsNullOrEmpty(option))
+				{
+					string[] array = option.Split(' ').Where(p => !string.IsNullOrEmpty(p)).ToArray();
+					defaultOptions.Add(new SqlFirstOption(array[0], array.Skip(1)));
+				}
+			}
+
+			A.CallTo(() => result.SqlFirstOptions).Returns(defaultOptions);
+			return result;
+		}
+
+		private static ICodeGenerationContext GetDefaultCodeGenerationContext(IDatabaseTypeMapper typeMapper)
+		{
+			var optionsDictionary = new Dictionary<string, object>
+			{
+				["Namespace"] = MyTestNamespace,
+				["QueryName"] = QueryName,
+				["QueryResultItemName"] = QueryItemName,
+			};
+
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+			A.CallTo(() => context.Options).Returns(optionsDictionary);
+
+			var parameter1 = A.Fake<IFieldDetails>(p => p.Strict());
+			A.CallTo(() => parameter1.DbType).Returns("varchar");
+			A.CallTo(() => parameter1.AllowDbNull).Returns(true);
+			A.CallTo(() => parameter1.ColumnName).Returns("OBJECT_Name");
+
+			var parameter2 = A.Fake<IFieldDetails>(p => p.Strict());
+			A.CallTo(() => parameter2.DbType).Returns("int");
+			A.CallTo(() => parameter2.AllowDbNull).Returns(true);
+			A.CallTo(() => parameter2.ColumnName).Returns("currentStage");
+
+			var parameter3 = A.Fake<IFieldDetails>(p => p.Strict());
+			A.CallTo(() => parameter3.DbType).Returns("bit");
+			A.CallTo(() => parameter3.AllowDbNull).Returns(false);
+			A.CallTo(() => parameter3.ColumnName).Returns("Is_Completed");
+
+			var outgoingParameters = new[] { parameter1, parameter2, parameter3 };
+
+			A.CallTo(() => context.OutgoingParameters).Returns(outgoingParameters);
+
+			A.CallTo(() => context.TypeMapper).Returns(typeMapper);
+			return context;
+		}
+
+		#endregion
 	}
 }

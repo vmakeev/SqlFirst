@@ -31,6 +31,5 @@ namespace SqlFirst.Core
 		/// Имя свойства параметра, содержащего специфичный тип данных БД
 		/// </summary>
 		string CommandParameterSpecificDbTypePropertyName { get; }
-
 	}
 }

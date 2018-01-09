@@ -22,7 +22,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin variables
+				@"-- begin variables
 
 test declarations
 
@@ -48,7 +48,6 @@ test body");
 				new QuerySection(QuerySectionType.Body, "test body_2"),
 				new QuerySection(QuerySectionType.Custom, "myCusTom1", "myCustom1_2"),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new MsSqlServerCodeEmitter();
@@ -57,7 +56,7 @@ test body");
 
 			// fuck my eyes...
 			query.ShouldBe(
-@"some useless text 1
+				@"some useless text 1
 
 -- begin sqlFirstOptions
 
@@ -104,7 +103,6 @@ test body_2");
 				new QuerySection(QuerySectionType.Unknown, "some useless text"),
 				new QuerySection(QuerySectionType.Declarations, "test declarations_2"),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new MsSqlServerCodeEmitter();
@@ -112,7 +110,7 @@ test body_2");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin sqlFirstOptions
+				@"-- begin sqlFirstOptions
 
 test options_1
 test options_2
@@ -142,7 +140,6 @@ test body");
 				new QuerySection(QuerySectionType.Unknown, string.Empty),
 				new QuerySection(QuerySectionType.Declarations, "test declarations_2"),
 				new QuerySection(QuerySectionType.Options, "test options_2"),
-
 			};
 
 			var emitter = new MsSqlServerCodeEmitter();
@@ -150,7 +147,7 @@ test body");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin sqlFirstOptions
+				@"-- begin sqlFirstOptions
 
 test options_1
 test options_2
@@ -177,7 +174,6 @@ test body");
 				new QuerySection(QuerySectionType.Options, string.Empty),
 				new QuerySection(QuerySectionType.Unknown, string.Empty),
 				new QuerySection(QuerySectionType.Declarations, "test declarations_2"),
-
 			};
 
 			var emitter = new MsSqlServerCodeEmitter();
@@ -185,7 +181,7 @@ test body");
 			string query = emitter.EmitQuery(sections);
 
 			query.ShouldBe(
-@"-- begin variables
+				@"-- begin variables
 
 test declarations_1
 test declarations_2
@@ -222,7 +218,6 @@ test body");
 				new QuerySection(QuerySectionType.Options, string.Empty),
 				new QuerySection(QuerySectionType.Unknown, string.Empty),
 				new QuerySection(QuerySectionType.Declarations, "test declarations_2"),
-
 			};
 
 			var emitter = new MsSqlServerCodeEmitter();
@@ -401,19 +396,16 @@ test declarations_2
 		[InlineData(" ", MsSqlDbType.Bigint)]
 		[InlineData("", MsSqlDbType.Bigint)]
 		[InlineData(null, MsSqlDbType.Bigint)]
-
 		[InlineData("		", "")]
 		[InlineData(" ", "")]
 		[InlineData("", "")]
 		[InlineData(null, "")]
 		[InlineData("test", "")]
-
 		[InlineData("		", " ")]
 		[InlineData(" ", " ")]
 		[InlineData("", " ")]
 		[InlineData(null, " ")]
 		[InlineData("test", " ")]
-
 		[InlineData("		", null)]
 		[InlineData(" ", null)]
 		[InlineData("", null)]

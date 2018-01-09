@@ -25,9 +25,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demo", "Demo", "{E0D49BD3-F
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.Codegen.Tests", "SqlFirst.Codegen.Tests\SqlFirst.Codegen.Tests.csproj", "{6FDE0FED-4681-4B0E-BDEF-357A2E992D6F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlFirst.Providers.Postgres", "SqlFirst.Providers.Postgres\SqlFirst.Providers.Postgres.csproj", "{A3B53EE7-3AA4-4C30-B81A-9DBD7D3EBADD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.Providers.Postgres", "SqlFirst.Providers.Postgres\SqlFirst.Providers.Postgres.csproj", "{A3B53EE7-3AA4-4C30-B81A-9DBD7D3EBADD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlFirst.Providers.Postgres.Tests", "SqlFirst.Providers.Postgres.Tests\SqlFirst.Providers.Postgres.Tests.csproj", "{B0DA8034-4C34-400F-A1E1-178389900153}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.Providers.Postgres.Tests", "SqlFirst.Providers.Postgres.Tests\SqlFirst.Providers.Postgres.Tests.csproj", "{B0DA8034-4C34-400F-A1E1-178389900153}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Providers", "Providers", "{0ED800C1-A297-4D72-911F-35469DAA062C}"
 EndProject

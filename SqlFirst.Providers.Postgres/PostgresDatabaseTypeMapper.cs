@@ -27,10 +27,13 @@ namespace SqlFirst.Providers.Postgres
 		}
 
 		/// <summary>
-		/// Возвращает <see cref="DbType"/>, который может быть безопасно использован для представления указанного типа данных в БД
+		/// Возвращает <see cref="DbType" />, который может быть безопасно использован для представления указанного типа данных в
+		/// БД
 		/// </summary>
 		/// <param name="dbType">Название типа данных в БД</param>
-		/// <returns><see cref="DbType"/></returns>
+		/// <returns>
+		/// <see cref="DbType" />
+		/// </returns>
 		public DbType MapToDbType(string dbType)
 		{
 			switch (PostgresDbType.Normalize(dbType))
@@ -137,10 +140,13 @@ namespace SqlFirst.Providers.Postgres
 		}
 
 		/// <summary>
-		/// Возвращает <see cref="IProviderSpecificType"/>, который может быть безопасно использован для представления указанного типа данных в БД
+		/// Возвращает <see cref="IProviderSpecificType" />, который может быть безопасно использован для представления указанного
+		/// типа данных в БД
 		/// </summary>
 		/// <param name="dbType">Название типа данных в БД</param>
-		/// <returns><see cref="IProviderSpecificType"/></returns>
+		/// <returns>
+		/// <see cref="IProviderSpecificType" />
+		/// </returns>
 		public IProviderSpecificType MapToProviderSpecificType(string dbType)
 		{
 			switch (PostgresDbType.Normalize(dbType))
@@ -401,7 +407,6 @@ namespace SqlFirst.Providers.Postgres
 
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dbType), dbType, $"Unsupported {typeof(PostgresDbType)}: {dbType}");
-
 			}
 		}
 	}

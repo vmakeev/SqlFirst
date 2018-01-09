@@ -32,7 +32,6 @@ namespace SqlFirst.Providers.MsSqlServer
 				throw new QueryParsingException("Unable to determine query results", ex);
 			}
 
-
 			if (schemaTable == null)
 			{
 				yield break;

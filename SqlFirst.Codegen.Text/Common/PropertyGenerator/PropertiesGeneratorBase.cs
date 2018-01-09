@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator.Impl;
 using SqlFirst.Codegen.Text.Templating;
 
@@ -12,12 +13,12 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 		protected readonly PropertyGenerationOptions _options;
 
 		/// <summary>
-		/// Инициализирует новый экземпляр класса <see cref="PropertiesGeneratorBase"/>
+		/// Инициализирует новый экземпляр класса <see cref="PropertiesGeneratorBase" />
 		/// </summary>
 		/// <param name="options">Параметры генерации свойств</param>
 		protected PropertiesGeneratorBase(PropertyGenerationOptions options)
 		{
-			_options = options ?? throw new System.ArgumentNullException(nameof(options));
+			_options = options ?? throw new ArgumentNullException(nameof(options));
 		}
 
 		/// <summary>

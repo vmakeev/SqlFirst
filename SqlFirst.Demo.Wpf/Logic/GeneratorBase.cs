@@ -13,31 +13,14 @@ namespace SqlFirst.Demo.Wpf.Logic
 	public abstract class GeneratorBase
 	{
 		public abstract SamplesBase Samples { get; }
+
 		public abstract IQueryParser QueryParser { get; }
+
 		public abstract ICodeGenerator CodeGenerator { get; }
+
 		public abstract IDatabaseTypeMapper TypeMapper { get; }
+
 		public abstract IDatabaseProvider DatabaseProvider { get; }
-
-		private IQueryInfo GetQueryInfo(string query, string connectionString)
-		{
-			IQueryInfo info = QueryParser.GetQueryInfo(query, connectionString);
-			return info;
-		}
-
-		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GeneratorParameters parameters)
-		{
-			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
-			{
-				["Namespace"] = parameters.Namespace,
-				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Result",
-				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Parameter",
-				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content
-			};
-			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
-
-			return context;
-		}
 
 		public IGeneratedItem GenerateParameterItem(string query, GeneratorParameters parameters)
 		{
@@ -129,5 +112,25 @@ namespace SqlFirst.Demo.Wpf.Logic
 			return itemCode;
 		}
 
+		private IQueryInfo GetQueryInfo(string query, string connectionString)
+		{
+			IQueryInfo info = QueryParser.GetQueryInfo(query, connectionString);
+			return info;
+		}
+
+		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GeneratorParameters parameters)
+		{
+			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
+			{
+				["Namespace"] = parameters.Namespace,
+				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal),
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Result",
+				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Parameter",
+				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content
+			};
+			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
+
+			return context;
+		}
 	}
 }

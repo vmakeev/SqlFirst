@@ -6,10 +6,11 @@ namespace SqlFirst.Codegen.Text.Templating
 {
 	public abstract class SnippetBase
 	{
-		protected abstract string BaseNamespace { get; }
-		protected abstract string FileExtension { get; }
-
 		private readonly string _prefix;
+
+		protected abstract string BaseNamespace { get; }
+
+		protected abstract string FileExtension { get; }
 
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		protected SnippetBase(string prefix)

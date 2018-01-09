@@ -6,13 +6,6 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 {
 	internal static class QuerySelect
 	{
-		private static string GetQueryText([CallerMemberName] string name = null)
-		{
-			Stream stream = typeof(QuerySelect).Assembly.GetManifestResourceStream($"SqlFirst.Providers.MsSqlServer.Tests.Queries.Select.{name}.sql");
-			string queryText = new StreamReader(stream ?? throw new InvalidOperationException()).ReadToEnd();
-			return queryText;
-		}
-
 		public static string SelectGuidAndDateWithUnknownUnnamedAndCustomSections => GetQueryText();
 
 		public static string SelectGuidAndDateWithUnknownAndCustomSections => GetQueryText();
@@ -46,5 +39,12 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 		public static string SelectNotUniqueFieldsWithRightJoin => GetQueryText();
 
 		public static string SelectNotUniqueNamedFieldsWithInnerJoin => GetQueryText();
+
+		private static string GetQueryText([CallerMemberName] string name = null)
+		{
+			Stream stream = typeof(QuerySelect).Assembly.GetManifestResourceStream($"SqlFirst.Providers.MsSqlServer.Tests.Queries.Select.{name}.sql");
+			string queryText = new StreamReader(stream ?? throw new InvalidOperationException()).ReadToEnd();
+			return queryText;
+		}
 	}
 }
