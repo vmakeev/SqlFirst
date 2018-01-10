@@ -1,0 +1,4 @@
+﻿$Modifiers` `| $$ObjectType$ $Name$$` : `BaseTypes|, $
+{
+$1|Content`\r\n`|\r\n\r\n$~
+}

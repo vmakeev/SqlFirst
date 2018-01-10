@@ -7,7 +7,7 @@ namespace SqlFirst.Codegen.Impl
 	public class GenericArgument : IGenericArgument
 	{
 		/// <inheritdoc />
-		public string GenericTemplateName { get; set; }
+		public string Type { get; set; }
 
 		/// <inheritdoc />
 		public bool IsGeneric { get; set; }

@@ -1,8 +1,6 @@
 ﻿using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
-using SqlFirst.Codegen.Text.Snippets;
-using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.ParameterItem.Impl
@@ -39,10 +37,6 @@ namespace SqlFirst.Codegen.Text.ParameterItem.Impl
 			return base.GenerateParameterItemInternal(context);
 		}
 
-		/// <summary>
-		/// Возвращает шаблон кода для генерации объекта
-		/// </summary>
-		/// <returns>Шаблон кода для генерации объекта</returns>
-		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Parameter.StructParameterItem;
+		protected override string ObjectType { get; } = ObjectTypes.Struct;
 	}
 }

@@ -2,6 +2,7 @@
 using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
+using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
@@ -61,9 +62,9 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 			var result = new GeneratedParameterItem
 			{
 				Namespace = targetNamespace,
-				ItemModifiers = new[] { Modifiers.Public },
-				ItemName = itemName,
-				BaseTypes = new IGeneratedType[0]
+				Modifiers = new[] { Modifiers.Public },
+				Name = itemName,
+				BaseTypes = Enumerable.Empty<IGeneratedType>()
 			};
 
 			IEnumerable<CodeMemberInfo> memberInfos = targetParameters.Select(info => CodeMemberInfo.FromQueryParamInfo(info, context.TypeMapper));
@@ -84,21 +85,22 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 
 			string itemText = template.Render(new
 			{
-				ItemName = result.ItemName,
-				Modificators = result.ItemModifiers.ToArray(),
 				Fields = backingFields,
 				Properties = properties
 			});
 
-			result.Item = itemText;
+			result.Content = itemText;
+			result.ObjectType = ObjectType;
 
 			return result;
 		}
+
+		protected abstract string ObjectType { get; }
 
 		/// <summary>
 		/// Возвращает шаблон кода для генерации объекта
 		/// </summary>
 		/// <returns>Шаблон кода для генерации объекта</returns>
-		protected abstract IRenderableTemplate GetTemplate();
+		protected IRenderableTemplate GetTemplate() => Snippet.Item.Content.ParameterItem;
 	}
 }

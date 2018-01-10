@@ -9,6 +9,21 @@ using System.Text.RegularExpressions;
 
 namespace SqlFirst.Codegen.Text.Templating
 {
+	public class RenderableTemplate<T> : RenderableTemplate, IRenderableTemplate<T> where T : class
+	{
+		/// <inheritdoc />
+		public RenderableTemplate(string template)
+			: base(template)
+		{
+		}
+
+		/// <inheritdoc />
+		public virtual string Render(T model)
+		{
+			return base.Render(model);
+		}
+	}
+
 	public class RenderableTemplate : IRenderableTemplate
 	{
 		private static readonly PropertyEqualityComparer _propertyEqualityComparer = new PropertyEqualityComparer();
@@ -29,7 +44,7 @@ namespace SqlFirst.Codegen.Text.Templating
 		}
 
 		/// <inheritdoc />
-		public string Render(object model)
+		public virtual string Render(object model)
 		{
 			if (model == null)
 			{
@@ -65,12 +80,12 @@ namespace SqlFirst.Codegen.Text.Templating
 			return sb.ToString();
 		}
 
-		public string Render()
+		public virtual string Render()
 		{
 			return Render(null);
 		}
 
-		protected string GetValue(object modelValue, string enumerableDelimiter)
+		protected virtual string GetValue(object modelValue, string enumerableDelimiter)
 		{
 			switch (modelValue)
 			{

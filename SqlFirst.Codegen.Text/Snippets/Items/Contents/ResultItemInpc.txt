@@ -1,0 +1,16 @@
+﻿$Fields`\r\n\r\n`|\r\n$~
+$Properties`\r\n`|\r\n\r\n$~
+
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
+
+public event PropertyChangedEventHandler PropertyChanged;
+
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
+
+partial void AfterLoadInternal();

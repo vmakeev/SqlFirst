@@ -1,12 +1,20 @@
-﻿using SqlFirst.Codegen.Text.Snippets.Items.Parameter;
-using SqlFirst.Codegen.Text.Snippets.Items.Result;
+﻿using SqlFirst.Codegen.Text.Snippets.Items.Contents;
+using SqlFirst.Codegen.Text.Snippets.Items.Types;
+using SqlFirst.Codegen.Text.Templating;
+using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Text.Snippets.Items
 {
-	internal class ItemSnippet
+	internal class ItemSnippet : SqlFirstSnippet
 	{
-		public ResultItemSnippet Result { get; } = new ResultItemSnippet();
+		public ContentSnippet Content { get; } = new ContentSnippet();
+		public TypeSnippet Type { get; } = new TypeSnippet();
 
-		public ParameterItemSnippet Parameter { get; } = new ParameterItemSnippet();
+		public IRenderableTemplate<IGeneratedItem> Item => new ItemRenderableTemplate(GetText(nameof(Item)));
+
+		public ItemSnippet()
+			: base("Items")
+		{
+		}
 	}
 }

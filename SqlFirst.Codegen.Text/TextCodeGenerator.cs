@@ -50,26 +50,27 @@ namespace SqlFirst.Codegen.Text
 
 			IEnumerable<IRenderable> usings = items
 											.SelectMany(generatedItem => generatedItem.Usings)
-											.Distinct(StringComparer.InvariantCultureIgnoreCase)
+											.Distinct(StringComparer.InvariantCulture)
 											.OrderBy(usingName => usingName)
 											.Select(usingName => Renderable.Create(usingSnippet, new { Using = usingName }));
 
-			IGrouping<string, (string Namespace, string Data)>[] namespaceDataItems = items
-																					.Select(generatedItem => (Namespace: generatedItem.Namespace, Data: generatedItem.Item))
+			IRenderableTemplate<IGeneratedItem> itemTemplate = Snippet.Item.Item;
+			IGrouping<string, (string Namespace, IRenderable Item)>[] namespaceDataItems = items
+																					.Select(generatedItem => (Namespace: generatedItem.Namespace, Renderable.Create(itemTemplate, generatedItem)))
 																					.GroupBy(item => item.Namespace).ToArray();
 
 			var namespaces = new LinkedList<IRenderable>();
 
 			IRenderableTemplate namespaceTemplate = Snippet.File.Namespace;
-			foreach (IGrouping<string, (string Namespace, string Data)> namespaceDataItem in namespaceDataItems)
+			foreach (IGrouping<string, (string Namespace, IRenderable Item)> namespaceDataItem in namespaceDataItems)
 			{
 				string namespaceName = namespaceDataItem.Key;
-				string[] data = namespaceDataItem.Select(p => p.Data).ToArray();
+				IEnumerable<IRenderable> dataItems = namespaceDataItem.Select(p => p.Item);
 
 				var model = new
 				{
 					Namespace = namespaceName,
-					Data = data
+					Data = dataItems
 				};
 
 				namespaces.AddLast(Renderable.Create(namespaceTemplate, model));

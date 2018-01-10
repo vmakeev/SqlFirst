@@ -1,0 +1,9 @@
+﻿$Fields`\r\n\r\n`|\r\n$~
+$Properties`\r\n`|\r\n\r\n$~
+
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
+
+partial void AfterLoadInternal();

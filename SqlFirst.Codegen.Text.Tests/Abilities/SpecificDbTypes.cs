@@ -1,4 +1,5 @@
-﻿namespace MySpecificDatabaseTypes
+﻿// ReSharper disable once CheckNamespace
+namespace MySpecificDatabaseTypes
 {
 	internal class MySpecificParameterType
 	{

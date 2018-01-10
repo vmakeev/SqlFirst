@@ -10,7 +10,7 @@ namespace SqlFirst.Codegen.Trees
 		/// <summary>
 		/// Имя типа
 		/// </summary>
-		string TypeName { get; }
+		string Name { get; }
 
 		/// <summary>
 		/// Признак интерфейса
@@ -26,10 +26,5 @@ namespace SqlFirst.Codegen.Trees
 		/// Список обобщенных параметров
 		/// </summary>
 		IEnumerable<IGenericArgument> GenericArguments { get; }
-
-		/// <summary>
-		/// Условия, накладываемые на Generic параметры
-		/// </summary>
-		IEnumerable<string> GenericConditions { get; }
 	}
 }

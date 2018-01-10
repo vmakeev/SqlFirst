@@ -1,5 +1,6 @@
 using System;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.QueryObject.Options;
@@ -14,17 +15,15 @@ namespace SqlFirst.Codegen.Text.QueryObject
 		{
 			var result = new GeneratedQueryObject
 			{
-				ItemName = context.GetQueryName(),
+				Name = context.GetQueryName(),
 				Namespace = context.GetNamespace(),
-				ItemModifiers = new[] { "public", "partial" }
+				Modifiers = new[] { "public", "partial" }
 			};
 
 			IQueryObjectData data = GenerateQueryObjectData(context, options);
 
 			string item = Snippet.Query.QueryObject.Render(new
 			{
-				Modificators = result.ItemModifiers,
-				QueryName = context.GetQueryName(),
 				Nested = data.Nested,
 				Consts = data.Constants,
 				Fields = data.Fields,
@@ -32,8 +31,9 @@ namespace SqlFirst.Codegen.Text.QueryObject
 				Methods = data.Methods
 			});
 
-			result.Item = item;
-			result.Usings = data.Usings;
+			result.Content = item;
+			result.Usings = data.Usings.Distinct().OrderBy(@using => @using);
+			result.ObjectType = ObjectTypes.Class; 
 
 			return result;
 		}

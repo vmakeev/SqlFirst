@@ -26,33 +26,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public virtual string ObjectName { get; set; }
+
+public virtual int? CurrentStage { get; set; }
+
+public virtual bool IsCompleted { get; set; }
+
+internal void AfterLoad()
 {
-	public virtual string ObjectName { get; set; }
+	AfterLoadInternal();
+}
 
-	public virtual int? CurrentStage { get; set; }
-
-	public virtual bool IsCompleted { get; set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -75,33 +72,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public virtual string ObjectName { get; internal set; }
+
+public virtual int? CurrentStage { get; internal set; }
+
+public virtual bool IsCompleted { get; internal set; }
+
+internal void AfterLoad()
 {
-	public virtual string ObjectName { get; internal set; }
+	AfterLoadInternal();
+}
 
-	public virtual int? CurrentStage { get; internal set; }
-
-	public virtual bool IsCompleted { get; internal set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -118,49 +112,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public virtual string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	set => _objectName = value;
+}
 
-	public virtual string ObjectName
-	{
-		get => _objectName;
-		set => _objectName = value;
-	}
+public virtual int? CurrentStage
+{
+	get => _currentStage;
+	set => _currentStage = value;
+}
 
-	public virtual int? CurrentStage
-	{
-		get => _currentStage;
-		set => _currentStage = value;
-	}
+public virtual bool IsCompleted
+{
+	get => _isCompleted;
+	set => _isCompleted = value;
+}
 
-	public virtual bool IsCompleted
-	{
-		get => _isCompleted;
-		set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -177,49 +168,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public virtual string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	internal set => _objectName = value;
+}
 
-	public virtual string ObjectName
-	{
-		get => _objectName;
-		internal set => _objectName = value;
-	}
+public virtual int? CurrentStage
+{
+	get => _currentStage;
+	internal set => _currentStage = value;
+}
 
-	public virtual int? CurrentStage
-	{
-		get => _currentStage;
-		internal set => _currentStage = value;
-	}
+public virtual bool IsCompleted
+{
+	get => _isCompleted;
+	internal set => _isCompleted = value;
+}
 
-	public virtual bool IsCompleted
-	{
-		get => _isCompleted;
-		internal set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		//------------------------------------------------------------------
@@ -241,33 +229,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public string ObjectName { get; set; }
+
+public int? CurrentStage { get; set; }
+
+public bool IsCompleted { get; set; }
+
+internal void AfterLoad()
 {
-	public string ObjectName { get; set; }
+	AfterLoadInternal();
+}
 
-	public int? CurrentStage { get; set; }
-
-	public bool IsCompleted { get; set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -285,33 +270,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public string ObjectName { get; internal set; }
+
+public int? CurrentStage { get; internal set; }
+
+public bool IsCompleted { get; internal set; }
+
+internal void AfterLoad()
 {
-	public string ObjectName { get; internal set; }
+	AfterLoadInternal();
+}
 
-	public int? CurrentStage { get; internal set; }
-
-	public bool IsCompleted { get; internal set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -327,49 +309,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	set => _objectName = value;
+}
 
-	public string ObjectName
-	{
-		get => _objectName;
-		set => _objectName = value;
-	}
+public int? CurrentStage
+{
+	get => _currentStage;
+	set => _currentStage = value;
+}
 
-	public int? CurrentStage
-	{
-		get => _currentStage;
-		set => _currentStage = value;
-	}
+public bool IsCompleted
+{
+	get => _isCompleted;
+	set => _isCompleted = value;
+}
 
-	public bool IsCompleted
-	{
-		get => _isCompleted;
-		set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -385,49 +364,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial class SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	internal set => _objectName = value;
+}
 
-	public string ObjectName
-	{
-		get => _objectName;
-		internal set => _objectName = value;
-	}
+public int? CurrentStage
+{
+	get => _currentStage;
+	internal set => _currentStage = value;
+}
 
-	public int? CurrentStage
-	{
-		get => _currentStage;
-		internal set => _currentStage = value;
-	}
+public bool IsCompleted
+{
+	get => _isCompleted;
+	internal set => _isCompleted = value;
+}
 
-	public bool IsCompleted
-	{
-		get => _isCompleted;
-		internal set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		//------------------------------------------------------------------
@@ -446,11 +422,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -459,80 +435,76 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
+			resultItem.Content.ShouldBe(
 
 				#region Too long result
 
-				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public virtual string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public virtual string ObjectName
+	get => _objectName;
+	set
 	{
-		get => _objectName;
-		set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public virtual int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public virtual int? CurrentStage
+{
+	get => _currentStage;
+	set
 	{
-		get => _currentStage;
-		set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public virtual bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public virtual bool IsCompleted
+{
+	get => _isCompleted;
+	set
 	{
-		get => _isCompleted;
-		set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}"
+partial void AfterLoadInternal();"
 
 				#endregion
 
@@ -554,11 +526,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -567,80 +539,76 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
+			resultItem.Content.ShouldBe(
 
 				#region Too long result
 
-				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public virtual string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public virtual string ObjectName
+	get => _objectName;
+	internal set
 	{
-		get => _objectName;
-		internal set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public virtual int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public virtual int? CurrentStage
+{
+	get => _currentStage;
+	internal set
 	{
-		get => _currentStage;
-		internal set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public virtual bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public virtual bool IsCompleted
+{
+	get => _isCompleted;
+	internal set
 	{
-		get => _isCompleted;
-		internal set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}"
+partial void AfterLoadInternal();"
 
 				#endregion
 
@@ -662,11 +630,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -675,80 +643,76 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
+			resultItem.Content.ShouldBe(
 
 				#region Too long result
 
-				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public string ObjectName
+	get => _objectName;
+	set
 	{
-		get => _objectName;
-		set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public int? CurrentStage
+{
+	get => _currentStage;
+	set
 	{
-		get => _currentStage;
-		set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public bool IsCompleted
+{
+	get => _isCompleted;
+	set
 	{
-		get => _isCompleted;
-		set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}"
+partial void AfterLoadInternal();"
 
 				#endregion
 
@@ -770,11 +734,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -783,80 +747,76 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
+			resultItem.Content.ShouldBe(
 
 				#region Too long result
 
-				@"public partial class SelectSomeDataItem : INotifyPropertyChanged
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public string ObjectName
+	get => _objectName;
+	internal set
 	{
-		get => _objectName;
-		internal set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public int? CurrentStage
+{
+	get => _currentStage;
+	internal set
 	{
-		get => _currentStage;
-		internal set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public bool IsCompleted
+{
+	get => _isCompleted;
+	internal set
 	{
-		get => _isCompleted;
-		internal set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected virtual void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}"
+partial void AfterLoadInternal();"
 
 				#endregion
 
@@ -879,33 +839,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public string ObjectName { get; set; }
+
+public int? CurrentStage { get; set; }
+
+public bool IsCompleted { get; set; }
+
+internal void AfterLoad()
 {
-	public string ObjectName { get; set; }
+	AfterLoadInternal();
+}
 
-	public int? CurrentStage { get; set; }
-
-	public bool IsCompleted { get; set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -922,33 +879,30 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"public string ObjectName { get; internal set; }
+
+public int? CurrentStage { get; internal set; }
+
+public bool IsCompleted { get; internal set; }
+
+internal void AfterLoad()
 {
-	public string ObjectName { get; internal set; }
+	AfterLoadInternal();
+}
 
-	public int? CurrentStage { get; internal set; }
-
-	public bool IsCompleted { get; internal set; }
-
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -963,49 +917,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	set => _objectName = value;
+}
 
-	public string ObjectName
-	{
-		get => _objectName;
-		set => _objectName = value;
-	}
+public int? CurrentStage
+{
+	get => _currentStage;
+	set => _currentStage = value;
+}
 
-	public int? CurrentStage
-	{
-		get => _currentStage;
-		set => _currentStage = value;
-	}
+public bool IsCompleted
+{
+	get => _isCompleted;
+	set => _isCompleted = value;
+}
 
-	public bool IsCompleted
-	{
-		get => _isCompleted;
-		set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -1021,49 +972,46 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(1);
 			resultItem.Usings.ShouldContain("System");
 
 			resultItem.BaseTypes.ShouldBeEmpty();
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
+	get => _objectName;
+	internal set => _objectName = value;
+}
 
-	public string ObjectName
-	{
-		get => _objectName;
-		internal set => _objectName = value;
-	}
+public int? CurrentStage
+{
+	get => _currentStage;
+	internal set => _currentStage = value;
+}
 
-	public int? CurrentStage
-	{
-		get => _currentStage;
-		internal set => _currentStage = value;
-	}
+public bool IsCompleted
+{
+	get => _isCompleted;
+	internal set => _isCompleted = value;
+}
 
-	public bool IsCompleted
-	{
-		get => _isCompleted;
-		internal set => _isCompleted = value;
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
-
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		//------------------------------------------------------------------
@@ -1082,11 +1030,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -1095,77 +1043,73 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public string ObjectName
+	get => _objectName;
+	set
 	{
-		get => _objectName;
-		set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public int? CurrentStage
+{
+	get => _currentStage;
+	set
 	{
-		get => _currentStage;
-		set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public bool IsCompleted
+{
+	get => _isCompleted;
+	set
 	{
-		get => _isCompleted;
-		set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		[Theory]
@@ -1182,11 +1126,11 @@ namespace SqlFirst.Codegen.Text.Tests
 
 			IGeneratedResultItem resultItem = generator.GenerateResultItem(context, options);
 
-			resultItem.ItemName.ShouldBe("SelectSomeDataItem");
+			resultItem.Name.ShouldBe("SelectSomeDataItem");
 
-			resultItem.ItemModifiers.Count().ShouldBe(2);
-			resultItem.ItemModifiers.ShouldContain("public");
-			resultItem.ItemModifiers.ShouldContain("partial");
+			resultItem.Modifiers.Count().ShouldBe(2);
+			resultItem.Modifiers.ShouldContain("public");
+			resultItem.Modifiers.ShouldContain("partial");
 
 			resultItem.Usings.Count().ShouldBe(2);
 			resultItem.Usings.ShouldContain("System");
@@ -1195,77 +1139,73 @@ namespace SqlFirst.Codegen.Text.Tests
 			resultItem.BaseTypes.Count().ShouldBe(1);
 			IGeneratedType type = resultItem.BaseTypes.Single();
 			type.GenericArguments.ShouldBeEmpty();
-			type.GenericConditions.ShouldBeEmpty();
 			type.IsGeneric.ShouldBeFalse();
 			type.IsInterface.ShouldBeTrue();
-			type.TypeName.ShouldBe(nameof(INotifyPropertyChanged));
+			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
-			resultItem.Item.ShouldBe(
-				@"public partial struct SelectSomeDataItem : INotifyPropertyChanged
+			resultItem.Content.ShouldBe(
+				@"private string _objectName;
+private int? _currentStage;
+private bool _isCompleted;
+
+public string ObjectName
 {
-	private string _objectName;
-	private int? _currentStage;
-	private bool _isCompleted;
-
-	public string ObjectName
+	get => _objectName;
+	internal set
 	{
-		get => _objectName;
-		internal set
+		if (value == _objectName)
 		{
-			if (value == _objectName)
-			{
-				return;
-			}
-
-			_objectName = value;
-			OnPropertyChanged(nameof(ObjectName));
+			return;
 		}
-	}
 
-	public int? CurrentStage
+		_objectName = value;
+		OnPropertyChanged(nameof(ObjectName));
+	}
+}
+
+public int? CurrentStage
+{
+	get => _currentStage;
+	internal set
 	{
-		get => _currentStage;
-		internal set
+		if (value == _currentStage)
 		{
-			if (value == _currentStage)
-			{
-				return;
-			}
-
-			_currentStage = value;
-			OnPropertyChanged(nameof(CurrentStage));
+			return;
 		}
-	}
 
-	public bool IsCompleted
+		_currentStage = value;
+		OnPropertyChanged(nameof(CurrentStage));
+	}
+}
+
+public bool IsCompleted
+{
+	get => _isCompleted;
+	internal set
 	{
-		get => _isCompleted;
-		internal set
+		if (value == _isCompleted)
 		{
-			if (value == _isCompleted)
-			{
-				return;
-			}
-
-			_isCompleted = value;
-			OnPropertyChanged(nameof(IsCompleted));
+			return;
 		}
+
+		_isCompleted = value;
+		OnPropertyChanged(nameof(IsCompleted));
 	}
+}
 
-	internal void AfterLoad()
-	{
-		AfterLoadInternal();
-	}
+internal void AfterLoad()
+{
+	AfterLoadInternal();
+}
 
-	public event PropertyChangedEventHandler PropertyChanged;
+public event PropertyChangedEventHandler PropertyChanged;
 
-	protected void OnPropertyChanged(string propertyName)
-	{
-		PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-	}
+protected void OnPropertyChanged(string propertyName)
+{
+	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+}
 
-	partial void AfterLoadInternal();
-}");
+partial void AfterLoadInternal();");
 		}
 
 		#region Fixture

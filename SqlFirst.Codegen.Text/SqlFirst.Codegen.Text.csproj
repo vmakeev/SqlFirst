@@ -25,9 +25,11 @@
     <None Remove="Snippets\Files\DefaultFile.txt" />
     <None Remove="Snippets\Files\Namespace.txt" />
     <None Remove="Snippets\Files\Using.txt" />
+    <None Remove="Snippets\Items\Item.txt" />
     <None Remove="Snippets\Items\NotifyPropertyChangedStructResultItem.txt" />
     <None Remove="Snippets\Items\PocoParameterItem.txt" />
     <None Remove="Snippets\Items\StructParameterItem.txt" />
+    <None Remove="Snippets\Items\Types\Type.txt" />
     <None Remove="Snippets\NotifyPropertyChangedBackingFieldProperty.txt" />
     <None Remove="Snippets\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
     <None Remove="Snippets\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
@@ -99,8 +101,9 @@
     <EmbeddedResource Include="Snippets\Fields\Field.txt" />
     <EmbeddedResource Include="Snippets\Fields\BackingFieldWithValue.txt" />
     <EmbeddedResource Include="Snippets\Fields\ReadOnlyField.txt" />
-    <EmbeddedResource Include="Snippets\Items\Parameter\PocoParameterItem.txt" />
-    <EmbeddedResource Include="Snippets\Items\Parameter\StructParameterItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Contents\ParameterItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Item.txt" />
+    <EmbeddedResource Include="Snippets\Items\Types\Type.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyWithDefault.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyVirtualWithDefault.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoPropertyVirtualWithDefault.txt" />
@@ -144,7 +147,6 @@
   <ItemGroup>
     <EmbeddedResource Include="Snippets\Files\DefaultFile.txt" />
     <EmbeddedResource Include="Snippets\Files\Namespace.txt" />
-    <EmbeddedResource Include="Snippets\Items\Result\NotifyPropertyChangedStructResultItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\AutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Fields\BackingField.txt" />
@@ -154,13 +156,12 @@
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\NotifyPropertyChangedBackingFieldPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\ReadOnly\NotifyPropertyChangedReadOnlyBackingFieldProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\Inpc\ReadOnly\NotifyPropertyChangedReadOnlyBackingFieldPropertyVirtual.txt" />
-    <EmbeddedResource Include="Snippets\Items\Result\NotifyPropertyChangedClassResultItem.txt" />
-    <EmbeddedResource Include="Snippets\Items\Result\PocoResultItem.txt" />
+    <EmbeddedResource Include="Snippets\Items\Contents\ResultItemInpc.txt" />
+    <EmbeddedResource Include="Snippets\Items\Contents\ResultItem.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\Auto\ReadOnly\ReadOnlyAutoPropertyVirtual.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\ReadOnly\ReadOnlyBackingFieldProperty.txt" />
     <EmbeddedResource Include="Snippets\Properties\BackingField\ReadOnly\ReadOnlyBackingFieldPropertyVirtual.txt" />
-    <EmbeddedResource Include="Snippets\Items\Result\StructResultItem.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\MapField.txt" />

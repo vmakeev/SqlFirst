@@ -22,6 +22,10 @@ namespace SqlFirst.Codegen.Text.Templating
 		{
 			return new RenderableTemplate(GetText(name));
 		}
+		protected virtual IRenderableTemplate<T> GetRenderableTemplate<T>([CallerMemberName] string name = null) where T : class
+		{
+			return new RenderableTemplate<T>(GetText(name));
+		}
 
 		protected virtual IRenderable GetRenderable([CallerMemberName] string name = null)
 		{

@@ -58,9 +58,10 @@ namespace SqlFirst.Codegen.Text.ResultItem
 			var result = new GeneratedResultItem
 			{
 				Namespace = targetNamespace,
-				ItemModifiers = new[] { Modifiers.Public, Modifiers.Partial },
-				ItemName = itemName,
-				BaseTypes = Enumerable.Empty<IGeneratedType>()
+				Modifiers = new[] { Modifiers.Public, Modifiers.Partial },
+				Name = itemName,
+				BaseTypes = GetBaseTypes(),
+				ObjectType = ObjectType
 			};
 
 			IEnumerable<CodeMemberInfo> memberInfos = context.OutgoingParameters.Select(info => CodeMemberInfo.FromFieldDetails(info, context.TypeMapper));
@@ -81,16 +82,25 @@ namespace SqlFirst.Codegen.Text.ResultItem
 
 			string item = template.Render(new
 			{
-				ItemName = result.ItemName,
-				Modificators = result.ItemModifiers,
 				Fields = backingFields,
 				Properties = properties
 			});
 
-			result.Item = item;
+			result.Content = item;
 
 			return result;
 		}
+
+		/// <summary>
+		/// Возвращает базовые для генерируемого объекта типы
+		/// </summary>
+		/// <returns></returns>
+		protected abstract IEnumerable<IGeneratedType> GetBaseTypes();
+
+		/// <summary>
+		/// Тип объекта
+		/// </summary>
+		protected abstract string ObjectType { get; }
 
 		/// <summary>
 		/// Возвращает шаблон кода для генерации объекта

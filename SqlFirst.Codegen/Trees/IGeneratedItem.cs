@@ -20,12 +20,12 @@ namespace SqlFirst.Codegen.Trees
 		/// <summary>
 		/// Имя сгенерированного элемента
 		/// </summary>
-		string ItemName { get; }
+		string Name { get; }
 
 		/// <summary>
 		/// Модификаторы сгенерированного элемента
 		/// </summary>
-		IEnumerable<string> ItemModifiers { get; }
+		IEnumerable<string> Modifiers { get; }
 
 		/// <summary>
 		/// Перечень базовых типов для сгенерированного
@@ -33,8 +33,13 @@ namespace SqlFirst.Codegen.Trees
 		IEnumerable<IGeneratedType> BaseTypes { get; }
 
 		/// <summary>
-		/// Полный текст сгенерированного элемента
+		/// Содержимое сгенерированного элемента
 		/// </summary>
-		string Item { get; }
+		string Content { get; }
+
+		/// <summary>
+		/// Тип объекта (класс, перечисление, структура)
+		/// </summary>
+		string ObjectType { get; }
 	}
 }

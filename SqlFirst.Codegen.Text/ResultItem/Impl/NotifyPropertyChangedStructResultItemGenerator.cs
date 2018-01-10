@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
-using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
 using SqlFirst.Codegen.Text.QueryObject;
@@ -31,27 +30,15 @@ namespace SqlFirst.Codegen.Text.ResultItem.Impl
 		}
 
 		/// <inheritdoc />
-		protected override GeneratedResultItem GenerateResultItemInternal(ICodeGenerationContext context)
+		protected override IEnumerable<IGeneratedType> GetBaseTypes()
 		{
-			GeneratedResultItem result = base.GenerateResultItemInternal(context);
-
-			var baseTypes = new List<IGeneratedType>
-			{
-				new GeneratedType
-				{
-					IsInterface = true,
-					TypeName = nameof(INotifyPropertyChanged)
-				}
-			};
-
-			result.BaseTypes = result.BaseTypes == null
-				? baseTypes
-				: result.BaseTypes.Concat(baseTypes);
-
-			return result;
+			yield return new GeneratedType(typeof(INotifyPropertyChanged));
 		}
+		
+		/// <inheritdoc />
+		protected override string ObjectType { get; } = ObjectTypes.Struct;
 
 		/// <inheritdoc />
-		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Result.NotifyPropertyChangedStructResultItem;
+		protected override IRenderableTemplate GetTemplate() => Snippet.Item.Content.ResultItemInpc;
 	}
 }

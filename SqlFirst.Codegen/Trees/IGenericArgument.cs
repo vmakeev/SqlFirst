@@ -8,9 +8,9 @@ namespace SqlFirst.Codegen.Trees
 	public interface IGenericArgument
 	{
 		/// <summary>
-		/// Имя шаблона обобщенного параметра
+		/// Имя конкретного типа обобщенного параметра
 		/// </summary>
-		string GenericTemplateName { get; }
+		string Type { get; }
 
 		/// <summary>
 		/// Признак аргумента обобщенного типа
