@@ -1,0 +1,1 @@
+-s "$(SolutionDir)$(SolutionFileName)" -p "$(ProjectDir)$(ProjectFileName)" -f "$(ItemPath)"

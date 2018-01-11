@@ -1,0 +1,4 @@
+{
+  "ConnectionString": "Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;",
+  "Dialect": "MsSqlServer"
+}

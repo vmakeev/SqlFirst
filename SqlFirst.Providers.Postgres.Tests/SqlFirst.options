@@ -1,0 +1,4 @@
+{
+  "ConnectionString": "Server = 127.0.0.1; Port = 5432; Database = CasebookApi.Arbitrage.Tracking_dev; User Id = postgres;Password = postgres;",
+  "Dialect": "Postgres"
+}

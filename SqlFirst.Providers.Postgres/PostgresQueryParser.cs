@@ -17,6 +17,11 @@ namespace SqlFirst.Providers.Postgres
 		/// <inheritdoc />
 		public override IEnumerable<IFieldDetails> GetResultDetails(string queryText, string connectionString)
 		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
 			DataTable schemaTable;
 
 			try
@@ -88,6 +93,11 @@ namespace SqlFirst.Providers.Postgres
 		/// <inheritdoc />
 		public override IQueryInfo GetQueryInfo(string queryText, string connectionString)
 		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
 			IQueryBaseInfo baseInfo = GetQueryBaseInfo(queryText);
 
 			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText);
@@ -127,6 +137,11 @@ namespace SqlFirst.Providers.Postgres
 		/// <returns>Информация о параметрах</returns>
 		protected override IEnumerable<IQueryParamInfo> GetUndeclaredParametersInternal(IEnumerable<IQueryParamInfo> declared, string queryText, string connectionString)
 		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
 			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
 			{
 				connection.Open();
@@ -165,6 +180,11 @@ namespace SqlFirst.Providers.Postgres
 		/// <returns>Таблица со схемой запроса</returns>
 		private DataTable GetQuerySchema(string queryText, string connectionString)
 		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
 			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
 			{
 				connection.Open();

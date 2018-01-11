@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "SqlFirst.VisualStudio.ExternalTool": {
+      "commandName": "Project",
+      "commandLineArgs": "/?"
+    }
+  }
+}
