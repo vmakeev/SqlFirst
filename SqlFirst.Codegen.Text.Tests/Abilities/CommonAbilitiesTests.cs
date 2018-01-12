@@ -112,7 +112,7 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 
 			result.Fields.ShouldNotBeNull();
 			result.Fields.Count().ShouldBe(3);
-			result.Fields.ShouldContain("private readonly int _queryTextChecksum = 39193;");
+			result.Fields.ShouldContain("private const int QueryTextChecksum = 39193;");
 			result.Fields.ShouldContain("private string _cachedSql;");
 			result.Fields.ShouldContain("private readonly object _cachedSqlLocker = new object();");
 
@@ -186,14 +186,14 @@ protected virtual string GetQueryText()
 			{
 				string sql = new StreamReader(stream ?? throw new InvalidOperationException(""Can not get manifest resource stream."")).ReadToEnd();
 				
-				if (CalculateChecksum(sql) != _queryTextChecksum)
+				if (CalculateChecksum(sql) != QueryTextChecksum)
 				{
 					throw new Exception($""{GetType().FullName}: query text was changed. Query object must be re-generated."");
 				}
 
 				const string sectionRegexPattern = @""--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n"";
 				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-				sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
+				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
 
 				_cachedSql = sql;
 			}

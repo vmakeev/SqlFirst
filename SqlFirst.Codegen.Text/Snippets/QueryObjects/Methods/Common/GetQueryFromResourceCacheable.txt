@@ -19,7 +19,7 @@ protected virtual string GetQueryText()
 
 				const string sectionRegexPattern = @"--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n";
 				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-				sql = Regex.Replace(sql, sectionRegexPattern, String.Empty, regexOptions);
+				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
 
 				$CacheName$ = sql;
 			}

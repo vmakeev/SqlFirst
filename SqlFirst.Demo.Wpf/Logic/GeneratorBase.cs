@@ -31,7 +31,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 				return null;
 			}
 
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
 			IGeneratedItem generatedItem = CodeGenerator.GenerateParameterItem(context, itemOptions);
@@ -48,7 +48,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 				return null;
 			}
 
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
 			IGeneratedItem generatedItem = CodeGenerator.GenerateResultItem(context, itemOptions);
@@ -90,7 +90,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
 			IGeneratedItem generatedItem = CodeGenerator.GenerateQueryObject(context, queryOptions);
@@ -118,7 +118,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 			return info;
 		}
 
-		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GeneratorParameters parameters)
+		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GeneratorParameters parameters, string rawQuery)
 		{
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
 			{
@@ -127,6 +127,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Result",
 				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Parameter",
 				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content,
+				["QueryTextRaw"] = rawQuery,
 				["ResourcePath"] = $"{parameters.Namespace}.{parameters.QueryName}.sql"
 			};
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);

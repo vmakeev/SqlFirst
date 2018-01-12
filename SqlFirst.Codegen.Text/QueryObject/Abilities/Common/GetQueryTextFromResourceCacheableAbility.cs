@@ -14,7 +14,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
-			(string checksumFieldName, IRenderable checksumField) = GetChecksumField(context.GetQueryText());
+			(string checksumFieldName, IRenderable checksumField) = GetChecksumField(context.GetQueryTextRaw());
 			(string cacheFieldName, IRenderable cacheField) = GetCacheField();
 			(string lockerFieldName, IRenderable lockerField) = GetLockerField();
 
@@ -103,12 +103,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		{
 			int queryTextHash = CalculateChecksum(queryText);
 
-			string checksumFieldName = CSharpCodeHelper.GetValidIdentifierName("queryTextChecksum", NamingPolicy.CamelCaseWithUnderscope);
+			string checksumFieldName = CSharpCodeHelper.GetValidIdentifierName("queryTextChecksum", NamingPolicy.Pascal);
 			string hashCodeFieldType = CSharpCodeHelper.GetTypeBuiltInName(typeof(int));
 
-			IRenderableTemplate template = Snippet.Field.ReadOnlyField;
+			IRenderableTemplate template = Snippet.Field.Const;
 			var model = new
 			{
+				Modificators = new[] { Modifiers.Private },
 				Type = hashCodeFieldType,
 				Name = checksumFieldName,
 				Value = queryTextHash.ToString(CultureInfo.InvariantCulture)

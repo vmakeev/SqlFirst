@@ -39,7 +39,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 			}
 
 			Log.Info("Preparing to generate parameter item");
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
 			Log.Info("Parameter item generating is in progress");
@@ -60,7 +60,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 			}
 
 			Log.Info("Preparing to generate result item");
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
 			Log.Info("Result item generating is in progress");
@@ -107,7 +107,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
 			Log.Info("Preparing to generate query object");
-			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters);
+			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
 			Log.Info("Query object generating is in progress");
@@ -147,7 +147,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 			return new QueryInfoWrapper(baseIinfo);
 		}
 
-		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GenerationOptions parameters)
+		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GenerationOptions parameters, string rawSql)
 		{
 			string queryName = Path.GetFileNameWithoutExtension(parameters.QueryFile);
 			string queryItemName = CSharpCodeHelper.GetValidIdentifierName(queryName, NamingPolicy.Pascal);
@@ -159,6 +159,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 				["QueryResultItemName"] = parameters.ResultItemName,
 				["QueryParameterItemName"] = parameters.ParameterItemName,
 				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content,
+				["QueryTextRaw"] = rawSql,
 				["ResourcePath"] = $"{parameters.Namespace}.{Path.GetFileName(parameters.QueryFile)}"
 			};
 

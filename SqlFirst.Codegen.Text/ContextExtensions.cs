@@ -38,6 +38,16 @@ namespace SqlFirst.Codegen.Text
 		}
 
 		/// <summary>
+		/// Возвращает полный текст оригинального запроса, включая комментарии и секции параметров
+		/// </summary>
+		/// <param name="context">Контекст генерации кода</param>
+		/// <returns>Текст оригинального запроса, включая комментарии и секции параметров</returns>
+		public static string GetQueryTextRaw(this ICodeGenerationContext context)
+		{
+			return context.GetOption<string>("QueryTextRaw");
+		}
+
+		/// <summary>
 		/// Возвращает имя генерируемого класса с результатом
 		/// </summary>
 		/// <param name="context">Контекст генерации кода</param>

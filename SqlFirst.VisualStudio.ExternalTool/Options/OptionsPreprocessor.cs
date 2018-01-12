@@ -96,13 +96,18 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 				return "DefaultNamespace";
 			}
 
-			var projectFileUri = new Uri(projectPath.TrimEnd(separators) + separator, UriKind.Absolute);
-			var queryFileUri = new Uri(queryPath.TrimEnd(separators), UriKind.Absolute);
-			string relativeUri = projectFileUri.MakeRelativeUri(queryFileUri).ToString();
+			string relativeUri = string.Empty;
+			if (!string.Equals(projectPath, queryPath, StringComparison.OrdinalIgnoreCase))
+			{
+				var projectFileUri = new Uri(projectPath.TrimEnd(separators) + separator, UriKind.Absolute);
+				var queryFileUri = new Uri(queryPath.TrimEnd(separators), UriKind.Absolute);
+
+				relativeUri = projectFileUri.MakeRelativeUri(queryFileUri).ToString();
+			}
 
 			string rootNamespace = Path.GetFileNameWithoutExtension(projectFile);
 
-			var sb = new StringBuilder(rootNamespace + "." + relativeUri);
+			var sb = new StringBuilder(string.Join(".", new[] { rootNamespace, relativeUri }.Where(item => !string.IsNullOrEmpty(item))));
 			sb.Replace(Path.DirectorySeparatorChar, '.');
 			sb.Replace(Path.AltDirectorySeparatorChar, '.');
 
