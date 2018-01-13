@@ -9,7 +9,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 {
 	internal static class CsprojHelper
 	{
-		private static readonly ILog _log = LogManager.GetLogger(nameof(CsprojHelper));
+		private static readonly ILog _log = LogManager.GetLogger(typeof(CsprojHelper));
 
 		public static Project BeginUpdate(string csprojPath)
 		{

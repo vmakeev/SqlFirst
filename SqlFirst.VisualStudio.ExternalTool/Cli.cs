@@ -11,7 +11,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 {
 	public static class Cli
 	{
-		private static readonly ILog _log = LogManager.GetLogger("Main");
+		private static readonly ILog _log = LogManager.GetLogger(typeof(Cli));
 
 		public static int Main(params string[] args)
 		{

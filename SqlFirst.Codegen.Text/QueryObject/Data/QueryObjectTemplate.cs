@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Common.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Data
 {
 	internal class QueryObjectTemplate
 	{
+		private static readonly ILog _log = LogManager.GetLogger<QueryObjectTemplate>();
+
 		private readonly object _locker = new object();
 
 		private readonly List<IQueryObjectAbility> _abilities = new List<IQueryObjectAbility>();
@@ -42,6 +45,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Data
 				}
 
 				_abilities.Add(ability);
+
+				_log.Debug($"Ability [{ability.Name}] added as [{ability.GetType().Name}]");
 			}
 		}
 

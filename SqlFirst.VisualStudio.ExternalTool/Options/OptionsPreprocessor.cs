@@ -4,18 +4,16 @@ using System.Linq;
 using System.Text;
 using Common.Logging;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
 
 namespace SqlFirst.VisualStudio.ExternalTool.Options
 {
 	internal static class OptionsPreprocessor
 	{
-		private static readonly ILog _log = LogManager.GetLogger(nameof(OptionsPreprocessor));
-		private static readonly StringEnumConverter _stringEnumConverter = new StringEnumConverter();
+		private static readonly ILog _log = LogManager.GetLogger(typeof(OptionsPreprocessor));
 
 		public static void FillWithDefaults(this GenerationOptions generationOptions)
 		{
-			_log.Trace(p => p("Incoming:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter)));
+			_log.Trace(p => p("Incoming:\r\n" + generationOptions.ToString()));
 
 			if (!string.IsNullOrEmpty(generationOptions.QueryFile))
 			{
@@ -51,7 +49,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 
 			ApplyGlobalOptions(generationOptions);
 
-			_log.Trace(p => p("Processed:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter)));
+			_log.Trace(p => p("Processed:\r\n" + generationOptions.ToString()));
 		}
 
 		private static void ApplyGlobalOptions(GenerationOptions generationOptions)

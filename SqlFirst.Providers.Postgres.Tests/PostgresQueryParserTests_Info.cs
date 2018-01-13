@@ -171,7 +171,7 @@ namespace SqlFirst.Providers.Postgres.Tests
 
 			IQuerySection[] sections = result.Sections.ToArray();
 
-			sections.Length.ShouldBe(6);
+			sections.Length.ShouldBe(4);
 
 			IQuerySection unknownSection = sections[0];
 			unknownSection.Type.ShouldBe(QuerySectionType.Unknown);
@@ -190,22 +190,12 @@ namespace SqlFirst.Providers.Postgres.Tests
 			optionsSection.Content.ShouldBe(@"-- disable all
 -- enable Async");
 
-			IQuerySection variablesSection1 = sections[2];
-			variablesSection1.Type.ShouldBe(QuerySectionType.Declarations);
-			variablesSection1.Name.ShouldBe(QuerySectionName.Declarations);
-			variablesSection1.Content.ShouldBe(@"declare @userKey varchar(MAX) ='test';");
-
-			IQuerySection customSection = sections[3];
+			IQuerySection customSection = sections[2];
 			customSection.Type.ShouldBe(QuerySectionType.Custom);
 			customSection.Name.ShouldBe("mySpecialSection");
 			customSection.Content.ShouldBe("--simple test");
 
-			IQuerySection variablesSection2 = sections[4];
-			variablesSection2.Type.ShouldBe(QuerySectionType.Declarations);
-			variablesSection2.Name.ShouldBe(QuerySectionName.Declarations);
-			variablesSection2.Content.ShouldBe("declare @take int = 42;");
-
-			IQuerySection bodySection = sections[5];
+			IQuerySection bodySection = sections[3];
 			bodySection.Type.ShouldBe(QuerySectionType.Body);
 			bodySection.Name.ShouldBeNull();
 

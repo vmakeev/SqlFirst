@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Common.Logging;
-using Newtonsoft.Json;
 using SqlFirst.Codegen;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Impl;
@@ -18,7 +17,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 	{
 		private ILog _log;
 
-		protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType().Name));
+		protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType()));
 
 		public abstract IQueryParser QueryParser { get; }
 
@@ -163,7 +162,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 				["ResourcePath"] = $"{parameters.Namespace}.{Path.GetFileName(parameters.QueryFile)}"
 			};
 
-			Log.Trace(p => p("CodeGenerationContext options:\n" + JsonConvert.SerializeObject(contextOptions, Formatting.Indented)));
+			Log.Trace(p => p("CodeGenerationContext options:\n" + string.Join("\n", contextOptions.Select(pair => $"\t{pair.Key}: {pair.Value}"))));
 
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
 

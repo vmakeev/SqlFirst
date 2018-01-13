@@ -92,6 +92,10 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 			.Returns(true)
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "SomeQueryText" });
 
+			A.CallTo(() => options.TryGetValue("QueryTextRaw", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "SomeQueryTextRaw" });
+
 			A.CallTo(() => options.TryGetValue("ResourcePath", out _))
 			.Returns(true)
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryResourcePath" });
@@ -112,7 +116,7 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 
 			result.Fields.ShouldNotBeNull();
 			result.Fields.Count().ShouldBe(3);
-			result.Fields.ShouldContain("private const int QueryTextChecksum = 39193;");
+			result.Fields.ShouldContain("private const int QueryTextChecksum = 22918;");
 			result.Fields.ShouldContain("private string _cachedSql;");
 			result.Fields.ShouldContain("private readonly object _cachedSqlLocker = new object();");
 

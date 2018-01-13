@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Common.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Nested;
@@ -11,14 +13,18 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	internal static class SelectTemplateFactory
 	{
+		private static readonly ILog _log = LogManager.GetLogger(typeof(SelectTemplateFactory));
+
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static QueryObjectTemplate Build(ICodeGenerationContext context, SelectQueryObjectOptions options)
 		{
-			bool useResourceFile = options.UseQueryTextResourceFile ?? false;
+			var internalOptions = new InternalOptions(context, options);
+
+			_log.Trace(p => p($"QueryObject for SELECT:\n{internalOptions}"));
 
 			var result = new QueryObjectTemplate();
 
-			if (useResourceFile)
+			if (internalOptions.User.UseResourceFile)
 			{
 				result.AddAbility<GetQueryTextFromResourceCacheableAbility>();
 			}
@@ -29,65 +35,142 @@ namespace SqlFirst.Codegen.Text.QueryObject
 
 			result.AddAbility<AddSqlConnectionParameterAbility>();
 
-			if (IsScalarResult(context))
+			if (internalOptions.Calculated.IsScalarOutput)
 			{
-				AddScalarAbilities(result, options);
+				AddScalarAbilities(result, internalOptions);
 			}
 			else
 			{
-				AddItemAbilities(result, options);
+				AddItemAbilities(result, internalOptions);
 			}
 
 			return result;
 		}
 
-		private static void AddItemAbilities(QueryObjectTemplate result, SelectQueryObjectOptions options)
+		private static void AddItemAbilities(QueryObjectTemplate template, InternalOptions options)
 		{
-			bool generateSync = options.GenerateSyncMethods ?? true;
-			bool generateAsync = options.GenerateAsyncMethods ?? true;
-			bool generateGetFirst = options.GenerateSelectFirstMethods ?? true;
-			bool generateGetAll = options.GenerateSelectAllMethods ?? true;
-
-			if (!result.IsExists(KnownAbilityName.AsyncEnumerable))
+			if (!template.IsExists(KnownAbilityName.AsyncEnumerable))
 			{
-				result.AddAbility<NestedAsyncEnumerableAbility>(() => generateAsync && generateGetAll);
+				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
 			}
 
-			result.AddAbility<MapDataRecordToItemAbility>(() => (generateSync || generateAsync) && (generateGetFirst || generateGetAll));
+			template.AddAbility<MapDataRecordToItemAbility>(() =>
+				(options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods) && (options.User.UseGetFirst || options.User.UseGetAll));
 
-			result.AddAbility<SelectFirstItemAbility>(() => generateSync && generateGetFirst);
-			result.AddAbility<SelectFirstItemAsyncAbility>(() => generateAsync && generateGetFirst);
+			template.AddAbility<SelectFirstItemAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetFirst);
+			template.AddAbility<SelectFirstItemAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetFirst);
 
-			result.AddAbility<SelectItemsLazyAbility>(() => generateSync && generateGetAll);
-			result.AddAbility<SelectItemsIEnumerableAsyncNestedEnumerableAbility>(() => generateAsync && generateGetAll);
+			template.AddAbility<SelectItemsLazyAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetAll);
+			template.AddAbility<SelectItemsIEnumerableAsyncNestedEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
 		}
 
-		private static void AddScalarAbilities(QueryObjectTemplate result, SelectQueryObjectOptions options)
+		private static void AddScalarAbilities(QueryObjectTemplate template, InternalOptions options)
 		{
-			bool generateSync = options.GenerateSyncMethods ?? true;
-			bool generateAsync = options.GenerateAsyncMethods ?? true;
-			bool generateGetFirst = options.GenerateSelectFirstMethods ?? true;
-			bool generateGetAll = options.GenerateSelectAllMethods ?? true;
-
-			if (!result.IsExists(KnownAbilityName.AsyncEnumerable))
+			if (!template.IsExists(KnownAbilityName.AsyncEnumerable))
 			{
-				result.AddAbility<NestedAsyncEnumerableAbility>(() => generateAsync && generateGetAll);
+				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
 			}
 
-			result.AddAbility<MapDataRecordToScalarAbility>(() => (generateSync || generateAsync) && generateGetAll);
-			result.AddAbility<MapValueToScalarAbility>(() => (generateSync || generateAsync) && (generateGetFirst || generateGetAll));
+			template.AddAbility<MapDataRecordToScalarAbility>(() => (options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods) && options.User.UseGetAll);
+			template.AddAbility<MapValueToScalarAbility>(() =>
+				(options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods) && (options.User.UseGetFirst || options.User.UseGetAll));
 
-			result.AddAbility<SelectScalarAbility>(() => generateSync && generateGetFirst);
-			result.AddAbility<SelectScalarAsyncAbility>(() => generateAsync && generateGetFirst);
+			template.AddAbility<SelectScalarAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetFirst);
+			template.AddAbility<SelectScalarAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetFirst);
 
-			result.AddAbility<SelectScalarsAbility>(() => generateSync && generateGetAll);
-			result.AddAbility<SelectScalarsIEnumerableAsyncNestedEnumerableAbility>(() => generateAsync && generateGetAll);
+			template.AddAbility<SelectScalarsAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetAll);
+			template.AddAbility<SelectScalarsIEnumerableAsyncNestedEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
 		}
 
-		private static bool IsScalarResult(ICodeGenerationContext context)
+		#region Nested
+
+		private class InternalOptions
 		{
-			// todo: multiple enumeration
-			return context.OutgoingParameters.Count() == 1;
+			public CalculatedOptions Calculated { get; }
+
+			public UserOptions User { get; }
+
+			/// <inheritdoc />
+			public InternalOptions(ICodeGenerationContext context, SelectQueryObjectOptions options)
+			{
+				if (context == null)
+				{
+					throw new ArgumentNullException(nameof(context));
+				}
+
+				if (options == null)
+				{
+					throw new ArgumentNullException(nameof(options));
+				}
+
+				int outgoungParametersCount = context.OutgoingParameters.Count();
+
+				Calculated = new CalculatedOptions
+				{
+					IsScalarOutput = outgoungParametersCount == 1
+				};
+
+				User = new UserOptions
+				{
+					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
+					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
+					UseResourceFile = options.UseQueryTextResourceFile ?? false,
+					UseGetAll = options.GenerateSelectAllMethods ?? true,
+					UseGetFirst = options.GenerateSelectFirstMethods ?? true
+				};
+			}
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				return "InternalOptions:\r\n" + string.Join(Environment.NewLine, Calculated, User).Indent("\t", 1);
+			}
 		}
+
+		private class CalculatedOptions
+		{
+			public bool IsScalarOutput { get; set; }
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				string[] parameters =
+				{
+					$"IsScalarOutput: {IsScalarOutput}"
+				};
+
+				return "CalculatedOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);
+			}
+		}
+
+		private class UserOptions
+		{
+			public bool UseResourceFile { get; set; }
+
+			public bool GenerateAsyncMethods { get; set; }
+
+			public bool GenerateSyncMethods { get; set; }
+
+			public bool UseGetFirst { get; set; }
+
+			public bool UseGetAll { get; set; }
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				string[] parameters =
+				{
+					$"UseResourceFile: {UseResourceFile}",
+					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
+					$"GenerateSyncMethods: {GenerateSyncMethods}",
+					$"UseGetAll: {UseGetAll}",
+					$"UseGetFirst: {UseGetFirst}"
+				};
+
+				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);
+			}
+		}
+
+		#endregion
 	}
 }

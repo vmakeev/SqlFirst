@@ -15,9 +15,7 @@ namespace SqlFirst.Providers.Postgres.Tests.Queries
 		public static string SelectGuidAndDateWithPaging => GetQueryText();
 
 		public static string SelectCount => GetQueryText();
-
-		public static string SelectAll => GetQueryText();
-
+		
 		public static string SelectTwoStringsWithLeftJoin => GetQueryText();
 
 		public static string SelectTwoStringsWithInnerJoin => GetQueryText();
@@ -25,9 +23,7 @@ namespace SqlFirst.Providers.Postgres.Tests.Queries
 		public static string SelectDateWithOrdinal => GetQueryText();
 
 		public static string SelectDateWithNamedOrdinal => GetQueryText();
-
-		public static string SelectGuidAndDateWithPagingAssignmentAndComments => GetQueryText();
-
+		
 		public static string SelectGuidAndDateWithPagingNoParameters => GetQueryText();
 
 		public static string SelectNotUniqueFieldsWithLeftJoin => GetQueryText();

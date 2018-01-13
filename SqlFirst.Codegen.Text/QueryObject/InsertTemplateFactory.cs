@@ -1,5 +1,7 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Common.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
 using SqlFirst.Codegen.Text.QueryObject.Data;
@@ -9,97 +11,183 @@ namespace SqlFirst.Codegen.Text.QueryObject
 {
 	internal static class InsertTemplateFactory
 	{
+		private static readonly ILog _log = LogManager.GetLogger(typeof(InsertTemplateFactory));
+
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static QueryObjectTemplate Build(ICodeGenerationContext context, InsertQueryObjectOptions options)
 		{
-			bool useMultipleInsert = context.IncomingParameters.Any(p => p.IsNumbered) && (options.GenerateAddMultipleMethods ?? true);
-			bool useOutputValues = context.OutgoingParameters.Any();
-			bool useResourceFile = options.UseQueryTextResourceFile ?? false;
+			var internalOptions = new InternalOptions(context, options);
 
-			// todo: multiple enumeration 
-			bool isScalarResult = context.OutgoingParameters.Count() == 1;
+			_log.Trace(p => p($"QueryObject for INSERT:\n{internalOptions}"));
 
 			var result = new QueryObjectTemplate();
 
-			if (useResourceFile)
+			if (internalOptions.User.UseResourceFile)
 			{
 				result.AddAbility<GetQueryTextFromResourceCacheableAbility>();
-				result.AddAbility<GetMultipleInsertQueryTextRuntimeCachedAbility>(() => useMultipleInsert);
+				result.AddAbility<GetMultipleInsertQueryTextRuntimeCachedAbility>(() => internalOptions.User.UseMultipleInsert && internalOptions.Calculated.HasMultipleInsert);
 			}
 			else
 			{
 				result.AddAbility<GetQueryTextFromStringAbility>();
-				result.AddAbility<GetMultipleInsertQueryTextPrecompiledAbility>(() => useMultipleInsert);
+				result.AddAbility<GetMultipleInsertQueryTextPrecompiledAbility>(() => internalOptions.User.UseMultipleInsert && internalOptions.Calculated.HasMultipleInsert);
 			}
 
 			result.AddAbility<AddSqlConnectionParameterAbility>();
 
-			if (useOutputValues)
+			if (internalOptions.Calculated.HasOutput)
 			{
-				BuildWithOutput(result: result, options: options, isScalarResult: isScalarResult, useMultipleInsert: useMultipleInsert);
+				BuildWithOutput(result, internalOptions);
 			}
 			else
 			{
-				BuildWithRowsCountOutput(result: result, options: options, useMultipleInsert: useMultipleInsert);
+				BuildWithRowsCountOutput(result, internalOptions);
 			}
 
 			return result;
 		}
 
-		private static void BuildWithRowsCountOutput(QueryObjectTemplate result, InsertQueryObjectOptions options, bool useMultipleInsert)
+		private static void BuildWithRowsCountOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			bool generateAsync = options.GenerateAsyncMethods ?? true;
-			bool generateSync = options.GenerateSyncMethods ?? true;
-			bool useSingleInsert = options.GenerateAddSingleMethods ?? true;
+			template.AddAbility<InsertSingleValuePlainAbility>(() => options.User.UseSingleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertSingleValuePlainAsyncAbility>(() => options.User.UseSingleInsert && options.User.GenerateAsyncMethods);
 
-			result.AddAbility<InsertSingleValuePlainAbility>(() => useSingleInsert && generateSync);
-			result.AddAbility<InsertSingleValuePlainAsyncAbility>(() => useSingleInsert && generateAsync);
-
-			result.AddAbility<InsertMultipleValuesAbility>(() => useMultipleInsert && generateSync);
-			result.AddAbility<InsertMultipleValuesAsyncAbility>(() => useMultipleInsert && generateAsync);
+			template.AddAbility<InsertMultipleValuesAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertMultipleValuesAsyncAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateAsyncMethods);
 		}
 
-		private static void BuildWithOutput(QueryObjectTemplate result, InsertQueryObjectOptions options, bool isScalarResult, bool useMultipleInsert)
+		private static void BuildWithOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			if (isScalarResult)
+			if (options.Calculated.IsScalarOutput)
 			{
-				BuildWithScalarOutput(result: result, options: options, useMultipleInsert: useMultipleInsert);
+				BuildWithScalarOutput(template, options);
 			}
 			else
 			{
-				BuildWithObjectOutput(result: result, options: options, useMultipleInsert: useMultipleInsert);
+				BuildWithObjectOutput(template, options);
 			}
 		}
 
-		private static void BuildWithObjectOutput(QueryObjectTemplate result, InsertQueryObjectOptions options, bool useMultipleInsert)
+		private static void BuildWithObjectOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			bool generateAsync = options.GenerateAsyncMethods ?? true;
-			bool generateSync = options.GenerateSyncMethods ?? true;
-			bool useSingleInsert = options.GenerateAddSingleMethods ?? true;
+			template.AddAbility<MapDataRecordToItemAbility>(() => options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods);
 
-			result.AddAbility<MapDataRecordToItemAbility>(() => generateSync || generateAsync);
+			template.AddAbility<InsertSingleValuePlainWithResultAbility>(() => options.User.UseSingleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertSingleValuePlainWithResultAsyncAbility>(() => options.User.UseSingleInsert && options.User.GenerateAsyncMethods);
 
-			result.AddAbility<InsertSingleValuePlainWithResultAbility>(() => useSingleInsert && generateSync);
-			result.AddAbility<InsertSingleValuePlainWithResultAsyncAbility>(() => useSingleInsert && generateAsync);
-
-			result.AddAbility<InsertMultipleValuesWithResultAbility>(() => useMultipleInsert && generateSync);
-			result.AddAbility<InsertMultipleValuesWithResultAsyncAbility>(() => useMultipleInsert && generateAsync);
+			template.AddAbility<InsertMultipleValuesWithResultAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertMultipleValuesWithResultAsyncAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateAsyncMethods);
 		}
 
-		private static void BuildWithScalarOutput(QueryObjectTemplate result, InsertQueryObjectOptions options, bool useMultipleInsert)
+		private static void BuildWithScalarOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			bool generateAsync = options.GenerateAsyncMethods ?? true;
-			bool generateSync = options.GenerateSyncMethods ?? true;
-			bool useSingleInsert = options.GenerateAddSingleMethods ?? true;
+			template.AddAbility<MapDataRecordToScalarAbility>(() => options.User.UseMultipleInsert && options.Calculated.HasMultipleInsert);
+			template.AddAbility<MapValueToScalarAbility>(() => options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods);
 
-			result.AddAbility<MapDataRecordToScalarAbility>(() => useMultipleInsert);
-			result.AddAbility<MapValueToScalarAbility>(() => generateSync || generateAsync);
+			template.AddAbility<InsertSingleValuePlainWithScalarResultAbility>(() => options.User.UseSingleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertSingleValuePlainWithScalarResultAsyncAbility>(() => options.User.UseSingleInsert && options.User.GenerateAsyncMethods);
 
-			result.AddAbility<InsertSingleValuePlainWithScalarResultAbility>(() => useSingleInsert && generateSync);
-			result.AddAbility<InsertSingleValuePlainWithScalarResultAsyncAbility>(() => useSingleInsert && generateAsync);
-
-			result.AddAbility<InsertMultipleValuesWithScalarResultAbility>(() => useMultipleInsert && generateSync);
-			result.AddAbility<InsertMultipleValuesWithScalarResultAsyncAbility>(() => useMultipleInsert && generateAsync);
+			template.AddAbility<InsertMultipleValuesWithScalarResultAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateSyncMethods);
+			template.AddAbility<InsertMultipleValuesWithScalarResultAsyncAbility>(() => options.Calculated.HasMultipleInsert && options.User.UseMultipleInsert && options.User.GenerateAsyncMethods);
 		}
+
+		#region Nested
+
+		private class InternalOptions
+		{
+			public CalculatedOptions Calculated { get; }
+
+			public UserOptions User { get; }
+
+			/// <inheritdoc />
+			public InternalOptions(ICodeGenerationContext context, InsertQueryObjectOptions options)
+			{
+				if (context == null)
+				{
+					throw new ArgumentNullException(nameof(context));
+				}
+
+				if (options == null)
+				{
+					throw new ArgumentNullException(nameof(options));
+				}
+
+				int outgoungParametersCount = context.OutgoingParameters.Count();
+
+				Calculated = new CalculatedOptions
+				{
+					HasMultipleInsert = context.IncomingParameters.Any(p => p.IsNumbered),
+					HasOutput = outgoungParametersCount > 0,
+					IsScalarOutput = outgoungParametersCount == 1
+				};
+
+				User = new UserOptions
+				{
+					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
+					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
+					UseMultipleInsert = options.GenerateAddMultipleMethods ?? true,
+					UseResourceFile = options.UseQueryTextResourceFile ?? false,
+					UseSingleInsert = options.GenerateAddSingleMethods ?? true
+				};
+			}
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				return "InternalOptions:\r\n" + string.Join(Environment.NewLine, Calculated, User).Indent("\t", 1);
+			}
+		}
+
+		private class CalculatedOptions
+		{
+			public bool HasMultipleInsert { get; set; }
+
+			public bool HasOutput { get; set; }
+
+			public bool IsScalarOutput { get; set; }
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				string[] parameters =
+				{
+					$"HasMultipleInsert: {HasMultipleInsert}",
+					$"HasOutput: {HasOutput}",
+					$"IsScalarOutput: {IsScalarOutput}"
+				};
+
+				return "CalculatedOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);
+			}
+		}
+
+		private class UserOptions
+		{
+			public bool UseResourceFile { get; set; }
+
+			public bool GenerateAsyncMethods { get; set; }
+
+			public bool GenerateSyncMethods { get; set; }
+
+			public bool UseSingleInsert { get; set; }
+
+			public bool UseMultipleInsert { get; set; }
+
+			/// <inheritdoc />
+			public override string ToString()
+			{
+				string[] parameters =
+				{
+					$"UseResourceFile: {UseResourceFile}",
+					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
+					$"GenerateSyncMethods: {GenerateSyncMethods}",
+					$"UseSingleInsert: {UseSingleInsert}",
+					$"UseMultipleInsert: {UseMultipleInsert}",
+				};
+
+				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);
+			}
+		}
+
+		#endregion
 	}
 }

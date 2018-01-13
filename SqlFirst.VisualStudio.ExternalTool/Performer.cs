@@ -9,7 +9,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 {
 	internal class Performer
 	{
-		private static readonly ILog _log = LogManager.GetLogger(nameof(Performer));
+		private static readonly ILog _log = LogManager.GetLogger(typeof(Performer));
 
 		public void Perform(GenerationOptions options)
 		{
