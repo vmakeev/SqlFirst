@@ -19,5 +19,7 @@
 		public Dialect? Dialect { get; set; }
 
 		public string ConnectionString { get; set; }
+
+		public bool UpdateCsproj { get; set; } = true;
 	}
 }

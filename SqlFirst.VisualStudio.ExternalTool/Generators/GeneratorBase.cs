@@ -78,7 +78,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 			{
 				return null;
 			}
-			
+
 			Log.Info("Preparing to compose .cs file with result item");
 			string itemCode = CodeGenerator.GenerateFile(new[] { generatedItem });
 			Log.Info("File with result item was successfully composed");
@@ -163,7 +163,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Generators
 				["ResourcePath"] = $"{parameters.Namespace}.{Path.GetFileName(parameters.QueryFile)}"
 			};
 
-			Log.Trace("CodeGenerationContext options:\n" + JsonConvert.SerializeObject(contextOptions, Formatting.Indented));
+			Log.Trace(p => p("CodeGenerationContext options:\n" + JsonConvert.SerializeObject(contextOptions, Formatting.Indented)));
 
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
 

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Runtime.CompilerServices;
 using System.Text;
 using Common.Logging;
 using Mono.Options;
 using SqlFirst.VisualStudio.ExternalTool.Options;
+
+[assembly: InternalsVisibleTo("SqlFirst.VisualStudio.ExternalTool.Tests")]
 
 namespace SqlFirst.VisualStudio.ExternalTool
 {
@@ -25,6 +28,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 									.Add("s|solution=", "Путь к файлу решения", s => options.SolutionFile = s)
 									.Add("i|in=", "Имя генерируемого аргумента запроса", s => options.ParameterItemName = s)
 									.Add("o|out=", "Имя генерируемого результата запроса", s => options.ResultItemName = s)
+									.Add("csproj=", "Добавить сгенерированные файлы в проект (включено по умолчанию)", s => options.UpdateCsproj = bool.Parse(s))
 									.Add("b|beautify", "Форматировать текст запроса", s => options.BeautifyFile = true)
 									.Add("d|dialect=", "Диалект SQL: MsSqlServer или Postgres", s => options.Dialect = (Dialect)Enum.Parse(typeof(Dialect), s, true))
 									.Add("?|help", "Справка", s => helpOnly = true);

@@ -15,7 +15,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 
 		public static void FillWithDefaults(this GenerationOptions generationOptions)
 		{
-			_log.Trace("Incoming:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter));
+			_log.Trace(p => p("Incoming:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter)));
 
 			if (!string.IsNullOrEmpty(generationOptions.QueryFile))
 			{
@@ -51,7 +51,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 
 			ApplyGlobalOptions(generationOptions);
 
-			_log.Trace("Processed:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter));
+			_log.Trace(p => p("Processed:\n" + JsonConvert.SerializeObject(generationOptions, Formatting.Indented, _stringEnumConverter)));
 		}
 
 		private static void ApplyGlobalOptions(GenerationOptions generationOptions)
@@ -84,9 +84,6 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 
 		private static string GetNamespace(string projectFile, string queryFile)
 		{
-			char separator = Path.DirectorySeparatorChar;
-			char[] separators = { Path.DirectorySeparatorChar, Path.AltDirectorySeparatorChar };
-
 			string projectPath = Path.GetDirectoryName(projectFile);
 			string queryPath = Path.GetDirectoryName(queryFile);
 
@@ -96,14 +93,7 @@ namespace SqlFirst.VisualStudio.ExternalTool.Options
 				return "DefaultNamespace";
 			}
 
-			string relativeUri = string.Empty;
-			if (!string.Equals(projectPath, queryPath, StringComparison.OrdinalIgnoreCase))
-			{
-				var projectFileUri = new Uri(projectPath.TrimEnd(separators) + separator, UriKind.Absolute);
-				var queryFileUri = new Uri(queryPath.TrimEnd(separators), UriKind.Absolute);
-
-				relativeUri = projectFileUri.MakeRelativeUri(queryFileUri).ToString();
-			}
+			string relativeUri = PathHelper.GetRelativePath(projectPath, queryPath);
 
 			string rootNamespace = Path.GetFileNameWithoutExtension(projectFile);
 
