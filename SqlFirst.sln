@@ -33,6 +33,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{53A28636
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SqlFirst.VisualStudio.ExternalTool", "SqlFirst.VisualStudio.ExternalTool\SqlFirst.VisualStudio.ExternalTool.csproj", "{14E1EB4F-B8AE-40E4-8AB7-7FC3578AEDC5}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlFIrst.VisualStudio.ItemTemplate", "SqlFIrst.VisualStudio.ItemTemplate\SqlFIrst.VisualStudio.ItemTemplate.csproj", "{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlFIrst.VisualStudio.Integration", "SqlFIrst.VisualStudio.Integration\SqlFIrst.VisualStudio.Integration.csproj", "{B3C97029-703E-4DCC-86F5-2931885CE978}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,6 +91,14 @@ Global
 		{14E1EB4F-B8AE-40E4-8AB7-7FC3578AEDC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{14E1EB4F-B8AE-40E4-8AB7-7FC3578AEDC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{14E1EB4F-B8AE-40E4-8AB7-7FC3578AEDC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3C97029-703E-4DCC-86F5-2931885CE978}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3C97029-703E-4DCC-86F5-2931885CE978}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3C97029-703E-4DCC-86F5-2931885CE978}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3C97029-703E-4DCC-86F5-2931885CE978}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,6 +113,8 @@ Global
 		{A3B53EE7-3AA4-4C30-B81A-9DBD7D3EBADD} = {0ED800C1-A297-4D72-911F-35469DAA062C}
 		{B0DA8034-4C34-400F-A1E1-178389900153} = {55F1C8F5-98D5-4C13-BFE8-8794EF8FFB29}
 		{14E1EB4F-B8AE-40E4-8AB7-7FC3578AEDC5} = {53A28636-3958-4F47-82AB-3B3D689C0433}
+		{1AF3B2AE-9C1D-4A7B-8197-930E87D8D0C8} = {53A28636-3958-4F47-82AB-3B3D689C0433}
+		{B3C97029-703E-4DCC-86F5-2931885CE978} = {53A28636-3958-4F47-82AB-3B3D689C0433}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {1EAC2A1F-C598-46CC-A81C-EB229C2336CB}
