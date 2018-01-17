@@ -9,38 +9,34 @@ namespace SqlFirst.Intelligence.Generators
 	{
 		private static readonly ISqlFirstOption[] _useResourceFileOption = { new SqlFirstOption("use", new[] { "querytext", "resource" }) };
 
-		private readonly IQueryInfo _info;
-
-		/// <inheritdoc />
-		public QueryInfoWrapper(IQueryInfo info)
+		public static QueryInfoWrapper Create(IQueryInfo info)
 		{
-			_info = info;
+			return new QueryInfoWrapper(info);
 		}
 
 		/// <inheritdoc />
-		public QueryType Type => _info.Type;
-
-		/// <inheritdoc />
-		public IEnumerable<IQuerySection> Sections => _info.Sections;
-
-		/// <inheritdoc />
-		public IEnumerable<ISqlFirstOption> SqlFirstOptions
+		private QueryInfoWrapper(IQueryInfo info)
 		{
-			get
-			{
-				if (_info.SqlFirstOptions == null)
-				{
-					return _useResourceFileOption;
-				}
-
-				return _info.SqlFirstOptions.Concat(_useResourceFileOption);
-			}
+			Type = info.Type;
+			Parameters = info.Parameters?.ToArray() ?? Enumerable.Empty<IQueryParamInfo>();
+			Results = info.Results?.ToArray() ?? Enumerable.Empty<IFieldDetails>();
+			Sections = info.Sections?.ToArray() ?? Enumerable.Empty<IQuerySection>();
+			SqlFirstOptions = info.SqlFirstOptions?.Concat(_useResourceFileOption).ToArray() ?? _useResourceFileOption;
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<IQueryParamInfo> Parameters => _info.Parameters;
+		public QueryType Type { get; }
 
 		/// <inheritdoc />
-		public IEnumerable<IFieldDetails> Results => _info.Results;
+		public IEnumerable<IQuerySection> Sections { get; }
+
+		/// <inheritdoc />
+		public IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
+
+		/// <inheritdoc />
+		public IEnumerable<IQueryParamInfo> Parameters { get; }
+
+		/// <inheritdoc />
+		public IEnumerable<IFieldDetails> Results { get; }
 	}
 }

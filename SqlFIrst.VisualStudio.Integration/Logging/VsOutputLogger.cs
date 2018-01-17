@@ -3,6 +3,7 @@ using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 using EnvDTE;
+using SqlFIrst.VisualStudio.Integration.Helpers;
 
 namespace SqlFIrst.VisualStudio.Integration.Logging
 {

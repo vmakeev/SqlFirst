@@ -31,6 +31,60 @@ namespace SqlFirst.Intelligence.Generators
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
+			return GenerateParameterItemInternal(query: query, parameters: parameters, info: info);
+		}
+
+		public IGeneratedItem GenerateResultItem(string query, GenerationOptions parameters)
+		{
+			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
+
+			return GenerateResultItemInternal(query: query, parameters: parameters, info: info);
+		}
+
+		public string GenerateResultItemCode(string query, GenerationOptions parameters)
+		{
+			IGeneratedItem generatedItem = GenerateResultItem(query, parameters);
+
+			return GenerateResultItemCodeInternal(generatedItem: generatedItem);
+		}
+
+		public string GenerateParameterItemCode(string query, GenerationOptions parameters)
+		{
+			IGeneratedItem generatedItem = GenerateParameterItem(query, parameters);
+
+			return GenerateParameterItemCodeInternal(generatedItem: generatedItem);
+		}
+
+		public IGeneratedItem GenerateQueryObject(string query, GenerationOptions parameters)
+		{
+			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
+			return GenerateQueryObjectInternal(query, parameters, info);
+		}
+
+		public string GenerateQueryObjectCode(string query, GenerationOptions parameters)
+		{
+			IGeneratedItem generatedItem = GenerateQueryObject(query, parameters);
+
+			return GenerateQueryObjectCodeInternal(generatedItem: generatedItem);
+		}
+
+		public (string queryObject, string resultItem, string parameterItem) GenerateAll(string query, GenerationOptions parameters)
+		{
+			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
+
+			IGeneratedItem queryObjectItem = GenerateQueryObjectInternal(query, parameters, info);
+			IGeneratedItem resultObjectItem = GenerateResultItemInternal(query, parameters, info);
+			IGeneratedItem parameterObjectItem = GenerateParameterItemInternal(query, parameters, info);
+
+			string queryObject = GenerateQueryObjectCodeInternal(queryObjectItem);
+			string resultObject = GenerateResultItemCodeInternal(resultObjectItem);
+			string parameterObject = GenerateParameterItemCodeInternal(parameterObjectItem);
+
+			return (queryObject, resultObject, parameterObject);
+		}
+
+		private IGeneratedItem GenerateParameterItemInternal(string query, GenerationOptions parameters, IQueryInfo info)
+		{
 			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
 			{
 				Log.Debug("No numbered parameters found, parameter item won't be generated.");
@@ -48,10 +102,8 @@ namespace SqlFirst.Intelligence.Generators
 			return generatedItem;
 		}
 
-		public IGeneratedItem GenerateResultItem(string query, GenerationOptions parameters)
+		private IGeneratedItem GenerateResultItemInternal(string query, GenerationOptions parameters, IQueryInfo info)
 		{
-			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
-
 			if (info.Results.Count() <= 1)
 			{
 				Log.Debug("No such output columns found, result item won't be generated.");
@@ -69,10 +121,8 @@ namespace SqlFirst.Intelligence.Generators
 			return generatedItem;
 		}
 
-		public string GenerateResultItemCode(string query, GenerationOptions parameters)
+		private string GenerateResultItemCodeInternal(IGeneratedItem generatedItem)
 		{
-			IGeneratedItem generatedItem = GenerateResultItem(query, parameters);
-
 			if (generatedItem == null)
 			{
 				return null;
@@ -85,10 +135,8 @@ namespace SqlFirst.Intelligence.Generators
 			return itemCode;
 		}
 
-		public string GenerateParameterItemCode(string query, GenerationOptions parameters)
+		private string GenerateParameterItemCodeInternal(IGeneratedItem generatedItem)
 		{
-			IGeneratedItem generatedItem = GenerateParameterItem(query, parameters);
-
 			if (generatedItem == null)
 			{
 				return null;
@@ -101,10 +149,8 @@ namespace SqlFirst.Intelligence.Generators
 			return itemCode;
 		}
 
-		public IGeneratedItem GenerateQueryObject(string query, GenerationOptions parameters)
+		private IGeneratedItem GenerateQueryObjectInternal(string query, GenerationOptions parameters, IQueryInfo info)
 		{
-			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
-
 			Log.Info("Preparing to generate query object");
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
@@ -116,10 +162,8 @@ namespace SqlFirst.Intelligence.Generators
 			return generatedItem;
 		}
 
-		public string GenerateQueryObjectCode(string query, GenerationOptions parameters)
+		private string GenerateQueryObjectCodeInternal(IGeneratedItem generatedItem)
 		{
-			IGeneratedItem generatedItem = GenerateQueryObject(query, parameters);
-
 			if (generatedItem == null)
 			{
 				return null;
@@ -141,9 +185,9 @@ namespace SqlFirst.Intelligence.Generators
 				Log.Debug($"Connection string option found. [{connectionString}] will be used as primary connection string.");
 			}
 
-			IQueryInfo baseIinfo = QueryParser.GetQueryInfo(query, connectionString);
+			IQueryInfo baseInfo = QueryParser.GetQueryInfo(query, connectionString);
 
-			return new QueryInfoWrapper(baseIinfo);
+			return QueryInfoWrapper.Create(baseInfo);
 		}
 
 		private ICodeGenerationContext GetCodeGenerationContext(IQueryInfo info, GenerationOptions parameters, string rawSql)

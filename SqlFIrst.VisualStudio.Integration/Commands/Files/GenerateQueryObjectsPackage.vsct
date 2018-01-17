@@ -12,6 +12,7 @@
 
     <Buttons>
       <Button guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsId" priority="0x0100" type="Button">
+        <CommandFlag>DynamicVisibility</CommandFlag>
         <Strings>
           <ButtonText>SqlFirst generate</ButtonText>
         </Strings>

@@ -3,7 +3,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 
-namespace SqlFIrst.VisualStudio.Integration.Logging
+namespace SqlFIrst.VisualStudio.Integration.Helpers
 {
 	internal static class SqlFirstOutputWindow
 	{

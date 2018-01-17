@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
+using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using SqlFIrst.VisualStudio.Integration.Logging;
 
@@ -27,6 +28,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 	[InstalledProductRegistration("#110", "#112", "1.0", IconResourceID = 400)] // Info on this package for Help/About
 	[ProvideMenuResource("Menus.ctmenu", 1)]
 	[Guid(PackageGuidString)]
+	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
 	public sealed class GenerateQueryObjectsPackage : Package
 	{

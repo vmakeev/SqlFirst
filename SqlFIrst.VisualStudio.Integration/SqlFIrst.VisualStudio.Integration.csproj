@@ -59,10 +59,13 @@
     <Compile Include="Commands\Files\GenerateQueryObjectsPackage.cs" />
     <Compile Include="Helpers\HierarchyHelper.cs" />
     <Compile Include="Logging\CommonLoggingConfiguration.cs" />
-    <Compile Include="Logging\SqlFirstOutputWindow.cs" />
+    <Compile Include="Helpers\SqlFirstOutputWindow.cs" />
     <Compile Include="Logging\VsOutputAdapter.cs" />
     <Compile Include="Logging\VsOutputLogger.cs" />
+    <Compile Include="Helpers\SqlFirstErrorsWindow.cs" />
     <Compile Include="Logic\Performer.cs" />
+    <Compile Include="Helpers\IdeHelper.cs" />
+    <Compile Include="Helpers\ProjectItemExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

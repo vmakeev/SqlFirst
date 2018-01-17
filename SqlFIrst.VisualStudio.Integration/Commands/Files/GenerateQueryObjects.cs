@@ -4,11 +4,11 @@ using System.ComponentModel.Design;
 using System.Linq;
 using Common.Logging;
 using EnvDTE;
-using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using SqlFIrst.VisualStudio.Integration.Helpers;
 using SqlFIrst.VisualStudio.Integration.Logging;
 using SqlFIrst.VisualStudio.Integration.Logic;
+using Task = System.Threading.Tasks.Task;
 
 namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 {
@@ -29,7 +29,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		/// </summary>
 		private readonly Package _package;
 
-		private ErrorListProvider _errorListProvider;
+		private readonly SqlFirstErrorsWindow _errorWindow;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -61,17 +61,12 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 			if (ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
 			{
 				var menuCommandId = new CommandID(CommandSet, CommandId);
-				var menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
-				commandService.AddCommand(menuItem);
+				var oleMenuItem = new OleMenuCommand(MenuItemCallback, menuCommandId);
+				oleMenuItem.BeforeQueryStatus += OnBeforeQueryStatus;
+				commandService.AddCommand(oleMenuItem);
 			}
 
-			_errorListProvider = new ErrorListProvider(ServiceProvider)
-			{
-				ProviderName = "SqlFirstErrorProvider",
-				ProviderGuid = Guid.Parse("e5ef6ee6-13ba-45ea-97e8-e2becaeb6cad")
-			};
-
-
+			_errorWindow = new SqlFirstErrorsWindow(ServiceProvider);
 		}
 
 		/// <summary>
@@ -83,20 +78,12 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 			Instance = new GenerateQueryObjects(package);
 		}
 
-		private IEnumerable<ProjectItem> GetSelectedItems()
+		private void OnBeforeQueryStatus(object sender, EventArgs e)
 		{
-			var applicationObject = (DTE2)Package.GetGlobalService(typeof(DTE));
-			UIHierarchy solutionExplorer = applicationObject.ToolWindows.SolutionExplorer;
-
-			if (solutionExplorer.SelectedItems is Array selectedItems)
+			if (sender is OleMenuCommand menuCommand)
 			{
-				foreach (UIHierarchyItem selectedItem in selectedItems)
-				{
-					if (selectedItem.Object is ProjectItem projectItem)
-					{
-						yield return projectItem;
-					}
-				}
+				IEnumerable<ProjectItem> selectedItems = IdeHelper.GetSelectedItems();
+				menuCommand.Visible = selectedItems.All(projectItem => projectItem.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase));
 			}
 		}
 
@@ -109,7 +96,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		/// <param name="e">Event args.</param>
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
-			ProjectItem[] selected = GetSelectedItems().ToArray();
+			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
 
 			SqlFirstOutputWindow.Pane.Clear();
 			SqlFirstOutputWindow.Pane.Activate();
@@ -119,6 +106,13 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 				_log.Info("Nothing selected to generate query objects");
 				return;
 			}
+
+			Task.Run(() => ProcessSelectedItems(selected));
+		}
+
+		private void ProcessSelectedItems(IEnumerable<ProjectItem> selected)
+		{
+			_errorWindow.ClearErrors();
 
 			var errors = new LinkedList<(ProjectItem, Exception)>();
 			var projects = new List<Project>();
@@ -141,80 +135,14 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 				}
 			}
 
-			SaveDirtyProjects(projects);
+			foreach (Project project in projects.Where(project => project.IsDirty))
+			{
+				project.Save();
+			}
 
 			if (errors.Any())
 			{
-				DisplayErrors(errors);
-			}
-		}
-
-		private void DisplayErrors(LinkedList<(ProjectItem, Exception)> errors)
-		{
-			_errorListProvider.Tasks.Clear();
-
-			foreach ((ProjectItem item, Exception error) in errors)
-			{
-				Exception innerError = error;
-				while (innerError?.InnerException != null)
-				{
-					innerError = innerError.InnerException;
-				}
-
-				var task = new ErrorTask(innerError)
-				{
-					CanDelete = true,
-					Category = TaskCategory.User,
-					ErrorCategory = TaskErrorCategory.Error,
-					Document = item.Name,
-					HierarchyItem = item.ContainingProject.GetIVsHierarchy(),
-				};
-
-				task.Navigate += (sender, args) =>
-				{
-					var applicationObject = (DTE2)Package.GetGlobalService(typeof(DTE));
-					UIHierarchy solutionExplorer = applicationObject.ToolWindows.SolutionExplorer;
-
-					UIHierarchyItem hierarchyItem = FindInExplorer(solutionExplorer.UIHierarchyItems, item);
-					hierarchyItem?.Select(vsUISelectionType.vsUISelectionTypeSelect);
-				};
-
-				_errorListProvider.Tasks.Add(task);
-			}
-			_errorListProvider.Show();
-			_errorListProvider.BringToFront();
-		}
-
-		private UIHierarchyItem FindInExplorer(UIHierarchyItems items, ProjectItem target)
-		{
-			foreach (UIHierarchyItem hierarchyItem in items.OfType<UIHierarchyItem>())
-			{
-				if (hierarchyItem.Object is ProjectItem projectItem && projectItem == target)
-				{
-					return hierarchyItem;
-				}
-
-				if (hierarchyItem.UIHierarchyItems != null)
-				{
-					UIHierarchyItem inner = FindInExplorer(hierarchyItem.UIHierarchyItems, target);
-					if (inner != null)
-					{
-						return inner;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		private static void SaveDirtyProjects(IEnumerable<Project> projects)
-		{
-			foreach (Project project in projects)
-			{
-				if (project.IsDirty)
-				{
-					project.Save();
-				}
+				_errorWindow.DisplayErrors(errors);
 			}
 		}
 	}
