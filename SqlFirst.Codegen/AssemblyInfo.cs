@@ -1,3 +1,7 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SqlFirst.Codegen.Tests")]
+[assembly: InternalsVisibleTo("SqlFirst.Codegen.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100e93701c92a6e5d" +
+							"7a8c3ef2259b7b0eb32216183142e6060707858322e445f4ec63b5a6105c2cded6379068ef34ef" +
+							"d3d4ec54c712505cbf5fbb4468af409199d543e327a1d0ba75c6befabc2f9b9f8b2a7bfae12f30" +
+							"c11873e38feb40d65e5443de7dca6c9c57f36ead47823a3321832a7b092408bf1f96733caf3e71" +
+							"3d07d9df")]

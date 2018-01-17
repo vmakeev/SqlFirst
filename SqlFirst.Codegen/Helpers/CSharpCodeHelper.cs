@@ -124,6 +124,17 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
+		/// Проверяет, является ли <paramref name="name"/> корректным идентификатором
+		/// </summary>
+		/// <param name="name">Проверяемй идентификатор</param>
+		/// <returns>Является ли идентификатор корректным</returns>
+		public static bool IsValidIdentifierName(string name)
+		{
+			string validName = GetValidIdentifierName(name);
+			return string.Equals(validName, name, StringComparison.InvariantCulture);
+		}
+
+		/// <summary>
 		/// Возвращает корректное название переменной в указанном стиле
 		/// </summary>
 		/// <param name="name">Предполагаемое название переменной</param>

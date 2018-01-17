@@ -4,7 +4,17 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <SignAssembly>true</SignAssembly>
+
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GenerateResultItemTests.cs" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FakeItEasy" Version="4.0.0" />

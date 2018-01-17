@@ -61,7 +61,8 @@ namespace SqlFirst.Codegen.Text.ResultItem
 				Modifiers = new[] { Modifiers.Public, Modifiers.Partial },
 				Name = itemName,
 				BaseTypes = GetBaseTypes(),
-				ObjectType = ObjectType
+				ObjectType = ObjectType,
+				BeforeItemData = new[] { @"// ReSharper disable once PartialTypeWithSinglePart" }
 			};
 
 			IEnumerable<CodeMemberInfo> memberInfos = context.OutgoingParameters.Select(info => CodeMemberInfo.FromFieldDetails(info, context.TypeMapper));
@@ -83,7 +84,7 @@ namespace SqlFirst.Codegen.Text.ResultItem
 			string item = template.Render(new
 			{
 				Fields = backingFields,
-				Properties = properties
+				Properties = properties,
 			});
 
 			result.Content = item;

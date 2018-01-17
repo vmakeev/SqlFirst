@@ -4,6 +4,12 @@
     <TargetFramework>netcoreapp2.0</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <SignAssembly>true</SignAssembly>
+
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
 
   <ItemGroup>

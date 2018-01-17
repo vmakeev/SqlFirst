@@ -3,6 +3,7 @@ $Properties`\r\n`|\r\n\r\n$~
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -13,4 +14,5 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();

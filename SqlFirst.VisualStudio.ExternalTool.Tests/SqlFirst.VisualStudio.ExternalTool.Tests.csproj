@@ -1,0 +1,14 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Remove="InsertStringGuidDate.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="InsertStringGuidDate.sql" />
+  </ItemGroup>
+</Project>

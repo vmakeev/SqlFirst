@@ -3,7 +3,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.QueryObject.Data;
-using SqlFirst.Codegen.Text.QueryObject.Options;
+using SqlFirst.Codegen.Text.QueryObject.Factories;
+using SqlFirst.Codegen.Text.QueryObject.Factories.Options;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Core;
 
@@ -33,7 +34,8 @@ namespace SqlFirst.Codegen.Text.QueryObject
 
 			result.Content = item;
 			result.Usings = data.Usings.Distinct().OrderBy(@using => @using);
-			result.ObjectType = ObjectTypes.Class; 
+			result.ObjectType = ObjectTypes.Class;
+			result.BeforeItemData = new[] { @"// ReSharper disable once PartialTypeWithSinglePart" };
 
 			return result;
 		}
@@ -58,13 +60,15 @@ namespace SqlFirst.Codegen.Text.QueryObject
 					return SelectTemplateFactory.Build(context, selectOptions);
 
 				case QueryType.Update:
-					throw new NotImplementedException();
+					var updateOptions = new UpdateQueryObjectOptions(options.SqlFirstOptions);
+					return UpdateTemplateFactory.Build(context, updateOptions);
 
 				case QueryType.Delete:
-					throw new NotImplementedException();
+					var deleteOptions = new DeleteQueryObjectOptions(options.SqlFirstOptions);
+					return DeleteTemplateFactory.Build(context, deleteOptions);
 
 				case QueryType.Merge:
-					throw new NotImplementedException();
+					throw new NotImplementedException("MERGE queries are not currently supported.");
 
 				default:
 					throw new CodeGenerationException($"Unsupported QueryType: [{options.QueryType:G}] ({options.QueryType:D})");

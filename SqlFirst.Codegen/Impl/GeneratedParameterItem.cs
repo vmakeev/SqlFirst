@@ -27,5 +27,8 @@ namespace SqlFirst.Codegen.Impl
 
 		/// <inheritdoc />
 		public string ObjectType { get; set; }
+
+		/// <inheritdoc />
+		public IEnumerable<string> BeforeItemData { get; set; }
 	}
 }

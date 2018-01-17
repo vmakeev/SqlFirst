@@ -1,6 +1,6 @@
 ﻿namespace SqlFirst.VisualStudio.ExternalTool
 {
-	internal enum ItemType
+	public enum ItemType
 	{
 		Compile,
 		None,

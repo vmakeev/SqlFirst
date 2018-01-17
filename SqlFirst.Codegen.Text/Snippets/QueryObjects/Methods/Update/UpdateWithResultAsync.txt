@@ -1,0 +1,27 @@
+﻿/// <summary>
+/// Выполняет обновление строк в таблице и возвращает дополнительные данные
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams`\r\n`|\r\n$~
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Результаты выполнения запроса</returns>
+public virtual async Task<IEnumerable<$ResultItemType$>> UpdateAsync(DbConnection connection$`, `MethodParameters|, $, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+$2|AddParameters`\r\n`|\r\n$~
+
+		var result = new List<$ResultItemType$>();
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		{
+			while (await reader.ReadAsync(cancellationToken))
+			{
+				$ResultItemType$ resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
+			}
+		}
+
+		return result;
+	}	
+}

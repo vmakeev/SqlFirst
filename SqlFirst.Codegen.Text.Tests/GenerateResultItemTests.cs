@@ -46,9 +46,11 @@ public virtual bool IsCompleted { get; set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -92,9 +94,11 @@ public virtual bool IsCompleted { get; internal set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -148,9 +152,11 @@ public virtual bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -204,9 +210,11 @@ public virtual bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -249,9 +257,11 @@ public bool IsCompleted { get; set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -290,9 +300,11 @@ public bool IsCompleted { get; internal set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -345,9 +357,11 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -400,9 +414,11 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -439,10 +455,9 @@ partial void AfterLoadInternal();");
 			type.IsInterface.ShouldBeTrue();
 			type.Name.ShouldBe(nameof(INotifyPropertyChanged));
 
+			#region Too long result
+
 			resultItem.Content.ShouldBe(
-
-				#region Too long result
-
 				@"private string _objectName;
 private int? _currentStage;
 private bool _isCompleted;
@@ -494,6 +509,7 @@ public virtual bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -504,11 +520,10 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
-partial void AfterLoadInternal();"
+// ReSharper disable once PartialMethodWithSinglePart
+partial void AfterLoadInternal();");
 
-				#endregion
-
-			);
+			#endregion
 		}
 
 		[Theory]
@@ -545,7 +560,7 @@ partial void AfterLoadInternal();"
 
 			resultItem.Content.ShouldBe(
 
-				#region Too long result
+			#region Too long result
 
 				@"private string _objectName;
 private int? _currentStage;
@@ -598,6 +613,7 @@ public virtual bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -608,9 +624,10 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();"
 
-				#endregion
+			#endregion
 
 			);
 		}
@@ -649,7 +666,7 @@ partial void AfterLoadInternal();"
 
 			resultItem.Content.ShouldBe(
 
-				#region Too long result
+			#region Too long result
 
 				@"private string _objectName;
 private int? _currentStage;
@@ -702,6 +719,7 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -712,9 +730,10 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();"
 
-				#endregion
+			#endregion
 
 			);
 		}
@@ -753,7 +772,7 @@ partial void AfterLoadInternal();"
 
 			resultItem.Content.ShouldBe(
 
-				#region Too long result
+			#region Too long result
 
 				@"private string _objectName;
 private int? _currentStage;
@@ -806,6 +825,7 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -816,9 +836,10 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();"
 
-				#endregion
+			#endregion
 
 			);
 		}
@@ -859,9 +880,11 @@ public bool IsCompleted { get; set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -899,9 +922,11 @@ public bool IsCompleted { get; internal set; }
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -953,9 +978,11 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -1008,9 +1035,11 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -1099,6 +1128,7 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -1109,6 +1139,7 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 
@@ -1195,6 +1226,7 @@ public bool IsCompleted
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
@@ -1205,6 +1237,7 @@ protected void OnPropertyChanged(string propertyName)
 	PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();");
 		}
 

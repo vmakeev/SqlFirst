@@ -1,0 +1,45 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <Extern href="stdidcmd.h"/>
+  <Extern href="vsshlids.h"/>
+
+  <Commands package="guidGenerateQueryObjectsPackage">
+   
+    <Groups>
+      <Group guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsGroup"/>
+    </Groups>
+
+    <Buttons>
+      <Button guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsId" priority="0x0100" type="Button">
+        <Strings>
+          <ButtonText>SqlFirst generate</ButtonText>
+        </Strings>
+      </Button>
+    </Buttons>
+
+  </Commands>
+
+  <CommandPlacements>
+
+    <!-- Single file --> 
+    <CommandPlacement guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsGroup" priority="0x02FF">
+      <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE"/>
+    </CommandPlacement>
+
+    <!-- Placement for command. The parent of a command is always a group, never a menu, context menu or toolbar. -->
+    <CommandPlacement guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsId" priority="0xFFFF" >
+      <Parent guid="guidGenerateQueryObjectsPackageCmdSet" id="GenerateQueryObjectsGroup"/>
+    </CommandPlacement>
+
+  </CommandPlacements>
+
+  <Symbols>
+    <GuidSymbol name="guidGenerateQueryObjectsPackage" value="{3d750cc8-b827-48fb-ad38-903c0c2e6fd7}" />
+
+    <GuidSymbol name="guidGenerateQueryObjectsPackageCmdSet" value="{02a34c8a-02ae-401c-9566-7ed255a4d535}">
+      <IDSymbol name="GenerateQueryObjectsGroup" value="0x03DC" />
+      <IDSymbol name="GenerateQueryObjectsId" value="0x70E7" />
+    </GuidSymbol>
+  </Symbols>
+</CommandTable>

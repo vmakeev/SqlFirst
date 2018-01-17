@@ -17,7 +17,7 @@ namespace SqlFirst.Codegen.Impl
 		public string Name { get; set; }
 
 		/// <inheritdoc />
-		public IEnumerable<string> Modifiers { get; set; }= Enumerable.Empty<string>();
+		public IEnumerable<string> Modifiers { get; set; } = Enumerable.Empty<string>();
 
 		/// <inheritdoc />
 		public IEnumerable<IGeneratedType> BaseTypes { get; set; } = Enumerable.Empty<IGeneratedType>();
@@ -27,5 +27,8 @@ namespace SqlFirst.Codegen.Impl
 
 		/// <inheritdoc />
 		public string ObjectType { get; set; }
+
+		/// <inheritdoc />
+		public IEnumerable<string> BeforeItemData { get; set; } = Enumerable.Empty<string>();
 	}
 }

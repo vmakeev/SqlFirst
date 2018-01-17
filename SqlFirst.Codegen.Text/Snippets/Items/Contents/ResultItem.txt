@@ -3,7 +3,9 @@ $Properties`\r\n`|\r\n\r\n$~
 
 internal void AfterLoad()
 {
+	// ReSharper disable once InvocationIsSkipped
 	AfterLoadInternal();
 }
 
+// ReSharper disable once PartialMethodWithSinglePart
 partial void AfterLoadInternal();

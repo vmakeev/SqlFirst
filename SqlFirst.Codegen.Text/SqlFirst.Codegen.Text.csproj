@@ -1,7 +1,11 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
@@ -67,6 +71,12 @@
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetQueryTemplates.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\MapField.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\NumberedParameterInfo.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\Delete.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\DeleteAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\DeleteWithResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\DeleteWithResultAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\DeleteWithScalarResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Delete\DeleteWithScalarResultAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\GetFirst.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\GetFirstAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\GetIEnumerable.txt" />
@@ -83,6 +93,12 @@
     <None Remove="Snippets\Enumerables\DbAsyncEnumerator.txt" />
     <None Remove="Snippets\Enumerables\Enumerable.txt" />
     <None Remove="Snippets\Enumerables\EnumerableItem.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\Update.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\UpdateAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\UpdateWithResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\UpdateWithResultAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResultAsync.txt" />
     <None Remove="Snippets\QueryObjects\QueryObject.txt" />
     <None Remove="Snippets\ReadOnlyAutoProperty.txt" />
     <None Remove="Snippets\ReadOnlyAutoPropertyVirtual.txt" />
@@ -131,12 +147,24 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetQueryTemplates.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\Delete.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\DeleteAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\DeleteWithResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\DeleteWithResultAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\DeleteWithScalarResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Delete\DeleteWithScalarResultAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetFirstAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalar.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameterNumbered.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResultAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithResultAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\Update.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\QueryObject.txt" />
   </ItemGroup>
 
@@ -175,11 +203,15 @@
 
   <ItemGroup>
     <PackageReference Include="Common.Logging" Version="3.4.1" />
+    <PackageReference Include="Microsoft.VSSDK.BuildTools" Version="15.5.100" />
     <PackageReference Include="Stateless" Version="4.0.0" />
+    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
   </ItemGroup>
+
+  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
 
 </Project>

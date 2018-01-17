@@ -2,7 +2,7 @@
   "profiles": {
     "SqlFirst.VisualStudio.ExternalTool": {
       "commandName": "Project",
-      "commandLineArgs": "/?"
+      "commandLineArgs": "-f \"C:\\Projects\\SqlFirst\\SqlFirst.VisualStudio.ExternalTool.Tests\\InsertStringGuidDate.sql\" -p \"C:\\Projects\\SqlFirst\\SqlFirst.VisualStudio.ExternalTool.Tests\\SqlFirst.VisualStudio.ExternalTool.Tests.csproj\" -s \"C:\\Projects\\SqlFirst\\SqlFirst.sln\""
     }
   }
 }
