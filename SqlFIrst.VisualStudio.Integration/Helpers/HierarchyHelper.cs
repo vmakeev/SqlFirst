@@ -3,7 +3,6 @@ using System.Diagnostics.CodeAnalysis;
 using System.Runtime.InteropServices;
 using EnvDTE;
 using EnvDTE80;
-using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
 
 namespace SqlFIrst.VisualStudio.Integration.Helpers
@@ -15,7 +14,7 @@ namespace SqlFIrst.VisualStudio.Integration.Helpers
 		[SuppressMessage("ReSharper", "SuspiciousTypeConversion.Global")]
 		public static IVsHierarchy GetIVsHierarchy(this Project project)
 		{
-			var applicationObject = (DTE2)Package.GetGlobalService(typeof(DTE));
+			DTE2 applicationObject =  IdeHelper.ApplicationObject;
 			var serviceProvider = (Microsoft.VisualStudio.OLE.Interop.IServiceProvider)applicationObject;
 			var solutionService = (IVsSolution)GetService(serviceProvider, typeof(SVsSolution), typeof(IVsSolution));
 

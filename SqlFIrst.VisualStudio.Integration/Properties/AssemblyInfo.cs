@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("SqlFIrst.VisualStudio.Integration")]
-[assembly: AssemblyDescription("")]
+[assembly: AssemblyTitle("SqlFirst")]
+[assembly: AssemblyDescription("Compile-time micro ORM")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SqlFIrst.VisualStudio.Integration")]
-[assembly: AssemblyCopyright("")]
+[assembly: AssemblyProduct("SqlFIrst")]
+[assembly: AssemblyCopyright("© Vladimir Makeev 2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

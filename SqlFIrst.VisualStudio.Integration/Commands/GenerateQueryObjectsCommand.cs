@@ -10,19 +10,19 @@ using SqlFIrst.VisualStudio.Integration.Logging;
 using SqlFIrst.VisualStudio.Integration.Logic;
 using Task = System.Threading.Tasks.Task;
 
-namespace SqlFIrst.VisualStudio.Integration.Commands.Files
+namespace SqlFIrst.VisualStudio.Integration.Commands
 {
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class GenerateQueryObjects
+	internal sealed class GenerateQueryObjectsCommand
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x70E7;
+		public const int CommandId = 0x962F;
 
-		private readonly ILog _log;
+		private readonly ILog _log = LogManager.GetLogger<GenerateQueryObjectsCommand>();
 
 		/// <summary>
 		/// VS Package that provides this command, not null.
@@ -39,7 +39,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		/// <summary>
 		/// Gets the instance of the command.
 		/// </summary>
-		public static GenerateQueryObjects Instance { get; private set; }
+		public static GenerateQueryObjectsCommand Instance { get; private set; }
 
 		/// <summary>
 		/// Gets the service provider from the owner package.
@@ -47,15 +47,12 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		private IServiceProvider ServiceProvider => _package;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenerateQueryObjects" /> class.
+		/// Initializes a new instance of the <see cref="GenerateQueryObjectsCommand" /> class.
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private GenerateQueryObjects(Package package)
+		private GenerateQueryObjectsCommand(Package package)
 		{
-			CommonLoggingConfiguration.EnsureOutputEnabled();
-			_log = LogManager.GetLogger<GenerateQueryObjects>();
-
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 
 			if (ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
@@ -75,7 +72,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		/// <param name="package">Owner package, not null.</param>
 		public static void Initialize(Package package)
 		{
-			Instance = new GenerateQueryObjects(package);
+			Instance = new GenerateQueryObjectsCommand(package);
 		}
 
 		private void OnBeforeQueryStatus(object sender, EventArgs e)
@@ -83,7 +80,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 			if (sender is OleMenuCommand menuCommand)
 			{
 				IEnumerable<ProjectItem> selectedItems = IdeHelper.GetSelectedItems();
-				menuCommand.Visible = selectedItems.All(projectItem => projectItem.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase));
+				menuCommand.Enabled = selectedItems.All(projectItem => projectItem.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase));
 			}
 		}
 
@@ -129,7 +126,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 					errors.AddLast((projectItem, ex));
 				}
 
-				if (!projects.Contains(projectItem.ContainingProject))
+				if (projectItem.ContainingProject != null && !projects.Contains(projectItem.ContainingProject))
 				{
 					projects.Add(projectItem.ContainingProject);
 				}

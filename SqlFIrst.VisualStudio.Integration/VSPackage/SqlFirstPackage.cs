@@ -2,9 +2,10 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
+using SqlFIrst.VisualStudio.Integration.Commands;
 using SqlFIrst.VisualStudio.Integration.Logging;
 
-namespace SqlFIrst.VisualStudio.Integration.Commands.Files
+namespace SqlFIrst.VisualStudio.Integration.VSPackage
 {
 	/// <summary>
 	/// This is the class that implements the package exposed by this assembly.
@@ -30,7 +31,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 	[Guid(PackageGuidString)]
 	[ProvideAutoLoad(VSConstants.UICONTEXT.SolutionExists_string)]
 	[SuppressMessage("StyleCop.CSharp.DocumentationRules", "SA1650:ElementDocumentationMustBeSpelledCorrectly", Justification = "pkgdef, VS and vsixmanifest are valid VS terms")]
-	public sealed class GenerateQueryObjectsPackage : Package
+	public sealed class SqlFirstPackage : Package
 	{
 		/// <summary>
 		/// GenerateQueryObjectsPackage GUID string.
@@ -38,9 +39,9 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		public const string PackageGuidString = "3d750cc8-b827-48fb-ad38-903c0c2e6fd7";
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenerateQueryObjects" /> class.
+		/// Initializes a new instance of the <see cref="GenerateQueryObjectsCommand" /> class.
 		/// </summary>
-		public GenerateQueryObjectsPackage()
+		public SqlFirstPackage()
 		{
 			CommonLoggingConfiguration.EnsureOutputEnabled();
 		}
@@ -53,10 +54,9 @@ namespace SqlFIrst.VisualStudio.Integration.Commands.Files
 		/// </summary>
 		protected override void Initialize()
 		{
-			GenerateQueryObjects.Initialize(this);
+			GenerateQueryObjectsCommand.Initialize(this);
 			base.Initialize();
 		}
-
 
 		#endregion
 	}

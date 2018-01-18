@@ -24,8 +24,8 @@
     <ProjectGuid>{B3C97029-703E-4DCC-86F5-2931885CE978}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>SqlFIrst.VisualStudio.Integration</RootNamespace>
-    <AssemblyName>SqlFIrst.VisualStudio.Integration</AssemblyName>
+    <RootNamespace>SqlFirst.VisualStudio.Integration</RootNamespace>
+    <AssemblyName>SqlFirst</AssemblyName>
     <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <GeneratePkgDefFile>true</GeneratePkgDefFile>
     <IncludeAssemblyInVSIXContainer>true</IncludeAssemblyInVSIXContainer>
@@ -55,8 +55,8 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\Files\GenerateQueryObjects.cs" />
-    <Compile Include="Commands\Files\GenerateQueryObjectsPackage.cs" />
+    <Compile Include="Commands\GenerateQueryObjectsCommand.cs" />
+    <Compile Include="VSPackage\SqlFirstPackage.cs" />
     <Compile Include="Helpers\HierarchyHelper.cs" />
     <Compile Include="Logging\CommonLoggingConfiguration.cs" />
     <Compile Include="Helpers\SqlFirstOutputWindow.cs" />
@@ -77,10 +77,9 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <VSCTCompile Include="Commands\Files\GenerateQueryObjectsPackage.vsct">
+    <VSCTCompile Include="VSPackage\SqlFirstPackage.vsct">
       <ResourceName>Menus.ctmenu</ResourceName>
     </VSCTCompile>
-    <Content Include="Commands\Files\Resources\GenerateQueryObjectsPackage.ico" />
     <Content Include="index.html" />
     <Content Include="stylesheet.css" />
   </ItemGroup>
@@ -204,7 +203,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="Commands\Files\VSPackage.resx">
+    <EmbeddedResource Include="VSPackage\VSPackage.resx">
       <MergeWithCTO>true</MergeWithCTO>
       <ManifestResourceName>VSPackage</ManifestResourceName>
     </EmbeddedResource>
