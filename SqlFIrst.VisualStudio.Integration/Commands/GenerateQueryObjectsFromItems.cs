@@ -2,34 +2,31 @@
 using System.Collections.Generic;
 using System.ComponentModel.Design;
 using System.Linq;
+using System.Threading;
 using Common.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using SqlFirst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Logic;
 using SqlFIrst.VisualStudio.Integration.Helpers;
-using SqlFIrst.VisualStudio.Integration.Logging;
-using SqlFIrst.VisualStudio.Integration.Logic;
 using Task = System.Threading.Tasks.Task;
 
-namespace SqlFIrst.VisualStudio.Integration.Commands
+namespace SqlFirst.VisualStudio.Integration.Commands
 {
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class GenerateQueryObjectsCommand
+	internal sealed class GenerateQueryObjectsFromItems
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
 		public const int CommandId = 0x962F;
 
-		private readonly ILog _log = LogManager.GetLogger<GenerateQueryObjectsCommand>();
-
 		/// <summary>
 		/// VS Package that provides this command, not null.
 		/// </summary>
 		private readonly Package _package;
-
-		private readonly SqlFirstErrorsWindow _errorWindow;
 
 		/// <summary>
 		/// Command menu group (command set GUID).
@@ -39,7 +36,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands
 		/// <summary>
 		/// Gets the instance of the command.
 		/// </summary>
-		public static GenerateQueryObjectsCommand Instance { get; private set; }
+		public static GenerateQueryObjectsFromItems Instance { get; private set; }
 
 		/// <summary>
 		/// Gets the service provider from the owner package.
@@ -47,11 +44,11 @@ namespace SqlFIrst.VisualStudio.Integration.Commands
 		private IServiceProvider ServiceProvider => _package;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenerateQueryObjectsCommand" /> class.
+		/// Initializes a new instance of the <see cref="GenerateQueryObjectsFromItems" /> class.
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private GenerateQueryObjectsCommand(Package package)
+		private GenerateQueryObjectsFromItems(Package package)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 
@@ -62,8 +59,6 @@ namespace SqlFIrst.VisualStudio.Integration.Commands
 				oleMenuItem.BeforeQueryStatus += OnBeforeQueryStatus;
 				commandService.AddCommand(oleMenuItem);
 			}
-
-			_errorWindow = new SqlFirstErrorsWindow(ServiceProvider);
 		}
 
 		/// <summary>
@@ -72,7 +67,7 @@ namespace SqlFIrst.VisualStudio.Integration.Commands
 		/// <param name="package">Owner package, not null.</param>
 		public static void Initialize(Package package)
 		{
-			Instance = new GenerateQueryObjectsCommand(package);
+			Instance = new GenerateQueryObjectsFromItems(package);
 		}
 
 		private void OnBeforeQueryStatus(object sender, EventArgs e)
@@ -95,52 +90,9 @@ namespace SqlFIrst.VisualStudio.Integration.Commands
 		{
 			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
 
-			SqlFirstOutputWindow.Pane.Clear();
-			SqlFirstOutputWindow.Pane.Activate();
-
-			if (!selected.Any())
-			{
-				_log.Info("Nothing selected to generate query objects");
-				return;
-			}
-
-			Task.Run(() => ProcessSelectedItems(selected));
+			var itemsPerformer = new ProjectItemsPerformer(ServiceProvider);
+			Task.Run(() => itemsPerformer.ProcessItemsAsync(selected, CancellationToken.None));
 		}
-
-		private void ProcessSelectedItems(IEnumerable<ProjectItem> selected)
-		{
-			_errorWindow.ClearErrors();
-
-			var errors = new LinkedList<(ProjectItem, Exception)>();
-			var projects = new List<Project>();
-
-			foreach (ProjectItem projectItem in selected)
-			{
-				try
-				{
-					Performer.Perform(projectItem);
-				}
-				catch (Exception ex)
-				{
-					_log.Error(ex);
-					errors.AddLast((projectItem, ex));
-				}
-
-				if (projectItem.ContainingProject != null && !projects.Contains(projectItem.ContainingProject))
-				{
-					projects.Add(projectItem.ContainingProject);
-				}
-			}
-
-			foreach (Project project in projects.Where(project => project.IsDirty))
-			{
-				project.Save();
-			}
-
-			if (errors.Any())
-			{
-				_errorWindow.DisplayErrors(errors);
-			}
-		}
+		
 	}
 }

@@ -55,7 +55,10 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Commands\GenerateQueryObjectsCommand.cs" />
+    <Compile Include="Commands\GenerateQueryObjectsFromItems.cs" />
+    <Compile Include="Commands\GenerateQueryObjectFromFolder.cs" />
+    <Compile Include="Helpers\SqlFirstStatusBar.cs" />
+    <Compile Include="Logic\ProjectItemsPerformer.cs" />
     <Compile Include="VSPackage\SqlFirstPackage.cs" />
     <Compile Include="Helpers\HierarchyHelper.cs" />
     <Compile Include="Logging\CommonLoggingConfiguration.cs" />

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
@@ -33,8 +34,28 @@ namespace SqlFIrst.VisualStudio.Integration.Helpers
 			}
 		}
 
+		public static IEnumerable<ProjectItem> GetNestedItemsRecursive(ProjectItem source, Func<ProjectItem, bool> predicate)
+		{
+			if (source == null)
+			{
+				yield break;
+			}
 
+			if (predicate(source))
+			{
+				yield return source;
+			}
 
-
+			if (source.ProjectItems != null)
+			{
+				foreach (ProjectItem innerItem in source.ProjectItems.OfType<ProjectItem>())
+				{
+					foreach (ProjectItem item in GetNestedItemsRecursive(innerItem, predicate))
+					{
+						yield return item;
+					}
+				}
+			}
+		}
 	}
 }

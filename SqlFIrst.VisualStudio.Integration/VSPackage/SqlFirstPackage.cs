@@ -2,7 +2,8 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using SqlFIrst.VisualStudio.Integration.Commands;
+using SqlFirst.VisualStudio.Integration;
+using SqlFirst.VisualStudio.Integration.Commands;
 using SqlFIrst.VisualStudio.Integration.Logging;
 
 namespace SqlFIrst.VisualStudio.Integration.VSPackage
@@ -39,7 +40,7 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 		public const string PackageGuidString = "3d750cc8-b827-48fb-ad38-903c0c2e6fd7";
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenerateQueryObjectsCommand" /> class.
+		/// Initializes a new instance of the <see cref="GenerateQueryObjectsFromItems" /> class.
 		/// </summary>
 		public SqlFirstPackage()
 		{
@@ -54,8 +55,9 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 		/// </summary>
 		protected override void Initialize()
 		{
-			GenerateQueryObjectsCommand.Initialize(this);
 			base.Initialize();
+			GenerateQueryObjectsFromItems.Initialize(this);
+		    GenerateQueryObjectFromFolder.Initialize(this);
 		}
 
 		#endregion
