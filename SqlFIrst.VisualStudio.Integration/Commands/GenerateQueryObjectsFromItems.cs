@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
+using System.IO;
 using System.Linq;
 using System.Threading;
 using Common.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
+using SqlFirst.Codegen;
 using SqlFirst.VisualStudio.Integration.Helpers;
 using SqlFirst.VisualStudio.Integration.Logic;
 using SqlFIrst.VisualStudio.Integration.Helpers;
@@ -93,6 +95,5 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 			var itemsPerformer = new ProjectItemsPerformer(ServiceProvider);
 			Task.Run(() => itemsPerformer.ProcessItemsAsync(selected, CancellationToken.None));
 		}
-		
 	}
 }

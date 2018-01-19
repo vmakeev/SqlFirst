@@ -55,6 +55,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Commands\AddSqlFirstOptions.cs" />
     <Compile Include="Commands\GenerateQueryObjectsFromItems.cs" />
     <Compile Include="Commands\GenerateQueryObjectFromFolder.cs" />
     <Compile Include="Helpers\SqlFirstStatusBar.cs" />
@@ -78,6 +79,7 @@
     <None Include="source.extension.vsixmanifest">
       <SubType>Designer</SubType>
     </None>
+    <EmbeddedResource Include="SqlFirst.options" />
   </ItemGroup>
   <ItemGroup>
     <VSCTCompile Include="VSPackage\SqlFirstPackage.vsct">

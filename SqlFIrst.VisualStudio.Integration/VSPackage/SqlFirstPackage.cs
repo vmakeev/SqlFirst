@@ -58,6 +58,7 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 			base.Initialize();
 			GenerateQueryObjectsFromItems.Initialize(this);
 		    GenerateQueryObjectFromFolder.Initialize(this);
+			AddSqlFirstOptions.Initialize(this);
 		}
 
 		#endregion

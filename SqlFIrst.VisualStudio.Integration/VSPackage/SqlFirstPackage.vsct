@@ -36,6 +36,15 @@
           <ButtonText>Generate objects</ButtonText>
         </Strings>
       </Button>
+
+      <!-- Generate query objects for folder command -->
+      <Button guid="guidSqlFirstPackageCmdSet1" id="AddSqlFirstOptionsCommandId" priority="0x0110" type="Button">
+        <Parent guid="guidSqlFirstPackageCmdSet1" id="SqlFirstGenerateObjectsFromFolderGroupId" />
+        <CommandFlag>TextChanges</CommandFlag>
+        <Strings>
+          <ButtonText>Add SqlFirst.options</ButtonText>
+        </Strings>
+      </Button>
     </Buttons>
 
     <Menus>
@@ -92,6 +101,7 @@
       <IDSymbol name="SqlFirstGenerateObjectsFromFolderGroupId" value="0x2000" />
       <IDSymbol name="GenerateQueryObjectsFolderMenuId" value="0x1100" />
       <IDSymbol name="GenerateQueryObjectsFromFolderCommandId" value="0x11DE" />
+      <IDSymbol name="AddSqlFirstOptionsCommandId" value="0x11DF" />
 
     </GuidSymbol>
 
