@@ -76,6 +76,8 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <param name="e">Event args.</param>
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
+			SqlFirstOutputWindow.Pane.Clear();
+			SqlFirstOutputWindow.Pane.Activate();
 			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
 
 			bool IsSqlFile(ProjectItem candidate) => candidate.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase);

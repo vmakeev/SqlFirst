@@ -74,6 +74,8 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <param name="e">Event args.</param>
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
+			SqlFirstOutputWindow.Pane.Clear();
+			SqlFirstOutputWindow.Pane.Activate();
 			IEnumerable<ProjectItem> selectedItems = IdeHelper.GetSelectedItems();
 			var provider = new ProjectItemsPerformer(ServiceProvider);
 			Task.Run(() => provider.BeautifyFiles(selectedItems));

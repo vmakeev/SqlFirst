@@ -98,6 +98,8 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		{
 			string content = GetDefaultOptionsText();
 			const string fileName = "SqlFirst.options";
+			SqlFirstOutputWindow.Pane.Clear();
+			SqlFirstOutputWindow.Pane.Activate();
 
 			IEnumerable<ProjectItem> items = IdeHelper.GetSelectedItems();
 			foreach (ProjectItem item in items)

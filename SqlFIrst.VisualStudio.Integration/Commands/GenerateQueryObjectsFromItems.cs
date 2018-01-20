@@ -90,6 +90,8 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <param name="e">Event args.</param>
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
+			SqlFirstOutputWindow.Pane.Clear();
+			SqlFirstOutputWindow.Pane.Activate();
 			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
 
 			var itemsPerformer = new ProjectItemsPerformer(ServiceProvider);
