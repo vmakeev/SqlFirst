@@ -93,7 +93,7 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
 
 			var itemsPerformer = new ProjectItemsPerformer(ServiceProvider);
-			Task.Run(() => itemsPerformer.ProcessItemsAsync(selected, CancellationToken.None));
+			Task.Run(() => itemsPerformer.GenerateQueryObjectsAsync(selected, CancellationToken.None));
 		}
 	}
 }

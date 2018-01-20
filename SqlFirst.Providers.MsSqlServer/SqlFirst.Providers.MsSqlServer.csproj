@@ -1,16 +1,10 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net462</TargetFrameworks>
-    <Version>0.0.1</Version>
-    <Description>MS SQL Server support classes</Description>
-    <AssemblyVersion>0.0.1.0</AssemblyVersion>
-    <FileVersion>0.0.1.0</FileVersion>
-    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <TargetFramework>net462</TargetFramework>
     <SignAssembly>true</SignAssembly>
-    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
     <DelaySign>false</DelaySign>
-    <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>
@@ -22,7 +16,5 @@
   <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Core\SqlFirst.Core.csproj" />
   </ItemGroup>
-
-  <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
 
 </Project>

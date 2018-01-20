@@ -19,6 +19,8 @@ namespace SqlFirst.Intelligence.Generators
 
 		protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType()));
 
+		public abstract ISqlEmitter SqlEmitter { get; }
+
 		public abstract IQueryParser QueryParser { get; }
 
 		public abstract ICodeGenerator CodeGenerator { get; }
@@ -233,6 +235,34 @@ namespace SqlFirst.Intelligence.Generators
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
 
 			return context;
+		}
+
+		public string FormatQuery(string query, GenerationOptions parameters)
+		{
+			IQueryParser parser = QueryParser;
+
+			IQueryInfo info = parser.GetQueryInfo(query, parameters.ConnectionString);
+			List<IQuerySection> sections = parser.GetQuerySections(query).ToList();
+
+			if (SqlEmitter.CanEmitDeclarations)
+			{
+				IQuerySection[] allDeclarations = sections.Where(p => p.Type == QuerySectionType.Declarations).ToArray();
+				sections.RemoveAll(allDeclarations.Contains);
+
+				string declarations = SqlEmitter.EmitDeclarations(info.Parameters);
+
+				IQuerySection declarationsSection = new QuerySection(QuerySectionType.Declarations, declarations);
+				sections.Add(declarationsSection);
+			}
+
+			if (sections.All(p => p.Type != QuerySectionType.Options))
+			{
+				IQuerySection optionsSection = new QuerySection(QuerySectionType.Options, @"/* add SqlFirst options here */");
+				sections.Add(optionsSection);
+			}
+
+			string result = SqlEmitter.EmitQuery(sections);
+			return result;
 		}
 	}
 }

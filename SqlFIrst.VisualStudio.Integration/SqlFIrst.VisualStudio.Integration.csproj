@@ -56,6 +56,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Commands\AddSqlFirstOptions.cs" />
+    <Compile Include="Commands\BeautifySqlFile.cs" />
     <Compile Include="Commands\GenerateQueryObjectsFromItems.cs" />
     <Compile Include="Commands\GenerateQueryObjectFromFolder.cs" />
     <Compile Include="Helpers\SqlFirstStatusBar.cs" />

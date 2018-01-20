@@ -21,16 +21,16 @@ namespace SqlFirst.VisualStudio.Integration.Logic
 		/// <inheritdoc />
 		public ProjectItemsPerformer(IServiceProvider serviceProvider)
 		{
-			_errorWindow = new SqlFirstErrorsWindow(serviceProvider);
+			_errorWindow = SqlFirstErrorsWindow.Instance;
 			_statusBar = new SqlFirstStatusBar(serviceProvider);
 		}
 
-		public Task ProcessItemsAsync(IEnumerable<ProjectItem> selected, CancellationToken cancellationToken)
+		public Task GenerateQueryObjectsAsync(IEnumerable<ProjectItem> selected, CancellationToken cancellationToken)
 		{
-			return Task.Factory.StartNew(() => ProcessItems(selected), cancellationToken);
+			return Task.Factory.StartNew(() => GenerateQueryObjects(selected), cancellationToken);
 		}
 
-		public void ProcessItems(IEnumerable<ProjectItem> selected)
+		public void GenerateQueryObjects(IEnumerable<ProjectItem> selected)
 		{
 			_errorWindow.ClearErrors();
 
@@ -43,7 +43,7 @@ namespace SqlFirst.VisualStudio.Integration.Logic
 			{
 				try
 				{
-					Performer.Perform(projectItem);
+					Performer.GenerateObjects(projectItem);
 					objectsCount++;
 				}
 				catch (Exception ex)
@@ -58,8 +58,6 @@ namespace SqlFirst.VisualStudio.Integration.Logic
 				}
 			}
 
-			_statusBar.Display($"SqlFirst generation successful, {objectsCount} queries processed");
-
 			foreach (Project project in projects.Where(project => project.IsDirty))
 			{
 				project.Save();
@@ -69,6 +67,43 @@ namespace SqlFirst.VisualStudio.Integration.Logic
 			{
 				_statusBar.Display("SqlFirst generation failed");
 				_errorWindow.DisplayErrors(errors);
+			}
+			else
+			{
+				_statusBar.Display($"SqlFirst generation successful, {objectsCount} queries processed");
+			}
+		}
+
+		public void BeautifyFiles(IEnumerable<ProjectItem> items)
+		{
+			_errorWindow.ClearErrors();
+
+			var errors = new LinkedList<(ProjectItem, Exception)>();
+
+			int objectsCount = 0;
+			_statusBar.Display("SqlFirst format files started...");
+			foreach (ProjectItem projectItem in items)
+			{
+				try
+				{
+					Performer.BeautifyFile(projectItem);
+					objectsCount++;
+				}
+				catch (Exception ex)
+				{
+					_log.Error(ex);
+					errors.AddLast((projectItem, ex));
+				}
+			}
+
+			if (errors.Any())
+			{
+				_statusBar.Display("SqlFirst format files failed");
+				_errorWindow.DisplayErrors(errors);
+			}
+			else
+			{
+				_statusBar.Display($"SqlFirst format files successful, {objectsCount} queries processed");
 			}
 		}
 	}

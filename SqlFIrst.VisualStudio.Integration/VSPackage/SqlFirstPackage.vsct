@@ -7,39 +7,46 @@
   <Commands package="guidSqlFirstPackage">
 
     <Groups>
-      <Group guid="guidSqlFirstPackageCmdSet" id="SqlFirstItemMenuGroupId" />
-      <Group guid="guidSqlFirstPackageCmdSet" id="SqlFirstGenerateObjectsFromItemGroupId">
-        <Parent guid="guidSqlFirstPackageCmdSet" id="GenerateQueryObjectsMenuId" />
+      <Group guid="guidSqlFirstItemCmdSet" id="SqlFirstItemMenuGroupId" />
+      <Group guid="guidSqlFirstItemCmdSet" id="SqlFirstGenerateObjectsFromItemGroupId">
+        <Parent guid="guidSqlFirstItemCmdSet" id="GenerateQueryObjectsMenuId" />
       </Group>
 
-      <Group guid="guidSqlFirstPackageCmdSet1" id="SqlFirstFolderMenuGroupId"/>
-      <Group guid="guidSqlFirstPackageCmdSet1" id="SqlFirstGenerateObjectsFromFolderGroupId">
-        <Parent guid="guidSqlFirstPackageCmdSet1" id="GenerateQueryObjectsFolderMenuId" />
+      <Group guid="guidSqlFirstFolderCmdSet" id="SqlFirstFolderMenuGroupId"/>
+      <Group guid="guidSqlFirstFolderCmdSet" id="SqlFirstGenerateObjectsFromFolderGroupId">
+        <Parent guid="guidSqlFirstFolderCmdSet" id="GenerateQueryObjectsFolderMenuId" />
       </Group>
 
     </Groups>
 
     <Buttons>
       <!-- Generate query objects for items command -->
-      <Button guid="guidSqlFirstPackageCmdSet" id="GenerateQueryObjectsFromItemsCommandId" priority="0x0001" type="Button">
-        <Parent guid="guidSqlFirstPackageCmdSet" id="SqlFirstGenerateObjectsFromItemGroupId" />
-        <CommandFlag>DynamicVisibility</CommandFlag>
+      <Button guid="guidSqlFirstItemCmdSet" id="GenerateQueryObjectsFromItemsCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidSqlFirstItemCmdSet" id="SqlFirstGenerateObjectsFromItemGroupId" />
+        <Strings>
+          <ButtonText>Generate objects</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Beautify file command -->
+      <Button guid="guidSqlFirstItemCmdSet" id="BeautifySqlFileCommandId" priority="0x0110" type="Button">
+        <Parent guid="guidSqlFirstItemCmdSet" id="SqlFirstGenerateObjectsFromItemGroupId" />
+        <Strings>
+          <ButtonText>Beautify file</ButtonText>
+        </Strings>
+      </Button>
+
+      <!-- Generate query objects for folder command -->
+      <Button guid="guidSqlFirstFolderCmdSet" id="GenerateQueryObjectsFromFolderCommandId" priority="0x0100" type="Button">
+        <Parent guid="guidSqlFirstFolderCmdSet" id="SqlFirstGenerateObjectsFromFolderGroupId" />
         <Strings>
           <ButtonText>Generate objects</ButtonText>
         </Strings>
       </Button>
 
       <!-- Generate query objects for folder command -->
-      <Button guid="guidSqlFirstPackageCmdSet1" id="GenerateQueryObjectsFromFolderCommandId" priority="0x0100" type="Button">
-        <Parent guid="guidSqlFirstPackageCmdSet1" id="SqlFirstGenerateObjectsFromFolderGroupId" />
-        <Strings>
-          <ButtonText>Generate objects</ButtonText>
-        </Strings>
-      </Button>
-
-      <!-- Generate query objects for folder command -->
-      <Button guid="guidSqlFirstPackageCmdSet1" id="AddSqlFirstOptionsCommandId" priority="0x0110" type="Button">
-        <Parent guid="guidSqlFirstPackageCmdSet1" id="SqlFirstGenerateObjectsFromFolderGroupId" />
+      <Button guid="guidSqlFirstFolderCmdSet" id="AddSqlFirstOptionsCommandId" priority="0x0110" type="Button">
+        <Parent guid="guidSqlFirstFolderCmdSet" id="SqlFirstGenerateObjectsFromFolderGroupId" />
         <CommandFlag>TextChanges</CommandFlag>
         <Strings>
           <ButtonText>Add SqlFirst.options</ButtonText>
@@ -50,16 +57,16 @@
     <Menus>
 
       <!-- Root SqlFirst menu text -->
-      <Menu guid="guidSqlFirstPackageCmdSet" id="GenerateQueryObjectsMenuId" priority="0x0100" type="Menu">
-        <Parent guid="guidSqlFirstPackageCmdSet" id="SqlFirstItemMenuGroupId" />
+      <Menu guid="guidSqlFirstItemCmdSet" id="GenerateQueryObjectsMenuId" priority="0x0100" type="Menu">
+        <Parent guid="guidSqlFirstItemCmdSet" id="SqlFirstItemMenuGroupId" />
         <Strings>
           <ButtonText>SqlFirst</ButtonText>
         </Strings>
       </Menu>
 
       <!-- Root SqlFirst menu text -->
-      <Menu guid="guidSqlFirstPackageCmdSet1" id="GenerateQueryObjectsFolderMenuId" priority="0x0100" type="Menu">
-        <Parent guid="guidSqlFirstPackageCmdSet1" id="SqlFirstFolderMenuGroupId" />
+      <Menu guid="guidSqlFirstFolderCmdSet" id="GenerateQueryObjectsFolderMenuId" priority="0x0100" type="Menu">
+        <Parent guid="guidSqlFirstFolderCmdSet" id="SqlFirstFolderMenuGroupId" />
         <Strings>
           <ButtonText>SqlFirst</ButtonText>
         </Strings>
@@ -72,12 +79,12 @@
   <CommandPlacements>
 
     <!-- Root SqlFirst item menu -->
-    <CommandPlacement guid="guidSqlFirstPackageCmdSet" id="SqlFirstItemMenuGroupId" priority="0x02FF">
+    <CommandPlacement guid="guidSqlFirstItemCmdSet" id="SqlFirstItemMenuGroupId" priority="0x02FF">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_ITEMNODE" />
     </CommandPlacement>
 
     <!-- Root SqlFirst folder menu -->
-    <CommandPlacement guid="guidSqlFirstPackageCmdSet1" id="SqlFirstFolderMenuGroupId" priority="0x02FF">
+    <CommandPlacement guid="guidSqlFirstFolderCmdSet" id="SqlFirstFolderMenuGroupId" priority="0x02FF">
       <Parent guid="guidSHLMainMenu" id="IDM_VS_CTXT_FOLDERNODE" />
     </CommandPlacement>
 
@@ -86,16 +93,17 @@
   <Symbols>
     <GuidSymbol name="guidSqlFirstPackage" value="{3d750cc8-b827-48fb-ad38-903c0c2e6fd7}" />
     
-    <GuidSymbol name="guidSqlFirstPackageCmdSet" value="{02a34c8a-02ae-401c-9566-7ed255a4d535}">
+    <GuidSymbol name="guidSqlFirstItemCmdSet" value="{02a34c8a-02ae-401c-9566-7ed255a4d535}">
 
       <IDSymbol name="SqlFirstItemMenuGroupId" value="0x1000" />      
       <IDSymbol name="SqlFirstGenerateObjectsFromItemGroupId" value="0x2000" />
       <IDSymbol name="GenerateQueryObjectsMenuId" value="0x1100" />
       <IDSymbol name="GenerateQueryObjectsFromItemsCommandId" value="0x962F" />
+      <IDSymbol name="BeautifySqlFileCommandId" value="0x9630" />
 
     </GuidSymbol>
   
-    <GuidSymbol value="{b2723acd-ece2-457d-9c4c-bef9ad610585}" name="guidSqlFirstPackageCmdSet1">
+    <GuidSymbol value="{b2723acd-ece2-457d-9c4c-bef9ad610585}" name="guidSqlFirstFolderCmdSet">
 
       <IDSymbol name="SqlFirstFolderMenuGroupId" value="0x1000" />
       <IDSymbol name="SqlFirstGenerateObjectsFromFolderGroupId" value="0x2000" />

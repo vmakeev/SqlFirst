@@ -63,8 +63,12 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 				{
 					string path = Path.Combine(items.Single().GetFullPath(), fileName);
 					menuCommand.Text = File.Exists(path)
-						? "Modify SqlFirst.options"
+						? "Edit SqlFirst.options"
 						: "Add SqlFirst.options";
+				}
+				else
+				{
+					menuCommand.Text = "Add SqlFirst.options";
 				}
 			}
 		}
@@ -104,7 +108,7 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 					File.WriteAllText(path, content);
 				}
 
-				IdeHelper.ApplicationObject.ItemOperations.OpenFile(path, Constants.vsViewKindTextView);
+				IdeHelper.OpenFile(path);
 			}
 		}
 

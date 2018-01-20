@@ -1,4 +1,6 @@
-﻿namespace SqlFirst.Core
+﻿using SqlFirst.Core.Impl;
+
+namespace SqlFirst.Core
 {
 	/// <summary>
 	/// Опция кодогенератора SqlFirst

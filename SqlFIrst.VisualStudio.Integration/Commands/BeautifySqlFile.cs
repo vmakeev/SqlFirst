@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.Linq;
-using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using SqlFirst.VisualStudio.Integration.Logic;
@@ -14,12 +12,12 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 	/// <summary>
 	/// Command handler
 	/// </summary>
-	internal sealed class GenerateQueryObjectFromFolder
+	internal sealed class BeautifySqlFile
 	{
 		/// <summary>
 		/// Command ID.
 		/// </summary>
-		public const int CommandId = 0x11DE;
+		public const int CommandId = 0x9630;
 
 		/// <summary>
 		/// VS Package that provides this command, not null.
@@ -29,7 +27,7 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <summary>
 		/// Gets the instance of the command.
 		/// </summary>
-		public static GenerateQueryObjectFromFolder Instance { get; private set; }
+		public static BeautifySqlFile Instance { get; private set; }
 
 		/// <summary>
 		/// Gets the service provider from the owner package.
@@ -37,19 +35,19 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		private IServiceProvider ServiceProvider => _package;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="GenerateQueryObjectFromFolder" /> class.
+		/// Initializes a new instance of the <see cref="BeautifySqlFile" /> class.
 		/// Adds our command handlers for menu (commands must exist in the command table file)
 		/// </summary>
 		/// <param name="package">Owner package, not null.</param>
-		private GenerateQueryObjectFromFolder(Package package)
+		private BeautifySqlFile(Package package)
 		{
 			_package = package ?? throw new ArgumentNullException(nameof(package));
 
 			if (ServiceProvider.GetService(typeof(IMenuCommandService)) is OleMenuCommandService commandService)
 			{
 				var menuCommandId = new CommandID(_commandSet, CommandId);
-				var oleMenuItem = new OleMenuCommand(MenuItemCallback, menuCommandId);
-				commandService.AddCommand(oleMenuItem);
+				var menuItem = new MenuCommand(MenuItemCallback, menuCommandId);
+				commandService.AddCommand(menuItem);
 			}
 		}
 
@@ -59,13 +57,13 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <param name="package">Owner package, not null.</param>
 		public static void Initialize(Package package)
 		{
-			Instance = new GenerateQueryObjectFromFolder(package);
+			Instance = new BeautifySqlFile(package);
 		}
 
 		/// <summary>
 		/// Command menu group (command set GUID).
 		/// </summary>
-		public static readonly Guid _commandSet = new Guid("b2723acd-ece2-457d-9c4c-bef9ad610585");
+		public static readonly Guid _commandSet = new Guid("02a34c8a-02ae-401c-9566-7ed255a4d535");
 
 		/// <summary>
 		/// This function is the callback used to execute the command when the menu item is clicked.
@@ -76,14 +74,9 @@ namespace SqlFirst.VisualStudio.Integration.Commands
 		/// <param name="e">Event args.</param>
 		private void MenuItemCallback(object sender, EventArgs e)
 		{
-			ProjectItem[] selected = IdeHelper.GetSelectedItems().ToArray();
-
-			bool IsSqlFile(ProjectItem candidate) => candidate.Name.EndsWith(".sql", StringComparison.OrdinalIgnoreCase);
-
-			IEnumerable<ProjectItem> sqlFiles = selected.SelectMany(item => IdeHelper.GetNestedItemsRecursive(item, IsSqlFile));
-
-			var itemsPerformer = new ProjectItemsPerformer(ServiceProvider);
-			Task.Run(() => itemsPerformer.GenerateQueryObjectsAsync(sqlFiles, CancellationToken.None));
+			IEnumerable<ProjectItem> selectedItems = IdeHelper.GetSelectedItems();
+			var provider = new ProjectItemsPerformer(ServiceProvider);
+			Task.Run(() => provider.BeautifyFiles(selectedItems));
 		}
 	}
 }

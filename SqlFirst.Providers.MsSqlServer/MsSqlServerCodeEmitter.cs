@@ -11,7 +11,7 @@ namespace SqlFirst.Providers.MsSqlServer
 	/// <summary>
 	/// Генерирует корректный SQL
 	/// </summary>
-	public class MsSqlServerCodeEmitter
+	public class MsSqlServerCodeEmitter : ISqlEmitter
 	{
 		public string EmitQuery(IEnumerable<IQuerySection> sections)
 		{
@@ -157,12 +157,15 @@ namespace SqlFirst.Providers.MsSqlServer
 			return result;
 		}
 
-		public string EmitOption(SqlFirstOption option)
+		/// <inheritdoc />
+		public bool CanEmitDeclarations { get; } = true;
+
+		public string EmitOption(ISqlFirstOption option)
 		{
 			return $"-- {option.Name} " + string.Join(" ", option.Parameters);
 		}
 
-		public string EmitOptions(IEnumerable<SqlFirstOption> options)
+		public string EmitOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			IEnumerable<string> results = options.Select(EmitOption);
 			string result = string.Join(Environment.NewLine, results);

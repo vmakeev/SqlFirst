@@ -2,8 +2,8 @@
 using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
-using SqlFirst.VisualStudio.Integration;
 using SqlFirst.VisualStudio.Integration.Commands;
+using SqlFIrst.VisualStudio.Integration.Helpers;
 using SqlFIrst.VisualStudio.Integration.Logging;
 
 namespace SqlFIrst.VisualStudio.Integration.VSPackage
@@ -45,6 +45,7 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 		public SqlFirstPackage()
 		{
 			CommonLoggingConfiguration.EnsureOutputEnabled();
+			SqlFirstErrorsWindow.InitInstance(this);
 		}
 
 		#region Package Members
@@ -58,6 +59,7 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 			base.Initialize();
 			GenerateQueryObjectsFromItems.Initialize(this);
 		    GenerateQueryObjectFromFolder.Initialize(this);
+		    BeautifySqlFile.Initialize(this);
 			AddSqlFirstOptions.Initialize(this);
 		}
 

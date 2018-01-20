@@ -17,6 +17,15 @@ namespace SqlFIrst.VisualStudio.Integration.Helpers
 		{
 			return (Solution2)ApplicationObject.Solution;
 		}
+		public static void OpenFile(string path)
+		{
+			ApplicationObject.ItemOperations.OpenFile(path, Constants.vsViewKindTextView);
+		}
+
+		public static void OpenFile(this ProjectItem item)
+		{
+			OpenFile(item.GetFullPath());
+		}
 
 		public static IEnumerable<ProjectItem> GetSelectedItems()
 		{

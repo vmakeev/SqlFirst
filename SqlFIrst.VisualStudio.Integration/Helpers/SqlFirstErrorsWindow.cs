@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
@@ -10,7 +11,17 @@ namespace SqlFIrst.VisualStudio.Integration.Helpers
 	{
 		private readonly ErrorListProvider _errorListProvider;
 
-		public SqlFirstErrorsWindow(IServiceProvider serviceProvider)
+		public static SqlFirstErrorsWindow Instance { get; private set; }
+
+		public static void InitInstance(IServiceProvider serviceProvider)
+		{
+			if (Instance == null)
+			{
+				Instance = new SqlFirstErrorsWindow(serviceProvider);
+			}
+		}
+
+		private SqlFirstErrorsWindow(IServiceProvider serviceProvider)
 		{
 			if (serviceProvider == null)
 			{

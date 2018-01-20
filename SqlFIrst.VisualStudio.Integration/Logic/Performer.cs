@@ -20,7 +20,40 @@ namespace SqlFIrst.VisualStudio.Integration.Logic
 			_log = LogManager.GetLogger(typeof(Performer));
 		}
 
-		public static void Perform(ProjectItem item)
+		public static void BeautifyFile(ProjectItem item)
+		{
+			_log.Info("Formatting file started");
+			GenerationOptions options = GetGenerationOptions(item);
+			GeneratorBase generator = GetGenerator(options);
+
+			string queryText = item.GetText();
+			string formattedText = generator.FormatQuery(queryText, options);
+
+			bool wasOpened = item.Document != null;
+
+			if (wasOpened)
+			{
+				_log.Trace("Trying to close file..");
+				item.Document?.Close(vsSaveChanges.vsSaveChangesYes);
+			}
+
+			if (item.IsDirty)
+			{
+				item.Save();
+			}
+
+			File.WriteAllText(item.GetFullPath(), formattedText);
+
+			if (wasOpened)
+			{
+				_log.Trace("Trying to reopen file..");
+				item.OpenFile();
+			}
+
+			_log.Trace("Formatting file successful");
+		}
+
+		public static void GenerateObjects(ProjectItem item)
 		{
 			item.EnsureIsEmbeddedResource(_log);
 
