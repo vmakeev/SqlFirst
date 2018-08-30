@@ -1,6 +1,6 @@
-﻿using SqlFirst.Codegen.Helpers;
+﻿using Shouldly;
+using SqlFirst.Codegen.Helpers;
 using Xunit;
-using Xunit.Should;
 
 namespace SqlFirst.Codegen.Tests
 {

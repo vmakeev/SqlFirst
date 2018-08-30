@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
+using Shouldly;
 using SqlFirst.Core;
 using SqlFirst.Core.Impl;
 using Xunit;
-using Xunit.Should;
 
 namespace SqlFirst.Providers.Postgres.Tests
 {
