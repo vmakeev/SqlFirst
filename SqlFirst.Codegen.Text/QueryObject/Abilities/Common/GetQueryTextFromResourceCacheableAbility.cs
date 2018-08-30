@@ -45,6 +45,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 				return 0;
 			}
 
+			data = data.Replace("\r\n", "\n");
+
 			byte[] bytes = Encoding.UTF8.GetBytes(data);
 
 			const ushort poly = 4129;
