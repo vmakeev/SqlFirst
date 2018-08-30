@@ -1,5 +1,5 @@
-﻿using Xunit;
-using Xunit.Should;
+﻿using Shouldly;
+using Xunit;
 
 namespace SqlFirst.Providers.MsSqlServer.Tests
 {

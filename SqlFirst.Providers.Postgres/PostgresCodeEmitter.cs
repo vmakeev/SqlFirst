@@ -10,7 +10,7 @@ namespace SqlFirst.Providers.Postgres
 	/// <summary>
 	/// Генерирует корректный SQL
 	/// </summary>
-	public class PostgresCodeEmitter
+	public class PostgresCodeEmitter : ISqlEmitter
 	{
 		public string EmitQuery(IEnumerable<IQuerySection> sections)
 		{
@@ -72,13 +72,22 @@ namespace SqlFirst.Providers.Postgres
 
 			return result;
 		}
+		
+		/// <inheritdoc />
+		public string EmitDeclarations(IEnumerable<IQueryParamInfo> infos)
+		{
+			throw new NotSupportedException("Postgres does not support parameter declarations");
+		}
 
-		public string EmitOption(SqlFirstOption option)
+		/// <inheritdoc />
+		public bool CanEmitDeclarations { get; } = false;
+
+		public string EmitOption(ISqlFirstOption option)
 		{
 			return $"-- {option.Name} " + string.Join(" ", option.Parameters);
 		}
 
-		public string EmitOptions(IEnumerable<SqlFirstOption> options)
+		public string EmitOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			IEnumerable<string> results = options.Select(EmitOption);
 			string result = string.Join(Environment.NewLine, results);

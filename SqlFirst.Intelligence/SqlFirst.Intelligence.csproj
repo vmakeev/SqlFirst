@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <SignAssembly>true</SignAssembly>
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+    <DelaySign>false</DelaySign>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Common.Logging" Version="3.4.1" />
+		<PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
+		<PackageReference Include="System.ValueTuple" Version="4.4.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\SqlFirst.Codegen.Text\SqlFirst.Codegen.Text.csproj" />
+		<ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
+		<ProjectReference Include="..\SqlFirst.Core\SqlFirst.Core.csproj" />
+		<ProjectReference Include="..\SqlFirst.Providers.MsSqlServer\SqlFirst.Providers.MsSqlServer.csproj" />
+		<ProjectReference Include="..\SqlFirst.Providers.Postgres\SqlFirst.Providers.Postgres.csproj" />
+	</ItemGroup>
+
+</Project>

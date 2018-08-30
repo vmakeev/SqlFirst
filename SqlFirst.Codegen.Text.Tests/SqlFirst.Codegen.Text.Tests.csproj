@@ -1,15 +1,25 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.0</TargetFramework>
+    <TargetFramework>net462</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <SignAssembly>true</SignAssembly>
+
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+
+    <DelaySign>false</DelaySign>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="GenerateResultItemTests.cs" />
+  </ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FakeItEasy" Version="4.0.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
-		<PackageReference Include="Shouldly" Version="2.8.3" />
+		<PackageReference Include="Shouldly" Version="3.0.0" />
 		<PackageReference Include="xunit" Version="2.2.0" />
 		<PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
 	</ItemGroup>

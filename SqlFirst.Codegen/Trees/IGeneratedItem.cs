@@ -41,5 +41,10 @@ namespace SqlFirst.Codegen.Trees
 		/// Тип объекта (класс, перечисление, структура)
 		/// </summary>
 		string ObjectType { get; }
+
+		/// <summary>
+		/// Произвольные данные, располагающиеся перед началом описания элемента
+		/// </summary>
+		IEnumerable<string> BeforeItemData { get; }
 	}
 }

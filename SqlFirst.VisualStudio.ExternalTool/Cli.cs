@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using Common.Logging;
 using Mono.Options;
-using SqlFirst.VisualStudio.ExternalTool.Options;
+using SqlFirst.Intelligence.Options;
 
 [assembly: InternalsVisibleTo("SqlFirst.VisualStudio.ExternalTool.Tests")]
 
@@ -21,7 +21,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 			bool helpOnly = false;
 
 			OptionSet optionsSet = new OptionSet()
-									.Add("f|file=", "Путь к файлу SQL", s => options.QueryFile = s)
+									.Add("f|folder|file=", "Путь к файлу SQL или папке с файлами", s => options.Target = s)
 									.Add("ns|namespace=", "Namespace генерируемых классов", s => options.Namespace = s)
 									.Add("cs|connectionstring=", "Строка подключения к БД", s => options.ConnectionString = s)
 									.Add("p|project=", "Путь к файлу проекта", s => options.ProjectFile = s)
@@ -41,10 +41,9 @@ namespace SqlFirst.VisualStudio.ExternalTool
 				return 0;
 			}
 
-			var generator = new Performer();
-
 			try
 			{
+				IPerformer generator = PerformerSelector.Select(options);
 				generator.Perform(options);
 			}
 			catch (Exception ex)

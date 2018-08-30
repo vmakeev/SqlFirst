@@ -1,68 +1,63 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
-	<PropertyGroup>
-		<TargetFramework>netcoreapp2.0</TargetFramework>
-
-		<IsPackable>false</IsPackable>
-	</PropertyGroup>
-
-	<ItemGroup>
-	  <None Remove="Queries\Delete\DeleteByGuid.sql" />
-	  <None Remove="Queries\Insert\InsertStringGuidDate.sql" />
-	  <None Remove="Queries\Insert\InsertStringGuidDateWithOption.sql" />
-	  <None Remove="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
-	  <None Remove="Queries\Select\SelectAll.sql" />
-	  <None Remove="Queries\Select\SelectCount.sql" />
-	  <None Remove="Queries\Select\SelectDateWithNamedOrdinal.sql" />
-	  <None Remove="Queries\Select\SelectDateWithOrdinal.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithPaging.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithPagingNoParameters.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithUnknownAndCustomSections.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithUnknownSections.sql" />
-	  <None Remove="Queries\Select\SelectGuidAndDateWithUnknownUnnamedAndCustomSections.sql" />
-	  <None Remove="Queries\Select\SelectNotUniqueFieldsWithInnerJoin.sql" />
-	  <None Remove="Queries\Select\SelectNotUniqueFieldsWithLeftJoin.sql" />
-	  <None Remove="Queries\Select\SelectNotUniqueFieldsWithRightJoin.sql" />
-	  <None Remove="Queries\Select\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
-	  <None Remove="Queries\Select\SelectTwoStringsWithInnerJoin.sql" />
-	  <None Remove="Queries\Select\SelectTwoStringsWithLeftJoin.sql" />
-	  <None Remove="Queries\Update\UpdateDateByGuid.sql" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <EmbeddedResource Include="Queries\Delete\DeleteByGuid.sql" />
-	  <EmbeddedResource Include="Queries\Insert\InsertStringGuidDate.sql" />
-	  <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOption.sql" />
-	  <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectAll.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectCount.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectDateWithNamedOrdinal.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectDateWithOrdinal.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPaging.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingNoParameters.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownAndCustomSections.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownSections.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownUnnamedAndCustomSections.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithInnerJoin.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithLeftJoin.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithRightJoin.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithInnerJoin.sql" />
-	  <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithLeftJoin.sql" />
-	  <EmbeddedResource Include="Queries\Update\UpdateDateByGuid.sql" />
-	</ItemGroup>
-
-	<ItemGroup>
-		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
-		<PackageReference Include="xunit" Version="2.2.0" />
-		<PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
-		<PackageReference Include="xunit.should.netstandard" Version="1.0.0" />
-	</ItemGroup>
-
-	<ItemGroup>
-	  <ProjectReference Include="..\SqlFirst.Providers.Postgres\SqlFirst.Providers.Postgres.csproj" />
-	</ItemGroup>
-
+  <PropertyGroup>
+    <TargetFramework>net462</TargetFramework>
+    <IsPackable>false</IsPackable>
+    <SignAssembly>true</SignAssembly>
+    <DelaySign>false</DelaySign>
+    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+  </PropertyGroup>
+ 
+  <ItemGroup>
+    <None Remove="Queries\Delete\DeleteByGuid.sql" />
+    <None Remove="Queries\Insert\InsertStringGuidDate.sql" />
+    <None Remove="Queries\Insert\InsertStringGuidDateWithOption.sql" />
+    <None Remove="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
+    <None Remove="Queries\Select\SelectAll.sql" />
+    <None Remove="Queries\Select\SelectCount.sql" />
+    <None Remove="Queries\Select\SelectDateWithNamedOrdinal.sql" />
+    <None Remove="Queries\Select\SelectDateWithOrdinal.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithPaging.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithPagingNoParameters.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithUnknownAndCustomSections.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithUnknownSections.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithUnknownUnnamedAndCustomSections.sql" />
+    <None Remove="Queries\Select\SelectNotUniqueFieldsWithInnerJoin.sql" />
+    <None Remove="Queries\Select\SelectNotUniqueFieldsWithLeftJoin.sql" />
+    <None Remove="Queries\Select\SelectNotUniqueFieldsWithRightJoin.sql" />
+    <None Remove="Queries\Select\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
+    <None Remove="Queries\Select\SelectTwoStringsWithInnerJoin.sql" />
+    <None Remove="Queries\Select\SelectTwoStringsWithLeftJoin.sql" />
+    <None Remove="Queries\Update\UpdateDateByGuid.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Queries\Delete\DeleteByGuid.sql" />
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDate.sql" />
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOption.sql" />
+    <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateWithOptions.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectCount.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectDateWithNamedOrdinal.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectDateWithOrdinal.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPaging.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingNoParameters.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownAndCustomSections.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownSections.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithUnknownUnnamedAndCustomSections.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithLeftJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueFieldsWithRightJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectNotUniqueNamedFieldsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithInnerJoin.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectTwoStringsWithLeftJoin.sql" />
+    <EmbeddedResource Include="Queries\Update\UpdateDateByGuid.sql" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.3.0-preview-20170628-02" />
+    <PackageReference Include="Shouldly" Version="3.0.0" />
+    <PackageReference Include="xunit" Version="2.2.0" />
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.2.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\SqlFirst.Providers.Postgres\SqlFirst.Providers.Postgres.csproj" />
+  </ItemGroup>
 </Project>

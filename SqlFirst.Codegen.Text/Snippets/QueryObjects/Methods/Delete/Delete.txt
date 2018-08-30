@@ -1,0 +1,16 @@
+﻿/// <summary>
+/// Выполняет удаление строк из таблицы
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams`\r\n`|\r\n$~
+/// <returns>Количество измененных строк</returns>
+public virtual int Delete(IDbConnection connection$`, `MethodParameters|, $)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+$2|AddParameters`\r\n`|\r\n$~
+
+		return cmd.ExecuteNonQuery();
+	}
+}
