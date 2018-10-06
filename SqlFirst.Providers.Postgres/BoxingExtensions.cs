@@ -21,7 +21,7 @@ namespace SqlFirst.Providers.Postgres
 		{
 			if (DBNull.Value == value)
 			{
-				throw new InvalidCastException($"{typeof(T)} can not be casted to null.");
+				throw new InvalidCastException($"Can not cast type '{typeof(T)}' to null.");
 			}
 
 			return (T)value;
@@ -61,7 +61,7 @@ namespace SqlFirst.Providers.Postgres
 						typeof(Converter<object, T>),
 						typeof(BoxingExtensions)
 							.GetMethod("NullableField", BindingFlags.Static | BindingFlags.NonPublic)
-							.MakeGenericMethod(type.GetGenericArguments()[0]));
+							?.MakeGenericMethod(type.GetGenericArguments()[0]) ?? throw new InvalidOperationException($"Unable to create '{nameof(NullableField)}' method delegate."));
 				}
 				else
 				{

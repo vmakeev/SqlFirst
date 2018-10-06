@@ -4,10 +4,10 @@ using Common.Logging;
 using EnvDTE;
 using SqlFirst.Intelligence.Generators;
 using SqlFirst.Intelligence.Options;
-using SqlFIrst.VisualStudio.Integration.Helpers;
-using SqlFIrst.VisualStudio.Integration.Logging;
+using SqlFirst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Logging;
 
-namespace SqlFIrst.VisualStudio.Integration.Logic
+namespace SqlFirst.VisualStudio.Integration.Logic
 {
 	internal static class Performer
 	{

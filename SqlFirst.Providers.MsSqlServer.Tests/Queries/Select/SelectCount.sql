@@ -1,2 +1,2 @@
 ﻿select count(*)
-from CaseSubscriptions with(nolock)
+from Users with(nolock)

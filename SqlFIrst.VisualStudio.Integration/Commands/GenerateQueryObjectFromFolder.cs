@@ -6,7 +6,7 @@ using System.Threading;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using SqlFirst.VisualStudio.Integration.Logic;
-using SqlFIrst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Helpers;
 using Task = System.Threading.Tasks.Task;
 
 namespace SqlFirst.VisualStudio.Integration.Commands

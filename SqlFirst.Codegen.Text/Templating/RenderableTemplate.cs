@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Reflection;
@@ -24,6 +25,7 @@ namespace SqlFirst.Codegen.Text.Templating
 		}
 	}
 
+	[SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
 	public class RenderableTemplate : IRenderableTemplate
 	{
 		private static readonly PropertyEqualityComparer _propertyEqualityComparer = new PropertyEqualityComparer();
@@ -74,7 +76,7 @@ namespace SqlFirst.Codegen.Text.Templating
 					}
 				}
 
-				sb.Replace(snippetField.Placeholder, value);
+				sb.Replace(snippetField.Placeholder, value ?? string.Empty);
 			}
 
 			return sb.ToString();
@@ -187,6 +189,7 @@ namespace SqlFirst.Codegen.Text.Templating
 			/// The type of <paramref name="obj">obj</paramref> is a reference type
 			/// and <paramref name="obj">obj</paramref> is null.
 			/// </exception>
+			[SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
 			public int GetHashCode(SnippetField obj)
 			{
 				return obj?.Placeholder.GetHashCode() ?? 0;

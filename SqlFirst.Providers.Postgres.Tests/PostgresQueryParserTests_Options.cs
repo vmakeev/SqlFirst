@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using Shouldly;
 using SqlFirst.Core;
@@ -7,6 +8,7 @@ using Xunit;
 
 namespace SqlFirst.Providers.Postgres.Tests
 {
+	[SuppressMessage("ReSharper", "PossibleMultipleEnumeration")]
 	public partial class PostgresQueryParserTests
 	{
 		[Fact]

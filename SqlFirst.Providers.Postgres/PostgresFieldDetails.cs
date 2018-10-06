@@ -92,7 +92,7 @@ namespace SqlFirst.Providers.Postgres
 		public string ColumnName { get; set; }
 
 		/// <summary>
-		/// Индекс столбда в БД
+		/// Индекс столбца в БД
 		/// </summary>
 		public int ColumnOrdinal { get; set; }
 

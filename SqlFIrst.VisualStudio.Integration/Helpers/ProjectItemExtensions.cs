@@ -4,7 +4,7 @@ using Common.Logging;
 using EnvDTE;
 using SqlFirst.Intelligence.Helpers;
 
-namespace SqlFIrst.VisualStudio.Integration.Helpers
+namespace SqlFirst.VisualStudio.Integration.Helpers
 {
 	internal static class ProjectItemExtensions
 	{

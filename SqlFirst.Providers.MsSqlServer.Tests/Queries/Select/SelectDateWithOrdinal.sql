@@ -1,2 +1,2 @@
-﻿select top 5 CreateDateUtc, 5
-from CaseSubscriptions with(nolock)
+﻿select top 5 DateOfBirth, 5
+from Users with(nolock)

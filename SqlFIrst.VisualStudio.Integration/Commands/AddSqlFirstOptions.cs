@@ -5,7 +5,7 @@ using System.IO;
 using System.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using SqlFIrst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Helpers;
 
 namespace SqlFirst.VisualStudio.Integration.Commands
 {

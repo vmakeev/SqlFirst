@@ -8,8 +8,6 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 {
 	public partial class MsSqlServerQueryParserTests
 	{
-		private const string ConnectionString = @"Server=vmcbapi.kadlab.local;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
-
 		[Fact]
 		public void GetDeclaredParametersTest_Select_1()
 		{
@@ -20,12 +18,12 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(3);
 
-			IQueryParamInfo userKey = declaredParameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("255");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = declaredParameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("255");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo skip = declaredParameters[1];
 			skip.ShouldNotBeNull();
@@ -63,12 +61,12 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(2);
 
-			IQueryParamInfo userKey = declaredParameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("MAX");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = declaredParameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("MAX");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo skip = declaredParameters[1];
 			skip.ShouldNotBeNull();
@@ -81,19 +79,19 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		[Fact]
 		public void GetDeclaredParametersTest_Select_4()
 		{
-			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
+			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
 			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(2);
 
-			IQueryParamInfo userKey = declaredParameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("MAX");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = declaredParameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("MAX");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo skip = declaredParameters[1];
 			skip.ShouldNotBeNull();
@@ -124,12 +122,12 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.Length.ShouldBe(3);
 
-			IQueryParamInfo userKey = undeclaredParameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.NVarChar);
-			userKey.Length.ShouldBe("255");
-			userKey.DefaultValue.ShouldBeNull();
+			IQueryParamInfo email = undeclaredParameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			email.Length.ShouldBe("50");
+			email.DefaultValue.ShouldBeNull();
 
 			IQueryParamInfo skip = undeclaredParameters[1];
 			skip.ShouldNotBeNull();
@@ -167,7 +165,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		[Fact]
 		public void GetUndeclaredParametersTest_Select_4()
 		{
-			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
+			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
 			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
 

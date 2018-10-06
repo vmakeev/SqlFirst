@@ -1,16 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.Design;
-using System.IO;
 using System.Linq;
 using System.Threading;
-using Common.Logging;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
-using SqlFirst.Codegen;
-using SqlFirst.VisualStudio.Integration.Helpers;
 using SqlFirst.VisualStudio.Integration.Logic;
-using SqlFIrst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Helpers;
 using Task = System.Threading.Tasks.Task;
 
 namespace SqlFirst.VisualStudio.Integration.Commands

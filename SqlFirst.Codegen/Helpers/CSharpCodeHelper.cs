@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -126,7 +127,7 @@ namespace SqlFirst.Codegen.Helpers
 		/// <summary>
 		/// Проверяет, является ли <paramref name="name"/> корректным идентификатором
 		/// </summary>
-		/// <param name="name">Проверяемй идентификатор</param>
+		/// <param name="name">Проверяемый идентификатор</param>
 		/// <returns>Является ли идентификатор корректным</returns>
 		public static bool IsValidIdentifierName(string name)
 		{
@@ -179,6 +180,7 @@ namespace SqlFirst.Codegen.Helpers
 			return result;
 		}
 
+		[SuppressMessage("ReSharper", "PossibleNullReferenceException")]
 		public static string GetValidValue(Type targetType, object value)
 		{
 			if (value == null)
