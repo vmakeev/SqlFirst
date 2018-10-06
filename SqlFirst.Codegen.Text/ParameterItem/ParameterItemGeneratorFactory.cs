@@ -21,6 +21,7 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 				case ItemType.Struct:
 					return GetStructResultItemsGenerator(options);
 
+				case ItemType.INVALID:
 				default:
 					throw new CodeGenerationException($"Unexpected {nameof(ParameterItemOptions)}.{nameof(ParameterItemOptions.ItemType)} [{options.ItemType:G}]");
 			}

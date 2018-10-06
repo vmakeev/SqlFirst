@@ -6,7 +6,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 
-namespace SqlFIrst.VisualStudio.Integration.Helpers
+namespace SqlFirst.VisualStudio.Integration.Helpers
 {
 	internal static class IdeHelper
 	{

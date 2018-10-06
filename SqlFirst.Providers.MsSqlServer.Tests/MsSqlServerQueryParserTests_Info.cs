@@ -96,7 +96,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		[Fact]
 		public void GetQueryBaseInfoTest_5()
 		{
-			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
+			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
 			IQueryBaseInfo result = queryParser.GetQueryBaseInfo(query);
 

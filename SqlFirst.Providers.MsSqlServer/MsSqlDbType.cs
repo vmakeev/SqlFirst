@@ -85,6 +85,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			return result?.Trim();
 		}
 
+		[SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
 		public static string GetLength(string type)
 		{
 			if (string.IsNullOrEmpty(type))

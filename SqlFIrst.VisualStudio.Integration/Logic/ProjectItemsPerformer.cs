@@ -6,8 +6,6 @@ using System.Threading.Tasks;
 using Common.Logging;
 using EnvDTE;
 using SqlFirst.VisualStudio.Integration.Helpers;
-using SqlFIrst.VisualStudio.Integration.Helpers;
-using SqlFIrst.VisualStudio.Integration.Logic;
 
 namespace SqlFirst.VisualStudio.Integration.Logic
 {

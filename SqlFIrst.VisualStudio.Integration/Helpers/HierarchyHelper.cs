@@ -5,7 +5,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell.Interop;
 
-namespace SqlFIrst.VisualStudio.Integration.Helpers
+namespace SqlFirst.VisualStudio.Integration.Helpers
 {
 	internal static class HierarchyHelper
 	{

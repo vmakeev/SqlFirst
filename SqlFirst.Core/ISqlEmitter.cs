@@ -24,7 +24,7 @@ namespace SqlFirst.Core
 		/// <summary>
 		/// Позволяет построить текст секции запроса
 		/// </summary>
-		/// <param name="section">Информация о секцмм</param>
+		/// <param name="section">Информация о секции</param>
 		/// <returns>Текст секции</returns>
 		string EmitSection(IQuerySection section);
 		
