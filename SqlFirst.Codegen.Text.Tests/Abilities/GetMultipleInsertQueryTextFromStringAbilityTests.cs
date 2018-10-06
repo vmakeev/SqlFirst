@@ -29,8 +29,8 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(0);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(0);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -66,9 +66,9 @@ private string GetQueryText(int rowsCount)
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("int", false)).Returns(typeof(int));
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true, A<IDictionary<string, object>>._)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true, A<IDictionary<string, object>>._)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("int", false, A<IDictionary<string, object>>._)).Returns(typeof(int));
 
 			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");

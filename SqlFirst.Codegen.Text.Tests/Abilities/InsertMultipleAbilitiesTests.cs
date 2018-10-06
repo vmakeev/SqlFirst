@@ -12,6 +12,7 @@ using Xunit;
 
 namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
+	// todo: add 'AddParameter' check for custom types. Also check dependencies when no input parameters present
 	public class InsertMultipleAbilitiesTests
 	{
 		[Fact]
@@ -31,10 +32,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(2);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -90,10 +91,10 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, ICollection<Q
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(2);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -153,11 +154,11 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -223,11 +224,11 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -297,11 +298,11 @@ public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection 
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetScalarFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -367,11 +368,11 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetScalarFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -444,30 +445,36 @@ public virtual async Task<IEnumerable<DateTime>> AddAsync(DbConnection connectio
 			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
 
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("date", false)).Returns(typeof(DateTime));
-			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier")).Returns(GetProviderSpecificType("MySpecificGuidType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("int")).Returns(GetProviderSpecificType("MySpecificIntType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("date")).Returns(GetProviderSpecificType("MySpecificDateType"));
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true, A<IDictionary<string, object>>._)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true, A<IDictionary<string, object>>._)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("date", false, A<IDictionary<string, object>>._)).Returns(typeof(DateTime));
+			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificGuidType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("int", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificIntType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("date", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificDateType"));
 
 			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
 			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
 			A.CallTo(() => firstParameter.IsNumbered).Returns(false);
 			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
+			A.CallTo(() => firstParameter.DbTypeMetadata).Returns(null);
+			A.CallTo(() => firstParameter.IsComplexType).Returns(false);
 
 			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param_N");
 			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
 			A.CallTo(() => secondParameter.IsNumbered).Returns(true);
 			A.CallTo(() => secondParameter.DbType).Returns("int");
+			A.CallTo(() => secondParameter.DbTypeMetadata).Returns(null);
+			A.CallTo(() => secondParameter.IsComplexType).Returns(false);
 
 			var thirdParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => thirdParameter.DbName).Returns("ThirdParam_N");
 			A.CallTo(() => thirdParameter.SemanticName).Returns("ThirdParam");
 			A.CallTo(() => thirdParameter.IsNumbered).Returns(true);
 			A.CallTo(() => thirdParameter.DbType).Returns("date");
+			A.CallTo(() => thirdParameter.DbTypeMetadata).Returns(null);
+			A.CallTo(() => thirdParameter.IsComplexType).Returns(false);
 
 			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
 			A.CallTo(() => firstResult.ColumnName).Returns("FirstResult");

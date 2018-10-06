@@ -31,10 +31,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(2);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -81,10 +81,10 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, int? secondPa
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(2);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -135,11 +135,11 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -194,11 +194,11 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetItemFromRecord);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -257,11 +257,11 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetScalarFromValue);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -309,11 +309,11 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 			result.Properties.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(3);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetScalarFromValue);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -368,22 +368,26 @@ public virtual async Task<DateTime> AddAsync(DbConnection connection, Guid? firs
 			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
 
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("date", false)).Returns(typeof(DateTime));
-			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier")).Returns(GetProviderSpecificType("MySpecificGuidType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("int")).Returns(GetProviderSpecificType("MySpecificIntType"));
-			A.CallTo(() => mapper.MapToProviderSpecificType("date")).Returns(GetProviderSpecificType("MySpecificDateType"));
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true, A<IDictionary<string, object>>._)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true, A<IDictionary<string, object>>._)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("date", false, A<IDictionary<string, object>>._)).Returns(typeof(DateTime));
+			A.CallTo(() => mapper.MapToProviderSpecificType("uniqueidentifier", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificGuidType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("int", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificIntType"));
+			A.CallTo(() => mapper.MapToProviderSpecificType("date", A<IDictionary<string, object>>._)).Returns(GetProviderSpecificType("MySpecificDateType"));
 
 			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");
 			A.CallTo(() => firstParameter.SemanticName).Returns("FirstParam");
 			A.CallTo(() => firstParameter.DbType).Returns("uniqueidentifier");
+			A.CallTo(() => firstParameter.DbTypeMetadata).Returns(null);
+			A.CallTo(() => firstParameter.IsComplexType).Returns(false);
 
 			var secondParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => secondParameter.DbName).Returns("SECOND_Param");
 			A.CallTo(() => secondParameter.SemanticName).Returns("SECOND_Param");
 			A.CallTo(() => secondParameter.DbType).Returns("int");
+			A.CallTo(() => secondParameter.DbTypeMetadata).Returns(null);
+			A.CallTo(() => secondParameter.IsComplexType).Returns(false);
 
 			var firstResult = A.Fake<IFieldDetails>(p => p.Strict());
 			A.CallTo(() => firstResult.ColumnName).Returns("FirstResult");

@@ -13,10 +13,18 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class GetMultipleInsertQueryTextRuntimeCachedAbilityTests
 	{
+		private IQueryParamInfo GetQueryParamInfo(bool isComplexType)
+		{
+			var result = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => result.IsComplexType).Returns(isComplexType);
+			return result;
+		}
+
 		[Fact]
 		public void GetMultipleInsertQueryTextRuntimeCachedAbility_Test()
 		{
 			ICodeGenerationContext context = GetDefaultCodeGenerationContext();
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -57,9 +65,9 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Properties.ShouldBeEmpty();
 
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(1);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(1);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetQueryText);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -160,9 +168,9 @@ private string GetQueryText(int rowsCount)
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true)).Returns(typeof(Guid?));
-			A.CallTo(() => mapper.MapToClrType("int", true)).Returns(typeof(int?));
-			A.CallTo(() => mapper.MapToClrType("int", false)).Returns(typeof(int));
+			A.CallTo(() => mapper.MapToClrType("uniqueidentifier", true, A<IDictionary<string, object>>._)).Returns(typeof(Guid?));
+			A.CallTo(() => mapper.MapToClrType("int", true, A<IDictionary<string, object>>._)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("int", false, A<IDictionary<string, object>>._)).Returns(typeof(int));
 
 			var firstParameter = A.Fake<IQueryParamInfo>(p => p.Strict());
 			A.CallTo(() => firstParameter.DbName).Returns("FirstParam");

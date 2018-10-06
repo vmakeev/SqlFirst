@@ -14,6 +14,13 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 {
 	public class CommonAbilitiesTests
 	{
+		private IQueryParamInfo GetQueryParamInfo(bool isComplexType)
+		{
+			var result = A.Fake<IQueryParamInfo>(p => p.Strict());
+			A.CallTo(() => result.IsComplexType).Returns(isComplexType);
+			return result;
+		}
+
 		[Fact]
 		public void AddSqlConnectionParameterAbility_Test()
 		{
@@ -28,14 +35,15 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			A.CallTo(() => provider.ProviderTypesInfo).Returns(providerTypesInfo);
 
 			A.CallTo(() => context.DatabaseProvider).Returns(provider);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
-			var ability = new AddSqlConnectionParameterAbility();
+			var ability = new AddQueryParameterAbility();
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.AddParameter);
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies(context).ShouldBeEmpty();
 
 			result.Constants.ShouldBeEmpty();
 			result.Fields.ShouldBeEmpty();
@@ -101,6 +109,7 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryResourcePath" });
 
 			A.CallTo(() => context.Options).Returns(options);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -108,7 +117,7 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies(context).ShouldBeEmpty();
 
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
@@ -227,6 +236,7 @@ protected virtual string GetQueryText()
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryText" });
 
 			A.CallTo(() => context.Options).Returns(options);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -234,7 +244,7 @@ protected virtual string GetQueryText()
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies(context).ShouldBeEmpty();
 
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
@@ -262,8 +272,8 @@ protected virtual string GetQueryText()
 		public void MapDataRecordToItemAbility_Test()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());
-			A.CallTo(() => mapper.MapToClrType("dummyDbType1", false)).Returns(typeof(Guid));
-			A.CallTo(() => mapper.MapToClrType("dummyDbType2", true)).Returns(typeof(int?));
+			A.CallTo(() => mapper.MapToClrType("dummyDbType1", false, A<IDictionary<string, object>>._)).Returns(typeof(Guid));
+			A.CallTo(() => mapper.MapToClrType("dummyDbType2", true, A<IDictionary<string, object>>._)).Returns(typeof(int?));
 
 			var firstParameter = A.Fake<IFieldDetails>(p => p.Strict());
 			A.CallTo(() => firstParameter.ColumnName).Returns("FirstParam");
@@ -287,6 +297,7 @@ protected virtual string GetQueryText()
 			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "QueryItemTestName" });
 
 			A.CallTo(() => context.Options).Returns(options);
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -294,7 +305,7 @@ protected virtual string GetQueryText()
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.GetItemFromRecord);
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies(context).ShouldBeEmpty();
 
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
@@ -335,6 +346,7 @@ protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
 		public void MapDataRecordToScalarAbility_Test()
 		{
 			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -342,9 +354,9 @@ protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.GetScalarFromRecord);
-			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(1);
-			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+			ability.GetDependencies(context).ShouldNotBeNull();
+			ability.GetDependencies(context).Count().ShouldBe(1);
+			ability.GetDependencies(context).ShouldContain(KnownAbilityName.GetScalarFromValue);
 
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
@@ -381,6 +393,7 @@ protected virtual T GetScalarFromRecord<T>(IDataRecord record)
 		public void MapValueToScalarAbility_Test()
 		{
 			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+			A.CallTo(() => context.IncomingParameters).Returns(new[] { GetQueryParamInfo(true), GetQueryParamInfo(false) });
 
 			var data = A.Dummy<IQueryObjectData>();
 
@@ -389,7 +402,7 @@ protected virtual T GetScalarFromRecord<T>(IDataRecord record)
 
 			ability.Name.ShouldBe(KnownAbilityName.GetScalarFromValue);
 
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies(context).ShouldBeEmpty();
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
 			result.Properties.ShouldBeEmpty();
