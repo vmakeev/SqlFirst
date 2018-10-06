@@ -81,7 +81,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		[Fact]
 		public void GetDeclaredParametersTest_Select_4()
 		{
-			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
+			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
 			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
 
@@ -167,7 +167,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		[Fact]
 		public void GetUndeclaredParametersTest_Select_4()
 		{
-			string query = QuerySelect.SelectGuidAndDateWithMiltipleSections;
+			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
 			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
 

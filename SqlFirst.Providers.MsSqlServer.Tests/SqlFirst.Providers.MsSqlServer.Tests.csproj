@@ -16,7 +16,7 @@
     <None Remove="Queries\Select\SelectCount.sql" />
     <None Remove="Queries\Select\SelectDateWithNamedOrdinal.sql" />
     <None Remove="Queries\Select\SelectDateWithOrdinal.sql" />
-    <None Remove="Queries\Select\SelectGuidAndDateWithMiltipleSections.sql" />
+    <None Remove="Queries\Select\SelectGuidAndDateWithMultipleSections.sql" />
     <None Remove="Queries\Select\SelectGuidAndDateWithPaging.sql" />
     <None Remove="Queries\Select\SelectGuidAndDateWithPagingAndPartOfParameters.sql" />
     <None Remove="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />
@@ -44,7 +44,7 @@
     <EmbeddedResource Include="Queries\Select\SelectCount.sql" />
     <EmbeddedResource Include="Queries\Select\SelectDateWithNamedOrdinal.sql" />
     <EmbeddedResource Include="Queries\Select\SelectDateWithOrdinal.sql" />
-    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithMiltipleSections.sql" />
+    <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithMultipleSections.sql" />
     <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPaging.sql" />
     <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingAndPartOfParameters.sql" />
     <EmbeddedResource Include="Queries\Select\SelectGuidAndDateWithPagingAssignmentAndComments.sql" />

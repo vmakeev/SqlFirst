@@ -56,6 +56,7 @@ namespace SqlFirst.Core.Impl
 				case QuerySectionType.Custom:
 					throw new ArgumentException("Custom query section must have an explicit name");
 
+				case QuerySectionType.INVALID:
 				default:
 					return null;
 			}

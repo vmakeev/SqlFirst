@@ -86,6 +86,11 @@ namespace SqlFirst.Codegen.Text
 		/// <returns>Параметр указанного типа с указанным именем</returns>
 		private static T GetOption<T>(this ICodeGenerationContext context, string option) where T : class
 		{
+			if (option == null)
+			{
+				throw new ArgumentNullException(nameof(option));
+			}
+
 			if (context.Options == null)
 			{
 				return null;
@@ -102,7 +107,7 @@ namespace SqlFirst.Codegen.Text
 				return typedResult;
 			}
 
-			throw new InvalidCastException($"Can not cast context option [{option ?? "null"}] from '{result?.GetType().FullName ?? "null"}' to '{typeof(T).FullName}'");
+			throw new InvalidCastException($"Can not cast context option [{option}] from '{result?.GetType().FullName ?? "null"}' to '{typeof(T).FullName}'");
 		}
 	}
 }

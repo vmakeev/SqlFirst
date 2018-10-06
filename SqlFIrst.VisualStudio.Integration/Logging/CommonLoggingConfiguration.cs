@@ -1,6 +1,6 @@
 ﻿using Common.Logging;
 
-namespace SqlFIrst.VisualStudio.Integration.Logging
+namespace SqlFirst.VisualStudio.Integration.Logging
 {
 	internal static class CommonLoggingConfiguration
 	{

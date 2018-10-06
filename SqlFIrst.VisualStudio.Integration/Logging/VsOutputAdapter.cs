@@ -2,7 +2,7 @@
 using Common.Logging.Configuration;
 using Common.Logging.Simple;
 
-namespace SqlFIrst.VisualStudio.Integration.Logging
+namespace SqlFirst.VisualStudio.Integration.Logging
 {
 	public class VsOutputAdapter : AbstractSimpleLoggerFactoryAdapter
 	{

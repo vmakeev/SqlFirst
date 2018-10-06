@@ -129,7 +129,7 @@ namespace SqlFirst.Providers.Postgres
 		}
 
 		/// <summary>
-		/// Возвращает информацию необъявленных в секции "queryParameters" параметров запроса
+		/// Возвращает информацию о не объявленных в секции "queryParameters" параметров запроса
 		/// </summary>
 		/// <param name="declared">Уже объявленные параметры</param>
 		/// <param name="queryText">Полный текст запроса</param>
