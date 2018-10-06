@@ -9,6 +9,8 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
 
 		public IRenderableTemplate AddParameter => GetRenderableTemplate();
 
+		public IRenderableTemplate AddCustomParameter => GetRenderableTemplate();
+
 		public IRenderableTemplate GetItemFromRecord => GetRenderableTemplate();
 
 		public IRenderable GetScalarFromRecord => GetRenderable();

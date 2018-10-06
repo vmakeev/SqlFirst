@@ -19,13 +19,16 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Update
 
 			IEnumerable<IRenderable> xmlParams = GetXmlParameters(context, allParameters);
 			IEnumerable<IRenderable> incomingParams = GetIncomingParameters(context, allParameters);
-			IEnumerable<IRenderable> addParams = GetAddParameters(context, allParameters, out IEnumerable<string> usings);
+
+			IEnumerable<IRenderable> addParams = GetAddParameters(context, allParameters.Where(p => !p.IsComplexType), out IEnumerable<string> sdtUsings);
+			IEnumerable<IRenderable> addCustomParams = GetAddCustomParameters(context, allParameters.Where(p => p.IsComplexType), out IEnumerable<string> customUsings);
 
 			string method = GetTemplate().Render(new
 			{
 				XmlParams = xmlParams,
 				MethodParameters = incomingParams,
 				AddParameters = addParams,
+				AddCustomParameters = addCustomParams
 			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
@@ -35,15 +38,25 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Update
 			result.Usings = result.Usings.AppendItems(
 									"System",
 									"System.Data")
-								.Concat(usings);
+								.Concat(sdtUsings)
+								.Concat(customUsings);
 
 			return result;
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies()
+		public override IEnumerable<string> GetDependencies(ICodeGenerationContext context)
 		{
-			yield return KnownAbilityName.AddParameter;
+			if (context.IncomingParameters.Any(p => !p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddParameter;
+			}
+
+			if (context.IncomingParameters.Any(p => p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddCustomParameter;
+			}
+
 			yield return KnownAbilityName.GetQueryText;
 		}
 

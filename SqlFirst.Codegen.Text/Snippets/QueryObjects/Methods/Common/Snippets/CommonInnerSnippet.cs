@@ -16,6 +16,16 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 
 		public IRenderableTemplate CalculateChecksum => GetRenderableTemplate();
 
+		public IRenderableTemplate CallAddParameter => GetRenderableTemplate();
+
+		public IRenderableTemplate CallAddCustomParameter => GetRenderableTemplate();
+
+		public IRenderableTemplate CallAddParameterNumbered => GetRenderableTemplate();
+
+		public IRenderableTemplate MethodParameter => GetRenderableTemplate();
+
+		public IRenderableTemplate XmlParam => GetRenderableTemplate();
+
 		public CommonInnerSnippet()
 			: base("QueryObjects.Methods.Common.Snippets")
 		{

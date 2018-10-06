@@ -11,6 +11,7 @@ public virtual IEnumerable<$ResultItemType$> Add(IDbConnection connection$`, `Me
 	{
 		cmd.CommandText = GetQueryText(items.Count);
 $2|AddParameters`\r\n`|\r\n$~
+$2|AddCustomParameters`\r\n`|\r\n$~
 
 		int $IndexVariableName$ = 0;
 		foreach($ParameterItemType$ $ParameterVariableName$ in items)

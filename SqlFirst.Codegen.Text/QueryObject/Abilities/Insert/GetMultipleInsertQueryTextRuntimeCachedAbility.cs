@@ -37,7 +37,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies()
+		public IEnumerable<string> GetDependencies(ICodeGenerationContext context)
 		{
 			yield return KnownAbilityName.GetQueryText;
 		}

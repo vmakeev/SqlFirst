@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SqlFirst.Core;
 
 namespace SqlFirst.Providers.MsSqlServer
@@ -78,6 +79,9 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// </summary>
 		public Type ClrType { get; set; }
 
+		/// <summary>
+		/// Имя сборки, в которой определен пользовательский тип
+		/// </summary>
 		public string UdtAssemblyQualifiedName { get; set; }
 
 		public int NewVersionedProviderType { get; set; }
@@ -105,5 +109,8 @@ namespace SqlFirst.Providers.MsSqlServer
 		/// Имя типа данных БД
 		/// </summary>
 		public string DbType { get; set; }
+
+		/// <inheritdoc />
+		public IDictionary<string, object> DbTypeMetadata { get; set; }
 	}
 }

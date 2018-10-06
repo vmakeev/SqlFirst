@@ -6,7 +6,7 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 {
-	internal class AddSqlConnectionParameterAbility : IQueryObjectAbility
+	internal class AddQueryParameterAbility : IQueryObjectAbility
 	{
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -35,7 +35,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+		public IEnumerable<string> GetDependencies(ICodeGenerationContext context) => Enumerable.Empty<string>();
 
 		/// <inheritdoc />
 		public string Name { get; } = KnownAbilityName.AddParameter;

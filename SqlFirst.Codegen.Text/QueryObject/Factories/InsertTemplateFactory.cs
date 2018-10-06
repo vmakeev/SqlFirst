@@ -33,7 +33,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				result.AddAbility<GetMultipleInsertQueryTextPrecompiledAbility>(() => internalOptions.User.UseMultipleInsert && internalOptions.Calculated.HasMultipleInsert);
 			}
 
-			result.AddAbility<AddSqlConnectionParameterAbility>();
+			result.AddAbility<AddQueryParameterAbility>(() => context.IncomingParameters.Any(p => !p.IsComplexType));
 
 			if (internalOptions.Calculated.HasOutput)
 			{

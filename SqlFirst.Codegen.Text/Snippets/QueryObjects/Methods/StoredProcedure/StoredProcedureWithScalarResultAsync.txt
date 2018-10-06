@@ -11,6 +11,7 @@ public virtual async Task<IEnumerable<$ResultItemType$>> ExecAsync(DbConnection 
 	{
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
+$2|AddCustomParameters`\r\n`|\r\n$~
 		
 		var result = new List<$ResultItemType$>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))

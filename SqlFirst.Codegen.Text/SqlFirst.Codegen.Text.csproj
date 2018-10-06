@@ -55,6 +55,7 @@
     <None Remove="Snippets\QueryObjects\Methods\Add\AddSingleWithResultAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Add\AddSingleWithScalarResult.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Add\AddSingleWithScalarResultAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\AddCustomParameter.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
@@ -65,6 +66,7 @@
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CallAddCustomParameter.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetQueryTemplates.txt" />
@@ -84,10 +86,6 @@
     <None Remove="Snippets\QueryObjects\Methods\Get\GetScalarAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
-    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameter.txt" />
-    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameterNumbered.txt" />
-    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\MethodParameter.txt" />
-    <None Remove="Snippets\QueryObjects\Methods\Get\Snippets\XmlParam.txt" />
     <None Remove="Snippets\Enumerables\AsyncEnumerator.txt" />
     <None Remove="Snippets\Enumerables\DbAsyncEnumerator.txt" />
     <None Remove="Snippets\Enumerables\Enumerable.txt" />
@@ -141,6 +139,7 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingleWithResult.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingleAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingle.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\AddCustomParameter.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryRuntimeGeneratedMultipleInsert.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
@@ -148,6 +147,7 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromStringMultipleInsert.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CallAddCustomParameter.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\NumberedParameterInfo.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
@@ -163,7 +163,7 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
-    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameterNumbered.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CallAddParameterNumbered.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedure.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithResult.txt" />
@@ -207,9 +207,9 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetFirst.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetIEnumerable.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetIEnumerableAsync.txt" />
-    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameter.txt" />
-    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\MethodParameter.txt" />
-    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\XmlParam.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CallAddParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\MethodParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\XmlParam.txt" />
   </ItemGroup>
 
   <ItemGroup>

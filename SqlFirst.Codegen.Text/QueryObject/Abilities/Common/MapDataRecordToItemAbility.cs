@@ -33,7 +33,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+		public IEnumerable<string> GetDependencies(ICodeGenerationContext context) => Enumerable.Empty<string>();
 
 		/// <inheritdoc />
 		public string Name { get; } = KnownAbilityName.GetItemFromRecord;

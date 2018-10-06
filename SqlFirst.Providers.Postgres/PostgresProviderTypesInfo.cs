@@ -28,5 +28,8 @@ namespace SqlFirst.Providers.Postgres
 
 		/// <inheritdoc />
 		public string CommandParameterSpecificDbTypePropertyName { get; } = nameof(NpgsqlParameter.NpgsqlDbType);
+
+		/// <inheritdoc />
+		public string CommandParameterSpecificCustomDbTypePropertyName { get; } = nameof(NpgsqlParameter.SpecificType);
 	}
 }

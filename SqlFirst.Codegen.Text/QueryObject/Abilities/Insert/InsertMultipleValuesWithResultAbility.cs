@@ -29,24 +29,34 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 
 			IEnumerable<IRenderable> notNumberedXml = GetXmlParameters(context, notNumberedParameters);
 			IEnumerable<IRenderable> notNumberedIncoming = GetIncomingParameters(context, notNumberedParameters);
-			IEnumerable<IRenderable> notNumberedAddParameters = GetAddParameters(context, notNumberedParameters, out IEnumerable<string> notNumberedUsings);
-			IEnumerable<IRenderable> numberedAddParameters = GetAddParametersNumbered(context, indexVariableName, numberedParameters, out IEnumerable<string> numberedUsings);
+			
+			IEnumerable<IRenderable> notNumberedAddParams = GetAddParameters(context, notNumberedParameters.Where(p => !p.IsComplexType), out IEnumerable<string> notNumberedSdtUsings);
+			IEnumerable<IRenderable> notNumberedAddCustomParams = GetAddCustomParameters(context, notNumberedParameters.Where(p => p.IsComplexType), out IEnumerable<string> notNumberedCustomUsings);
+
+			IEnumerable<IRenderable> numberedAddParameters = GetAddParametersNumbered(context, indexVariableName, numberedParameters.Where(p => !p.IsComplexType), out IEnumerable<string> numberedSdtUsings);
+			IEnumerable<IRenderable> numberedAddCustomParameters = GetAddParametersNumbered(context, indexVariableName, numberedParameters.Where(p => p.IsComplexType), out IEnumerable<string> numberedCustomUsings);
 
 			string method = GetTemplate().Render(new
 			{
 				XmlParams = notNumberedXml,
 				MethodParameters = notNumberedIncoming,
 				ParameterItemType = parameterType,
-				AddParameters = notNumberedAddParameters,
+				AddParameters = notNumberedAddParams,
+				AddCustomParameters = notNumberedAddCustomParams,
 				IndexVariableName = indexVariableName,
 				ParameterVariableName = parameterVariableName,
 				AddParametersNumbered = numberedAddParameters,
+				AddCustomParametersNumbered = numberedAddCustomParameters,
 				ResultItemType = resultItemType
 			});
 
 			QueryObjectData result = QueryObjectData.CreateFrom(data);
 
-			IEnumerable<string> specificParametersUsings = numberedUsings.Concat(notNumberedUsings).Distinct();
+			IEnumerable<string> specificParametersUsings = notNumberedSdtUsings
+															.Concat(notNumberedCustomUsings)
+															.Concat(numberedSdtUsings)
+															.Concat(numberedCustomUsings)
+															.Distinct();
 
 			result.Methods = result.Methods.AppendItems(method);
 			result.Usings = result.Usings.AppendItems(
@@ -59,10 +69,20 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies()
+		public override IEnumerable<string> GetDependencies(ICodeGenerationContext context)
 		{
 			yield return KnownAbilityName.GetQueryTextMultipleInsert;
-			yield return KnownAbilityName.AddParameter;
+
+			if (context.IncomingParameters.Any(p => !p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddParameter;
+			}
+
+			if (context.IncomingParameters.Any(p => p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddCustomParameter;
+			}
+
 			yield return KnownAbilityName.GetItemFromRecord;
 		}
 
@@ -82,7 +102,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			specificUsings = Enumerable.Empty<string>();
 			string variableName = GetParameterName(context);
 
-			IRenderableTemplate template = Snippet.Query.Methods.Get.Snippets.CallAddParameterNumbered;
+			IRenderableTemplate template = Snippet.Query.Methods.Common.Snippets.CallAddParameterNumbered;
 
 			var parameters = new LinkedList<IRenderable>();
 			foreach (IQueryParamInfo paramInfo in targetParameters)
@@ -90,7 +110,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 				string propertyName = CSharpCodeHelper.GetValidIdentifierName(paramInfo.SemanticName, NamingPolicy.Pascal);
 				string fullName = $"{variableName}.{propertyName}";
 
-				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType);
+				IProviderSpecificType dbType = context.TypeMapper.MapToProviderSpecificType(paramInfo.DbType, paramInfo.DbTypeMetadata);
 				specificUsings = specificUsings.Concat(dbType.Usings);
 
 				var model = new

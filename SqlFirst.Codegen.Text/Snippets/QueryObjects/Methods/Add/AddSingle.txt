@@ -10,6 +10,7 @@ public virtual int Add(IDbConnection connection$`, `MethodParameters|, $)
 	{
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
+$2|AddCustomParameters`\r\n`|\r\n$~
 
 		return cmd.ExecuteNonQuery();
 	}

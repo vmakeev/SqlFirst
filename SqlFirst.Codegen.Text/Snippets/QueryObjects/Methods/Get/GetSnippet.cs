@@ -1,12 +1,9 @@
-﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get.Snippets;
-using SqlFirst.Codegen.Text.Templating;
+﻿using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get
 {
 	internal class GetSnippet : SqlFirstSnippet
 	{
-		public GetInnerSnippet Snippets { get; } = new GetInnerSnippet();
-
 		public IRenderableTemplate GetFirst => GetRenderableTemplate();
 
 		public IRenderableTemplate GetFirstAsync => GetRenderableTemplate();

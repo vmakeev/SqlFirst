@@ -21,7 +21,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities
 		/// <summary>
 		/// Возвращает имена умений, от которых зависит текущее
 		/// </summary>
+		/// <param name="context">Контекст кодогенерации</param>
 		/// <returns>Имена умений, от которых зависит текущее</returns>
-		IEnumerable<string> GetDependencies();
+		IEnumerable<string> GetDependencies(ICodeGenerationContext context);
 	}
 }

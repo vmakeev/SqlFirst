@@ -28,5 +28,8 @@ namespace SqlFirst.Providers.MsSqlServer
 
 		/// <inheritdoc />
 		public string CommandParameterSpecificDbTypePropertyName { get; } = nameof(SqlParameter.SqlDbType);
+
+		/// <inheritdoc />
+		public string CommandParameterSpecificCustomDbTypePropertyName { get; } = nameof(SqlParameter.TypeName);
 	}
 }

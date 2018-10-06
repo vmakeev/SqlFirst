@@ -21,7 +21,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies()
+		public IEnumerable<string> GetDependencies(ICodeGenerationContext context)
 		{
 			yield return KnownAbilityName.GetScalarFromValue;
 		}

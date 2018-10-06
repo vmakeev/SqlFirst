@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections;
+using System.Collections.Generic;
 using System.Data;
 using NpgsqlTypes;
 using SqlFirst.Core;
@@ -8,13 +9,8 @@ namespace SqlFirst.Providers.Postgres
 {
 	public class PostgresDatabaseTypeMapper : IDatabaseTypeMapper
 	{
-		/// <summary>
-		/// Возвращает имя типа CLR, который может быть безопасно использован для представления указанного типа данных в БД
-		/// </summary>
-		/// <param name="dbType">Название типа данных в БД</param>
-		/// <param name="nullable">Поддерживается ли значение null</param>
-		/// <returns>Имя типа CLR</returns>
-		public Type MapToClrType(string dbType, bool nullable)
+		/// <inheritdoc />
+		public Type MapToClrType(string dbType, bool nullable, IDictionary<string, object> metadata = null)
 		{
 			Type baseType = GetBaseType(dbType);
 
@@ -25,16 +21,9 @@ namespace SqlFirst.Providers.Postgres
 
 			return baseType;
 		}
-
-		/// <summary>
-		/// Возвращает <see cref="DbType" />, который может быть безопасно использован для представления указанного типа данных в
-		/// БД
-		/// </summary>
-		/// <param name="dbType">Название типа данных в БД</param>
-		/// <returns>
-		/// <see cref="DbType" />
-		/// </returns>
-		public DbType MapToDbType(string dbType)
+		
+		/// <inheritdoc />
+		public DbType MapToDbType(string dbType, IDictionary<string, object> metadata = null)
 		{
 			switch (PostgresDbType.Normalize(dbType))
 			{
@@ -139,15 +128,8 @@ namespace SqlFirst.Providers.Postgres
 			}
 		}
 
-		/// <summary>
-		/// Возвращает <see cref="IProviderSpecificType" />, который может быть безопасно использован для представления указанного
-		/// типа данных в БД
-		/// </summary>
-		/// <param name="dbType">Название типа данных в БД</param>
-		/// <returns>
-		/// <see cref="IProviderSpecificType" />
-		/// </returns>
-		public IProviderSpecificType MapToProviderSpecificType(string dbType)
+		/// <inheritdoc />
+		public IProviderSpecificType MapToProviderSpecificType(string dbType, IDictionary<string, object> metadata = null)
 		{
 			switch (PostgresDbType.Normalize(dbType))
 			{

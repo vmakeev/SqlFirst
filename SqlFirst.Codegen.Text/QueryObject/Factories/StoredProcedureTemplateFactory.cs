@@ -31,7 +31,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				result.AddAbility<GetQueryTextFromStringAbility>();
 			}
 
-			result.AddAbility<AddSqlConnectionParameterAbility>();
+			result.AddAbility<AddQueryParameterAbility>(() => context.IncomingParameters.Any(p => !p.IsComplexType));
+			result.AddAbility<AddQueryCustomParameterAbility>(() => context.IncomingParameters.Any(p => p.IsComplexType));
 
 			if (internalOptions.Calculated.HasOutput)
 			{
@@ -108,7 +109,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				{
 					HasMultipleInsert = context.IncomingParameters.Any(p => p.IsNumbered),
 					HasOutput = outgoungParametersCount > 0,
-					IsScalarOutput = outgoungParametersCount == 1
+					IsScalarOutput = outgoungParametersCount == 1,
+					HasCustomTypeParameters = context.IncomingParameters.Any(p => p.IsComplexType)
 				};
 
 				User = new UserOptions
@@ -130,6 +132,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 		{
 			public bool HasMultipleInsert { get; set; }
 
+			public bool HasCustomTypeParameters { get; set; }
+
 			public bool HasOutput { get; set; }
 
 			public bool IsScalarOutput { get; set; }
@@ -141,7 +145,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				{
 					$"HasMultipleInsert: {HasMultipleInsert}",
 					$"HasOutput: {HasOutput}",
-					$"IsScalarOutput: {IsScalarOutput}"
+					$"IsScalarOutput: {IsScalarOutput}",
+					$"HasCustomTypeParameters: {HasCustomTypeParameters}"
 				};
 
 				return "CalculatedOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);

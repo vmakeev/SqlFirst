@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using SqlFirst.Core;
 
@@ -7,9 +8,9 @@ namespace SqlFirst.Providers.MsSqlServer
 	public class MsSqlServerTypeMapper : IDatabaseTypeMapper
 	{
 		/// <inheritdoc />
-		public Type MapToClrType(string dbType, bool nullable)
+		public Type MapToClrType(string dbType, bool nullable, IDictionary<string, object> metadata = null)
 		{
-			Type baseType = GetBaseType(dbType);
+			Type baseType = GetBaseType(dbType, metadata);
 
 			if (nullable && baseType.IsValueType)
 			{
@@ -20,7 +21,7 @@ namespace SqlFirst.Providers.MsSqlServer
 		}
 
 		/// <inheritdoc />
-		public DbType MapToDbType(string dbType)
+		public DbType MapToDbType(string dbType, IDictionary<string, object> metadata = null)
 		{
 			switch (MsSqlDbType.Normalize(dbType))
 			{
@@ -90,7 +91,7 @@ namespace SqlFirst.Providers.MsSqlServer
 		}
 
 		/// <inheritdoc />
-		public IProviderSpecificType MapToProviderSpecificType(string dbType)
+		public IProviderSpecificType MapToProviderSpecificType(string dbType, IDictionary<string, object> metadata = null)
 		{
 			switch (MsSqlDbType.Normalize(dbType))
 			{
@@ -178,12 +179,15 @@ namespace SqlFirst.Providers.MsSqlServer
 				case MsSqlDbType.UniqueIdentifier:
 					return new MsSqlServerProviderSpecificType(SqlDbType.UniqueIdentifier);
 
+				case string _ when MsSqlServerTypeMetadata.FromData(metadata).IsTableType:
+					return new MsSqlServerProviderSpecificType(SqlDbType.Structured);
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dbType), dbType);
 			}
 		}
 
-		private static Type GetBaseType(string dbType)
+		private static Type GetBaseType(string dbType, IDictionary<string, object> metadata)
 		{
 			switch (MsSqlDbType.Normalize(dbType))
 			{
@@ -249,9 +253,13 @@ namespace SqlFirst.Providers.MsSqlServer
 				case MsSqlDbType.UniqueIdentifier:
 					return typeof(Guid);
 
+				case string _ when MsSqlServerTypeMetadata.FromData(metadata).IsTableType:
+					return typeof(DataTable);
+
 				default:
 					throw new ArgumentOutOfRangeException(nameof(dbType), dbType);
 			}
 		}
+
 	}
 }

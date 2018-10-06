@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
@@ -24,10 +25,20 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Delete
 		}
 
 		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies()
+		public override IEnumerable<string> GetDependencies(ICodeGenerationContext context)
 		{
 			yield return KnownAbilityName.GetQueryText;
-			yield return KnownAbilityName.AddParameter;
+
+			if (context.IncomingParameters.Any(p => !p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddParameter;
+			}
+
+			if (context.IncomingParameters.Any(p => p.IsComplexType))
+			{
+				yield return KnownAbilityName.AddCustomParameter;
+			}
+
 			yield return KnownAbilityName.GetScalarFromRecord;
 		}
 

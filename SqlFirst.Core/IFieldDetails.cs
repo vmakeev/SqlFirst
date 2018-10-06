@@ -1,4 +1,6 @@
-﻿namespace SqlFirst.Core
+﻿using System.Collections.Generic;
+
+namespace SqlFirst.Core
 {
 	/// <summary>
 	/// Информация о столбце в БД
@@ -24,5 +26,10 @@
 		/// Имя типа данных БД
 		/// </summary>
 		string DbType { get; }
+
+		/// <summary>
+		/// Метаданные типа БД
+		/// </summary>
+		IDictionary<string, object> DbTypeMetadata { get; }
 	}
 }

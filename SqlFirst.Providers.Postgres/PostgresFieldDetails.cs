@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using SqlFirst.Core;
 
 namespace SqlFirst.Providers.Postgres
@@ -105,5 +106,8 @@ namespace SqlFirst.Providers.Postgres
 		/// Имя типа данных БД
 		/// </summary>
 		public string DbType { get; set; }
+
+		/// <inheritdoc />
+		public IDictionary<string, object> DbTypeMetadata { get; set; }
 	}
 }

@@ -94,7 +94,7 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 				throw new ArgumentNullException(paramName: nameof(typeMapper));
 			}
 
-			Type type = typeMapper.MapToClrType(info.DbType, true);
+			Type type = typeMapper.MapToClrType(info.DbType, true, info.DbTypeMetadata);
 
 			CodeMemberInfo result = info.DefaultValue != null
 				? new CodeMemberInfo(type, info.SemanticName, info.DefaultValue)

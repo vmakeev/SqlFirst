@@ -170,10 +170,17 @@ namespace SqlFirst.Providers.MsSqlServer
 				{
 					while (dataReader.Read())
 					{
-						if (!dataReader.GetString(1).StartsWith("@@"))
+						UndeclaredParameterDescription description = UndeclaredParameterDescription.FromDataRecord(dataReader);
+						MsSqlServerTypeMetadata typeMetadata = null;
+
+						if (!description.Name.StartsWith("@@"))
 						{
-							string dbName = dataReader.GetString(1).TrimStart('@');
-							string dbType = dataReader.GetString(3);
+							string dbName = description.Name.TrimStart('@');
+							string dbType = description.SuggestedSystemTypeName;
+							if (string.IsNullOrEmpty(dbType) && description.SuggestedUserTypeId != null)
+							{
+								(dbType, typeMetadata) = DescribeUserType(description, connectionString);
+							}
 
 							(bool isNumbered, string semanticName) = QueryParamInfoNameHelper.GetNameSemantic(dbName);
 
@@ -183,13 +190,51 @@ namespace SqlFirst.Providers.MsSqlServer
 								DbType = MsSqlDbType.Normalize(dbType),
 								Length = MsSqlDbType.GetLength(dbType),
 								IsNumbered = isNumbered,
-								SemanticName = semanticName
+								SemanticName = semanticName,
+								DbTypeMetadata = typeMetadata,
+								IsComplexType = typeMetadata?.IsTableType ?? false
 							};
 
 							yield return info;
 						}
 					}
 				}
+			}
+		}
+
+		private (string typeName, MsSqlServerTypeMetadata metadata) DescribeUserType(UndeclaredParameterDescription parameterDescription, string connectionString)
+		{
+			if (parameterDescription.SuggestedUserTypeId == null)
+			{
+				throw new QueryParsingException("Unable to describe user type: identifier is missing.");
+			}
+
+			string typeName = parameterDescription.SuggestedUserTypeName;
+			MsSqlServerTypeMetadata metadata = null;
+
+			MsSqlServerTypeDescription systemTypeDescription = GetMsSqlUserTypeDescription(parameterDescription, connectionString);
+			if (systemTypeDescription.IsTableType)
+			{
+				string queryText = $"declare @target {systemTypeDescription.Name}; select * from @target";
+				// todo: add recursive types support
+				IFieldDetails[] fieldDetails = GetResultDetails(queryText, connectionString).ToArray();
+
+				metadata = new MsSqlServerTypeMetadata
+				{
+					IsTableType = true,
+					TableTypeColumns = fieldDetails
+				};
+			}
+
+			return (typeName, metadata);
+		}
+
+		private MsSqlServerTypeDescription GetMsSqlUserTypeDescription(UndeclaredParameterDescription parameterDescription, string connectionString)
+		{
+			using (var connection = new SqlConnection(connectionString))
+			{
+				connection.Open();
+				return DescribeUserTypeByIdQuery.GetFirst(connection, parameterDescription.SuggestedUserTypeId);
 			}
 		}
 

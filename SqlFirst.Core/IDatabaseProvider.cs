@@ -8,7 +8,7 @@ namespace SqlFirst.Core
 	public interface IDatabaseProvider
 	{
 		/// <summary>
-		/// Информация о специфичных для провайдера
+		/// Информация о специфичных для провайдера типах
 		/// </summary>
 		IProviderTypesInfo ProviderTypesInfo { get; }
 
