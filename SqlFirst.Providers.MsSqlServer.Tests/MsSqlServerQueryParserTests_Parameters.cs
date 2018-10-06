@@ -8,7 +8,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 {
 	public partial class MsSqlServerQueryParserTests
 	{
-		private const string ConnectionString = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
+		private const string ConnectionString = @"Server=vmcbapi.kadlab.local;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
 
 		[Fact]
 		public void GetDeclaredParametersTest_Select_1()

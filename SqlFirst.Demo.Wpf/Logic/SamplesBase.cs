@@ -21,6 +21,12 @@ namespace SqlFirst.Demo.Wpf.Logic
 				case QueryType.Delete:
 					return GetDeleteQuery();
 
+				case QueryType.StoredProcedure:
+					return GetStoredProcedureQuery();
+
+				case QueryType.INVALID:
+				case QueryType.Unknown:
+				case QueryType.Merge:
 				default:
 					throw new ArgumentOutOfRangeException(nameof(queryType), queryType, null);
 			}
@@ -33,5 +39,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 		protected virtual string GetUpdateQuery() => string.Empty;
 
 		protected virtual string GetDeleteQuery() => string.Empty;
+
+		protected virtual string GetStoredProcedureQuery() => string.Empty;
 	}
 }

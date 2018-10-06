@@ -243,6 +243,53 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 		}
 
 		/// <summary>
+		/// Создает конечный автомат для настройки <see cref="StoredProcedureQueryObjectOptions" />
+		/// </summary>
+		/// <param name="options">Конфигурируемые опции</param>
+		/// <returns>Конечный автомат для настройки <see cref="StoredProcedureQueryObjectOptions" /></returns>
+		public static StateMachine<State, string> Build(StoredProcedureQueryObjectOptions options)
+		{
+			var machine = new StateMachine<State, string>(State.Start);
+
+			machine.Configure(State.Start)
+					.Permit(Trigger.Generate, State.Generate)
+					.Permit(Trigger.Use, State.Use);
+
+			machine.Configure(State.Generate)
+					.Permit(Trigger.Methods, State.Methods);
+
+			machine.Configure(State.Methods)
+					.PermitReentry(Trigger.Sync, () =>
+					{
+						options.GenerateSyncMethods = true;
+						if (options.GenerateAsyncMethods == null)
+						{
+							options.GenerateAsyncMethods = false;
+						}
+					})
+					.PermitReentry(Trigger.Async, () =>
+					{
+						options.GenerateAsyncMethods = true;
+						if (options.GenerateSyncMethods == null)
+						{
+							options.GenerateSyncMethods = false;
+						}
+					});
+
+			machine.Configure(State.Use)
+					.Permit(Trigger.QueryText, State.QueryText);
+
+			machine.Configure(State.QueryText)
+					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
+					.PermitReentry(Trigger.String, () => options.UseQueryTextResourceFile = false);
+
+			machine.OnUnhandledTrigger((state, trigger) =>
+				throw new CodeGenerationException($"Can not parse stored procedure query generation options: unexpected trigger [{trigger}] at state [{state:G}]"));
+
+			return machine;
+		}
+
+		/// <summary>
 		/// Создает конечный автомат для настройки <see cref="DeleteQueryObjectOptions" />
 		/// </summary>
 		/// <param name="options">Конфигурируемые опции</param>

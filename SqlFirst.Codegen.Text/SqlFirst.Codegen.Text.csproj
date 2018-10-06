@@ -92,6 +92,12 @@
     <None Remove="Snippets\Enumerables\DbAsyncEnumerator.txt" />
     <None Remove="Snippets\Enumerables\Enumerable.txt" />
     <None Remove="Snippets\Enumerables\EnumerableItem.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedure.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithResultAsync.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithScalarResult.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithScalarResultAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Update\Update.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Update\UpdateAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Update\UpdateWithResult.txt" />
@@ -158,6 +164,12 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalars.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\GetScalarsAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Get\Snippets\CallAddParameterNumbered.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedure.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithResultAsync.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithScalarResult.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\StoredProcedure\StoredProcedureWithScalarResultAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResult.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithScalarResultAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Update\UpdateWithResult.txt" />

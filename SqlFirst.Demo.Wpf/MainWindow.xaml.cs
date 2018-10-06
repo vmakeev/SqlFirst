@@ -29,7 +29,7 @@ namespace SqlFirst.Demo.Wpf
 		{
 			InitializeComponent();
 
-			_sourceSql = Generator.Samples.GetSample(QueryType.Create);
+			_sourceSql = Generator.Samples.GetSample(QueryType.StoredProcedure);
 
 			DataContext = this;
 
@@ -192,7 +192,7 @@ namespace SqlFirst.Demo.Wpf
 
 		private ProviderType _providerType = ProviderType.MsSqlServer;
 
-		private string _connectionStringMsSqlServer = @"Server=api-dev;Database=CasebookApi.Arbitrage.Tracking_dev;Integrated Security=SSPI;";
+		private string _connectionStringMsSqlServer = @"Server=vmcbapi.kadlab.local;Initial Catalog=CBAPI_SvcQueries_dev;integrated security=True;MultipleActiveResultSets=True";
 		private string _connectionStringPostgres = @"Server = 127.0.0.1; Port = 5432; Database = CasebookApi.Arbitrage.Tracking_dev; User Id = postgres;Password = postgres;";
 
 		private string _namespace = "SqlFirst.Test.Namespace";

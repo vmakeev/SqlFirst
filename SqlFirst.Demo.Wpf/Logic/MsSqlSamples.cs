@@ -47,5 +47,13 @@ insert into caseevents (userKey, inn, ogrn, caseid, shardname, finddateutc)
 output inserted.id, inserted.userKey
 values (@userKey_N, @inn_N, @ogrn_N, @caseId_N, @shardName_N, @findDateUtc)";
 		}
+
+		/// <inheritdoc />
+		protected override string GetStoredProcedureQuery()
+		{
+			return @"EXEC	[dbo].[GetQueryStatForDatesShort]
+		@dateFrom = @myDateFrom,
+		@dateTo = @myDateTo;";
+		}
 	}
 }

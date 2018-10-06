@@ -84,6 +84,10 @@ namespace SqlFirst.Providers.MsSqlServer
 				{
 					queryType = QueryType.Merge;
 				}
+				else if (queryBody.StartsWith("exec"))
+				{
+					queryType = QueryType.StoredProcedure;
+				}
 			}
 
 			return new MsSqlServerQueryBaseInfo

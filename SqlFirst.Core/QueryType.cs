@@ -38,6 +38,11 @@
 		/// <summary>
 		/// Объединение данных
 		/// </summary>
-		Merge
+		Merge,
+
+		/// <summary>
+		/// Хранимая процедура
+		/// </summary>
+		StoredProcedure
 	}
 }

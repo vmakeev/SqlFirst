@@ -70,6 +70,10 @@ namespace SqlFirst.Codegen.Text.QueryObject
 				case QueryType.Merge:
 					throw new NotImplementedException("MERGE queries are not currently supported.");
 
+				case QueryType.StoredProcedure:
+					var storedProcedureOptions = new StoredProcedureQueryObjectOptions(options.SqlFirstOptions);
+					return StoredProcedureTemplateFactory.Build(context, storedProcedureOptions);
+
 				default:
 					throw new CodeGenerationException($"Unsupported QueryType: [{options.QueryType:G}] ({options.QueryType:D})");
 			}
