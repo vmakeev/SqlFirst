@@ -11,11 +11,11 @@ comments */
 
 -- begin variables
 
-declare @userKey varchar(255);
-declare @caseId uniqueidentifier;
-declare @createDateUtc datetime;
+declare @email varchar(255);
+declare @externalId uniqueidentifier;
+declare @birthDate datetime;
 
 -- end
 
-insert into CaseSubscriptions (UserKey, CaseId, CreateDateUtc)
-values (@userKey, @caseId, @createDateUtc);
+insert into Users (Email, ExternalId, DateOfBirth)
+values (@email, @externalId, @birthDate);

@@ -1,3 +1,3 @@
-﻿select top 10 cs.Id, de.Id from CaseSubscriptions cs  with(nolock)
-left join DocumentEvents de with(nolock) on cs.CaseId = de.CaseId
-where de.id is not null
+﻿select top 10 u.Id, rg.Id from Users u  with(nolock)
+left join UserRoleGroups rg with(nolock) on rg.Id = u.RoleGroupId
+where rg.id is not null

@@ -1,12 +1,11 @@
-﻿
--- begin variables
+﻿-- begin variables
 
-declare @caseId uniqueidentifier;
-declare @createDateUtc datetime;
+declare @externalId uniqueidentifier;
+declare @birthDate datetime;
 
 -- end
 
-update CaseSubscriptions
-set CreateDateUtc = @createDateUtc
+update Users
+set DateOfBirth = @birthDate
 output INSERTED.id
-where CaseId = @caseId
+where ExternalId = @externalId

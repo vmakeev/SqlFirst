@@ -18,17 +18,17 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails caseId = results[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = results[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = results[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = results[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -58,17 +58,17 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails userKey = results[0];
-			userKey.ColumnName.ShouldBe("UserKey");
-			userKey.AllowDbNull.ShouldBeFalse();
-			userKey.DbType.ShouldBe(MsSqlDbType.NVarChar);
-			userKey.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails email = results[0];
+			email.ColumnName.ShouldBe("Email");
+			email.AllowDbNull.ShouldBeFalse();
+			email.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			email.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails shardName = results[1];
-			shardName.ColumnName.ShouldBe("ShardName");
-			shardName.AllowDbNull.ShouldBeTrue(); // left join
-			shardName.DbType.ShouldBe(MsSqlDbType.NVarChar);
-			shardName.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails name = results[1];
+			name.ColumnName.ShouldBe("Name");
+			name.AllowDbNull.ShouldBeTrue(); // left join
+			name.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			name.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -81,11 +81,11 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails createDateUtc = results[0];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails dateOfBirth = results[0];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails ordinal = results[1];
 			ordinal.ColumnName.ShouldBe("column_1");
@@ -104,11 +104,11 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails createDateUtc = results[0];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails dateOfBirth = results[0];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails ordinal = results[1];
 			ordinal.ColumnName.ShouldBe("answer");
@@ -130,13 +130,13 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			IFieldDetails id1 = results[0];
 			id1.ColumnName.ShouldBe("Id");
 			id1.AllowDbNull.ShouldBeFalse();
-			id1.DbType.ShouldBe(MsSqlDbType.Int);
+			id1.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id1.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails id2 = results[1];
 			id2.ColumnName.ShouldBe("Id");
 			id2.AllowDbNull.ShouldBeTrue();
-			id2.DbType.ShouldBe(MsSqlDbType.Int);
+			id2.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id2.ColumnOrdinal.ShouldBe(1);
 		}
 
@@ -151,17 +151,16 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.Length.ShouldBe(2);
 
 			IFieldDetails subscriptionId = results[0];
-			subscriptionId.ColumnName.ShouldBe("SubscriptionId");
+			subscriptionId.ColumnName.ShouldBe("UserId");
 			subscriptionId.AllowDbNull.ShouldBeFalse();
-			subscriptionId.DbType.ShouldBe(MsSqlDbType.Int);
+			subscriptionId.DbType.ShouldBe(MsSqlDbType.Bigint);
 			subscriptionId.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails eventId = results[1];
-			eventId.ColumnName.ShouldBe("EventId");
+			eventId.ColumnName.ShouldBe("RoleGroupId");
 			eventId.AllowDbNull.ShouldBeFalse();
-			eventId.DbType.ShouldBe(MsSqlDbType.Int);
+			eventId.DbType.ShouldBe(MsSqlDbType.Bigint);
 			eventId.ColumnOrdinal.ShouldBe(1);
-			eventId.ColumnName.ShouldBe("EventId");
 		}
 
 		[Fact]
@@ -174,17 +173,17 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails userKey = results[0];
-			userKey.ColumnName.ShouldBe("UserKey");
-			userKey.AllowDbNull.ShouldBeFalse();
-			userKey.DbType.ShouldBe(MsSqlDbType.NVarChar);
-			userKey.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails email = results[0];
+			email.ColumnName.ShouldBe("Email");
+			email.AllowDbNull.ShouldBeFalse();
+			email.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			email.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails shardName = results[1];
-			shardName.ColumnName.ShouldBe("ShardName");
-			shardName.AllowDbNull.ShouldBeFalse(); // inner join
-			shardName.DbType.ShouldBe(MsSqlDbType.NVarChar);
-			shardName.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails name = results[1];
+			name.ColumnName.ShouldBe("Name");
+			name.AllowDbNull.ShouldBeFalse(); // inner join
+			name.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			name.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -200,13 +199,13 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			IFieldDetails id1 = results[0];
 			id1.ColumnName.ShouldBe("Id");
 			id1.AllowDbNull.ShouldBeFalse();
-			id1.DbType.ShouldBe(MsSqlDbType.Int);
+			id1.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id1.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails id2 = results[1];
 			id2.ColumnName.ShouldBe("Id");
 			id2.AllowDbNull.ShouldBeFalse();
-			id2.DbType.ShouldBe(MsSqlDbType.Int);
+			id2.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id2.ColumnOrdinal.ShouldBe(1);
 		}
 
@@ -223,13 +222,13 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			IFieldDetails id1 = results[0];
 			id1.ColumnName.ShouldBe("Id");
 			id1.AllowDbNull.ShouldBeTrue();
-			id1.DbType.ShouldBe(MsSqlDbType.Int);
+			id1.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id1.ColumnOrdinal.ShouldBe(0);
 
 			IFieldDetails id2 = results[1];
 			id2.ColumnName.ShouldBe("Id");
 			id2.AllowDbNull.ShouldBeFalse();
-			id2.DbType.ShouldBe(MsSqlDbType.Int);
+			id2.DbType.ShouldBe(MsSqlDbType.Bigint);
 			id2.ColumnOrdinal.ShouldBe(1);
 		}
 
@@ -243,17 +242,17 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails caseId = results[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = results[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = results[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = results[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -266,17 +265,17 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			results.ShouldNotBeEmpty();
 			results.Length.ShouldBe(2);
 
-			IFieldDetails caseId = results[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = results[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = results[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = results[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 	}
 }
