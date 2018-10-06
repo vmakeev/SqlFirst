@@ -1,13 +1,13 @@
 ﻿-- begin variables
 
-declare @userKey varchar(MAX) ='test'; 
+declare @email varchar(MAX) ='test@mail.com'; 
 declare @skip int = 42;
 
 --end
 
-select CaseId, CreateDateUtc
-from CaseSubscriptions with(nolock)
-where UserKey = @userKey
-order by CreateDateUtc desc
+select ExternalId, DateOfBirth
+from Users with(nolock)
+where Email = @email
+order by Id desc
 offset @skip rows
 fetch next @take rows only

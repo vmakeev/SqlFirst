@@ -1,9 +1,9 @@
 ﻿
 -- begin variables
 
-declare @caseId uniqueidentifier;
+declare @externalId uniqueidentifier;
 
 -- end
 
-delete from CaseSubscriptions
-where CaseId = @caseId
+delete from Users
+where ExternalId = @externalId

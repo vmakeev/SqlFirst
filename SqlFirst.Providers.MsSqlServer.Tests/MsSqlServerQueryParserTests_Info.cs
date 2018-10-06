@@ -153,7 +153,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			IQuerySection variablesSection = sections[2];
 			variablesSection.Type.ShouldBe(QuerySectionType.Declarations);
 			variablesSection.Name.ShouldBe(QuerySectionName.Declarations);
-			variablesSection.Content.ShouldBe(@"declare @userKey varchar(MAX) ='test'; 
+			variablesSection.Content.ShouldBe(@"declare @email varchar(MAX) ='test@mail.com'; 
 declare @take int = 42;");
 
 			IQuerySection bodySection = sections[3];
@@ -194,7 +194,7 @@ declare @take int = 42;");
 			IQuerySection variablesSection1 = sections[2];
 			variablesSection1.Type.ShouldBe(QuerySectionType.Declarations);
 			variablesSection1.Name.ShouldBe(QuerySectionName.Declarations);
-			variablesSection1.Content.ShouldBe(@"declare @userKey varchar(MAX) ='test';");
+			variablesSection1.Content.ShouldBe(@"declare @email varchar(MAX) ='test@mail.com';");
 
 			IQuerySection customSection = sections[3];
 			customSection.Type.ShouldBe(QuerySectionType.Custom);
@@ -244,7 +244,7 @@ declare @take int = 42;");
 			IQuerySection variablesSection1 = sections[2];
 			variablesSection1.Type.ShouldBe(QuerySectionType.Declarations);
 			variablesSection1.Name.ShouldBe(QuerySectionName.Declarations);
-			variablesSection1.Content.ShouldBe(@"declare @userKey varchar(MAX) ='test';");
+			variablesSection1.Content.ShouldBe(@"declare @email varchar(MAX) ='test@mail.com';");
 
 			IQuerySection customSection = sections[3];
 			customSection.Type.ShouldBe(QuerySectionType.Custom);
@@ -278,12 +278,12 @@ declare @take int = 42;");
 
 			parameters.Length.ShouldBe(3);
 
-			IQueryParamInfo userKey = parameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("MAX");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = parameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("MAX");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo skip = parameters[1];
 			skip.ShouldNotBeNull();
@@ -304,17 +304,17 @@ declare @take int = 42;");
 
 			queryResults.Length.ShouldBe(2);
 
-			IFieldDetails caseId = queryResults[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = queryResults[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = queryResults[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = queryResults[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -332,12 +332,12 @@ declare @take int = 42;");
 
 			parameters.Length.ShouldBe(3);
 
-			IQueryParamInfo userKey = parameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("MAX");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = parameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("MAX");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo take = parameters[1];
 			take.ShouldNotBeNull();
@@ -358,17 +358,17 @@ declare @take int = 42;");
 
 			queryResults.Length.ShouldBe(2);
 
-			IFieldDetails caseId = queryResults[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = queryResults[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = queryResults[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = queryResults[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 
 		[Fact]
@@ -386,12 +386,12 @@ declare @take int = 42;");
 
 			parameters.Length.ShouldBe(3);
 
-			IQueryParamInfo userKey = parameters[0];
-			userKey.ShouldNotBeNull();
-			userKey.DbName.ShouldBe("userKey");
-			userKey.DbType.ShouldBe(MsSqlDbType.VarChar);
-			userKey.Length.ShouldBe("MAX");
-			userKey.DefaultValue.ShouldBe("test");
+			IQueryParamInfo email = parameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.VarChar);
+			email.Length.ShouldBe("MAX");
+			email.DefaultValue.ShouldBe("test@mail.com");
 
 			IQueryParamInfo take = parameters[1];
 			take.ShouldNotBeNull();
@@ -412,17 +412,17 @@ declare @take int = 42;");
 
 			queryResults.Length.ShouldBe(2);
 
-			IFieldDetails caseId = queryResults[0];
-			caseId.ColumnName.ShouldBe("CaseId");
-			caseId.AllowDbNull.ShouldBeFalse();
-			caseId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
-			caseId.ColumnOrdinal.ShouldBe(0);
+			IFieldDetails externalId = queryResults[0];
+			externalId.ColumnName.ShouldBe("ExternalId");
+			externalId.AllowDbNull.ShouldBeFalse();
+			externalId.DbType.ShouldBe(MsSqlDbType.UniqueIdentifier);
+			externalId.ColumnOrdinal.ShouldBe(0);
 
-			IFieldDetails createDateUtc = queryResults[1];
-			createDateUtc.ColumnName.ShouldBe("CreateDateUtc");
-			createDateUtc.AllowDbNull.ShouldBeFalse();
-			createDateUtc.DbType.ShouldBe(MsSqlDbType.DateTime);
-			createDateUtc.ColumnOrdinal.ShouldBe(1);
+			IFieldDetails dateOfBirth = queryResults[1];
+			dateOfBirth.ColumnName.ShouldBe("DateOfBirth");
+			dateOfBirth.AllowDbNull.ShouldBeTrue();
+			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
+			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
 	}
 }

@@ -1,2 +1,2 @@
-﻿insert into CaseSubscriptions (UserKey, CaseId, CreateDateUtc)
-values (@userKey, @caseId, @createDateUtc);
+﻿insert into Users (Email, ExternalId, DateOfBirth)
+values (@email, @externalId, @birthDate);

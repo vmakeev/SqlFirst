@@ -1,2 +1,2 @@
-﻿select top 10 CreateDateUtc, 42 as answer
-from CaseSubscriptions with(nolock)
+﻿select top 10 DateOfBirth, 42 as answer
+from Users with(nolock)
