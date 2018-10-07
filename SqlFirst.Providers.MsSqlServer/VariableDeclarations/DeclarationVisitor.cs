@@ -6,17 +6,17 @@ using SqlFirst.Providers.MsSqlServer.VariableDeclarations.Generated;
 
 namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 {
-	internal class DeclarationVisitor : SqlVariableDeclarationsBaseVisitor<QueryParamInfo>
+	internal class DeclarationVisitor : SqlVariableDeclarationsBaseVisitor<DeclaredQueryParamInfo>
 	{
 		/// <inheritdoc />
-		public override QueryParamInfo VisitVariable(SqlVariableDeclarationsParser.VariableContext context)
+		public override DeclaredQueryParamInfo VisitVariable(SqlVariableDeclarationsParser.VariableContext context)
 		{
 			string variableName = context.GetRuleContexts<SqlVariableDeclarationsParser.IdentifierContext>().Single().GetText();
 
 			string dbName = variableName;
 			(bool isNumbered, string semanticName) = QueryParamInfoNameHelper.GetNameSemantic(dbName);
 
-			return new QueryParamInfo
+			return new DeclaredQueryParamInfo
 			{
 				DbName = dbName,
 				IsNumbered = isNumbered,
@@ -25,34 +25,34 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 		}
 
 		/// <inheritdoc />
-		public override QueryParamInfo VisitTypeName(SqlVariableDeclarationsParser.TypeNameContext context)
+		public override DeclaredQueryParamInfo VisitTypeName(SqlVariableDeclarationsParser.TypeNameContext context)
 		{
 			IEnumerable<string> typeNameParts = context.GetRuleContexts<SqlVariableDeclarationsParser.IdentifierContext>().Select(p => p.GetText());
 
-			return new QueryParamInfo
+			return new DeclaredQueryParamInfo
 			{
 				DbType = string.Join(" ", typeNameParts)
 			};
 		}
 
 		/// <inheritdoc />
-		public override QueryParamInfo VisitLength(SqlVariableDeclarationsParser.LengthContext context)
+		public override DeclaredQueryParamInfo VisitLength(SqlVariableDeclarationsParser.LengthContext context)
 		{
 			var maxValueContext = new Lazy<SqlVariableDeclarationsParser.MaxValueContext>(() => context.GetRuleContext<SqlVariableDeclarationsParser.MaxValueContext>(0));
 			var intContext = new Lazy<SqlVariableDeclarationsParser.IntValueContext>(() => context.GetRuleContext<SqlVariableDeclarationsParser.IntValueContext>(0));
 
-			QueryParamInfo result = null;
+			DeclaredQueryParamInfo result = null;
 
 			if (intContext.Value != null)
 			{
-				result = new QueryParamInfo
+				result = new DeclaredQueryParamInfo
 				{
 					Length = intContext.Value.GetText()
 				};
 			}
 			else if (maxValueContext.Value != null)
 			{
-				result = new QueryParamInfo
+				result = new DeclaredQueryParamInfo
 				{
 					Length = maxValueContext.Value.GetText()
 				};
@@ -62,31 +62,31 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 		}
 
 		/// <inheritdoc />
-		public override QueryParamInfo VisitValue(SqlVariableDeclarationsParser.ValueContext context)
+		public override DeclaredQueryParamInfo VisitValue(SqlVariableDeclarationsParser.ValueContext context)
 		{
 			var stringContext = new Lazy<SqlVariableDeclarationsParser.StringValueContext>(() => context.GetRuleContext<SqlVariableDeclarationsParser.StringValueContext>(0));
 			var intContext = new Lazy<SqlVariableDeclarationsParser.IntValueContext>(() => context.GetRuleContext<SqlVariableDeclarationsParser.IntValueContext>(0));
 			var floatContext = new Lazy<SqlVariableDeclarationsParser.FloatValueContext>(() => context.GetRuleContext<SqlVariableDeclarationsParser.FloatValueContext>(0));
 
-			QueryParamInfo result = null;
+			DeclaredQueryParamInfo result = null;
 
 			if (stringContext.Value != null)
 			{
-				result = new QueryParamInfo
+				result = new DeclaredQueryParamInfo
 				{
 					DefaultValue = stringContext.Value.GetText()?.Trim('\'')
 				};
 			}
 			else if (intContext.Value != null)
 			{
-				result = new QueryParamInfo
+				result = new DeclaredQueryParamInfo
 				{
 					DefaultValue = int.Parse(intContext.Value.GetText())
 				};
 			}
 			else if (floatContext.Value != null)
 			{
-				result = new QueryParamInfo
+				result = new DeclaredQueryParamInfo
 				{
 					DefaultValue = float.Parse(floatContext.Value.GetText())
 				};
@@ -96,7 +96,7 @@ namespace SqlFirst.Providers.MsSqlServer.VariableDeclarations
 		}
 
 		/// <inheritdoc />
-		protected override QueryParamInfo AggregateResult(QueryParamInfo aggregate, QueryParamInfo nextResult)
+		protected override DeclaredQueryParamInfo AggregateResult(DeclaredQueryParamInfo aggregate, DeclaredQueryParamInfo nextResult)
 		{
 			if (aggregate == null)
 			{

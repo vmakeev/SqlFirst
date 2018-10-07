@@ -10,5 +10,7 @@
 		public const string GetScalarFromRecord = "GetScalarFromRecord";
 		public const string GetScalarFromValue = "GetScalarFromValue";
 		public const string AsyncEnumerable = "AsyncEnumerable";
+
+		public static string GetDataTable(string typeName) => $"Get{typeName}DataTable";
 	}
 }

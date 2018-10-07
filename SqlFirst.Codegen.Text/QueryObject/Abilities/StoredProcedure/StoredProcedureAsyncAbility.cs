@@ -1,12 +1,13 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure
 {
-	internal class StoredProcedureAsyncAbility : StoredProcedureAbility
+	internal class StoredProcedureAsyncAbility : StoredProcedureSmartTableAbility
 	{
 		/// <inheritdoc />
 		public override string Name { get; } = "StoredProcedureAsync";

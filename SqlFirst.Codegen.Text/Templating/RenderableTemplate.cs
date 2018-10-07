@@ -28,7 +28,6 @@ namespace SqlFirst.Codegen.Text.Templating
 	[SuppressMessage("ReSharper", "ConstantNullCoalescingCondition")]
 	public class RenderableTemplate : IRenderableTemplate
 	{
-		private static readonly PropertyEqualityComparer _propertyEqualityComparer = new PropertyEqualityComparer();
 		private readonly string _template;
 
 		protected static readonly Regex _templatesRegex =
@@ -42,7 +41,7 @@ namespace SqlFirst.Codegen.Text.Templating
 		public RenderableTemplate(string template)
 		{
 			_template = template ?? throw new ArgumentNullException(nameof(template));
-			_snippetFields = GetItems(_template).Distinct(_propertyEqualityComparer).ToArray();
+			_snippetFields = GetItems(_template).DistinctBy(field => field.Placeholder).ToArray();
 		}
 
 		/// <inheritdoc />
@@ -169,31 +168,6 @@ namespace SqlFirst.Codegen.Text.Templating
 			public string Prefix { get; set; }
 
 			public string Postfix { get; set; }
-		}
-
-		private class PropertyEqualityComparer : IEqualityComparer<SnippetField>
-		{
-			/// <summary>Determines whether the specified objects are equal.</summary>
-			/// <param name="x">The first object of type T to compare.</param>
-			/// <param name="y">The second object of type T to compare.</param>
-			/// <returns>true if the specified objects are equal; otherwise, false.</returns>
-			public bool Equals(SnippetField x, SnippetField y)
-			{
-				return string.Equals(x?.Placeholder, y?.Placeholder);
-			}
-
-			/// <summary>Returns a hash code for the specified object.</summary>
-			/// <param name="obj">The <see cref="T:System.Object"></see> for which a hash code is to be returned.</param>
-			/// <returns>A hash code for the specified object.</returns>
-			/// <exception cref="T:System.ArgumentNullException">
-			/// The type of <paramref name="obj">obj</paramref> is a reference type
-			/// and <paramref name="obj">obj</paramref> is null.
-			/// </exception>
-			[SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]
-			public int GetHashCode(SnippetField obj)
-			{
-				return obj?.Placeholder.GetHashCode() ?? 0;
-			}
 		}
 
 		#endregion

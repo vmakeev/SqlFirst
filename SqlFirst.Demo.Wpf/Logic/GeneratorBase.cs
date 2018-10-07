@@ -22,21 +22,21 @@ namespace SqlFirst.Demo.Wpf.Logic
 
 		public abstract IDatabaseProvider DatabaseProvider { get; }
 
-		public IGeneratedItem GenerateParameterItem(string query, GeneratorParameters parameters)
+		public IEnumerable<IGeneratedParameterItem> GenerateParameterItems(string query, GeneratorParameters parameters)
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
-			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
+			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered || paramInfo.IsComplexType))
 			{
-				return null;
+				return Enumerable.Empty<IGeneratedParameterItem>();
 			}
 
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
-			IGeneratedItem generatedItem = CodeGenerator.GenerateParameterItem(context, itemOptions);
+			IEnumerable<IGeneratedParameterItem> generatedItems = CodeGenerator.GenerateParameterItems(context, itemOptions);
 
-			return generatedItem;
+			return generatedItems;
 		}
 
 		public IGeneratedItem GenerateResultItem(string query, GeneratorParameters parameters)
@@ -71,17 +71,17 @@ namespace SqlFirst.Demo.Wpf.Logic
 			return itemCode;
 		}
 
-		public string GenerateParameterItemCode(string query, GeneratorParameters parameters)
+		public string GenerateParameterItemsCode(string query, GeneratorParameters parameters)
 		{
 			ICodeGenerator codeGenerator = new TextCodeGenerator();
-			IGeneratedItem generatedItem = GenerateParameterItem(query, parameters);
+			IGeneratedParameterItem[] generatedItems = GenerateParameterItems(query, parameters).ToArray();
 
-			if (generatedItem == null)
+			if (!generatedItems.Any())
 			{
 				return null;
 			}
 
-			string itemCode = codeGenerator.GenerateFile(new[] { generatedItem });
+			string itemCode = codeGenerator.GenerateFile(generatedItems);
 
 			return itemCode;
 		}

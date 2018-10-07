@@ -23,6 +23,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 		/// </summary>
 		public bool? UseQueryTextResourceFile { get; set; }
 
+		/// <summary>
+		/// Использовать ли автогенерируемые типы для представления DataTable в параметрах
+		/// </summary>
+		public bool? UseSmartDataTableParameters { get; set; }
+
 		public StoredProcedureQueryObjectOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			if (options == null)

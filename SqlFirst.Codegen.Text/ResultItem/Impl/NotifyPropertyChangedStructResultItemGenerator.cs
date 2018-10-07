@@ -2,7 +2,6 @@
 using System.ComponentModel;
 using SqlFirst.Codegen.Impl;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
-using SqlFirst.Codegen.Text.QueryObject;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Codegen.Trees;

@@ -100,7 +100,7 @@ namespace SqlFirst.Providers.Postgres
 
 			IQueryBaseInfo baseInfo = GetQueryBaseInfo(queryText);
 
-			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText);
+			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText, connectionString);
 			IEnumerable<IQueryParamInfo> undeclaredParameters = GetUndeclaredParameters(queryText, connectionString);
 			IEnumerable<IQueryParamInfo> parameters = declaredParameters.Concat(undeclaredParameters);
 
@@ -122,8 +122,9 @@ namespace SqlFirst.Providers.Postgres
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
 		/// </summary>
 		/// <param name="parametersDeclaration">Строка с объявленными переменными</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Информация о параметрах</returns>
-		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration)
+		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration, string connectionString)
 		{
 			yield break;
 		}

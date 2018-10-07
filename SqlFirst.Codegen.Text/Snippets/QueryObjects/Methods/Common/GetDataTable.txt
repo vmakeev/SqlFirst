@@ -1,0 +1,23 @@
+﻿/// <summary>
+/// Создает DataTable для типа $DbTypeName$
+/// </summary>
+/// <param name="values">Набор данных, который будет помещен в DataTable</param>
+protected virtual DataTable Get$DbTypeName$DataTable(IEnumerable<$ClrTypeName$> values)
+{
+	var $DataTableVariableName$ = new DataTable();
+$1|AddColumns`\r\n`|\r\n$~
+
+	if (values == null)
+	{
+		return $ValueWhenNoInput$;
+	}
+
+	foreach ($ClrTypeName$ $ValueVariableName$ in values)
+	{
+		DataRow $RowVariableName$ = $DataTableVariableName$.NewRow();
+$2|AddRows`\r\n`|\r\n$~
+		$DataTableVariableName$.Rows.Add($RowVariableName$);
+	}
+
+	return $DataTableVariableName$;
+}

@@ -57,6 +57,7 @@
     <None Remove="Snippets\QueryObjects\Methods\Add\AddSingleWithScalarResultAsync.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\AddCustomParameter.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\AddParameter.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\GetDataTable.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetItemFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
@@ -65,8 +66,11 @@
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryText.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\AddDataTableColumn.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\AddDataTableRow.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CallAddCustomParameter.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CallGetDataTableInline.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetQueryTemplates.txt" />
@@ -139,6 +143,7 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingleWithResult.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingleAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingle.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetDataTable.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\AddCustomParameter.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryRuntimeGeneratedMultipleInsert.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
@@ -146,8 +151,11 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromStringMultipleInsert.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromString.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\AddDataTableRow.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CallAddCustomParameter.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\AddDataTableColumn.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\CallGetDataTableInline.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\NumberedParameterInfo.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
@@ -221,6 +229,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Snippets\Types\" />
   </ItemGroup>
 
 </Project>

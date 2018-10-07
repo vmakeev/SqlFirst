@@ -12,8 +12,9 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		public void GetDeclaredParametersTest_Select_1()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAssignmentAndComments;
+			
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(3);
@@ -45,7 +46,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = QuerySelect.SelectDateWithNamedOrdinal;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.ShouldBeEmpty();
@@ -56,7 +57,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAndPartOfParameters;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(2);
@@ -81,7 +82,7 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		{
 			string query = QuerySelect.SelectGuidAndDateWithMultipleSections;
 			var queryParser = new MsSqlServerQueryParser();
-			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.Length.ShouldBe(2);

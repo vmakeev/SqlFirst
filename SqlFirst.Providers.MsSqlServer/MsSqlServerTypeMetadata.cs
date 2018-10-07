@@ -10,6 +10,7 @@ namespace SqlFirst.Providers.MsSqlServer
 		private static class Keys
 		{
 			public const string IsTableType = "IsTableType";
+			public const string IsNullable = "IsNullable";
 			public const string TableTypeColumns = "TableTypeColumns";
 		}
 
@@ -22,6 +23,15 @@ namespace SqlFirst.Providers.MsSqlServer
 		{
 			get => GetValue(Keys.IsTableType, false);
 			set => _innerDictionary[Keys.IsTableType] = value;
+		}
+
+		/// <summary>
+		/// Поддерживает ли тип значение null
+		/// </summary>
+		public bool? IsNullable
+		{
+			get => GetValue<bool?>(Keys.IsNullable, null);
+			set => _innerDictionary[Keys.IsNullable] = value;
 		}
 
 		/// <summary>

@@ -1,4 +1,5 @@
-﻿using System.Diagnostics.CodeAnalysis;
+﻿using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Text.RegularExpressions;
 
 namespace SqlFirst.Providers.MsSqlServer
@@ -6,6 +7,42 @@ namespace SqlFirst.Providers.MsSqlServer
 	[SuppressMessage("ReSharper", "InconsistentNaming")]
 	internal static class MsSqlDbType
 	{
+		private static readonly HashSet<string> _knownTypes = new HashSet<string>
+		{
+			Char,
+			NChar,
+			NText,
+			NVarChar,
+			VarChar,
+			Text,
+			Xml,
+			Date,
+			DateTime,
+			DateTime2,
+			SmallDateTime,
+			Time,
+			Binary,
+			Image,
+			Timestamp,
+			VarBinary,
+			Decimal,
+			Money,
+			SmallMoney,
+			SqlVariant,
+			Variant,
+			Udt,
+			Bit,
+			Bigint,
+			DateTimeOffset,
+			Float,
+			Real,
+			Smallint,
+			Tinyint,
+			Int,
+			Structured,
+			UniqueIdentifier
+		};
+
 		public const string Char = "char";
 
 		public const string NChar = "nchar";
@@ -83,6 +120,17 @@ namespace SqlFirst.Providers.MsSqlServer
 			}
 
 			return result?.Trim();
+		}
+
+		public static bool IsKnownType(string type)
+		{
+			string normalizedType = Normalize(type);
+			if (string.IsNullOrEmpty(normalizedType))
+			{
+				return false;
+			}
+
+			return _knownTypes.Contains(normalizedType);
 		}
 
 		[SuppressMessage("ReSharper", "ConstantConditionalAccessQualifier")]

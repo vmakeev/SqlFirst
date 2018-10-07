@@ -13,7 +13,7 @@ namespace SqlFirst.Providers.Postgres.Tests
 		{
 			string query = QuerySelect.SelectDateWithNamedOrdinal;
 			var queryParser = new PostgresQueryParser();
-			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query).ToArray();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
 
 			declaredParameters.ShouldNotBeNull();
 			declaredParameters.ShouldBeEmpty();

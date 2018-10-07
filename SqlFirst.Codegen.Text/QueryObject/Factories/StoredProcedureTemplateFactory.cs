@@ -4,8 +4,10 @@ using System.Linq;
 using Common.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure;
+using SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.QueryObject.Factories.Options;
+using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Factories
 {
@@ -34,6 +36,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 			result.AddAbility<AddQueryParameterAbility>(() => context.IncomingParameters.Any(p => !p.IsComplexType));
 			result.AddAbility<AddQueryCustomParameterAbility>(() => context.IncomingParameters.Any(p => p.IsComplexType));
 
+			foreach (IQueryParamInfo complexParam in context.IncomingParameters
+															.Where(info => info.IsComplexType && info.ComplexTypeData?.IsTableType == true)
+															.DistinctBy(info => info.DbType))
+			{
+				result.AddAbility(new GetDataTableAbility(complexParam.DbType, complexParam.ComplexTypeData));
+			}
+
 			if (internalOptions.Calculated.HasOutput)
 			{
 				BuildWithOutput(result, internalOptions);
@@ -48,7 +57,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 		private static void BuildWithRowsCountOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			template.AddAbility<StoredProcedureAbility>(() => options.User.GenerateSyncMethods);
+			template.AddAbility<StoredProcedureSmartTableAbility>(() => options.User.GenerateSyncMethods);
+
 			template.AddAbility<StoredProcedureAsyncAbility>(() => options.User.GenerateAsyncMethods);
 		}
 
@@ -66,9 +76,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 		private static void BuildWithObjectOutput(QueryObjectTemplate template, InternalOptions options)
 		{
+			bool smartTableParametersRequired = options.User.UseSmartDataTableParameters && options.Calculated.HasTableParameters;
+
 			template.AddAbility<MapDataRecordToItemAbility>(() => options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods);
 
-			template.AddAbility<StoredProcedureWithResultAbility>(() => options.User.GenerateSyncMethods);
+			template.AddAbility<StoredProcedureWithResultAbility>(() => options.User.GenerateSyncMethods && !smartTableParametersRequired);
+			template.AddAbility<StoredProcedureWithResultSmartTableAbility>(() => options.User.GenerateSyncMethods && smartTableParametersRequired);
+
 			template.AddAbility<StoredProcedureWithResultAsyncAbility>(() => options.User.GenerateAsyncMethods);
 		}
 
@@ -110,7 +124,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					HasMultipleInsert = context.IncomingParameters.Any(p => p.IsNumbered),
 					HasOutput = outgoungParametersCount > 0,
 					IsScalarOutput = outgoungParametersCount == 1,
-					HasCustomTypeParameters = context.IncomingParameters.Any(p => p.IsComplexType)
+					HasCustomTypeParameters = context.IncomingParameters.Any(p => p.IsComplexType),
+					HasTableParameters = context.IncomingParameters.Any(p => p.IsComplexType && p.ComplexTypeData?.IsTableType == true)
 				};
 
 				User = new UserOptions
@@ -118,6 +133,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
+					UseSmartDataTableParameters = true // todo: move to options
 				};
 			}
 
@@ -134,6 +150,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			public bool HasCustomTypeParameters { get; set; }
 
+			public bool HasTableParameters { get; set; }
+
 			public bool HasOutput { get; set; }
 
 			public bool IsScalarOutput { get; set; }
@@ -146,7 +164,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					$"HasMultipleInsert: {HasMultipleInsert}",
 					$"HasOutput: {HasOutput}",
 					$"IsScalarOutput: {IsScalarOutput}",
-					$"HasCustomTypeParameters: {HasCustomTypeParameters}"
+					$"HasCustomTypeParameters: {HasCustomTypeParameters}",
+					$"HasTableParameters: {HasTableParameters}"
 				};
 
 				return "CalculatedOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);
@@ -156,6 +175,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 		private class UserOptions
 		{
 			public bool UseResourceFile { get; set; }
+
+			public bool UseSmartDataTableParameters { get; set; }
 
 			public bool GenerateAsyncMethods { get; set; }
 
@@ -168,7 +189,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				{
 					$"UseResourceFile: {UseResourceFile}",
 					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
-					$"GenerateSyncMethods: {GenerateSyncMethods}"
+					$"GenerateSyncMethods: {GenerateSyncMethods}",
+					$"UseDataTableParametersInstead: {UseSmartDataTableParameters}"
 				};
 
 				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);

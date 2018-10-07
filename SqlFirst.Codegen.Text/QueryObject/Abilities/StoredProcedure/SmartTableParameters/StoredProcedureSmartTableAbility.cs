@@ -5,10 +5,34 @@ using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
-namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure
+namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters
 {
-	internal class StoredProcedureAbility : QueryObjectAbilityBase
+	internal class StoredProcedureSmartTableAbility : QueryObjectAbilityBase
 	{
+		protected override IEnumerable<IRenderable> GetAddCustomParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters, out IEnumerable<string> specificUsings)
+		{
+			specificUsings = Enumerable.Empty<string>();
+
+			var results = new LinkedList<IRenderable>();
+			foreach (IQueryParamInfo paramInfo in targetParameters)
+			{
+				string name = GetParameterName(paramInfo);
+
+				IRenderableTemplate template = Snippet.Query.Methods.Common.Snippets.CallAddCustomParameter;
+				var model = new
+				{
+					SqlType = paramInfo.DbType,
+					SqlName = paramInfo.DbName,
+					Name = name
+				};
+
+				results.AddLast(Renderable.Create(template, model));
+			}
+
+			specificUsings = specificUsings.Distinct().ToArray();
+			return results;
+		}
+
 		/// <inheritdoc />
 		public override string Name { get; } = "StoredProcedure";
 

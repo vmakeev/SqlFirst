@@ -25,17 +25,17 @@ namespace SqlFirst.Codegen
 		IGeneratedResultItem GenerateResultItem(ICodeGenerationContext context, IResultGenerationOptions options);
 
 		/// <summary>
-		/// Выполняет генерацию объекта, представляющего входящий аргумент запроса
+		/// Выполняет генерацию объектов, используемых в качестве входящих аргументов запроса
 		/// </summary>
 		/// <param name="context">Контекст генерации кода</param>
 		/// <param name="options">Параметры генерации</param>
-		/// <returns>Сгенерированный объект</returns>
-		IGeneratedParameterItem GenerateParameterItem(ICodeGenerationContext context, IParameterGenerationOptions options);
+		/// <returns>Сгенерированные объекты</returns>
+		IEnumerable<IGeneratedParameterItem> GenerateParameterItems(ICodeGenerationContext context, IParameterGenerationOptions options);
 
 		/// <summary>
 		/// Выполняет генерацию файла
 		/// </summary>
-		/// <param name="generatedItems">Набор сгеренированных элементов, которые следует разместить в файле</param>
+		/// <param name="generatedItems">Набор сгенерированных элементов, которые следует разместить в файле</param>
 		/// <returns>Сгенерированный файл</returns>
 		string GenerateFile(IEnumerable<IGeneratedItem> generatedItems);
 	}

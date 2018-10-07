@@ -17,7 +17,7 @@ namespace SqlFirst.Core.Impl
 		public string DbType { get; set; }
 
 		/// <inheritdoc />
-		public IDictionary<string, object> DbTypeMetadata { get; set;  }
+		public IDictionary<string, object> DbTypeMetadata { get; set; }
 
 		/// <inheritdoc />
 		public object DefaultValue { get; set; }
@@ -27,6 +27,9 @@ namespace SqlFirst.Core.Impl
 
 		/// <inheritdoc />
 		public bool IsComplexType { get; set; }
+
+		/// <inheritdoc />
+		public IComplexTypeData ComplexTypeData { get; set; }
 
 		/// <inheritdoc />
 		public string Length { get; set; }

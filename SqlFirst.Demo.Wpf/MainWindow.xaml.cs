@@ -9,6 +9,7 @@ using System.Xml;
 using ICSharpCode.AvalonEdit;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using SqlFirst.Codegen;
 using SqlFirst.Codegen.Trees;
 using SqlFirst.Core;
 using SqlFirst.Core.Impl;
@@ -73,7 +74,7 @@ namespace SqlFirst.Demo.Wpf
 
 				FormattedSql = FormatSql(SourceSql);
 				ResultItem = Generator.GenerateResultItemCode(sql, parameters);
-				ParameterItem = Generator.GenerateParameterItemCode(sql, parameters);
+				ParameterItem = Generator.GenerateParameterItemsCode(sql, parameters);
 				QueryObject = Generator.GenerateQueryObjectCode(sql, parameters);
 			}
 			catch (Exception ex)
@@ -98,10 +99,10 @@ namespace SqlFirst.Demo.Wpf
 				GeneratorParameters parameters = GetGeneratorParameters();
 
 				IGeneratedItem resultItem = Generator.GenerateResultItem(sql, parameters);
-				IGeneratedItem parameterItem = Generator.GenerateParameterItem(sql, parameters);
+				IEnumerable<IGeneratedParameterItem> parameterItems = Generator.GenerateParameterItems(sql, parameters);
 				IGeneratedItem queryObject = Generator.GenerateQueryObject(sql, parameters);
 
-				string file = Generator.CodeGenerator.GenerateFile(new[] { resultItem, parameterItem, queryObject }.Where(p => p != null));
+				string file = Generator.CodeGenerator.GenerateFile(parameterItems.Concat(new[] { resultItem, queryObject }).Where(p => p != null));
 				Clipboard.SetText(file);
 
 				MessageBox.Show("Все объекты помещены в буфер обмена", "Генерация", MessageBoxButton.OK, MessageBoxImage.Information);
@@ -192,7 +193,7 @@ namespace SqlFirst.Demo.Wpf
 
 		private ProviderType _providerType = ProviderType.MsSqlServer;
 
-		private string _connectionStringMsSqlServer = @"Server=vmcbapi.kadlab.local;Initial Catalog=CBAPI_SvcQueries_dev;integrated security=True;MultipleActiveResultSets=True";
+		private string _connectionStringMsSqlServer = @"Server=DB_DL;initial catalog=ArbitrCalculatedData;Integrated Security=SSPI;Connection Timeout=150";
 		private string _connectionStringPostgres = @"Server = 127.0.0.1; Port = 5432; Database = CasebookApi.Arbitrage.Tracking_dev; User Id = postgres;Password = postgres;";
 
 		private string _namespace = "SqlFirst.Test.Namespace";

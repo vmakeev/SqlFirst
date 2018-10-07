@@ -33,12 +33,12 @@ namespace SqlFirst.Codegen.Text
 		}
 
 		/// <inheritdoc />
-		public IGeneratedParameterItem GenerateParameterItem(ICodeGenerationContext context, IParameterGenerationOptions options)
+		public IEnumerable<IGeneratedParameterItem> GenerateParameterItems(ICodeGenerationContext context, IParameterGenerationOptions options)
 		{
 			var itemOptions = new ParameterItemOptions(options.SqlFirstOptions?.ToArray());
 
 			ParameterItemGeneratorBase itemGenerator = ParameterItemGeneratorFactory.Build(itemOptions);
-			return itemGenerator.GenerateParameterItem(context);
+			return itemGenerator.GenerateParameterItems(context);
 		}
 
 		/// <inheritdoc />

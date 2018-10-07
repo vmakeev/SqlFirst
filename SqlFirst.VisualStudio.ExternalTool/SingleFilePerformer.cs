@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using Common.Logging;
 using Microsoft.Build.Evaluation;
 using SqlFirst.Intelligence.Generators;
@@ -42,26 +44,31 @@ namespace SqlFirst.VisualStudio.ExternalTool
 			GeneratorBase generator = GetGenerator(options);
 
 			string queryObject = generator.GenerateQueryObjectCode(queryText, options);
-			string parameterItem = generator.GenerateParameterItemCode(queryText, options);
+			IEnumerable<(string text, string name)> parameterItems = generator.GenerateParameterItemsCode(queryText, options);
 			string resultItem = generator.GenerateResultItemCode(queryText, options);
 
 			Log.Debug("Query objects generated");
 
 			string queryObjectFileName = Path.GetFileNameWithoutExtension(options.Target) + ".gen.cs";
-			string parameterItemFileName = options.ParameterItemName + ".gen.cs";
+			string GetParameterItemFileName(string name) => name + ".gen.cs";
 			string resultItemFileName = options.ResultItemName + ".gen.cs";
 
 			string queryObjectPath = Path.Combine(targetDirectory, queryObjectFileName);
-			string parameterItemPath = Path.Combine(targetDirectory, parameterItemFileName);
 			string resultItemPath = Path.Combine(targetDirectory, resultItemFileName);
+			string GetParameterItemPath(string name) => Path.Combine(targetDirectory, GetParameterItemFileName(name));
+
+			(string Path, string Data)[] parameterItemsPaths = parameterItems.Select(p => (GetParameterItemPath(p.name), p.text)).ToArray();
 
 			WriteFile(queryObject, queryObjectPath);
-			WriteFile(parameterItem, parameterItemPath);
+			foreach ((string path, string data) in parameterItemsPaths)
+			{
+				WriteFile(data, path);
+			}
 			WriteFile(resultItem, resultItemPath);
 
 			if (options.UpdateCsproj)
 			{
-				UpdateCsprojFile(options, (queryObjectPath, queryObject), (parameterItemPath, parameterItem), (resultItemPath, resultItem));
+				UpdateCsprojFile(options, (queryObjectPath, queryObject), parameterItemsPaths, (resultItemPath, resultItem));
 			}
 
 			Log.Info("Query objects generation was successfully completed.");
@@ -69,7 +76,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 
 		protected virtual void UpdateCsprojFile(GenerationOptions options,
 			(string Path, string Data) queryObject,
-			(string Path, string Data) parameter,
+			(string Path, string Data)[] parameters,
 			(string Path, string Data) result)
 		{
 			Log.Debug("Trying to modify project file");
@@ -78,26 +85,30 @@ namespace SqlFirst.VisualStudio.ExternalTool
 
 			Project project = CsprojHelper.BeginUpdate(options.ProjectFile);
 
-			string relativeQueryObjectPath = Path.IsPathRooted(queryObject.Path)
-				? PathHelper.GetRelativePath(csprojDirectoryName, queryObject.Path)
-				: queryObject.Path;
+			string GetRelativePath(string path)
+			{
+				return Path.IsPathRooted(path)
+					? PathHelper.GetRelativePath(csprojDirectoryName, path)
+					: path;
+			}
 
-			string relativeParameterItemPath = Path.IsPathRooted(parameter.Path)
-				? PathHelper.GetRelativePath(csprojDirectoryName, parameter.Path)
-				: parameter.Path;
+			string relativeQueryObjectPath = GetRelativePath(queryObject.Path);
 
-			string relativeResultItemPath = Path.IsPathRooted(result.Path)
-				? PathHelper.GetRelativePath(csprojDirectoryName, result.Path)
-				: result.Path;
+			(string Data, string RelativePath)[] relativeParameterItemsPaths = parameters
+													.Select(parameter => (parameter.Data, GetRelativePath(parameter.Path)))
+													.ToArray();
 
-			string relativeQuerySqlPath = Path.IsPathRooted(options.Target)
-				? PathHelper.GetRelativePath(csprojDirectoryName, options.Target)
-				: options.Target;
+			string relativeResultItemPath = GetRelativePath(result.Path);
+
+			string relativeQuerySqlPath = GetRelativePath(options.Target);
 
 			string querySqlFileName = Path.GetFileName(options.Target);
 
 			CsprojHelper.RemoveItem(project, relativeQueryObjectPath);
-			CsprojHelper.RemoveItem(project, relativeParameterItemPath);
+			foreach ((string _, string relativeParameterItemPath) in relativeParameterItemsPaths)
+			{
+				CsprojHelper.RemoveItem(project, relativeParameterItemPath);
+			}
 			CsprojHelper.RemoveItem(project, relativeResultItemPath);
 
 			if (!CsprojHelper.IsExists(project, ItemType.EmbeddedResource, relativeQuerySqlPath))
@@ -116,9 +127,12 @@ namespace SqlFirst.VisualStudio.ExternalTool
 				CsprojHelper.AddItem(project, relativeQueryObjectPath, ItemType.Compile, querySqlFileName);
 			}
 
-			if (!string.IsNullOrEmpty(parameter.Data))
+			foreach ((string Data, string RelativePath) parameter in relativeParameterItemsPaths)
 			{
-				CsprojHelper.AddItem(project, relativeParameterItemPath, ItemType.Compile, querySqlFileName);
+				if (!string.IsNullOrEmpty(parameter.Data))
+				{
+					CsprojHelper.AddItem(project, parameter.RelativePath, ItemType.Compile, querySqlFileName);
+				}
 			}
 
 			if (!string.IsNullOrEmpty(result.Data))

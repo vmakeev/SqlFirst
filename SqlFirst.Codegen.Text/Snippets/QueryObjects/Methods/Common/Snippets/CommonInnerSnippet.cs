@@ -26,6 +26,12 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 
 		public IRenderableTemplate XmlParam => GetRenderableTemplate();
 
+		public IRenderableTemplate AddDataTableColumn => GetRenderableTemplate();
+
+		public IRenderableTemplate AddDataTableRow => GetRenderableTemplate();
+
+		public IRenderableTemplate CallGetDataTableInline => GetRenderableTemplate();
+
 		public CommonInnerSnippet()
 			: base("QueryObjects.Methods.Common.Snippets")
 		{

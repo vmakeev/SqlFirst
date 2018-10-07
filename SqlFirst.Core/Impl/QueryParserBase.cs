@@ -15,7 +15,7 @@ namespace SqlFirst.Core.Impl
 		protected const string SectionRegexPattern = @"--\s*begin\s+(?<sectionName>[a-zA-Z0-9_]*)\s*\r?\n(?<content>.*?)\s*\r?\n\s*--\s*end\s*\r?\n";
 
 		/// <inheritdoc />
-		public virtual IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText)
+		public virtual IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText, string connectionString)
 		{
 			IEnumerable<string> allDeclarations = GetQuerySections(queryText, QuerySectionType.Declarations).Select(querySection => querySection.Content);
 			string declarations = string.Join(Environment.NewLine, allDeclarations);
@@ -24,7 +24,7 @@ namespace SqlFirst.Core.Impl
 				yield break;
 			}
 
-			foreach (IQueryParamInfo info in GetDeclaredParametersInternal(declarations))
+			foreach (IQueryParamInfo info in GetDeclaredParametersInternal(declarations, connectionString))
 			{
 				yield return info;
 			}
@@ -33,7 +33,7 @@ namespace SqlFirst.Core.Impl
 		/// <inheritdoc />
 		public virtual IEnumerable<IQueryParamInfo> GetUndeclaredParameters(string queryText, string connectionString)
 		{
-			IEnumerable<IQueryParamInfo> declared = GetDeclaredParameters(queryText);
+			IEnumerable<IQueryParamInfo> declared = GetDeclaredParameters(queryText, connectionString);
 			foreach (IQueryParamInfo info in GetUndeclaredParametersInternal(declared, queryText, connectionString))
 			{
 				yield return info;
@@ -196,8 +196,9 @@ namespace SqlFirst.Core.Impl
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
 		/// </summary>
 		/// <param name="parametersDeclaration">Строка с объявленными переменными</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Информация о параметрах</returns>
-		protected abstract IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration);
+		protected abstract IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration, string connectionString);
 
 		/// <summary>
 		/// Возвращает информацию необъявленных в секции "queryParameters" параметров запроса

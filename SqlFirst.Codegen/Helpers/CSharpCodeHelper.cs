@@ -185,7 +185,7 @@ namespace SqlFirst.Codegen.Helpers
 		{
 			if (value == null)
 			{
-				return "\"null\"";
+				return "null";
 			}
 
 			string valueString = Convert.ToString(value, CultureInfo.InvariantCulture);
@@ -327,7 +327,7 @@ namespace SqlFirst.Codegen.Helpers
 				result = name;
 			}
 
-			if (_reservedWords.Any(reservedWord => result == reservedWord))
+			if (_reservedWords.Contains(result))
 			{
 				return '@' + result;
 			}
@@ -458,5 +458,39 @@ namespace SqlFirst.Codegen.Helpers
 		};
 
 		#endregion
+
+		public static string GetGenericType(Type genericType, params string[] genericTypeArguments)
+		{
+			if (genericType == null)
+			{
+				throw new ArgumentNullException(nameof(genericType));
+			}
+
+			if (genericTypeArguments == null)
+			{
+				throw new ArgumentNullException(nameof(genericTypeArguments));
+			}
+
+			if (!genericType.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("Provided type must be open generic type.", nameof(genericType));
+			}
+
+			if (genericTypeArguments.Length != genericType.GetGenericArguments().Length)
+			{
+				throw new ArgumentException("Generic type arguments count must be equals to generic type generic arguments count.", nameof(genericTypeArguments));
+			}
+
+			foreach (string genericTypeArgument in genericTypeArguments)
+			{
+				if (!IsValidIdentifierName(genericTypeArgument))
+				{
+					throw new ArgumentException($"[{genericTypeArgument}] is not a valid identifier name.", nameof(genericTypeArguments));
+				}
+			}
+
+			string genericTypeBaseName = GetTypeShortName(genericType);
+			return $"{genericTypeBaseName}<{string.Join(", ", genericTypeArguments)}>";
+		}
 	}
 }

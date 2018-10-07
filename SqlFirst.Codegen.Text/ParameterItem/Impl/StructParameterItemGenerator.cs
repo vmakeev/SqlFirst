@@ -1,5 +1,5 @@
-﻿using System.Linq;
-using SqlFirst.Codegen.Impl;
+﻿using System.Collections.Generic;
+using System.Linq;
 using SqlFirst.Codegen.Text.Common.PropertyGenerator;
 using SqlFirst.Core;
 
@@ -24,9 +24,11 @@ namespace SqlFirst.Codegen.Text.ParameterItem.Impl
 		/// </summary>
 		/// <param name="context">Контекст генерации</param>
 		/// <returns>Сгенерированный код, описывающий параметры запроса</returns>
-		protected override GeneratedParameterItem GenerateParameterItemInternal(ICodeGenerationContext context)
+		protected override IEnumerable<IGeneratedParameterItem> GenerateParameterItemsInternal(ICodeGenerationContext context)
 		{
-			IQueryParamInfo[] paramsWithDefaults = context.IncomingParameters.Where(paramInfo => paramInfo.DefaultValue != null).ToArray();
+			IQueryParamInfo[] paramsWithDefaults = context.IncomingParameters
+														.Where(paramInfo => paramInfo.DefaultValue != null)
+														.ToArray();
 
 			if (paramsWithDefaults.Any())
 			{
@@ -34,7 +36,7 @@ namespace SqlFirst.Codegen.Text.ParameterItem.Impl
 				throw new CodeGenerationException($"Struct parameter item can not contains default values. Invalid parameters list: {names}");
 			}
 
-			return base.GenerateParameterItemInternal(context);
+			return base.GenerateParameterItemsInternal(context);
 		}
 
 		protected override string ObjectType { get; } = ObjectTypes.Struct;

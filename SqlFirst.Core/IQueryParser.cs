@@ -12,8 +12,9 @@ namespace SqlFirst.Core
 		/// Возвращает информацию о явно объявленных в секции "queryParameters" параметров запроса
 		/// </summary>
 		/// <param name="queryText">Полный текст запроса</param>
+		/// <param name="connectionString">Строка подключения к БД</param>
 		/// <returns>Информация о параметрах</returns>
-		IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText);
+		IEnumerable<IQueryParamInfo> GetDeclaredParameters(string queryText, string connectionString);
 
 		/// <summary>
 		/// Возвращает информацию необъявленных в секции "queryParameters" параметров запроса

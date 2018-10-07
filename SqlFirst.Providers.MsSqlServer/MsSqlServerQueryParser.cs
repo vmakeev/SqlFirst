@@ -108,7 +108,7 @@ namespace SqlFirst.Providers.MsSqlServer
 
 			IQueryBaseInfo baseInfo = GetQueryBaseInfo(queryText);
 
-			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText);
+			IEnumerable<IQueryParamInfo> declaredParameters = GetDeclaredParameters(queryText, connectionString);
 			IEnumerable<IQueryParamInfo> undeclaredParameters = GetUndeclaredParameters(queryText, connectionString);
 			IEnumerable<IQueryParamInfo> parameters = declaredParameters.Concat(undeclaredParameters);
 
@@ -127,8 +127,15 @@ namespace SqlFirst.Providers.MsSqlServer
 		}
 
 		/// <inheritdoc />
-		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration)
+		protected override IEnumerable<IQueryParamInfo> GetDeclaredParametersInternal(string parametersDeclaration, string connectionString)
 		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
+			DeclaredQueryParamInfo[] declaredQueryParamInfos;
+
 			try
 			{
 				using (TextReader textReader = new StringReader(parametersDeclaration))
@@ -141,13 +148,101 @@ namespace SqlFirst.Providers.MsSqlServer
 						ErrorHandler = new BailErrorStrategy()
 					};
 
-					return new QueryParamInfoVisitor().Visit(parser.root());
+					declaredQueryParamInfos = new QueryParamInfoVisitor()
+												   .Visit(parser.root())
+												   .ToArray();
 				}
 			}
 			catch (Exception ex)
 			{
 				throw new QueryParsingException("Unable to parse variable declarations section", ex);
 			}
+
+			bool NeedInspection(string typeName)
+			{
+				string declaredType = MsSqlDbType.Normalize(typeName);
+				return declaredType == MsSqlDbType.Udt ||
+						declaredType == MsSqlDbType.Structured ||
+						!MsSqlDbType.IsKnownType(declaredType);
+			}
+
+			foreach (DeclaredQueryParamInfo info in declaredQueryParamInfos)
+			{
+				var result = new QueryParamInfo
+				{
+					IsComplexType = false,
+					DbTypeMetadata = null,
+					ComplexTypeData = null,
+					DbType = info.DbType,
+					IsNumbered = info.IsNumbered,
+					DbName = info.DbName,
+					DefaultValue = info.DefaultValue,
+					Length = info.Length,
+					SemanticName = info.SemanticName
+				};
+
+				if (NeedInspection(result.DbType))
+				{
+					bool isComplexType;
+					IComplexTypeData complexTypeData;
+					MsSqlServerTypeMetadata metadata;
+
+					(isComplexType, complexTypeData, metadata) = GetTypeDetails(result.DbType, connectionString);
+
+					result.IsComplexType = isComplexType;
+					result.ComplexTypeData = complexTypeData;
+					result.DbTypeMetadata = metadata;
+				}
+
+				yield return result;
+			}
+		}
+
+		private (bool isComplexType, IComplexTypeData complexTypeData, MsSqlServerTypeMetadata metadata) GetTypeDetails(string dbType, string connectionString)
+		{
+			if (string.IsNullOrEmpty(connectionString))
+			{
+				throw new QueryParsingException("Connection string must be specified.");
+			}
+
+			bool isComplexType = false;
+			IComplexTypeData complexTypeData = null;
+			MsSqlServerTypeMetadata metadata = null;
+
+			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
+			{
+				connection.Open();
+				MsSqlServerTypeDescription typeDescription = DescribeUserTypeByNameQuery.GetFirst(connection, dbType);
+
+				if (typeDescription.IsTableType)
+				{
+					string queryText = $"declare @target {typeDescription.Name}; select * from @target";
+					// todo: add recursive types support
+					IFieldDetails[] fieldDetails = GetResultDetails(queryText, connectionString).ToArray();
+
+					isComplexType = true;
+
+					metadata = new MsSqlServerTypeMetadata
+					{
+						IsTableType = true,
+						TableTypeColumns = fieldDetails
+					};
+
+					string complexTypeDisplayedName = typeDescription.Name;
+					string complexTypeItemName = typeDescription.Name + "Item";
+
+					complexTypeData = metadata.TableTypeColumns == null
+						? null
+						: new ComplexTypeData(
+							name: complexTypeItemName, 
+							dbTypeDisplayedName: complexTypeDisplayedName,
+							isTableType: true, 
+							allowNull: typeDescription.IsNullable ?? false,
+							fields: metadata.TableTypeColumns);
+				}
+			}
+
+			return (isComplexType, complexTypeData, metadata);
 		}
 
 		/// <inheritdoc />
@@ -177,12 +272,26 @@ namespace SqlFirst.Providers.MsSqlServer
 						{
 							string dbName = description.Name.TrimStart('@');
 							string dbType = description.SuggestedSystemTypeName;
+							string complexTypeItemName = null;
+
 							if (string.IsNullOrEmpty(dbType) && description.SuggestedUserTypeId != null)
 							{
-								(dbType, typeMetadata) = DescribeUserType(description, connectionString);
+								(dbType, complexTypeItemName, typeMetadata) = DescribeUserType(description, connectionString);
 							}
 
 							(bool isNumbered, string semanticName) = QueryParamInfoNameHelper.GetNameSemantic(dbName);
+
+							bool isTableType = typeMetadata?.IsTableType ?? false;
+							bool isComplexType = isTableType;
+
+							ComplexTypeData complexTypeData = typeMetadata?.TableTypeColumns == null
+								? null
+								: new ComplexTypeData(
+									name: complexTypeItemName, 
+									dbTypeDisplayedName: dbType,
+									isTableType: isTableType,
+									allowNull: typeMetadata.IsNullable ?? false,
+									fields: typeMetadata.TableTypeColumns);
 
 							var info = new QueryParamInfo
 							{
@@ -192,7 +301,8 @@ namespace SqlFirst.Providers.MsSqlServer
 								IsNumbered = isNumbered,
 								SemanticName = semanticName,
 								DbTypeMetadata = typeMetadata,
-								IsComplexType = typeMetadata?.IsTableType ?? false
+								IsComplexType = isComplexType,
+								ComplexTypeData = complexTypeData
 							};
 
 							yield return info;
@@ -202,19 +312,22 @@ namespace SqlFirst.Providers.MsSqlServer
 			}
 		}
 
-		private (string typeName, MsSqlServerTypeMetadata metadata) DescribeUserType(UndeclaredParameterDescription parameterDescription, string connectionString)
+		private (string typeName, string itemName, MsSqlServerTypeMetadata metadata) DescribeUserType(UndeclaredParameterDescription parameterDescription, string connectionString)
 		{
 			if (parameterDescription.SuggestedUserTypeId == null)
 			{
-				throw new QueryParsingException("Unable to describe user type: identifier is missing.");
+				throw new QueryParsingException("Unable to describe user type: suggested user type identifier is missing.");
 			}
 
 			string typeName = parameterDescription.SuggestedUserTypeName;
-			MsSqlServerTypeMetadata metadata = null;
+			string itemName = null;
+			var metadata = new MsSqlServerTypeMetadata();
 
 			MsSqlServerTypeDescription systemTypeDescription = GetMsSqlUserTypeDescription(parameterDescription, connectionString);
 			if (systemTypeDescription.IsTableType)
 			{
+				typeName = systemTypeDescription.Name;
+				itemName = systemTypeDescription.Name + "Item";
 				string queryText = $"declare @target {systemTypeDescription.Name}; select * from @target";
 				// todo: add recursive types support
 				IFieldDetails[] fieldDetails = GetResultDetails(queryText, connectionString).ToArray();
@@ -222,16 +335,18 @@ namespace SqlFirst.Providers.MsSqlServer
 				metadata = new MsSqlServerTypeMetadata
 				{
 					IsTableType = true,
-					TableTypeColumns = fieldDetails
+					TableTypeColumns = fieldDetails,
 				};
 			}
 
-			return (typeName, metadata);
+			metadata.IsNullable = systemTypeDescription.IsNullable;
+
+			return (typeName, itemName ?? typeName, metadata);
 		}
 
 		private MsSqlServerTypeDescription GetMsSqlUserTypeDescription(UndeclaredParameterDescription parameterDescription, string connectionString)
 		{
-			using (var connection = new SqlConnection(connectionString))
+			using (IDbConnection connection = _databaseProvider.Value.GetConnection(connectionString))
 			{
 				connection.Open();
 				return DescribeUserTypeByIdQuery.GetFirst(connection, parameterDescription.SuggestedUserTypeId);

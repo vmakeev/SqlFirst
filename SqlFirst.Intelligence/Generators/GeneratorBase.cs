@@ -29,11 +29,11 @@ namespace SqlFirst.Intelligence.Generators
 
 		public abstract IDatabaseProvider DatabaseProvider { get; }
 
-		public IGeneratedItem GenerateParameterItem(string query, GenerationOptions parameters)
+		public IEnumerable<IGeneratedParameterItem> GenerateParameterItems(string query, GenerationOptions parameters)
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
-			return GenerateParameterItemInternal(query: query, parameters: parameters, info: info);
+			return GenerateParameterItemsInternal(query: query, parameters: parameters, info: info);
 		}
 
 		public IGeneratedItem GenerateResultItem(string query, GenerationOptions parameters)
@@ -50,11 +50,11 @@ namespace SqlFirst.Intelligence.Generators
 			return GenerateResultItemCodeInternal(generatedItem: generatedItem);
 		}
 
-		public string GenerateParameterItemCode(string query, GenerationOptions parameters)
+		public IEnumerable<(string text, string name)> GenerateParameterItemsCode(string query, GenerationOptions parameters)
 		{
-			IGeneratedItem generatedItem = GenerateParameterItem(query, parameters);
+			IEnumerable<IGeneratedParameterItem> generatedItems = GenerateParameterItems(query, parameters);
 
-			return GenerateParameterItemCodeInternal(generatedItem: generatedItem);
+			return generatedItems.Select(p => (GenerateParameterItemCodeInternal(p), p.Name));
 		}
 
 		public IGeneratedItem GenerateQueryObject(string query, GenerationOptions parameters)
@@ -70,26 +70,26 @@ namespace SqlFirst.Intelligence.Generators
 			return GenerateQueryObjectCodeInternal(generatedItem: generatedItem);
 		}
 
-		public (string queryObject, string resultItem, string parameterItem) GenerateAll(string query, GenerationOptions parameters)
+		public (string queryObject, string resultItem, string[] parameterItem) GenerateAll(string query, GenerationOptions parameters)
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
 			IGeneratedItem queryObjectItem = GenerateQueryObjectInternal(query, parameters, info);
 			IGeneratedItem resultObjectItem = GenerateResultItemInternal(query, parameters, info);
-			IGeneratedItem parameterObjectItem = GenerateParameterItemInternal(query, parameters, info);
+			IEnumerable<IGeneratedParameterItem> parameterObjectItems = GenerateParameterItemsInternal(query, parameters, info);
 
 			string queryObject = GenerateQueryObjectCodeInternal(queryObjectItem);
 			string resultObject = GenerateResultItemCodeInternal(resultObjectItem);
-			string parameterObject = GenerateParameterItemCodeInternal(parameterObjectItem);
+			string[] parameterObjects = parameterObjectItems.Select(GenerateParameterItemCodeInternal).ToArray();
 
-			return (queryObject, resultObject, parameterObject);
+			return (queryObject, resultObject, parameterObjects);
 		}
 
-		private IGeneratedItem GenerateParameterItemInternal(string query, GenerationOptions parameters, IQueryInfo info)
+		private IEnumerable<IGeneratedParameterItem> GenerateParameterItemsInternal(string query, GenerationOptions parameters, IQueryInfo info)
 		{
-			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
+			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered || paramInfo.IsComplexType))
 			{
-				Log.Debug("No numbered parameters found, parameter item won't be generated.");
+				Log.Debug("No numbered or complex parameters found, parameter items won't be generated.");
 				return null;
 			}
 
@@ -97,11 +97,11 @@ namespace SqlFirst.Intelligence.Generators
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
-			Log.Info("Parameter item generating is in progress");
-			IGeneratedItem generatedItem = CodeGenerator.GenerateParameterItem(context, itemOptions);
-			Log.Info("Parameter item generating is completed");
+			Log.Info("Parameter items generating is in progress");
+			IEnumerable<IGeneratedParameterItem> generatedItems = CodeGenerator.GenerateParameterItems(context, itemOptions);
+			Log.Info("Parameter items generating is completed");
 
-			return generatedItem;
+			return generatedItems;
 		}
 
 		private IGeneratedItem GenerateResultItemInternal(string query, GenerationOptions parameters, IQueryInfo info)

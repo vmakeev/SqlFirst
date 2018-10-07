@@ -46,5 +46,10 @@ namespace SqlFirst.Core
 		/// Является ли тип параметра составным
 		/// </summary>
 		bool IsComplexType { get; }
+
+		/// <summary>
+		/// Информация о полях составного типа
+		/// </summary>
+		IComplexTypeData ComplexTypeData { get; }
 	}
 }
