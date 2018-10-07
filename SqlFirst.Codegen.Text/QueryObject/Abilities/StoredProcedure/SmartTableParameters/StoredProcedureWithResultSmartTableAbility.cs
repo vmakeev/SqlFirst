@@ -88,7 +88,18 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 
 				if (paramInfo.IsComplexType && paramInfo.ComplexTypeData?.IsTableType == true)
 				{
-					typeName = CSharpCodeHelper.GetGenericType(typeof(IEnumerable<>), paramInfo.ComplexTypeData.Name);
+					IFieldDetails[] fields = paramInfo.ComplexTypeData.Fields?.ToArray();
+					if (fields?.Length == 1)
+					{
+						IFieldDetails field = fields.Single();
+						Type fieldType = context.TypeMapper.MapToClrType(field.DbType, field.AllowDbNull, field.DbTypeMetadata);
+						string fieldTypeName = CSharpCodeHelper.GetTypeBuiltInName(fieldType);
+						typeName = CSharpCodeHelper.GetGenericType(typeof(IEnumerable<>), fieldTypeName);
+					}
+					else
+					{
+						typeName = CSharpCodeHelper.GetGenericType(typeof(IEnumerable<>), paramInfo.ComplexTypeData.Name);
+					}
 				}
 				else
 				{

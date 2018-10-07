@@ -8,7 +8,7 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters
 {
-	internal class StoredProcedureSmartTableAbility : StoredProcedureAbility
+	internal class StoredProcedureWithScalarResultSmartTableAbility : StoredProcedureWithScalarResultAbility
 	{
 		/// <inheritdoc />
 		public override IEnumerable<string> GetDependencies(ICodeGenerationContext context)

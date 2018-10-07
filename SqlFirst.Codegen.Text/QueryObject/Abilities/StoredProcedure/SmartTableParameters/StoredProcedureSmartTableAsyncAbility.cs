@@ -1,12 +1,10 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using SqlFirst.Codegen.Text.QueryObject.Data;
+﻿using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 
-namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure
+namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters
 {
-	internal class StoredProcedureAsyncAbility : StoredProcedureAbility
+	internal class StoredProcedureSmartTableAsyncAbility : StoredProcedureSmartTableAbility
 	{
 		/// <inheritdoc />
 		public override string Name { get; } = "StoredProcedureAsync";
@@ -22,23 +20,6 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure
 				"System.Threading.Tasks");
 
 			return result;
-		}
-
-
-		/// <inheritdoc />
-		public override IEnumerable<string> GetDependencies(ICodeGenerationContext context)
-		{
-			if (context.IncomingParameters.Any(p => !p.IsComplexType))
-			{
-				yield return KnownAbilityName.AddParameter;
-			}
-
-			if (context.IncomingParameters.Any(p => p.IsComplexType))
-			{
-				yield return KnownAbilityName.AddCustomParameter;
-			}
-
-			yield return KnownAbilityName.GetQueryText;
 		}
 
 		protected override IRenderableTemplate GetTemplate() => Snippet.Query.Methods.StoredProcedure.StoredProcedureAsync;

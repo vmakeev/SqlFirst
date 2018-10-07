@@ -57,9 +57,18 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 		private static void BuildWithRowsCountOutput(QueryObjectTemplate template, InternalOptions options)
 		{
-			template.AddAbility<StoredProcedureSmartTableAbility>(() => options.User.GenerateSyncMethods);
+			bool smartTableParametersRequired = options.User.UseSmartDataTableParameters && options.Calculated.HasTableParameters;
 
-			template.AddAbility<StoredProcedureAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			if (smartTableParametersRequired)
+			{
+				template.AddAbility<StoredProcedureSmartTableAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureSmartTableAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
+			else
+			{
+				template.AddAbility<StoredProcedureAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
 		}
 
 		private static void BuildWithOutput(QueryObjectTemplate template, InternalOptions options)
@@ -80,20 +89,35 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			template.AddAbility<MapDataRecordToItemAbility>(() => options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods);
 
-			template.AddAbility<StoredProcedureWithResultAbility>(() => options.User.GenerateSyncMethods && !smartTableParametersRequired);
-			template.AddAbility<StoredProcedureWithResultSmartTableAbility>(() => options.User.GenerateSyncMethods && smartTableParametersRequired);
-
-			template.AddAbility<StoredProcedureWithResultAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			if (smartTableParametersRequired)
+			{
+				template.AddAbility<StoredProcedureWithResultSmartTableAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureWithResultSmartTableAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
+			else
+			{
+				template.AddAbility<StoredProcedureWithResultAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureWithResultAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
 		}
 
 		private static void BuildWithScalarOutput(QueryObjectTemplate template, InternalOptions options)
 		{
+			bool smartTableParametersRequired = options.User.UseSmartDataTableParameters && options.Calculated.HasTableParameters;
+
 			template.AddAbility<MapDataRecordToScalarAbility>();
 			template.AddAbility<MapValueToScalarAbility>(() => options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods);
 
-			template.AddAbility<StoredProcedureWithScalarResultAbility>(() => options.User.GenerateSyncMethods);
-			template.AddAbility<StoredProcedureWithScalarResultAsyncAbility>(() => options.User.GenerateAsyncMethods);
-
+			if (smartTableParametersRequired)
+			{
+				template.AddAbility<StoredProcedureWithScalarResultSmartTableAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureWithScalarResultSmartTableAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
+			else
+			{
+				template.AddAbility<StoredProcedureWithScalarResultAbility>(() => options.User.GenerateSyncMethods);
+				template.AddAbility<StoredProcedureWithScalarResultAsyncAbility>(() => options.User.GenerateAsyncMethods);
+			}
 		}
 
 		#region Nested

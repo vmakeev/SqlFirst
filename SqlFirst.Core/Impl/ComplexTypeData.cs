@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace SqlFirst.Core.Impl
 {
@@ -21,7 +22,7 @@ namespace SqlFirst.Core.Impl
 
 			Name = name;
 			DbTypeDisplayedName = dbTypeDisplayedName;
-			Fields = fields ?? throw new ArgumentNullException(nameof(fields));
+			Fields = fields?.ToArray() ?? throw new ArgumentNullException(nameof(fields));
 			AllowNull = allowNull;
 			IsTableType = isTableType;
 		}

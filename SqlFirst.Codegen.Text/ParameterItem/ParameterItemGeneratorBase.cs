@@ -74,7 +74,9 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 
 		protected virtual IGeneratedParameterItem GenerateCompositeParameterItemInternal(IQueryParamInfo item, ICodeGenerationContext context)
 		{
-			if (item.ComplexTypeData?.Fields == null)
+			IFieldDetails[] fieldDetails = item.ComplexTypeData?.Fields.ToArray();
+
+			if (fieldDetails == null || fieldDetails.Length <= 1)
 			{
 				return null;
 			}
@@ -92,8 +94,7 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 				BaseTypes = Enumerable.Empty<IGeneratedType>()
 			};
 
-			IEnumerable<CodeMemberInfo> memberInfos = item.ComplexTypeData.Fields
-														.Select(fieldDetails => CodeMemberInfo.FromFieldDetails(fieldDetails, context.TypeMapper));
+			IEnumerable<CodeMemberInfo> memberInfos = fieldDetails.Select(field => CodeMemberInfo.FromFieldDetails(field, context.TypeMapper));
 			GeneratedPropertyInfo[] propertiesInfo = _propertiesGenerator.GenerateProperties(memberInfos).ToArray();
 
 			IEnumerable<string> allUsings = GetCommonUsings().Concat(propertiesInfo.SelectMany(p => p.Usings));

@@ -483,9 +483,9 @@ namespace SqlFirst.Codegen.Helpers
 
 			foreach (string genericTypeArgument in genericTypeArguments)
 			{
-				if (!IsValidIdentifierName(genericTypeArgument))
+				if (string.IsNullOrEmpty(genericTypeArgument) || (!IsValidIdentifierName(genericTypeArgument) && !_typeAliases.ContainsValue(genericTypeArgument)))
 				{
-					throw new ArgumentException($"[{genericTypeArgument}] is not a valid identifier name.", nameof(genericTypeArguments));
+					throw new ArgumentException($"[{genericTypeArgument ?? "<null>"}] is not a valid type name.", nameof(genericTypeArguments));
 				}
 			}
 

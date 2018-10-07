@@ -8,7 +8,7 @@ using SqlFirst.Codegen.Text.Snippets;
 using SqlFirst.Codegen.Text.Templating;
 using SqlFirst.Core;
 
-namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTableParameters
+namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 {
 	internal class GetDataTableAbility : IQueryObjectAbility
 	{
@@ -39,8 +39,20 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 		/// <inheritdoc />
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
+			bool canSimplifyComplexType = _complexTypeData.Fields.Count() == 1;
+
 			string dbTypeDisplayedName = _complexTypeData.DbTypeDisplayedName ?? _dbType;
-			string clrTypeName = CSharpCodeHelper.GetValidIdentifierName(_complexTypeData.Name ?? _dbType, NamingPolicy.Pascal);
+			string clrTypeName;
+			if (canSimplifyComplexType)
+			{
+				IFieldDetails field = _complexTypeData.Fields.Single();
+				Type clrType = context.TypeMapper.MapToClrType(field.DbType, field.AllowDbNull, field.DbTypeMetadata);
+				clrTypeName = CSharpCodeHelper.GetTypeBuiltInName(clrType);
+			}
+			else
+			{
+				clrTypeName = CSharpCodeHelper.GetValidIdentifierName(_complexTypeData.Name ?? _dbType, NamingPolicy.Pascal);
+			}
 
 			const string dataTableVariableName = "dataTable";
 			const string rowVariableName = "dataRow";
@@ -48,7 +60,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 
 			IRenderableTemplate getDataTableTemplate = Snippet.Query.Methods.Common.GetDataTable;
 			IRenderableTemplate addColumnTemplate = Snippet.Query.Methods.Common.Snippets.AddDataTableColumn;
-			IRenderableTemplate addRowTemplate = Snippet.Query.Methods.Common.Snippets.AddDataTableRow;
+
+			IRenderableTemplate addRowTemplate = canSimplifyComplexType
+				? Snippet.Query.Methods.Common.Snippets.AddDataTableRowValue
+				: Snippet.Query.Methods.Common.Snippets.AddDataTableRowProperty;
 
 			var addColumnModels = new List<object>();
 			var addRowModels = new List<object>();
@@ -58,6 +73,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 				string columnName = fieldDetails.ColumnName;
 				Type columnClrType = context.TypeMapper
 											.MapToClrType(fieldDetails.DbType, fieldDetails.AllowDbNull, fieldDetails.DbTypeMetadata);
+
 				string columnClrTypeName = CSharpCodeHelper.GetTypeBuiltInName(columnClrType);
 
 				string valuePropertyName = CSharpCodeHelper.GetValidIdentifierName(fieldDetails.ColumnName, NamingPolicy.Pascal);
@@ -89,8 +105,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 				ValueVariableName = valueVariableName,
 				AddColumns = addColumnModels.Select(model => Renderable.Create(addColumnTemplate, model)),
 				AddRows = addRowModels.Select(model => Renderable.Create(addRowTemplate, model)),
-				ValueWhenNoInput = _complexTypeData.AllowNull 
-					? CSharpCodeHelper.GetValidValue(typeof(DataTable), null) 
+				ValueWhenNoInput = _complexTypeData.AllowNull
+					? CSharpCodeHelper.GetValidValue(typeof(DataTable), null)
 					: dataTableVariableName
 			};
 
