@@ -1,9 +1,11 @@
 ﻿using System;
+using System.CodeDom.Compiler;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace SqlFirst.Codegen.Helpers
 {
@@ -113,26 +115,20 @@ namespace SqlFirst.Codegen.Helpers
 		/// <returns>Корректное название переменной</returns>
 		public static string GetValidIdentifierName(string name)
 		{
-			if (string.IsNullOrEmpty(name))
-			{
-				return "_";
-			}
-
-			string preparedName = RemoveInvalidSymbols(name);
-			string result = FixNameStartSymbolIssues(preparedName);
-
-			return result;
+			return GetValidIdentifierNameInternal(name, null);
 		}
 
 		/// <summary>
-		/// Проверяет, является ли <paramref name="name"/> корректным идентификатором
+		/// Проверяет, является ли <paramref name="name" /> корректным идентификатором
 		/// </summary>
 		/// <param name="name">Проверяемый идентификатор</param>
 		/// <returns>Является ли идентификатор корректным</returns>
 		public static bool IsValidIdentifierName(string name)
 		{
-			string validName = GetValidIdentifierName(name);
-			return string.Equals(validName, name, StringComparison.InvariantCulture);
+			using (CodeDomProvider provider = CodeDomProvider.CreateProvider("C#"))
+			{
+				return provider.IsValidIdentifier(name);
+			}
 		}
 
 		/// <summary>
@@ -144,17 +140,33 @@ namespace SqlFirst.Codegen.Helpers
 		/// <returns></returns>
 		public static string GetValidIdentifierName(string name, NamingPolicy namingPolicy)
 		{
+			return GetValidIdentifierNameInternal(name, namingPolicy);
+		}
+
+		/// <summary>
+		/// Возвращает корректное название переменной в указанном стиле
+		/// </summary>
+		/// <param name="name">Предполагаемое название переменной</param>
+		/// <param name="namingPolicy">Политика именования переменной</param>
+		/// <returns>Корректное название переменной</returns>
+		/// <returns></returns>
+		private static string GetValidIdentifierNameInternal(string name, NamingPolicy? namingPolicy)
+		{
 			if (string.IsNullOrEmpty(name))
 			{
 				return "_";
 			}
 
-			string preparedName = RemoveInvalidSymbols(name, '_');
+			string preparedName = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_');
 
 			string formattedName;
 
 			switch (namingPolicy)
 			{
+				case null:
+					formattedName = preparedName;
+					break;
+
 				case NamingPolicy.CamelCase:
 					formattedName = AdjustTextCase.ToCamelCase(preparedName);
 					break;
@@ -175,9 +187,103 @@ namespace SqlFirst.Codegen.Helpers
 					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
 			}
 
-			string result = FixNameStartSymbolIssues(formattedName);
+			string result = FixIdentifierNameStartSymbolIssues(formattedName);
+
+			result = Regex.Replace(result, @"([^_])__+", "$1_");
 
 			return result;
+		}
+
+		/// <summary>
+		/// Возвращает корректное название типа без пространства имен и generic параметров
+		/// </summary>
+		/// <param name="name">Предполагаемое название типа</param>
+		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
+		/// <returns></returns>
+		public static string GetValidTypeName(string name)
+		{
+			return GetValidTypeNameInternal(name, null);
+		}
+
+		/// <summary>
+		/// Возвращает корректное название типа без пространства имен и generic параметров
+		/// </summary>
+		/// <param name="name">Предполагаемое название типа</param>
+		/// <param name="namingPolicy">Политика именования типа</param>
+		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
+		/// <returns></returns>
+		public static string GetValidTypeName(string name, NamingPolicy namingPolicy)
+		{
+			return GetValidTypeNameInternal(name, namingPolicy);
+		}
+
+		/// <summary>
+		/// Возвращает корректное название типа без пространства имен и generic параметров
+		/// </summary>
+		/// <param name="name">Предполагаемое название типа</param>
+		/// <param name="namingPolicy">Политика именования типа</param>
+		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
+		/// <returns></returns>
+		private static string GetValidTypeNameInternal(string name, NamingPolicy? namingPolicy)
+		{
+			if (name == null)
+			{
+				return "_";
+			}
+
+			const char namespaceDelimiter = '.';
+			const char genericStartSymbol = '<';
+
+			int genericStartIndex = name.IndexOf(genericStartSymbol);
+			name = genericStartIndex >= 0
+				? name.Substring(0, genericStartIndex)
+				: name;
+
+			int lastDelimiterIndex = name.LastIndexOf(namespaceDelimiter);
+			name = lastDelimiterIndex >= 0
+				? name.Substring(lastDelimiterIndex)
+				: name;
+
+			name = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_').Trim();
+
+			switch (namingPolicy)
+			{
+				case null:
+					break;
+
+				case NamingPolicy.CamelCase:
+					name = AdjustTextCase.ToCamelCase(name);
+					break;
+
+				case NamingPolicy.CamelCaseWithUnderscope:
+					name = '_' + AdjustTextCase.ToCamelCase(name).TrimStart('_', '@');
+					break;
+
+				case NamingPolicy.Pascal:
+					name = AdjustTextCase.ToPascal(name);
+					break;
+
+				case NamingPolicy.Underscope:
+					name = AdjustTextCase.ToUnderscopes(name);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
+			}
+
+			if (name.Length > 0 && char.IsDigit(name[0]))
+			{
+				name = "_" + name;
+			}
+
+			if (string.IsNullOrEmpty(name))
+			{
+				name = "_";
+			}
+
+			name = Regex.Replace(name, @"([^_])__+", "$1_");
+
+			return name;
 		}
 
 		[SuppressMessage("ReSharper", "PossibleNullReferenceException")]
@@ -215,24 +321,17 @@ namespace SqlFirst.Codegen.Helpers
 				return boolValue.ToString().ToLowerInvariant();
 			}
 
-			if (targetType == typeof(int) ||
-				targetType == typeof(int?) ||
-				targetType == typeof(uint) ||
-				targetType == typeof(uint?) ||
-				targetType == typeof(long) ||
-				targetType == typeof(long?) ||
-				targetType == typeof(ulong) ||
-				targetType == typeof(ulong?) ||
-				targetType == typeof(byte) ||
-				targetType == typeof(byte?) ||
-				targetType == typeof(sbyte) ||
-				targetType == typeof(sbyte?) ||
-				targetType == typeof(decimal) ||
-				targetType == typeof(decimal?) ||
-				targetType == typeof(double) ||
-				targetType == typeof(double?) ||
-				targetType == typeof(float) ||
-				targetType == typeof(float?))
+			var fractionalTypes = new HashSet<Type>
+			{
+				typeof(decimal),
+				typeof(decimal?),
+				typeof(double),
+				typeof(double?),
+				typeof(float),
+				typeof(float?)
+			};
+
+			if (fractionalTypes.Contains(targetType))
 			{
 				return valueString.Replace(",", ".");
 			}
@@ -298,9 +397,43 @@ namespace SqlFirst.Codegen.Helpers
 			return literal.ToString();
 		}
 
-		public static string EscapeStringVerbatium(string input)
+		/// <summary>
+		/// Возвращает строковое представление имени generic-типа с указанными аргументами
+		/// </summary>
+		/// <param name="genericType">Базовый тип</param>
+		/// <param name="genericTypeArguments">Аргументы типа</param>
+		/// <returns>Строковое представление имени generic-типа с указанными аргументами</returns>
+		public static string GetGenericType(Type genericType, params string[] genericTypeArguments)
 		{
-			return input.Replace("\"", "\"\"");
+			if (genericType == null)
+			{
+				throw new ArgumentNullException(nameof(genericType));
+			}
+
+			if (genericTypeArguments == null)
+			{
+				throw new ArgumentNullException(nameof(genericTypeArguments));
+			}
+
+			if (!genericType.IsGenericTypeDefinition)
+			{
+				throw new ArgumentException("Provided type must be open generic type.", nameof(genericType));
+			}
+
+			if (genericTypeArguments.Any(string.IsNullOrWhiteSpace))
+			{
+				throw new ArgumentException("Generic type arguments can not contain empty values.", nameof(genericTypeArguments));
+			}
+
+			if (genericTypeArguments.Length != genericType.GetGenericArguments().Length)
+			{
+				throw new ArgumentException("Generic type arguments count must be equals to generic type generic arguments count.", nameof(genericTypeArguments));
+			}
+
+			// todo: validate arguments
+
+			string genericTypeBaseName = GetTypeShortName(genericType);
+			return $"{genericTypeBaseName}<{string.Join(", ", genericTypeArguments)}>";
 		}
 
 		/// <summary>
@@ -309,7 +442,7 @@ namespace SqlFirst.Codegen.Helpers
 		/// </summary>
 		/// <param name="name">Предполагаемое имя переменной</param>
 		/// <returns>Скорректированное имя переменной</returns>
-		private static string FixNameStartSymbolIssues(string name)
+		private static string FixIdentifierNameStartSymbolIssues(string name)
 		{
 			if (string.IsNullOrEmpty(name))
 			{
@@ -341,7 +474,7 @@ namespace SqlFirst.Codegen.Helpers
 		/// <param name="name">Предполагаемое имя переменной</param>
 		/// <param name="replacement">Символ, на который следует заменить некорректные</param>
 		/// <returns>Имя переменной, состоящее только из корректных символов</returns>
-		private static string RemoveInvalidSymbols(string name, char? replacement = null)
+		private static string RemoveInvalidIdentifierSymbols(string name, char? replacement = null)
 		{
 			bool IsValidSymbol(char c)
 			{
@@ -458,39 +591,5 @@ namespace SqlFirst.Codegen.Helpers
 		};
 
 		#endregion
-
-		public static string GetGenericType(Type genericType, params string[] genericTypeArguments)
-		{
-			if (genericType == null)
-			{
-				throw new ArgumentNullException(nameof(genericType));
-			}
-
-			if (genericTypeArguments == null)
-			{
-				throw new ArgumentNullException(nameof(genericTypeArguments));
-			}
-
-			if (!genericType.IsGenericTypeDefinition)
-			{
-				throw new ArgumentException("Provided type must be open generic type.", nameof(genericType));
-			}
-
-			if (genericTypeArguments.Length != genericType.GetGenericArguments().Length)
-			{
-				throw new ArgumentException("Generic type arguments count must be equals to generic type generic arguments count.", nameof(genericTypeArguments));
-			}
-
-			foreach (string genericTypeArgument in genericTypeArguments)
-			{
-				if (string.IsNullOrEmpty(genericTypeArgument) || (!IsValidIdentifierName(genericTypeArgument) && !_typeAliases.ContainsValue(genericTypeArgument)))
-				{
-					throw new ArgumentException($"[{genericTypeArgument ?? "<null>"}] is not a valid type name.", nameof(genericTypeArguments));
-				}
-			}
-
-			string genericTypeBaseName = GetTypeShortName(genericType);
-			return $"{genericTypeBaseName}<{string.Join(", ", genericTypeArguments)}>";
-		}
 	}
 }

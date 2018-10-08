@@ -63,16 +63,22 @@ namespace SqlFirst.VisualStudio.Integration.Logic
 
 			GeneratorBase generator = GetGenerator(options);
 
-			(string queryObject, string resultItem, string parameterItem) = generator.GenerateAll(queryText, options);
+			(string queryObject, string resultItem, (string data, string name)[] parameterItems) = generator.GenerateAll(queryText, options);
 
 			_log.Debug("Query objects generated");
 
-			string queryObjectFileName = Path.GetFileNameWithoutExtension(options.Target) + ".gen.cs";
-			string parameterItemFileName = options.ParameterItemName + ".gen.cs";
-			string resultItemFileName = options.ResultItemName + ".gen.cs";
+			string GetFileName(string name) => (name ?? throw new ArgumentNullException(nameof(name), "Item name can not be null")) + ".gen.cs";
+
+			string queryObjectFileName = GetFileName(Path.GetFileNameWithoutExtension(options.Target));
+			string resultItemFileName = GetFileName(options.ResultItemName);
 
 			ProcessGeneratedObject(item, queryObjectFileName, queryObject);
-			ProcessGeneratedObject(item, parameterItemFileName, parameterItem);
+
+			foreach ((string data, string name) in parameterItems)
+			{
+				ProcessGeneratedObject(item, GetFileName(name), data);
+			}
+
 			ProcessGeneratedObject(item, resultItemFileName, resultItem);
 		}
 

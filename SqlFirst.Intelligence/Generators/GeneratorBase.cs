@@ -70,7 +70,7 @@ namespace SqlFirst.Intelligence.Generators
 			return GenerateQueryObjectCodeInternal(generatedItem: generatedItem);
 		}
 
-		public (string queryObject, string resultItem, string[] parameterItem) GenerateAll(string query, GenerationOptions parameters)
+		public (string queryObject, string resultItem, (string data, string name)[] parameterItems) GenerateAll(string query, GenerationOptions parameters)
 		{
 			IQueryInfo info = GetQueryInfo(query, parameters.ConnectionString);
 
@@ -80,7 +80,7 @@ namespace SqlFirst.Intelligence.Generators
 
 			string queryObject = GenerateQueryObjectCodeInternal(queryObjectItem);
 			string resultObject = GenerateResultItemCodeInternal(resultObjectItem);
-			string[] parameterObjects = parameterObjectItems.Select(GenerateParameterItemCodeInternal).ToArray();
+			(string data, string name)[] parameterObjects = parameterObjectItems.Select(item => (GenerateParameterItemCodeInternal(item), item.Name)).ToArray();
 
 			return (queryObject, resultObject, parameterObjects);
 		}
