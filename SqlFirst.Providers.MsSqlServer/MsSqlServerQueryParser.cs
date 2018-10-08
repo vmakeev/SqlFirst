@@ -214,6 +214,11 @@ namespace SqlFirst.Providers.MsSqlServer
 				connection.Open();
 				MsSqlServerTypeDescription typeDescription = DescribeUserTypeByNameQuery.GetFirst(connection, dbType);
 
+				if (typeDescription == null)
+				{
+					throw new QueryParsingException($"Type [{dbType}] is not a valid database type.");
+				}
+
 				if (typeDescription.IsTableType)
 				{
 					string queryText = $"declare @target {typeDescription.Name}; select * from @target";

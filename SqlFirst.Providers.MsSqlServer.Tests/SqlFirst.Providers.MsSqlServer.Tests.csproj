@@ -8,6 +8,14 @@
   </PropertyGroup>
   <ItemGroup>
     <None Remove="Queries\Delete\DeleteByGuid.sql" />
+    <None Remove="Queries\Exec\ExecDeclaredStringParameter.sql" />
+    <None Remove="Queries\Exec\ExecDeclaredTableParameterInvalidType.sql" />
+    <None Remove="Queries\Exec\ExecDeclaredTableParameterOneColumn.sql" />
+    <None Remove="Queries\Exec\ExecDeclaredTableParameterTwoColumns.sql" />
+    <None Remove="Queries\Exec\ExecNoParameters.sql" />
+    <None Remove="Queries\Exec\ExecUndeclaredStringParameter.sql" />
+    <None Remove="Queries\Exec\ExecUndeclaredTableParameterOneColumn.sql" />
+    <None Remove="Queries\Exec\ExecUndeclaredTableParameterTwoColumns.sql" />
     <None Remove="Queries\Insert\InsertStringGuidDate.sql" />
     <None Remove="Queries\Insert\InsertStringGuidDateMultiple.sql" />
     <None Remove="Queries\Insert\InsertStringGuidDateUndeclared.sql" />
@@ -36,6 +44,14 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Queries\Delete\DeleteByGuid.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecDeclaredTableParameterInvalidType.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecNoParameters.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecDeclaredStringParameter.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecDeclaredTableParameterOneColumn.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecDeclaredTableParameterTwoColumns.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecUndeclaredTableParameterTwoColumns.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecUndeclaredTableParameterOneColumn.sql" />
+    <EmbeddedResource Include="Queries\Exec\ExecUndeclaredStringParameter.sql" />
     <EmbeddedResource Include="Queries\Insert\InsertStringGuidDate.sql" />
     <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateMultiple.sql" />
     <EmbeddedResource Include="Queries\Insert\InsertStringGuidDateUndeclared.sql" />

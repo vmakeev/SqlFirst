@@ -264,6 +264,29 @@ declare @take int = 42;");
 		}
 
 		[Fact]
+		public void GetQueryBaseInfoTest_9()
+		{
+			string query = QueryExec.ExecDeclaredTableParameterOneColumn;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryBaseInfo result = queryParser.GetQueryBaseInfo(query);
+
+			IQuerySection[] sections = result.Sections.ToArray();
+
+			sections.Length.ShouldBe(2);
+
+			IQuerySection variablesSection = sections[0];
+			variablesSection.Type.ShouldBe(QuerySectionType.Declarations);
+			variablesSection.Name.ShouldBe(QuerySectionName.Declarations);
+			variablesSection.Content.ShouldBe("declare @groupIds IntegerList;");
+
+			IQuerySection bodySection = sections[1];
+			bodySection.Type.ShouldBe(QuerySectionType.Body);
+			bodySection.Name.ShouldBeNull();
+
+			result.Type.ShouldBe(QueryType.StoredProcedure);
+		}
+
+		[Fact]
 		public void GetQueryInfoTest_1()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPagingAndPartOfParameters;
@@ -423,6 +446,52 @@ declare @take int = 42;");
 			dateOfBirth.AllowDbNull.ShouldBeTrue();
 			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
 			dateOfBirth.ColumnOrdinal.ShouldBe(1);
+		}
+
+		[Fact]
+		public void GetQueryInfoTest_4()
+		{
+			string query = QueryExec.ExecUndeclaredStringParameter;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryInfo result = queryParser.GetQueryInfo(query, ConnectionString);
+
+			result.Type.ShouldBe(QueryType.StoredProcedure);
+
+			result.Parameters.ShouldNotBeNull();
+
+			IQueryParamInfo[] parameters = result.Parameters.ToArray();
+
+			parameters.Length.ShouldBe(1);
+
+			IQueryParamInfo email = parameters[0];
+			email.ShouldNotBeNull();
+			email.DbName.ShouldBe("email");
+			email.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			email.Length.ShouldBe("50");
+			email.DefaultValue.ShouldBeNull();
+
+			result.Results.ShouldNotBeNull();
+			IFieldDetails[] queryResults = result.Results.ToArray();
+
+			queryResults.Length.ShouldBe(3);
+
+			IFieldDetails displayedName = queryResults[0];
+			displayedName.ColumnName.ShouldBe("UserName");
+			displayedName.AllowDbNull.ShouldBeTrue();
+			displayedName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			displayedName.ColumnOrdinal.ShouldBe(0);
+
+			IFieldDetails emailField = queryResults[1];
+			emailField.ColumnName.ShouldBe("UserEmail");
+			emailField.AllowDbNull.ShouldBeFalse();
+			emailField.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			emailField.ColumnOrdinal.ShouldBe(1);
+
+			IFieldDetails roleName = queryResults[2];
+			roleName.ColumnName.ShouldBe("RoleName");
+			roleName.AllowDbNull.ShouldBeTrue();
+			roleName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			roleName.ColumnOrdinal.ShouldBe(2);
 		}
 	}
 }

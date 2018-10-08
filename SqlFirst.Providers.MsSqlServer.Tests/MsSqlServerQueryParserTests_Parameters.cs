@@ -103,6 +103,79 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 		}
 
 		[Fact]
+		public void GetDeclaredParametersTest_Exec_1()
+		{
+			string query = QueryExec.ExecUndeclaredTableParameterOneColumn;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] declaredParameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
+
+			declaredParameters.ShouldNotBeNull();
+			declaredParameters.Length.ShouldBe(0);
+		}
+
+		[Fact]
+		public void GetDeclaredParametersTest_Exec_2()
+		{
+			string query = QueryExec.ExecDeclaredStringParameter;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] parameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
+
+			parameters.ShouldNotBeNull();
+			parameters.Length.ShouldBe(1);
+			parameters[0].DbType.ShouldBe("nvarchar");
+		}
+
+		[Fact]
+		public void GetDeclaredParametersTest_Exec_3()
+		{
+			string query = QueryExec.ExecDeclaredTableParameterOneColumn;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] parameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
+
+			parameters.ShouldNotBeNull();
+			parameters.Length.ShouldBe(1);
+			parameters[0].DbType.ShouldBe("IntegerList");
+			parameters[0].IsComplexType.ShouldBeTrue();
+			parameters[0].ComplexTypeData.ShouldNotBeNull();
+
+			parameters[0].ComplexTypeData.DbTypeDisplayedName.ShouldBe("IntegerList");
+
+			parameters[0].ComplexTypeData.Fields.ShouldNotBeNull();
+			parameters[0].ComplexTypeData.Fields.Count().ShouldBe(1);
+			parameters[0].ComplexTypeData.Fields.Single().DbType.ShouldBe("int");
+		}
+
+		[Fact]
+		public void GetDeclaredParametersTest_Exec_4()
+		{
+			string query = QueryExec.ExecDeclaredTableParameterTwoColumns;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] parameters = queryParser.GetDeclaredParameters(query, ConnectionString).ToArray();
+
+			parameters.ShouldNotBeNull();
+			parameters.Length.ShouldBe(1);
+			parameters[0].DbType.ShouldBe("KeyValueStringList");
+			parameters[0].IsComplexType.ShouldBeTrue();
+			parameters[0].ComplexTypeData.ShouldNotBeNull();
+
+			parameters[0].ComplexTypeData.DbTypeDisplayedName.ShouldBe("KeyValueStringList");
+
+			parameters[0].ComplexTypeData.Fields.ShouldNotBeNull();
+			parameters[0].ComplexTypeData.Fields.Count().ShouldBe(2);
+			parameters[0].ComplexTypeData.Fields.First().DbType.ShouldBe("nvarchar");
+			parameters[0].ComplexTypeData.Fields.Last().DbType.ShouldBe("nvarchar");
+		}
+
+		[Fact]
+		public void GetDeclaredParametersTest_Exec_5()
+		{
+			string query = QueryExec.ExecDeclaredTableParameterInvalidType;
+			var queryParser = new MsSqlServerQueryParser();
+
+			Assert.Throws<QueryParsingException>(() => queryParser.GetDeclaredParameters(query, ConnectionString).ToArray());
+		}
+
+		[Fact]
 		public void GetUndeclaredParametersTest_Select_1()
 		{
 			string query = QuerySelect.SelectGuidAndDateWithPaging;
@@ -201,6 +274,70 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 
 			undeclaredParameters.ShouldNotBeNull();
 			undeclaredParameters.Length.ShouldBe(3);
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Exec_1()
+		{
+			string query = QueryExec.ExecDeclaredTableParameterOneColumn;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.Length.ShouldBe(0);
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Exec_2()
+		{
+			string query = QueryExec.ExecUndeclaredStringParameter;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.Length.ShouldBe(1);
+			undeclaredParameters[0].DbType.ShouldBe("nvarchar");
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Exec_3()
+		{
+			string query = QueryExec.ExecUndeclaredTableParameterOneColumn;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.Length.ShouldBe(1);
+			undeclaredParameters[0].DbType.ShouldBe("integerlist");
+			undeclaredParameters[0].IsComplexType.ShouldBeTrue();
+			undeclaredParameters[0].ComplexTypeData.ShouldNotBeNull();
+
+			undeclaredParameters[0].ComplexTypeData.DbTypeDisplayedName.ShouldBe("IntegerList");
+
+			undeclaredParameters[0].ComplexTypeData.Fields.ShouldNotBeNull();
+			undeclaredParameters[0].ComplexTypeData.Fields.Count().ShouldBe(1);
+			undeclaredParameters[0].ComplexTypeData.Fields.Single().DbType.ShouldBe("int");
+		}
+
+		[Fact]
+		public void GetUndeclaredParametersTest_Exec_4()
+		{
+			string query = QueryExec.ExecUndeclaredTableParameterTwoColumns;
+			var queryParser = new MsSqlServerQueryParser();
+			IQueryParamInfo[] undeclaredParameters = queryParser.GetUndeclaredParameters(query, ConnectionString).ToArray();
+
+			undeclaredParameters.ShouldNotBeNull();
+			undeclaredParameters.Length.ShouldBe(1);
+			undeclaredParameters[0].DbType.ShouldBe("keyvaluestringlist");
+			undeclaredParameters[0].IsComplexType.ShouldBeTrue();
+			undeclaredParameters[0].ComplexTypeData.ShouldNotBeNull();
+
+			undeclaredParameters[0].ComplexTypeData.DbTypeDisplayedName.ShouldBe("KeyValueStringList");
+
+			undeclaredParameters[0].ComplexTypeData.Fields.ShouldNotBeNull();
+			undeclaredParameters[0].ComplexTypeData.Fields.Count().ShouldBe(2);
+			undeclaredParameters[0].ComplexTypeData.Fields.First().DbType.ShouldBe("nvarchar");
+			undeclaredParameters[0].ComplexTypeData.Fields.Last().DbType.ShouldBe("nvarchar");
 		}
 	}
 }

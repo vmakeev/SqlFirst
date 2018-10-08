@@ -8,6 +8,10 @@ namespace SqlFirst.Providers.MsSqlServer.Tests.Queries
 	{
 		public static string UpdateDateByGuid => GetQueryText();
 
+		public static string UpdateDateByGuidReturn1 => GetQueryText();
+
+		public static string UpdateDateByGuidReturn2 => GetQueryText();
+
 		private static string GetQueryText([CallerMemberName] string name = null)
 		{
 			Stream stream = typeof(QuerySelect).Assembly.GetManifestResourceStream($"SqlFirst.Providers.MsSqlServer.Tests.Queries.Update.{name}.sql");

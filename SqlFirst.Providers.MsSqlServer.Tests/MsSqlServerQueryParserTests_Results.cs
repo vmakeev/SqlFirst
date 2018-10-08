@@ -277,5 +277,34 @@ namespace SqlFirst.Providers.MsSqlServer.Tests
 			dateOfBirth.DbType.ShouldBe(MsSqlDbType.Date);
 			dateOfBirth.ColumnOrdinal.ShouldBe(1);
 		}
+
+		[Fact]
+		public void GetResultsTest_13()
+		{
+			string query = QueryExec.ExecNoParameters;
+			var queryParser = new MsSqlServerQueryParser();
+			IFieldDetails[] results = queryParser.GetResultDetails(query, ConnectionString).ToArray();
+
+			results.ShouldNotBeEmpty();
+			results.Length.ShouldBe(3);
+
+			IFieldDetails displayedName = results[0];
+			displayedName.ColumnName.ShouldBe("UserName");
+			displayedName.AllowDbNull.ShouldBeTrue();
+			displayedName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			displayedName.ColumnOrdinal.ShouldBe(0);
+
+			IFieldDetails emailField = results[1];
+			emailField.ColumnName.ShouldBe("UserEmail");
+			emailField.AllowDbNull.ShouldBeFalse();
+			emailField.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			emailField.ColumnOrdinal.ShouldBe(1);
+
+			IFieldDetails roleName = results[2];
+			roleName.ColumnName.ShouldBe("RoleName");
+			roleName.AllowDbNull.ShouldBeTrue();
+			roleName.DbType.ShouldBe(MsSqlDbType.NVarChar);
+			roleName.ColumnOrdinal.ShouldBe(2);
+		}
 	}
 }

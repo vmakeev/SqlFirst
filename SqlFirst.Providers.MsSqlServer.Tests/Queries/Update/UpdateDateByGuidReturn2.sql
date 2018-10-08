@@ -7,5 +7,5 @@ declare @birthDate datetime;
 
 update Users
 set DateOfBirth = @birthDate
-output INSERTED.id
+output INSERTED.id, INSERTED.Email
 where ExternalId = @externalId
