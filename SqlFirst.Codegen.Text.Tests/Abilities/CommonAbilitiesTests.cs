@@ -7,6 +7,7 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -58,30 +59,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Добавляет параметр к команде
-/// </summary>
-/// <param name=""command"">Команда SQL</param>
-/// <param name=""parameterType"">Тип параметра</param>
-/// <param name=""parameterName"">Имя параметра</param>
-/// <param name=""value"">Значение параметра</param>
-/// <param name=""length"">Длина параметра</param>
-protected virtual void AddParameter(IDbCommand command, MySpecificDbType parameterType, string parameterName, object value, int? length = null)
-{
-	var parameter = new MySpecificParameterType
-	{
-		ParameterName = parameterName,
-		MySpecificDbTypePropertyName = parameterType,
-		Value = value ?? DBNull.Value
-	};
-
-	if (length.HasValue && length.Value > 0)
-	{
-		parameter.Size = length.Value;
-	}
-	
-	command.Parameters.Add(parameter);
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.AddSqlConnectionParameterAbility_Method_AddParameter);
 		}
 
 		[Fact]
@@ -138,85 +116,8 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(2);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Вычисляет контрольную сумму строки по алгоритму CRC 8
-/// </summary>
-/// <param name=""data"">Искомая строка</param>
-/// <returns>Контрольная сумма строки</returns>
-private int CalculateChecksum(string data)
-{
-	if (string.IsNullOrEmpty(data))
-	{
-		return 0;
-	}
-
-	data = data.Replace(""\r\n"", ""\n"");
-
-	byte[] bytes = Encoding.UTF8.GetBytes(data);
-
-	const ushort poly = 4129;
-	var table = new ushort[256];
-	const ushort initialValue = 0xffff;
-	ushort crc = initialValue;
-	for (int i = 0; i < table.Length; ++i)
-	{
-		ushort temp = 0;
-		ushort a = (ushort)(i << 8);
-		for (int j = 0; j < 8; ++j)
-		{
-			if (((temp ^ a) & 0x8000) != 0)
-			{
-				temp = (ushort)((temp << 1) ^ poly);
-			}
-			else
-			{
-				temp <<= 1;
-			}
-
-			a <<= 1;
-		}
-
-		table[i] = temp;
-	}
-
-	foreach (byte b in bytes)
-	{
-		crc = (ushort)((crc << 8) ^ table[(crc >> 8) ^ (0xff & b)]);
-	}
-
-	return crc;
-}");
-
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает текст запроса
-/// </summary>
-/// <returns>Текст запроса</returns>
-protected virtual string GetQueryText()
-{
-	if (_cachedSql == null)
-	{
-		lock (_cachedSqlLocker)
-		{
-			using (Stream stream = typeof(TestQueryName).Assembly.GetManifestResourceStream(""TestQueryResourcePath""))
-			{
-				string sql = new StreamReader(stream ?? throw new InvalidOperationException(""Can not get manifest resource stream."")).ReadToEnd();
-				
-				if (CalculateChecksum(sql) != QueryTextChecksum)
-				{
-					throw new Exception($""{GetType().FullName}: query text was changed. Query object must be re-generated."");
-				}
-
-				const string sectionRegexPattern = @""--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n"";
-				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
-				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
-
-				_cachedSql = sql;
-			}
-		}
-	}
-
-	return _cachedSql;
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromResourceCacheableAbility_Method_CalculateChecksum);
+			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromResourceCacheableAbility_Method_GetQueryText);
 		}
 
 		[Fact]
@@ -258,14 +159,7 @@ protected virtual string GetQueryText()
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает текст запроса
-/// </summary>
-/// <returns>Текст запроса</returns>
-protected virtual string GetQueryText()
-{
-	return @""TestQueryText"";
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromStringAbility_Method_GetQueryText);
 		}
 
 		[Fact]
@@ -319,27 +213,7 @@ protected virtual string GetQueryText()
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает новый элемент, заполненный данными из <paramref name=""record""/>
-/// </summary>
-/// <param name=""record"">Строка БД</param>
-/// <returns>Новый элемент, заполненный данными из <paramref name=""record""/></returns>
-protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
-{
-	var result = new QueryItemTestName();
-
-	if (record[0] != null && record[0] != DBNull.Value)
-	{
-		result.FirstParam = (Guid)record[0];
-	}
-	if (record[1] != null && record[1] != DBNull.Value)
-	{
-		result.SecondParam = (int?)record[1];
-	}
-
-	result.AfterLoad();
-	return result;
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.MapDataRecordToItemAbility_Method_GetItemFromRecord);
 		}
 
 		[Fact]
@@ -370,23 +244,7 @@ protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает значение из первого столбца <paramref name=""record""/>
-/// </summary>
-/// <typeparam name=""T"">Тип значения</typeparam>
-/// <param name=""record"">Строка БД</param>
-/// <returns>Значение из первого столбца <paramref name=""record""/></returns>
-protected virtual T GetScalarFromRecord<T>(IDataRecord record)
-{
-	if (record.FieldCount < 1)
-	{
-		throw new Exception(""Data record contain no values."");
-	}
-
-	object valueObject = record[0];
-
-	return GetScalarFromValue<T>(valueObject);	
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.MapDataRecordToScalarAbility_Method_GetScalarFromRecord);
 		}
 
 		[Fact]
@@ -415,32 +273,7 @@ protected virtual T GetScalarFromRecord<T>(IDataRecord record)
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Конвертирует значение <paramref name=""valueObject""/> в <typeparamref name=""T""/>
-/// </summary>
-/// <typeparam name=""T"">Тип значения</typeparam>
-/// <param name=""valueObject"">Строка БД</param>
-/// <returns>Значение <paramref name=""valueObject""/>, сконвертированное в <typeparamref name=""T""/></returns>
-protected virtual T GetScalarFromValue<T>(object valueObject)
-{
-	switch (valueObject)
-	{
-		case null:
-		// ReSharper disable once UnusedVariable
-		case DBNull dbNull:
-			return default(T);
-
-		case T value:
-			return value;
-
-		case IConvertible convertible:
-			return (T)Convert.ChangeType(convertible, typeof(T));
-
-		default:
-			// ReSharper disable once ConstantConditionalAccessQualifier
-			throw new InvalidCastException($""Can not convert {valueObject?.GetType().FullName ?? ""null""} to {typeof(T).FullName}"");
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Common.MapValueToScalarAbility_Method_GetScalarFromValue);
 		}
 	}
 }

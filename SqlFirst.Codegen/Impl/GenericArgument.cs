@@ -1,11 +1,14 @@
 ﻿using System.Collections.Generic;
+using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Trees;
 
 namespace SqlFirst.Codegen.Impl
 {
 	/// <inheritdoc />
-	public class GenericArgument : IGenericArgument
+	public sealed class GenericArgument : IGenericArgument
 	{
+		private IEnumerable<IGenericArgument> _genericArguments = new IGenericArgument[0];
+
 		/// <inheritdoc />
 		public string Type { get; set; }
 
@@ -13,6 +16,10 @@ namespace SqlFirst.Codegen.Impl
 		public bool IsGeneric { get; set; }
 
 		/// <inheritdoc />
-		public IEnumerable<IGenericArgument> GenericArguments { get; set; } = new IGenericArgument[0];
+		public IEnumerable<IGenericArgument> GenericArguments
+		{
+			get => _genericArguments;
+			set => _genericArguments = value.AsCacheable();
+		}
 	}
 }

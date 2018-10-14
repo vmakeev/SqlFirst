@@ -23,7 +23,13 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 															.DistinctBy(p => p.DbName))
 			{
 				string typeName = queryParamInfo.ComplexTypeData.DbTypeDisplayedName ?? queryParamInfo.DbName;
-				yield return KnownAbilityName.GetDataTable(CSharpCodeHelper.GetValidIdentifierName(typeName, NamingPolicy.Pascal));
+
+				string validTypeName = CSharpCodeHelper.GetValidTypeName(
+					name: typeName,
+					namingPolicy: NamingPolicy.Pascal, 
+					allowBuiltInTypes: false);
+
+				yield return KnownAbilityName.GetDataTable(validTypeName);
 			}
 		}
 
@@ -46,7 +52,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 
 				if (paramInfo.IsComplexType && paramInfo.ComplexTypeData?.IsTableType == true)
 				{
-					string dbTypeName = CSharpCodeHelper.GetValidIdentifierName(paramInfo.ComplexTypeData.DbTypeDisplayedName ?? paramInfo.DbType, NamingPolicy.Pascal);
+					string dbTypeName = CSharpCodeHelper.GetValidTypeName(
+						name: paramInfo.ComplexTypeData.DbTypeDisplayedName ?? paramInfo.DbType,
+						namingPolicy: NamingPolicy.Pascal,
+						allowBuiltInTypes: false);
+
 					var dataTypeModel = new
 					{
 						DbTypeName = dbTypeName,

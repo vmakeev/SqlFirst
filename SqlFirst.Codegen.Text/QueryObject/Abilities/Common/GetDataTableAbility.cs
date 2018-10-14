@@ -51,7 +51,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			}
 			else
 			{
-				clrTypeName = CSharpCodeHelper.GetValidIdentifierName(_complexTypeData.Name ?? _dbType, NamingPolicy.Pascal);
+				clrTypeName = CSharpCodeHelper.GetValidTypeName(
+					name: _complexTypeData.Name ?? _dbType, 
+					namingPolicy: NamingPolicy.Pascal, 
+					allowBuiltInTypes: false);
 			}
 
 			const string dataTableVariableName = "dataTable";
@@ -98,7 +101,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 
 			var getDataTableModel = new
 			{
-				DbTypeName = CSharpCodeHelper.GetValidIdentifierName(dbTypeDisplayedName, NamingPolicy.Pascal),
+				DbTypeName = CSharpCodeHelper.GetValidTypeName(
+					name: dbTypeDisplayedName, 
+					namingPolicy: NamingPolicy.Pascal,
+					allowBuiltInTypes: false),
 				ClrTypeName = clrTypeName,
 				DataTableVariableName = dataTableVariableName,
 				RowVariableName = rowVariableName,

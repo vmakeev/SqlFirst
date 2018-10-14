@@ -1,0 +1,19 @@
+﻿/// <summary>
+/// Выполняет добавление строки в таблицу
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Количество обновленных строк</returns>
+public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	using (DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		return await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+}

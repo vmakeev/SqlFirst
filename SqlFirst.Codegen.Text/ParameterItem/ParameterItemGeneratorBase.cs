@@ -84,7 +84,10 @@ namespace SqlFirst.Codegen.Text.ParameterItem
 			string targetNamespace = context.GetNamespace();
 			IRenderableTemplate template = GetTemplate();
 
-			string itemName = CSharpCodeHelper.GetValidIdentifierName(item.ComplexTypeData.Name ?? item.DbType, NamingPolicy.Pascal);
+			string itemName = CSharpCodeHelper.GetValidTypeName(
+				name: item.ComplexTypeData.Name ?? item.DbType, 
+				namingPolicy: NamingPolicy.Pascal,
+				allowBuiltInTypes: false);
 
 			var result = new GeneratedParameterItem
 			{

@@ -7,8 +7,10 @@ using SqlFirst.Codegen.Trees;
 namespace SqlFirst.Codegen.Impl
 {
 	/// <inheritdoc />
-	public class GeneratedType : IGeneratedType
+	public sealed class GeneratedType : IGeneratedType
 	{
+		private IEnumerable<IGenericArgument> _genericArguments = Enumerable.Empty<IGenericArgument>();
+
 		/// <inheritdoc />
 		public GeneratedType()
 		{
@@ -27,15 +29,10 @@ namespace SqlFirst.Codegen.Impl
 			}
 		}
 
-		private string CleanTypeName(Type type)
+		private static string CleanTypeName(Type type)
 		{
 			string name = CSharpCodeHelper.GetTypeBuiltInName(type);
-
-			int genericIndex = name.IndexOf('<');
-			if (genericIndex >= 0)
-			{
-				name = name.Substring(0, genericIndex);
-			}
+			name = CSharpCodeHelper.GetValidTypeName(name, true);
 
 			return name;
 		}
@@ -77,6 +74,10 @@ namespace SqlFirst.Codegen.Impl
 		public bool IsGeneric { get; set; }
 
 		/// <inheritdoc />
-		public IEnumerable<IGenericArgument> GenericArguments { get; set; } = Enumerable.Empty<IGenericArgument>();
+		public IEnumerable<IGenericArgument> GenericArguments
+		{
+			get => _genericArguments;
+			set => _genericArguments = value.AsCacheable();
+		}
 	}
 }

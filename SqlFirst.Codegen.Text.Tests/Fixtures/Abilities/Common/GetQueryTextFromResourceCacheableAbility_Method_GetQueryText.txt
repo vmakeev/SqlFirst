@@ -1,0 +1,30 @@
+﻿/// <summary>
+/// Возвращает текст запроса
+/// </summary>
+/// <returns>Текст запроса</returns>
+protected virtual string GetQueryText()
+{
+	if (_cachedSql == null)
+	{
+		lock (_cachedSqlLocker)
+		{
+			using (Stream stream = typeof(TestQueryName).Assembly.GetManifestResourceStream("TestQueryResourcePath"))
+			{
+				string sql = new StreamReader(stream ?? throw new InvalidOperationException("Can not get manifest resource stream.")).ReadToEnd();
+				
+				if (CalculateChecksum(sql) != QueryTextChecksum)
+				{
+					throw new Exception($"{GetType().FullName}: query text was changed. Query object must be re-generated.");
+				}
+
+				const string sectionRegexPattern = @"--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n";
+				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
+
+				_cachedSql = sql;
+			}
+		}
+	}
+
+	return _cachedSql;
+}

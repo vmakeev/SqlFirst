@@ -1,0 +1,24 @@
+﻿/// <summary>
+/// Выполняет загрузку значения типа <see cref="int"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <returns>Значение типа  <see cref="int"/></returns>
+public virtual IEnumerable<int> Get(IDbConnection connection, Guid? firstParam, int? secondParam)
+{
+	using (IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			while (reader.Read())
+			{
+				yield return GetScalarFromRecord<int>(reader);
+			}
+		}
+	}
+}

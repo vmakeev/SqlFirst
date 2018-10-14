@@ -6,6 +6,7 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -43,18 +44,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Nested.ShouldNotBeNull();
 			result.Nested.Count().ShouldBe(1);
-			result.Nested.ShouldContain(@"protected struct NumberedParameterInfo
-{
-	/// <summary>Initializes a new instance of the <see cref=""T:System.Object"" /> class.</summary>
-	public NumberedParameterInfo(string dbName, string semanticName)
-	{
-		DbName = dbName;
-		SemanticName = semanticName;
-	}
-
-	public string DbName { get; }
-	public string SemanticName { get; }
-}");
+			result.Nested.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Type_NumberedParameterInfo);
 			result.Fields.ShouldNotBeNull();
 			result.Fields.Count().ShouldBe(5);
 			result.Fields.ShouldContain(@"protected static readonly Regex _numberedValueRegex = new Regex(NumberedValueRegexPattern, NumberedValueRegexOptions);");
@@ -78,91 +68,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(4);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает текст запроса для вставки <paramref name=""rowsCount"" /> записей
-/// </summary>
-/// <param name=""rowsCount"">Количество записей</param>
-/// <returns>Текст запроса для вставки <paramref name=""rowsCount"" /> записей</returns>
-private string GetQueryText(int rowsCount)
-{
-	GetQueryTemplates(GetQueryText(), out string queryTemplate, out string valuesTemplate);
-
-	if (rowsCount <= 0)
-	{
-		throw new ArgumentOutOfRangeException(nameof(rowsCount), rowsCount, $""{nameof(rowsCount)} must be greater than zero."");
-	}
-
-	IEnumerable<string> rowTemplates = Enumerable.Range(0, rowsCount).Select(index => string.Format(valuesTemplate, index));
-	string rowTemplatesString = string.Join($"",{Environment.NewLine}"", rowTemplates);
-
-	string queryText = string.Format(queryTemplate, rowTemplatesString);
-	return queryText;
-}");
-			result.Methods.ShouldContain(@"protected void GetQueryTemplates(string queryText, out string queryTemplate, out string valuesTemplate)
-{
-	if (string.IsNullOrEmpty(_cachedQueryTemplate) || string.IsNullOrEmpty(_cachedValuesTemplate))
-	{
-		lock (_queryTemplatesLocker)
-		{
-			string valuesSection = GetInsertedValuesSection(queryText);
-			if (string.IsNullOrEmpty(valuesSection))
-			{
-				throw new Exception(""Unable to find inserted values in query text."");
-			}
-
-			string queryTemplateLocal = queryText.Replace(valuesSection, ""{0}"");
-			string valuesTemplateLocal = valuesSection;
-
-			IEnumerable<NumberedParameterInfo> numberedParameters = GetNumberedParameters(queryText);
-			foreach (NumberedParameterInfo numberedParameter in numberedParameters)
-			{
-				valuesTemplateLocal = valuesTemplateLocal.Replace(numberedParameter.DbName, numberedParameter.SemanticName + ""_{0}"");
-			}
-
-			_cachedQueryTemplate = queryTemplateLocal;
-			_cachedValuesTemplate = valuesTemplateLocal;
-		}
-	}
-
-	queryTemplate = _cachedQueryTemplate;
-	valuesTemplate = _cachedValuesTemplate;
-}");
-			result.Methods.ShouldContain(@"protected virtual IEnumerable<NumberedParameterInfo> GetNumberedParameters(string insertedValuesSection)
-{
-	MatchCollection matches = _numberedValueRegex.Matches(insertedValuesSection);
-	if (matches.Count == 0)
-	{
-		yield break;
-	}
-
-	foreach (Match match in matches)
-	{
-		if (match.Success)
-		{
-			yield return new NumberedParameterInfo(match.Groups[""dbName""].Value, match.Groups[""semanticName""].Value);
-		}
-	}
-}");
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает текст запроса для вставки <paramref name=""rowsCount"" /> записей
-/// </summary>
-/// <param name=""rowsCount"">Количество записей</param>
-/// <returns>Текст запроса для вставки <paramref name=""rowsCount"" /> записей</returns>
-private string GetQueryText(int rowsCount)
-{
-	GetQueryTemplates(GetQueryText(), out string queryTemplate, out string valuesTemplate);
-
-	if (rowsCount <= 0)
-	{
-		throw new ArgumentOutOfRangeException(nameof(rowsCount), rowsCount, $""{nameof(rowsCount)} must be greater than zero."");
-	}
-
-	IEnumerable<string> rowTemplates = Enumerable.Range(0, rowsCount).Select(index => string.Format(valuesTemplate, index));
-	string rowTemplatesString = string.Join($"",{Environment.NewLine}"", rowTemplates);
-
-	string queryText = string.Format(queryTemplate, rowTemplatesString);
-	return queryText;
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText_MultipleRows);
+			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates);
+			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters);
+			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText);
 		}
 
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()

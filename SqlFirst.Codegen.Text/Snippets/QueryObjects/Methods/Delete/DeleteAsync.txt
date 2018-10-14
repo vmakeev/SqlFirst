@@ -13,6 +13,6 @@ public virtual async Task<int> DeleteAsync(DbConnection connection$`, `MethodPar
 $2|AddParameters`\r\n`|\r\n$~
 $2|AddCustomParameters`\r\n`|\r\n$~
 
-		return await cmd.ExecuteNonQueryAsync(cancellationToken);
+		return await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 	}
 }

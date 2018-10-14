@@ -1,0 +1,27 @@
+﻿/// <summary>
+/// Выполняет добавление строки в таблицу и возвращает дополнительные данные
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Результат выполнения запроса</returns>
+public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+		{
+			if (await reader.ReadAsync(cancellationToken).ConfigureAwait(false) != true)
+			{
+				return null;
+			}
+			
+			return GetItemFromRecord(reader);
+		}
+	}
+}

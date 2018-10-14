@@ -1,0 +1,16 @@
+﻿protected virtual IEnumerable<NumberedParameterInfo> GetNumberedParameters(string insertedValuesSection)
+{
+	MatchCollection matches = _numberedValueRegex.Matches(insertedValuesSection);
+	if (matches.Count == 0)
+	{
+		yield break;
+	}
+
+	foreach (Match match in matches)
+	{
+		if (match.Success)
+		{
+			yield return new NumberedParameterInfo(match.Groups["dbName"].Value, match.Groups["semanticName"].Value);
+		}
+	}
+}

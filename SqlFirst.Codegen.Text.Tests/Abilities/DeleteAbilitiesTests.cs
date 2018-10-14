@@ -7,6 +7,7 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Delete;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -44,24 +45,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Количество измененных строк</returns>
-public virtual int Delete(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		return cmd.ExecuteNonQuery();
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -97,25 +81,7 @@ public virtual int Delete(IDbConnection connection, Guid? firstParam, int? secon
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Количество измененных строк</returns>
-public virtual async Task<int> DeleteAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		return await cmd.ExecuteNonQueryAsync(cancellationToken);
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteAsyncAbility_Method_DeleteAsync);
 		}
 
 		[Fact]
@@ -150,34 +116,7 @@ public virtual async Task<int> DeleteAsync(DbConnection connection, Guid? firstP
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Результаты выполнения запроса</returns>
-public virtual IEnumerable<QueryItemTestName> Delete(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		var result = new List<QueryItemTestName>();
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				QueryItemTestName resultItem = GetItemFromRecord(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithResultAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -215,35 +154,7 @@ public virtual IEnumerable<QueryItemTestName> Delete(IDbConnection connection, G
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Результаты выполнения запроса</returns>
-public virtual async Task<IEnumerable<QueryItemTestName>> DeleteAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		var result = new List<QueryItemTestName>();
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
-		{
-			while (await reader.ReadAsync(cancellationToken))
-			{
-				QueryItemTestName resultItem = GetItemFromRecord(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}	
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithResultAsyncAbility_Method_DeleteAsync);
 		}
 
 		[Fact]
@@ -278,34 +189,7 @@ public virtual async Task<IEnumerable<QueryItemTestName>> DeleteAsync(DbConnecti
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>FirstResult</returns>
-public virtual IEnumerable<DateTime> Delete(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
-		var result = new List<DateTime>();
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithScalarResultAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -343,35 +227,7 @@ public virtual IEnumerable<DateTime> Delete(IDbConnection connection, Guid? firs
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет удаление строк из таблицы и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>FirstResult</returns>
-public virtual async Task<IEnumerable<DateTime>> DeleteAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
-		var result = new List<DateTime>();
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
-		{
-			while (await reader.ReadAsync(cancellationToken))
-			{
-				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithScalarResultAsyncAbility_Method_DeleteAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

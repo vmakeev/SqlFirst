@@ -1,20 +1,116 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+	<PropertyGroup>
+		<TargetFramework>net462</TargetFramework>
 
-    <IsPackable>false</IsPackable>
+		<IsPackable>false</IsPackable>
 
-    <SignAssembly>true</SignAssembly>
+		<SignAssembly>true</SignAssembly>
 
-    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
+		<AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
 
-    <DelaySign>false</DelaySign>
-  </PropertyGroup>
+		<DelaySign>false</DelaySign>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <Compile Remove="GenerateResultItemTests.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<Compile Remove="GenerateResultItemTests.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<None Remove="Fixtures\Abilities\AddSqlConnectionParameterAbilityMethod_AddParameter.txt" />
+		<None Remove="Fixtures\Abilities\Common\GetQueryTextFromStringAbility_Method_GetQueryText.txt" />
+		<None Remove="Fixtures\Abilities\Common\MapDataRecordToItemAbility_Method_GetItemFromRecord.txt" />
+		<None Remove="Fixtures\Abilities\Common\MapDataRecordToScalarAbility_Method_GetScalarFromRecord.txt" />
+		<None Remove="Fixtures\Abilities\Common\MapValueToScalarAbility_Method_GetScalarFromValue.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteAbility_Method_Delete.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteAsyncAbility_Method_DeleteAsync.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteWithResultAbility_Method_Delete.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteWithResultAsyncAbility_Method_DeleteAsync.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteWithScalarResultAbility_Method_Delete.txt" />
+		<None Remove="Fixtures\Abilities\Delete\DeleteWithScalarResultAsyncAbility_Method_DeleteAsync.txt" />
+		<None Remove="Fixtures\Abilities\GetQueryTextFromResourceCacheableAbilityMethod_CalculateChecksum.txt" />
+		<None Remove="Fixtures\Abilities\GetQueryTextFromResourceCacheableAbilityMethod_GetQueryText.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText_MultipleRows.txt" />
+		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Type_NumberedParameterInfo.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesWithResultAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesWithResultAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesWithScalarResultAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertMultipleValuesWithScalarResultAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainWithResultAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainWithResultAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainWithScalarResultAbility_Method_Add.txt" />
+		<None Remove="Fixtures\Abilities\Insert\InsertSingleValuePlainWithScalarResultAsyncAbility_Method_AddAsync.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectFirstItemAbility_Method_GetFirst.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectFirstItemAsyncAbility_Method_GetFirstAsync.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectItemsLazyAbility_Method_Get.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectScalarAbility_Method_GetFirst.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectScalarAsyncAbility_Method_GetFirstAsync.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectScalarsAbility_Method_Get.txt" />
+		<None Remove="Fixtures\Abilities\Select\SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateAbility_Method_Update.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateAsyncAbility_Method_UpdateAsync.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateWithResultAbility_Method_Update.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateWithResultAsyncAbility_Method_UpdateAsync.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateWithScalarResultAbility_Method_Update.txt" />
+		<None Remove="Fixtures\Abilities\Update\UpdateWithScalarResultAsyncAbility_Method_UpdateAsync.txt" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<EmbeddedResource Include="Fixtures\Abilities\Common\MapDataRecordToScalarAbility_Method_GetScalarFromRecord.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\MapValueToScalarAbility_Method_GetScalarFromValue.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\MapDataRecordToItemAbility_Method_GetItemFromRecord.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\GetQueryTextFromStringAbility_Method_GetQueryText.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\GetQueryTextFromResourceCacheableAbility_Method_GetQueryText.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\GetQueryTextFromResourceCacheableAbility_Method_CalculateChecksum.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Common\AddSqlConnectionParameterAbility_Method_AddParameter.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteWithScalarResultAbility_Method_Delete.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteWithScalarResultAsyncAbility_Method_DeleteAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteWithResultAsyncAbility_Method_DeleteAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteWithResultAbility_Method_Delete.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteAsyncAbility_Method_DeleteAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteAbility_Method_Delete.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText_MultipleRows.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainWithScalarResultAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainWithScalarResultAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainWithResultAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainWithResultAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertSingleValuePlainAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesWithScalarResultAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesWithScalarResultAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesWithResultAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesWithResultAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesAsyncAbility_Method_AddAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\InsertMultipleValuesAbility_Method_Add.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Type_NumberedParameterInfo.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectScalarsAbility_Method_Get.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectScalarAsyncAbility_Method_GetFirstAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectScalarAbility_Method_GetFirst.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectItemsLazyAbility_Method_Get.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectFirstItemAsyncAbility_Method_GetFirstAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectFirstItemAbility_Method_GetFirst.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithScalarResultAsyncAbility_Method_UpdateAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithScalarResultAbility_Method_Update.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithResultAsyncAbility_Method_UpdateAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithResultAbility_Method_Update.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateAsyncAbility_Method_UpdateAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateAbility_Method_Update.txt" />
+	</ItemGroup>
 
 	<ItemGroup>
 		<PackageReference Include="FakeItEasy" Version="4.0.0" />
@@ -25,8 +121,8 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\SqlFirst.Codegen.Text\SqlFirst.Codegen.Text.csproj" />
-	  <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
+		<ProjectReference Include="..\SqlFirst.Codegen.Text\SqlFirst.Codegen.Text.csproj" />
+		<ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
 	</ItemGroup>
 
 </Project>

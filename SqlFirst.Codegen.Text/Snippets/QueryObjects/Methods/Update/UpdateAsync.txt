@@ -12,6 +12,6 @@ public virtual async Task<int> UpdateAsync(DbConnection connection$`, `MethodPar
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
-		return await cmd.ExecuteNonQueryAsync(cancellationToken);
+		return await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 	}
 }

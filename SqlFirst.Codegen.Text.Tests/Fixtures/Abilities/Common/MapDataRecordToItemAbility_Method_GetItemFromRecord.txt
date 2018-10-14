@@ -1,0 +1,21 @@
+﻿/// <summary>
+/// Возвращает новый элемент, заполненный данными из <paramref name="record"/>
+/// </summary>
+/// <param name="record">Строка БД</param>
+/// <returns>Новый элемент, заполненный данными из <paramref name="record"/></returns>
+protected virtual QueryItemTestName GetItemFromRecord(IDataRecord record)
+{
+	var result = new QueryItemTestName();
+
+	if (record[0] != null && record[0] != DBNull.Value)
+	{
+		result.FirstParam = (Guid)record[0];
+	}
+	if (record[1] != null && record[1] != DBNull.Value)
+	{
+		result.SecondParam = (int?)record[1];
+	}
+
+	result.AfterLoad();
+	return result;
+}

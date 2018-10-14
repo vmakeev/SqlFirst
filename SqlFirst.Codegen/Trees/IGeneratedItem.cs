@@ -8,7 +8,7 @@ namespace SqlFirst.Codegen.Trees
 	public interface IGeneratedItem
 	{
 		/// <summary>
-		/// Перечень требуемых using'ов
+		/// Перечень требуемых usings
 		/// </summary>
 		IEnumerable<string> Usings { get; }
 

@@ -14,6 +14,135 @@ namespace SqlFirst.Codegen.Helpers
 	/// </summary>
 	public static class CSharpCodeHelper
 	{
+		private static readonly HashSet<string> _allReservedWords;
+
+		private static readonly Dictionary<Type, string> _typeAliases;
+
+		private static readonly ISet<string> _allBuiltInTypes;
+
+		private static readonly ISet<string> _builtInReferenceTypes;
+
+		private static readonly ISet<string> _builtInValueTypes;
+
+		private static readonly HashSet<string> _specialWords;
+
+		static CSharpCodeHelper()
+		{
+			_typeAliases = new Dictionary<Type, string>
+			{
+				[typeof(bool)] = "bool",
+				[typeof(byte)] = "byte",
+				[typeof(sbyte)] = "sbyte",
+				[typeof(char)] = "char",
+				[typeof(decimal)] = "decimal",
+				[typeof(double)] = "double",
+				[typeof(float)] = "float",
+				[typeof(int)] = "int",
+				[typeof(uint)] = "uint",
+				[typeof(long)] = "long",
+				[typeof(ulong)] = "ulong",
+				[typeof(object)] = "object",
+				[typeof(short)] = "short",
+				[typeof(ushort)] = "ushort",
+				[typeof(string)] = "string"
+			};
+
+			_builtInReferenceTypes = new HashSet<string>
+			{
+				"object",
+				"string"
+			};
+
+			_builtInValueTypes = new HashSet<string>
+			{
+				"bool",
+				"byte",
+				"sbyte",
+				"char",
+				"decimal",
+				"double",
+				"float",
+				"int",
+				"uint",
+				"long",
+				"ulong",
+				"short",
+				"ushort"
+			};
+
+			_allBuiltInTypes = new HashSet<string>(_builtInReferenceTypes.Concat(_builtInValueTypes));
+
+			_specialWords = new HashSet<string>
+			{
+				"abstract",
+				"as",
+				"base",
+				"break",
+				"case",
+				"catch",
+				"checked",
+				"class",
+				"const",
+				"continue",
+				"default",
+				"delegate",
+				"do",
+				"else",
+				"enum",
+				"event",
+				"explicit",
+				"extern",
+				"false",
+				"finally",
+				"fixed",
+				"for",
+				"foreach",
+				"goto",
+				"if",
+				"implicit",
+				"in",
+				"interface",
+				"internal",
+				"is",
+				"lock",
+				"namespace",
+				"new",
+				"null",
+				"operator",
+				"out",
+				"out",
+				"override",
+				"params",
+				"private",
+				"protected",
+				"public",
+				"readonly",
+				"ref",
+				"return",
+				"sealed",
+				"sizeof",
+				"stackalloc",
+				"static",
+				"struct",
+				"switch",
+				"this",
+				"throw",
+				"true",
+				"try",
+				"typeof",
+				"unchecked",
+				"unsafe",
+				"using",
+				"static",
+				"virtual",
+				"void",
+				"volatile",
+				"while"
+			};
+
+			_allReservedWords = new HashSet<string>(_specialWords.Concat(_allBuiltInTypes));
+		}
+
 		/// <summary>
 		/// Возвращает компилируемую строку, содержащую корректное объявление указанного типа
 		/// </summary>
@@ -144,65 +273,15 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
-		/// Возвращает корректное название переменной в указанном стиле
-		/// </summary>
-		/// <param name="name">Предполагаемое название переменной</param>
-		/// <param name="namingPolicy">Политика именования переменной</param>
-		/// <returns>Корректное название переменной</returns>
-		/// <returns></returns>
-		private static string GetValidIdentifierNameInternal(string name, NamingPolicy? namingPolicy)
-		{
-			if (string.IsNullOrEmpty(name))
-			{
-				return "_";
-			}
-
-			string preparedName = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_');
-
-			string formattedName;
-
-			switch (namingPolicy)
-			{
-				case null:
-					formattedName = preparedName;
-					break;
-
-				case NamingPolicy.CamelCase:
-					formattedName = AdjustTextCase.ToCamelCase(preparedName);
-					break;
-
-				case NamingPolicy.CamelCaseWithUnderscope:
-					formattedName = '_' + AdjustTextCase.ToCamelCase(preparedName).TrimStart('_', '@');
-					break;
-
-				case NamingPolicy.Pascal:
-					formattedName = AdjustTextCase.ToPascal(preparedName);
-					break;
-
-				case NamingPolicy.Underscope:
-					formattedName = AdjustTextCase.ToUnderscopes(preparedName);
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
-			}
-
-			string result = FixIdentifierNameStartSymbolIssues(formattedName);
-
-			result = Regex.Replace(result, @"([^_])__+", "$1_");
-
-			return result;
-		}
-
-		/// <summary>
 		/// Возвращает корректное название типа без пространства имен и generic параметров
 		/// </summary>
 		/// <param name="name">Предполагаемое название типа</param>
+		/// <param name="allowBuiltInTypes">Разрешить возврат имен, являющихся псевдонимами встроенных типов данных</param>
 		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
 		/// <returns></returns>
-		public static string GetValidTypeName(string name)
+		public static string GetValidTypeName(string name, bool allowBuiltInTypes)
 		{
-			return GetValidTypeNameInternal(name, null);
+			return GetValidTypeNameInternal(name, null, allowBuiltInTypes);
 		}
 
 		/// <summary>
@@ -210,80 +289,12 @@ namespace SqlFirst.Codegen.Helpers
 		/// </summary>
 		/// <param name="name">Предполагаемое название типа</param>
 		/// <param name="namingPolicy">Политика именования типа</param>
+		/// <param name="allowBuiltInTypes">Разрешить возврат имен, являющихся псевдонимами встроенных типов данных</param>
 		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
 		/// <returns></returns>
-		public static string GetValidTypeName(string name, NamingPolicy namingPolicy)
+		public static string GetValidTypeName(string name, NamingPolicy namingPolicy, bool allowBuiltInTypes)
 		{
-			return GetValidTypeNameInternal(name, namingPolicy);
-		}
-
-		/// <summary>
-		/// Возвращает корректное название типа без пространства имен и generic параметров
-		/// </summary>
-		/// <param name="name">Предполагаемое название типа</param>
-		/// <param name="namingPolicy">Политика именования типа</param>
-		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
-		/// <returns></returns>
-		private static string GetValidTypeNameInternal(string name, NamingPolicy? namingPolicy)
-		{
-			if (name == null)
-			{
-				return "_";
-			}
-
-			const char namespaceDelimiter = '.';
-			const char genericStartSymbol = '<';
-
-			int genericStartIndex = name.IndexOf(genericStartSymbol);
-			name = genericStartIndex >= 0
-				? name.Substring(0, genericStartIndex)
-				: name;
-
-			int lastDelimiterIndex = name.LastIndexOf(namespaceDelimiter);
-			name = lastDelimiterIndex >= 0
-				? name.Substring(lastDelimiterIndex)
-				: name;
-
-			name = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_').Trim();
-
-			switch (namingPolicy)
-			{
-				case null:
-					break;
-
-				case NamingPolicy.CamelCase:
-					name = AdjustTextCase.ToCamelCase(name);
-					break;
-
-				case NamingPolicy.CamelCaseWithUnderscope:
-					name = '_' + AdjustTextCase.ToCamelCase(name).TrimStart('_', '@');
-					break;
-
-				case NamingPolicy.Pascal:
-					name = AdjustTextCase.ToPascal(name);
-					break;
-
-				case NamingPolicy.Underscope:
-					name = AdjustTextCase.ToUnderscopes(name);
-					break;
-
-				default:
-					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
-			}
-
-			if (name.Length > 0 && char.IsDigit(name[0]))
-			{
-				name = "_" + name;
-			}
-
-			if (string.IsNullOrEmpty(name))
-			{
-				name = "_";
-			}
-
-			name = Regex.Replace(name, @"([^_])__+", "$1_");
-
-			return name;
+			return GetValidTypeNameInternal(name, namingPolicy, allowBuiltInTypes);
 		}
 
 		[SuppressMessage("ReSharper", "PossibleNullReferenceException")]
@@ -437,6 +448,178 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
+		/// Проверяет, является ли <paramref name="name" /> корректным именем не generic типа
+		/// </summary>
+		/// <param name="name">Проверяемое имя типа</param>
+		/// <param name="allowBuiltInTypes">Считать ли псевдонимы встроенных типов корректными именами</param>
+		/// <returns>True, если <paramref name="name" /> является корректным именем не generic типа</returns>
+		public static bool IsValidTypeName(string name, bool allowBuiltInTypes)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return false;
+			}
+
+			if (char.IsDigit(name[0]))
+			{
+				return false;
+			}
+
+			if (_allBuiltInTypes.Contains(name))
+			{
+				return allowBuiltInTypes;
+			}
+
+			if (_specialWords.Contains(name))
+			{
+				return false;
+			}
+
+			if (name.EndsWith("?"))
+			{
+				string typeNameWithoutNullableMark = name.Substring(0, name.Length - 1);
+
+				if (_builtInReferenceTypes.Contains(typeNameWithoutNullableMark))
+				{
+					return false;
+				}
+
+				if (_builtInValueTypes.Contains(typeNameWithoutNullableMark))
+				{
+					return allowBuiltInTypes;
+				}
+			}
+
+			return Regex.IsMatch(name, @"^@?[a-zA-Z_]\w*\??$");
+		}
+
+		/// <summary>
+		/// Возвращает корректное название переменной в указанном стиле
+		/// </summary>
+		/// <param name="name">Предполагаемое название переменной</param>
+		/// <param name="namingPolicy">Политика именования переменной</param>
+		/// <returns>Корректное название переменной</returns>
+		/// <returns></returns>
+		private static string GetValidIdentifierNameInternal(string name, NamingPolicy? namingPolicy)
+		{
+			if (string.IsNullOrEmpty(name))
+			{
+				return "_";
+			}
+
+			string preparedName = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_');
+
+			string formattedName;
+
+			switch (namingPolicy)
+			{
+				case null:
+					formattedName = preparedName;
+					break;
+
+				case NamingPolicy.CamelCase:
+					formattedName = AdjustTextCase.ToCamelCase(preparedName);
+					break;
+
+				case NamingPolicy.CamelCaseWithUnderscope:
+					formattedName = '_' + AdjustTextCase.ToCamelCase(preparedName).TrimStart('_', '@');
+					break;
+
+				case NamingPolicy.Pascal:
+					formattedName = AdjustTextCase.ToPascal(preparedName);
+					break;
+
+				case NamingPolicy.Underscope:
+					formattedName = AdjustTextCase.ToUnderscopes(preparedName);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
+			}
+
+			string result = FixIdentifierNameStartSymbolIssues(formattedName);
+
+			result = Regex.Replace(result, @"([^_])__+", "$1_");
+
+			return result;
+		}
+
+		/// <summary>
+		/// Возвращает корректное название типа без пространства имен и generic параметров
+		/// </summary>
+		/// <param name="name">Предполагаемое название типа</param>
+		/// <param name="namingPolicy">Политика именования типа</param>
+		/// <param name="allowBuiltInTypes">Разрешить возврат имен, являющихся псевдонимами встроенных типов данных</param>
+		/// <returns>Корректное название типа без пространства имен и generic параметров</returns>
+		/// <returns></returns>
+		private static string GetValidTypeNameInternal(string name, NamingPolicy? namingPolicy, bool allowBuiltInTypes)
+		{
+			if (name == null)
+			{
+				return "_";
+			}
+
+			const char namespaceDelimiter = '.';
+			const char genericStartSymbol = '<';
+
+			int genericStartIndex = name.IndexOf(genericStartSymbol);
+			name = genericStartIndex >= 0
+				? name.Substring(0, genericStartIndex)
+				: name;
+
+			int lastDelimiterIndex = name.LastIndexOf(namespaceDelimiter);
+			name = lastDelimiterIndex >= 0
+				? name.Substring(lastDelimiterIndex)
+				: name;
+
+			name = RemoveInvalidIdentifierSymbols(name, namingPolicy == null ? (char?)null : '_').Trim();
+
+			switch (namingPolicy)
+			{
+				case null:
+					break;
+
+				case NamingPolicy.CamelCase:
+					name = AdjustTextCase.ToCamelCase(name);
+					break;
+
+				case NamingPolicy.CamelCaseWithUnderscope:
+					name = '_' + AdjustTextCase.ToCamelCase(name).TrimStart('_', '@');
+					break;
+
+				case NamingPolicy.Pascal:
+					name = AdjustTextCase.ToPascal(name);
+					break;
+
+				case NamingPolicy.Underscope:
+					name = AdjustTextCase.ToUnderscopes(name);
+					break;
+
+				default:
+					throw new ArgumentOutOfRangeException(nameof(namingPolicy), namingPolicy, null);
+			}
+
+			if (name.Length > 0 && char.IsDigit(name[0]))
+			{
+				name = "_" + name;
+			}
+
+			if (string.IsNullOrEmpty(name))
+			{
+				name = "_";
+			}
+
+			name = Regex.Replace(name, @"([^_])__+", "$1_");
+
+			if (_allBuiltInTypes.Contains(name) && !allowBuiltInTypes)
+			{
+				name = $"@{name}";
+			}
+
+			return name;
+		}
+
+		/// <summary>
 		/// Выполняет корректировку первого символа имени переменной, если имя не является корректным идентификатором C# по этой
 		/// причине
 		/// </summary>
@@ -460,7 +643,7 @@ namespace SqlFirst.Codegen.Helpers
 				result = name;
 			}
 
-			if (_reservedWords.Contains(result))
+			if (_allReservedWords.Contains(result))
 			{
 				return '@' + result;
 			}
@@ -485,111 +668,5 @@ namespace SqlFirst.Codegen.Helpers
 				? new string(name.Select(symbol => IsValidSymbol(symbol) ? symbol : replacement.Value).ToArray())
 				: new string(name.Where(IsValidSymbol).ToArray());
 		}
-
-		#region Long arrays
-
-		private static readonly HashSet<string> _reservedWords = new HashSet<string>
-		{
-			"abstract",
-			"as",
-			"base",
-			"bool",
-			"break",
-			"byte",
-			"case",
-			"catch",
-			"char",
-			"checked",
-			"class",
-			"const",
-			"continue",
-			"decimal",
-			"default",
-			"delegate",
-			"do",
-			"double",
-			"else",
-			"enum",
-			"event",
-			"explicit",
-			"extern",
-			"false",
-			"finally",
-			"fixed",
-			"float",
-			"for",
-			"foreach",
-			"goto",
-			"if",
-			"implicit",
-			"in",
-			"int",
-			"interface",
-			"internal",
-			"is",
-			"lock",
-			"long",
-			"namespace",
-			"new",
-			"null",
-			"object",
-			"operator",
-			"out",
-			"out",
-			"override",
-			"params",
-			"private",
-			"protected",
-			"public",
-			"readonly",
-			"ref",
-			"return",
-			"sbyte",
-			"sealed",
-			"short",
-			"sizeof",
-			"stackalloc",
-			"static",
-			"string",
-			"struct",
-			"switch",
-			"this",
-			"throw",
-			"true",
-			"try",
-			"typeof",
-			"uint",
-			"ulong",
-			"unchecked",
-			"unsafe",
-			"ushort",
-			"using",
-			"static",
-			"virtual",
-			"void",
-			"volatile",
-			"while"
-		};
-
-		private static readonly Dictionary<Type, string> _typeAliases = new Dictionary<Type, string>
-		{
-			[typeof(bool)] = "bool",
-			[typeof(byte)] = "byte",
-			[typeof(sbyte)] = "sbyte",
-			[typeof(char)] = "char",
-			[typeof(decimal)] = "decimal",
-			[typeof(double)] = "double",
-			[typeof(float)] = "float",
-			[typeof(int)] = "int",
-			[typeof(uint)] = "uint",
-			[typeof(long)] = "long",
-			[typeof(ulong)] = "ulong",
-			[typeof(object)] = "object",
-			[typeof(short)] = "short",
-			[typeof(ushort)] = "ushort",
-			[typeof(string)] = "string"
-		};
-
-		#endregion
 	}
 }

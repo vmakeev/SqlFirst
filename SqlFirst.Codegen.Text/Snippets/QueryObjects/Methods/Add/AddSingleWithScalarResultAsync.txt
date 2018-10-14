@@ -13,7 +13,7 @@ public virtual async Task<$ResultItemType$> AddAsync(DbConnection connection$`, 
 $2|AddParameters`\r\n`|\r\n$~
 $2|AddCustomParameters`\r\n`|\r\n$~
 		
-		object value = await cmd.ExecuteScalarAsync(cancellationToken);
+		object value = await cmd.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
 		return GetScalarFromValue<$ResultItemType$>(value);
 	}
 }

@@ -198,24 +198,24 @@ namespace SqlFirst.Intelligence.Generators
 			string resultName = parameters.ResultItemName;
 			string parameterName = parameters.ParameterItemName;
 
-			if (!CSharpCodeHelper.IsValidIdentifierName(queryName))
+			if (!CSharpCodeHelper.IsValidTypeName(name: queryName, allowBuiltInTypes: false))
 			{
 				string oldName = queryName;
-				queryName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
+				queryName = CSharpCodeHelper.GetValidTypeName(name: oldName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false);
 				Log.Warn($"Invalid Query Object name [{oldName}]. Name [{queryName}] will be used");
 			}
 
-			if (!string.IsNullOrEmpty(resultName) && !CSharpCodeHelper.IsValidIdentifierName(resultName))
+			if (!string.IsNullOrEmpty(resultName) && !CSharpCodeHelper.IsValidTypeName(name: resultName, allowBuiltInTypes: false))
 			{
 				string oldName = resultName;
-				resultName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
+				resultName = CSharpCodeHelper.GetValidTypeName(name: oldName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false);
 				Log.Warn($"Invalid Query Result Item name [{oldName}]. Name [{resultName}] will be used");
 			}
 
-			if (!string.IsNullOrEmpty(parameterName) && !CSharpCodeHelper.IsValidIdentifierName(parameterName))
+			if (!string.IsNullOrEmpty(parameterName) && !CSharpCodeHelper.IsValidTypeName(name: parameterName, allowBuiltInTypes: false))
 			{
 				string oldName = parameterName;
-				parameterName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
+				parameterName = CSharpCodeHelper.GetValidTypeName(name: oldName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false);
 				Log.Warn($"Invalid Query Parameter Item name [{oldName}]. Name [{parameterName}] will be used");
 			}
 

@@ -3,7 +3,7 @@
 /// </summary>
 /// <param name="rowsCount">Количество записей</param>
 /// <returns>Текст запроса для вставки <paramref name="rowsCount"/> записей</returns>
-private string GetQueryText(int rowsCount)
+protected virtual string GetQueryText(int rowsCount)
 {
 	const string queryTemplate = @"$QueryTemplate$";
 	const string valuesTemplate = @"$ValuesTemplate$";

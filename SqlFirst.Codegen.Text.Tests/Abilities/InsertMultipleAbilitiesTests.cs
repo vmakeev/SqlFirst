@@ -7,6 +7,7 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -46,32 +47,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <returns>Количество добавленных строк</returns>
-public virtual int Add(IDbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-
-		return cmd.ExecuteNonQuery();
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesAbility_Method_Add);
 		}
 
 		[Fact]
@@ -108,33 +84,7 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, ICollection<Q
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Количество добавленных строк</returns>
-public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-
-		return await cmd.ExecuteNonQueryAsync(cancellationToken);
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -169,42 +119,7 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <returns>Результаты выполнения запроса</returns>
-public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-
-		var result = new List<QueryItemTestName>();
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				QueryItemTestName resultItem = GetItemFromRecord(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -242,43 +157,7 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Результаты выполнения запроса</returns>
-public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-
-		var result = new List<QueryItemTestName>();
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
-		{
-			while (await reader.ReadAsync(cancellationToken))
-			{
-				QueryItemTestName resultItem = GetItemFromRecord(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}	
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithResultAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -313,42 +192,7 @@ public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection 
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <returns>FirstResult</returns>
-public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-		
-		var result = new List<DateTime>();
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithScalarResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -386,43 +230,7 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет добавление строк в таблицу и возвращает дополнительные данные
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""items"">Добавляемые записи</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>FirstResult</returns>
-public virtual async Task<IEnumerable<DateTime>> AddAsync(DbConnection connection, Guid? firstParam, ICollection<QueryParamItemTestName> items, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText(items.Count);
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-
-		int index = 0;
-		foreach(QueryParamItemTestName item in items)
-		{
-			AddParameter(cmd, MySpecificDbType.MySpecificIntType, string.Format(""@SECOND_Param_{0}"", index), item.SecondParam);
-			AddParameter(cmd, MySpecificDbType.MySpecificDateType, string.Format(""@ThirdParam_{0}"", index), item.ThirdParam);
-
-			index++;
-		}
-		
-		var result = new List<DateTime>();
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
-		{
-			while (await reader.ReadAsync(cancellationToken))
-			{
-				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
-				result.Add(resultItem);
-			}
-		}
-
-		return result;
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithScalarResultAsyncAbility_Method_AddAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

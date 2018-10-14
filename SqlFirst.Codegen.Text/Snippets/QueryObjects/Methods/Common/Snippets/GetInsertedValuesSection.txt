@@ -1,4 +1,4 @@
-﻿private string GetInsertedValuesSection(string query)
+﻿protected virtual string GetInsertedValuesSection(string query)
 {
 	MatchCollection matches = _balancedParenthesisRegex.Matches(query);
 	if (matches.Count == 0)

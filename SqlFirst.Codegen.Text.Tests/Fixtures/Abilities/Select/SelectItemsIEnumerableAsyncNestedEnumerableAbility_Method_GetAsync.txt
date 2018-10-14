@@ -1,0 +1,25 @@
+﻿/// <summary>
+/// Выполняет ленивую загрузку списка элементов типа <see cref="QueryItemTestName"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Список элементов типа <see cref="QueryItemTestName"/></returns>
+public virtual Task<IEnumerable<QueryItemTestName>> GetAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	async Task<IEnumerator<QueryItemTestName>> CreateEnumerator()
+	{
+		// Command will be disposed in DbAsyncEnumerator.Dispose() method
+		DbCommand cmd = connection.CreateCommand();
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+		return new DbAsyncEnumerator<QueryItemTestName>(cmd, reader, GetItemFromRecord, cancellationToken);
+	}
+
+	IEnumerable<QueryItemTestName> enumerable = new Enumerable<QueryItemTestName>(async () => await CreateEnumerator().ConfigureAwait(false));
+	return Task.FromResult(enumerable);
+}

@@ -123,9 +123,9 @@ namespace SqlFirst.Demo.Wpf.Logic
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
 			{
 				["Namespace"] = parameters.Namespace,
-				["QueryName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal),
-				["QueryResultItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Result",
-				["QueryParameterItemName"] = CSharpCodeHelper.GetValidIdentifierName(parameters.QueryName, NamingPolicy.Pascal) + "Parameter",
+				["QueryName"] = CSharpCodeHelper.GetValidTypeName(name: parameters.QueryName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false),
+				["QueryResultItemName"] = CSharpCodeHelper.GetValidTypeName(name: parameters.QueryName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false) + "Result",
+				["QueryParameterItemName"] = CSharpCodeHelper.GetValidTypeName(name: parameters.QueryName, namingPolicy: NamingPolicy.Pascal, allowBuiltInTypes: false) + "Parameter",
 				["QueryText"] = info.Sections.Single(p => p.Type == QuerySectionType.Body).Content,
 				["QueryTextRaw"] = rawQuery,
 				["ResourcePath"] = $"{parameters.Namespace}.{parameters.QueryName}.sql"

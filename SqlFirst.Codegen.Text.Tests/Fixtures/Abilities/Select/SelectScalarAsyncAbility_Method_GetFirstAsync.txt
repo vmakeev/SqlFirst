@@ -1,0 +1,20 @@
+﻿/// <summary>
+/// Выполняет загрузку значения типа <see cref="int"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Значение типа  <see cref="int"/></returns>
+public virtual async Task<int> GetFirstAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		object value = await cmd.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false);
+		return GetScalarFromValue<int>(value);
+	}
+}

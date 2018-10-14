@@ -1,0 +1,12 @@
+﻿protected struct NumberedParameterInfo
+{
+	/// <summary>Initializes a new instance of the <see cref="T:System.Object" /> class.</summary>
+	public NumberedParameterInfo(string dbName, string semanticName)
+	{
+		DbName = dbName;
+		SemanticName = semanticName;
+	}
+
+	public string DbName { get; }
+	public string SemanticName { get; }
+}

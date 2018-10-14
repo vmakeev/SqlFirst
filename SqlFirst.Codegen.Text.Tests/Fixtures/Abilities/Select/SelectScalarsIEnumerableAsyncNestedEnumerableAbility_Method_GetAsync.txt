@@ -1,0 +1,25 @@
+﻿/// <summary>
+/// Выполняет загрузку значения типа <see cref="int"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Значение типа  <see cref="int"/></returns>
+public virtual Task<IEnumerable<int>> GetAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	async Task<IEnumerator<int>> CreateEnumerator()
+	{
+		// Command will be disposed in DbAsyncEnumerator.Dispose() method
+		DbCommand cmd = connection.CreateCommand();
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false);
+		return new DbAsyncEnumerator<int>(cmd, reader, GetScalarFromRecord<int>, cancellationToken);
+	}
+
+	IEnumerable<int> enumerable = new Enumerable<int>(async () => await CreateEnumerator().ConfigureAwait(false));
+	return Task.FromResult(enumerable);
+}

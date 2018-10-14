@@ -1,0 +1,29 @@
+﻿/// <summary>
+/// Выполняет удаление строк из таблицы и возвращает дополнительные данные
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Результаты выполнения запроса</returns>
+public virtual async Task<IEnumerable<QueryItemTestName>> DeleteAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		var result = new List<QueryItemTestName>();
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
+		{
+			while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
+			{
+				QueryItemTestName resultItem = GetItemFromRecord(reader);
+				result.Add(resultItem);
+			}
+		}
+
+		return result;
+	}
+}

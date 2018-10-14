@@ -13,9 +13,9 @@ public virtual async Task<IEnumerable<$ResultItemType$>> UpdateAsync(DbConnectio
 $2|AddParameters`\r\n`|\r\n$~
 		
 		var result = new List<$ResultItemType$>();
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
+		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken).ConfigureAwait(false))
 		{
-			while (await reader.ReadAsync(cancellationToken))
+			while (await reader.ReadAsync(cancellationToken).ConfigureAwait(false))
 			{
 				$ResultItemType$ resultItem = GetScalarFromRecord<$ResultItemType$>(reader);
 				result.Add(resultItem);

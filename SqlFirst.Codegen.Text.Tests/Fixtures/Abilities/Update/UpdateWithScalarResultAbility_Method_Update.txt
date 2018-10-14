@@ -1,0 +1,28 @@
+﻿/// <summary>
+/// Выполняет обновление строк в таблице
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <returns>FirstResult</returns>
+public virtual IEnumerable<DateTime> Update(IDbConnection connection, Guid? firstParam, int? secondParam)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+		
+		var result = new List<DateTime>();
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			while (reader.Read())
+			{
+				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
+				result.Add(resultItem);
+			}
+		}
+
+		return result;
+	}
+}

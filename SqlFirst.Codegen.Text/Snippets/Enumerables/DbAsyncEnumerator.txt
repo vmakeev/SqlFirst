@@ -24,7 +24,7 @@
 
 	protected override async Task<EnumerableItem<T>> Fetch()
 	{
-		bool isReadSuccess = await _reader.ReadAsync(_cancellationToken);
+		bool isReadSuccess = await _reader.ReadAsync(_cancellationToken).ConfigureAwait(false);
 		if (isReadSuccess)
 		{
 			return new EnumerableItem<T>

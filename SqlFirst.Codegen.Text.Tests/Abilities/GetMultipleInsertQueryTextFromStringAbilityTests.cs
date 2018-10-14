@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using FakeItEasy;
 using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -40,29 +42,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Возвращает текст запроса для вставки <paramref name=""rowsCount""/> записей
-/// </summary>
-/// <param name=""rowsCount"">Количество записей</param>
-/// <returns>Текст запроса для вставки <paramref name=""rowsCount""/> записей</returns>
-private string GetQueryText(int rowsCount)
-{
-	const string queryTemplate = @""insert into sometable (id, number) values {0}"";
-	const string valuesTemplate = @""(@FirstParam, @SECOND_Param_{0})"";
-
-	if (rowsCount <= 0)
-	{
-		throw new ArgumentOutOfRangeException(nameof(rowsCount), rowsCount, $""{nameof(rowsCount)} must be greater than zero."");
-	}
-
-	IEnumerable<string> rowTemplates = Enumerable.Range(0, rowsCount).Select(index => string.Format(valuesTemplate, index));
-	string rowTemplatesString = string.Join($"",{Environment.NewLine}"", rowTemplates);
-
-	string queryText = string.Format(queryTemplate, rowTemplatesString);
-	return queryText;
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText);
 		}
 
+		[SuppressMessage("ReSharper", "StringLiteralTypo")]
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()
 		{
 			var mapper = A.Fake<IDatabaseTypeMapper>(p => p.Strict());

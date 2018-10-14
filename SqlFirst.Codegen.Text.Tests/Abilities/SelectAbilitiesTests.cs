@@ -7,6 +7,7 @@ using Shouldly;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Select;
 using SqlFirst.Codegen.Text.QueryObject.Data;
+using SqlFirst.Codegen.Text.Tests.Fixtures;
 using SqlFirst.Core;
 using Xunit;
 
@@ -46,32 +47,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку первого элемента типа <see cref=""QueryItemTestName""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Первый элемент типа <see cref=""QueryItemTestName""/></returns>
-public virtual QueryItemTestName GetFirst(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			if (!reader.Read())
-			{
-				return null;
-			}
-
-			return GetItemFromRecord(reader);
-		}
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectFirstItemAbility_Method_GetFirst);
 		}
 
 		[Fact]
@@ -108,33 +84,7 @@ public virtual QueryItemTestName GetFirst(IDbConnection connection, Guid? firstP
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку первого элемента типа <see cref=""QueryItemTestName""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Первый элемент типа <see cref=""QueryItemTestName""/></returns>
-public virtual async Task<QueryItemTestName> GetFirstAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
-		{
-			if (await reader.ReadAsync(cancellationToken) != true)
-			{
-				return null;
-			}
-
-			return GetItemFromRecord(reader);
-		}
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectFirstItemAsyncAbility_Method_GetFirstAsync);
 		}
 
 		[Fact]
@@ -173,31 +123,7 @@ public virtual async Task<QueryItemTestName> GetFirstAsync(DbConnection connecti
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет ленивую загрузку списка элементов типа <see cref=""QueryItemTestName""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Список элементов типа <see cref=""QueryItemTestName""/></returns>
-public virtual Task<IEnumerable<QueryItemTestName>> GetAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	async Task<IEnumerator<QueryItemTestName>> CreateEnumerator()
-	{	
-		// Command will be disposed in DbAsyncEnumerator.Dispose() method
-		DbCommand cmd = connection.CreateCommand();
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<QueryItemTestName>(cmd, reader, GetItemFromRecord, cancellationToken);
-	}
-
-	IEnumerable<QueryItemTestName> enumerable = new Enumerable<QueryItemTestName>(async () => await CreateEnumerator());
-	return Task.FromResult(enumerable);
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
 		}
 
 		[Fact]
@@ -232,30 +158,7 @@ public virtual Task<IEnumerable<QueryItemTestName>> GetAsync(DbConnection connec
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет ленивую загрузку списка элементов типа <see cref=""QueryItemTestName""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Список элементов типа <see cref=""QueryItemTestName""/></returns>
-public virtual IEnumerable<QueryItemTestName> Get(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using (IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				yield return GetItemFromRecord(reader);
-			}
-		}
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectItemsLazyAbility_Method_Get);
 		}
 
 		[Fact]
@@ -289,25 +192,7 @@ public virtual IEnumerable<QueryItemTestName> Get(IDbConnection connection, Guid
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку значения типа <see cref=""int""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Значение типа  <see cref=""int""/></returns>
-public virtual int GetFirst(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using(IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		object value = cmd.ExecuteScalar();
-		return GetScalarFromValue<int>(value);
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarAbility_Method_GetFirst);
 		}
 
 		[Fact]
@@ -344,26 +229,7 @@ public virtual int GetFirst(IDbConnection connection, Guid? firstParam, int? sec
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку значения типа <see cref=""int""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Значение типа  <see cref=""int""/></returns>
-public virtual async Task<int> GetFirstAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	using(DbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		object value = await cmd.ExecuteScalarAsync(cancellationToken);
-		return GetScalarFromValue<int>(value);
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarAsyncAbility_Method_GetFirstAsync);
 		}
 
 		[Fact]
@@ -398,30 +264,7 @@ public virtual async Task<int> GetFirstAsync(DbConnection connection, Guid? firs
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку значения типа <see cref=""int""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <returns>Значение типа  <see cref=""int""/></returns>
-public virtual IEnumerable<int> Get(IDbConnection connection, Guid? firstParam, int? secondParam)
-{
-	using (IDbCommand cmd = connection.CreateCommand())
-	{
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		using (IDataReader reader = cmd.ExecuteReader())
-		{
-			while (reader.Read())
-			{
-				yield return GetScalarFromRecord<int>(reader);
-			}
-		}
-	}
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarsAbility_Method_Get);
 		}
 
 		[Fact]
@@ -460,31 +303,7 @@ public virtual IEnumerable<int> Get(IDbConnection connection, Guid? firstParam, 
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
-/// Выполняет загрузку значения типа <see cref=""int""/>
-/// </summary>
-/// <param name=""connection"">Подключение к БД</param>
-/// <param name=""firstParam"">FirstParam</param>
-/// <param name=""secondParam"">SECOND_Param</param>
-/// <param name=""cancellationToken"">Токен отмены</param>
-/// <returns>Значение типа  <see cref=""int""/></returns>
-public virtual Task<IEnumerable<int>> GetAsync(DbConnection connection, Guid? firstParam, int? secondParam, CancellationToken cancellationToken)
-{
-	async Task<IEnumerator<int>> CreateEnumerator()
-	{	
-		// Command will be disposed in DbAsyncEnumerator.Dispose() method
-		DbCommand cmd = connection.CreateCommand();
-		cmd.CommandText = GetQueryText();
-		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
-		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-
-		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
-		return new DbAsyncEnumerator<int>(cmd, reader, GetScalarFromRecord<int>, cancellationToken);
-	}
-
-	IEnumerable<int> enumerable = new Enumerable<int>(async () => await CreateEnumerator());
-	return Task.FromResult(enumerable);
-}");
+			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)
