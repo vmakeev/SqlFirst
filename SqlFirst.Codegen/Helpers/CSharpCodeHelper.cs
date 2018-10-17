@@ -26,8 +26,42 @@ namespace SqlFirst.Codegen.Helpers
 
 		private static readonly HashSet<string> _specialWords;
 
+		private static readonly ISet<Type> _realNumericTypes;
+
+		private static readonly ISet<Type> _integerNumericTypes;
+
 		static CSharpCodeHelper()
 		{
+			_realNumericTypes = new HashSet<Type>
+			{
+				typeof(decimal),
+				typeof(decimal?),
+				typeof(double),
+				typeof(double?),
+				typeof(float),
+				typeof(float?)
+			};
+
+			_integerNumericTypes = new HashSet<Type>
+			{
+				typeof(byte),
+				typeof(byte?),
+				typeof(short),
+				typeof(short?),
+				typeof(int),
+				typeof(int?),
+				typeof(long),
+				typeof(long?),
+				typeof(sbyte),
+				typeof(sbyte?),
+				typeof(ushort),
+				typeof(ushort?),
+				typeof(uint),
+				typeof(uint?),
+				typeof(ulong),
+				typeof(ulong?)
+			};
+
 			_typeAliases = new Dictionary<Type, string>
 			{
 				[typeof(bool)] = "bool",
@@ -332,19 +366,14 @@ namespace SqlFirst.Codegen.Helpers
 				return boolValue.ToString().ToLowerInvariant();
 			}
 
-			var fractionalTypes = new HashSet<Type>
-			{
-				typeof(decimal),
-				typeof(decimal?),
-				typeof(double),
-				typeof(double?),
-				typeof(float),
-				typeof(float?)
-			};
-
-			if (fractionalTypes.Contains(targetType))
+			if (_realNumericTypes.Contains(targetType))
 			{
 				return valueString.Replace(",", ".");
+			}
+
+			if (_integerNumericTypes.Contains(targetType))
+			{
+				return valueString;
 			}
 
 			throw new CodeGenerationException($"Unable generate value of type [{targetType.FullName}].");

@@ -101,7 +101,11 @@ namespace SqlFirst.Codegen.Text
 				return null;
 			}
 
-			// todo: null check?
+			if (result == null && !typeof(T).IsValueType)
+			{
+				return null;
+			}
+
 			if (result is T typedResult)
 			{
 				return typedResult;

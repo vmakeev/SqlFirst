@@ -46,7 +46,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateAbility_Method_Update);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateAbility_Method_Update);
 		}
 
 		[Fact]
@@ -82,7 +82,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateAsyncAbility_Method_UpdateAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateAsyncAbility_Method_UpdateAsync);
 		}
 
 		[Fact]
@@ -117,7 +117,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateWithResultAbility_Method_Update);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateWithResultAbility_Method_Update);
 		}
 
 		[Fact]
@@ -155,7 +155,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateWithResultAsyncAbility_Method_UpdateAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateWithResultAsyncAbility_Method_UpdateAsync);
 		}
 
 		[Fact]
@@ -190,7 +190,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateWithScalarResultAbility_Method_Update);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateWithScalarResultAbility_Method_Update);
 		}
 
 		[Fact]
@@ -228,7 +228,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Update.UpdateWithScalarResultAsyncAbility_Method_UpdateAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Update.UpdateWithScalarResultAsyncAbility_Method_UpdateAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

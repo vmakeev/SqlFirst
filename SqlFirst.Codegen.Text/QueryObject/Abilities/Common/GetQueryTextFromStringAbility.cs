@@ -11,7 +11,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		public IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
 			string queryText = context.GetQueryText();
-			if (string.IsNullOrEmpty(queryText))
+			if (string.IsNullOrWhiteSpace(queryText))
 			{
 				throw new CodeGenerationException("Can not find query text at current code generation context.");
 			}

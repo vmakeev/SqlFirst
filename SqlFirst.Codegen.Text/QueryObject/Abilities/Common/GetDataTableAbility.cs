@@ -18,7 +18,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 		/// <inheritdoc />
 		public GetDataTableAbility(string dbType, IComplexTypeData complexTypeData)
 		{
-			if (string.IsNullOrWhiteSpace(value: dbType))
+			if (string.IsNullOrWhiteSpace(dbType))
 			{
 				throw new ArgumentException("dbType cannot be null or whitespace.", nameof(dbType));
 			}
@@ -27,7 +27,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			_complexTypeData = complexTypeData ?? throw new ArgumentNullException(nameof(complexTypeData));
 			if (!complexTypeData.IsTableType)
 			{
-				throw new ArgumentException("Complex type must be a table type.", nameof(dbType));
+				throw new ArgumentException("Complex type must be a table type.", nameof(complexTypeData));
 			}
 
 			Name = $"Get{_complexTypeData.DbTypeDisplayedName}DataTable";
@@ -52,8 +52,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			else
 			{
 				clrTypeName = CSharpCodeHelper.GetValidTypeName(
-					name: _complexTypeData.Name ?? _dbType, 
-					namingPolicy: NamingPolicy.Pascal, 
+					name: _complexTypeData.Name ?? _dbType,
+					namingPolicy: NamingPolicy.Pascal,
 					allowBuiltInTypes: false);
 			}
 
@@ -62,11 +62,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			const string valueVariableName = "value";
 
 			IRenderableTemplate getDataTableTemplate = Snippet.Query.Methods.Common.GetDataTable;
-			IRenderableTemplate addColumnTemplate = Snippet.Query.Methods.Common.Snippets.AddDataTableColumn;
+			IRenderableTemplate addColumnTemplate = Snippet.Query.Methods.Common.Snippets.GetDataTable.AddDataTableColumn;
 
 			IRenderableTemplate addRowTemplate = canSimplifyComplexType
-				? Snippet.Query.Methods.Common.Snippets.AddDataTableRowValue
-				: Snippet.Query.Methods.Common.Snippets.AddDataTableRowProperty;
+				? Snippet.Query.Methods.Common.Snippets.GetDataTable.AddDataTableRowValue
+				: Snippet.Query.Methods.Common.Snippets.GetDataTable.AddDataTableRowProperty;
 
 			var addColumnModels = new List<object>();
 			var addRowModels = new List<object>();
@@ -89,12 +89,34 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 				};
 				addColumnModels.Add(addColumnModel);
 
+				IRenderable nullValueHandler;
+
+				if (fieldDetails.AllowDbNull)
+				{
+					nullValueHandler = Snippet.Query.Methods.Common.Snippets.GetDataTable.AddDataTableRowDbNull;
+				}
+				else if (columnClrType.IsValueType)
+				{
+					nullValueHandler = Renderable.Empty;
+				}
+				else
+				{
+					IRenderableTemplate nullValueHandlerTemplate = Snippet.Query.Methods.Common.Snippets.GetDataTable.AddDataTableRowNullArgumentException;
+					var nullValueHandlerModel = new
+					{
+						DbTypeName = CSharpCodeHelper.EscapeString(dbTypeDisplayedName),
+						DbColumnName = CSharpCodeHelper.EscapeString(columnName)
+					};
+					nullValueHandler = Renderable.Create(nullValueHandlerTemplate, nullValueHandlerModel);
+				}
+
 				var addRowModel = new
 				{
 					RowVariableName = rowVariableName,
 					ColumnName = columnName,
 					ValueVariableName = valueVariableName,
-					ValuePropertyName = valuePropertyName
+					ValuePropertyName = valuePropertyName,
+					NullValueHandler = nullValueHandler
 				};
 				addRowModels.Add(addRowModel);
 			}
@@ -102,7 +124,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 			var getDataTableModel = new
 			{
 				DbTypeName = CSharpCodeHelper.GetValidTypeName(
-					name: dbTypeDisplayedName, 
+					name: dbTypeDisplayedName,
 					namingPolicy: NamingPolicy.Pascal,
 					allowBuiltInTypes: false),
 				ClrTypeName = clrTypeName,

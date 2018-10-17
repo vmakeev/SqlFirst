@@ -17,6 +17,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<None Remove="Fixtures\Abilities\AddQueryCustomParameter\AddQueryCustomParameterAbility_Success.txt" />
 		<None Remove="Fixtures\Abilities\AddSqlConnectionParameterAbilityMethod_AddParameter.txt" />
 		<None Remove="Fixtures\Abilities\Common\GetQueryTextFromStringAbility_Method_GetQueryText.txt" />
 		<None Remove="Fixtures\Abilities\Common\MapDataRecordToItemAbility_Method_GetItemFromRecord.txt" />
@@ -28,6 +29,13 @@
 		<None Remove="Fixtures\Abilities\Delete\DeleteWithResultAsyncAbility_Method_DeleteAsync.txt" />
 		<None Remove="Fixtures\Abilities\Delete\DeleteWithScalarResultAbility_Method_Delete.txt" />
 		<None Remove="Fixtures\Abilities\Delete\DeleteWithScalarResultAsyncAbility_Method_DeleteAsync.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_NonNullable_SingleIntColumn_NonNullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleIntColumn_NonNullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleIntColumn_Nullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleStringColumn_NonNullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleStringColumn_Nullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_TwoColumns_BothNonNullable_Test.txt" />
+		<None Remove="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_TwoColumns_BothNullable_Test.txt" />
 		<None Remove="Fixtures\Abilities\GetQueryTextFromResourceCacheableAbilityMethod_CalculateChecksum.txt" />
 		<None Remove="Fixtures\Abilities\GetQueryTextFromResourceCacheableAbilityMethod_GetQueryText.txt" />
 		<None Remove="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText.txt" />
@@ -56,6 +64,30 @@
 		<None Remove="Fixtures\Abilities\Select\SelectScalarAsyncAbility_Method_GetFirstAsync.txt" />
 		<None Remove="Fixtures\Abilities\Select\SelectScalarsAbility_Method_Get.txt" />
 		<None Remove="Fixtures\Abilities\Select\SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Custom_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Empty_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Mixed_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Simple_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Custom_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Empty_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Mixed_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Simple_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Custom_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Empty_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Mixed_Method_Exec.txt" />
+		<None Remove="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Simple_Method_Exec.txt" />
 		<None Remove="Fixtures\Abilities\Update\UpdateAbility_Method_Update.txt" />
 		<None Remove="Fixtures\Abilities\Update\UpdateAsyncAbility_Method_UpdateAsync.txt" />
 		<None Remove="Fixtures\Abilities\Update\UpdateWithResultAbility_Method_Update.txt" />
@@ -65,6 +97,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
+		<EmbeddedResource Include="Fixtures\Abilities\AddQueryCustomParameter\AddQueryCustomParameterAbility_Success.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Common\MapDataRecordToScalarAbility_Method_GetScalarFromRecord.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Common\MapValueToScalarAbility_Method_GetScalarFromValue.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Common\MapDataRecordToItemAbility_Method_GetItemFromRecord.txt" />
@@ -78,6 +111,13 @@
 		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteWithResultAbility_Method_Delete.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteAsyncAbility_Method_DeleteAsync.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Delete\DeleteAbility_Method_Delete.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleStringColumn_NonNullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_TwoColumns_BothNullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_TwoColumns_BothNonNullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleStringColumn_Nullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleIntColumn_Nullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_Nullable_SingleIntColumn_NonNullable_Test.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\GetDataTable\GetDataTableAbility_IsTableType_NonNullable_SingleIntColumn_NonNullable_Test.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Insert\GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText.txt" />
@@ -104,6 +144,30 @@
 		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectFirstItemAsyncAbility_Method_GetFirstAsync.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Select\SelectFirstItemAbility_Method_GetFirst.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Custom_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Empty_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Mixed_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResultAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithResult_Parameters_Simple_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Custom_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Empty_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Mixed_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResultAsync_Parameters_Simple_Method_ExecAsync.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Custom_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Empty_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Mixed_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedureWithScalarResult_Parameters_Simple_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Simple_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Custom_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Mixed_Method_Exec.txt" />
+		<EmbeddedResource Include="Fixtures\Abilities\StoredProcedure\StoredProcedure_Parameters_Empty_Method_Exec.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithScalarResultAsyncAbility_Method_UpdateAsync.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithScalarResultAbility_Method_Update.txt" />
 		<EmbeddedResource Include="Fixtures\Abilities\Update\UpdateWithResultAsyncAbility_Method_UpdateAsync.txt" />

@@ -86,6 +86,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure.SmartTable
 			specificUsings = specificUsings.Distinct().ToArray();
 			return results;
 		}
+
 		/// <inheritdoc />
 		protected override IEnumerable<IRenderable> GetIncomingParameters(ICodeGenerationContext context, IEnumerable<IQueryParamInfo> targetParameters)
 		{

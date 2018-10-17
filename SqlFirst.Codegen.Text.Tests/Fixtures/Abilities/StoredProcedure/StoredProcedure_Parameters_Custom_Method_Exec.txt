@@ -1,0 +1,16 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <returns>Количество измененных строк</returns>
+public virtual int Exec(IDbConnection connection, DataTable firstParam)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddCustomParameter(cmd, "sometabletype", "@FirstParam", firstParam);
+
+		return cmd.ExecuteNonQuery();
+	}
+}

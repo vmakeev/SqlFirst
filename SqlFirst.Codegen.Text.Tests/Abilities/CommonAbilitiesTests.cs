@@ -59,7 +59,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Common.AddSqlConnectionParameterAbility_Method_AddParameter);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.AddSqlConnectionParameterAbility_Method_AddParameter);
 		}
 
 		[Fact]
@@ -116,8 +116,8 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(2);
-			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromResourceCacheableAbility_Method_CalculateChecksum);
-			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromResourceCacheableAbility_Method_GetQueryText);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.GetQueryTextFromResourceCacheableAbility_Method_CalculateChecksum);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.GetQueryTextFromResourceCacheableAbility_Method_GetQueryText);
 		}
 
 		[Fact]
@@ -159,7 +159,36 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Common.GetQueryTextFromStringAbility_Method_GetQueryText);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.GetQueryTextFromStringAbility_Method_GetQueryText);
+		}
+
+		[Theory]
+		[InlineData((string)null)]
+		[InlineData("")]
+		[InlineData(" ")]
+		public void GetQueryTextFromStringAbility_EmptyString_Test(string queryText)
+		{
+			var context = A.Fake<ICodeGenerationContext>(p => p.Strict());
+
+			var options = A.Fake<IReadOnlyDictionary<string, object>>(p => p.Strict());
+
+			object _;
+			A.CallTo(() => options.TryGetValue("QueryName", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { "TestQueryName" });
+
+			A.CallTo(() => options.TryGetValue("QueryText", out _))
+			.Returns(true)
+			.AssignsOutAndRefParametersLazily((string a, object b) => new object[] { queryText });
+
+			A.CallTo(() => context.Options).Returns(options);
+			A.CallTo(() => context.IncomingParameters).Returns(Enumerable.Empty<IQueryParamInfo>());
+
+			var data = A.Dummy<IQueryObjectData>();
+
+			var ability = new GetQueryTextFromStringAbility();
+			var exception = Assert.Throws<CodeGenerationException>(() => ability.Apply(context, data));
+			exception.Message.ShouldBe("Can not find query text at current code generation context.");
 		}
 
 		[Fact]
@@ -213,7 +242,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Common.MapDataRecordToItemAbility_Method_GetItemFromRecord);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.MapDataRecordToItemAbility_Method_GetItemFromRecord);
 		}
 
 		[Fact]
@@ -244,7 +273,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Common.MapDataRecordToScalarAbility_Method_GetScalarFromRecord);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.MapDataRecordToScalarAbility_Method_GetScalarFromRecord);
 		}
 
 		[Fact]
@@ -273,7 +302,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Common.MapValueToScalarAbility_Method_GetScalarFromValue);
+			result.Methods.ShouldContain(AbilityArtifacts.Common.MapValueToScalarAbility_Method_GetScalarFromValue);
 		}
 	}
 }

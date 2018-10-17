@@ -1,0 +1,21 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="thirdParam">thirdParam</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Количество измененных строк</returns>
+public virtual async Task<int> ExecAsync(DbConnection connection, Guid? firstParam, int? secondParam, DataTable thirdParam, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+		AddCustomParameter(cmd, "sometabletype", "@thirdParam", thirdParam);
+
+		return await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+}

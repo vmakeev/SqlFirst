@@ -1,0 +1,23 @@
+﻿/// <summary>
+/// Создает DataTable для типа SomeCustomTableType
+/// </summary>
+/// <param name="values">Набор данных, который будет помещен в DataTable</param>
+protected virtual DataTable GetSomeCustomTableTypeDataTable(IEnumerable<string> values)
+{
+	var dataTable = new DataTable();
+	dataTable.Columns.Add("some_nvarchar_column", typeof(string));
+
+	if (values == null)
+	{
+		return null;
+	}
+
+	foreach (string value in values)
+	{
+		DataRow dataRow = dataTable.NewRow();
+		dataRow["some_nvarchar_column"] = value ?? throw new ArgumentException("Type [SomeCustomTableType] does not allow null values at column [some_nvarchar_column]");
+		dataTable.Rows.Add(dataRow);
+	}
+
+	return dataTable;
+}

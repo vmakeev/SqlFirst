@@ -1,9 +1,9 @@
 ﻿/// <summary>
-/// Выполняет вызов хранимой процедуры
+/// Выполняет вызов хранимой процедуры и возвращает дополнительные данные
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
 $XmlParams`\r\n`|\r\n$~
-/// <returns>$ResultItemDescription$</returns>
+/// <returns>Результаты выполнения запроса</returns>
 public virtual IEnumerable<$ResultItemType$> Exec(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using(IDbCommand cmd = connection.CreateCommand())
@@ -11,7 +11,7 @@ public virtual IEnumerable<$ResultItemType$> Exec(IDbConnection connection$`, `M
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 $2|AddCustomParameters`\r\n`|\r\n$~
-		
+
 		var result = new List<$ResultItemType$>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{

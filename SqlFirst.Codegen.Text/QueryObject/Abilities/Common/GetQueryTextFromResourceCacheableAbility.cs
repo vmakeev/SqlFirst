@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Text;
 using SqlFirst.Codegen.Helpers;
@@ -114,7 +113,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Common
 				Modificators = new[] { Modifiers.Private },
 				Type = hashCodeFieldType,
 				Name = checksumFieldName,
-				Value = queryTextHash.ToString(CultureInfo.InvariantCulture)
+				Value = CSharpCodeHelper.GetValidValue(typeof(int), queryTextHash)
 			};
 
 			IRenderable hashCodeField = Renderable.Create(template, model);

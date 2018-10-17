@@ -42,7 +42,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextPrecompiledAbility_Method_GetQueryText);
 		}
 
 		[SuppressMessage("ReSharper", "StringLiteralTypo")]

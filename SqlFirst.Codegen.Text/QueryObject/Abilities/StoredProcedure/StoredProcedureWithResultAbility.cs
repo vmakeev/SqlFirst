@@ -16,7 +16,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.StoredProcedure
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
 		{
 			IQueryParamInfo[] allParameters = context.IncomingParameters.ToArray();
-
+			
 			string resultItemType = context.GetQueryResultItemTypeName();
 
 			IEnumerable<IRenderable> xmlParams = GetXmlParameters(context, allParameters);

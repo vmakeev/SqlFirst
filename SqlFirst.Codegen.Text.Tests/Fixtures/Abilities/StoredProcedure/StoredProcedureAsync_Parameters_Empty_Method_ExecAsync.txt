@@ -1,0 +1,15 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Количество измененных строк</returns>
+public virtual async Task<int> ExecAsync(DbConnection connection, CancellationToken cancellationToken)
+{
+	using(DbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+
+		return await cmd.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
+	}
+}

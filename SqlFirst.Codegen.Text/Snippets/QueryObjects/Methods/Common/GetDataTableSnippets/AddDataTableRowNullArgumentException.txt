@@ -1,0 +1,1 @@
+﻿ ?? throw new ArgumentException("Type [$DbTypeName$] does not allow null values at column [$DbColumnName$]")

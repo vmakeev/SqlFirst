@@ -45,7 +45,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteAbility_Method_Delete);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -81,7 +81,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteAsyncAbility_Method_DeleteAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteAsyncAbility_Method_DeleteAsync);
 		}
 
 		[Fact]
@@ -116,7 +116,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithResultAbility_Method_Delete);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteWithResultAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -154,7 +154,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithResultAsyncAbility_Method_DeleteAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteWithResultAsyncAbility_Method_DeleteAsync);
 		}
 
 		[Fact]
@@ -189,7 +189,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithScalarResultAbility_Method_Delete);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteWithScalarResultAbility_Method_Delete);
 		}
 
 		[Fact]
@@ -227,7 +227,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Delete.DeleteWithScalarResultAsyncAbility_Method_DeleteAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Delete.DeleteWithScalarResultAsyncAbility_Method_DeleteAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

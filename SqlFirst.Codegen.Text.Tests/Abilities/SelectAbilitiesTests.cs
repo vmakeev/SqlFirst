@@ -47,7 +47,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectFirstItemAbility_Method_GetFirst);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectFirstItemAbility_Method_GetFirst);
 		}
 
 		[Fact]
@@ -84,7 +84,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectFirstItemAsyncAbility_Method_GetFirstAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectFirstItemAsyncAbility_Method_GetFirstAsync);
 		}
 
 		[Fact]
@@ -123,7 +123,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectItemsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
 		}
 
 		[Fact]
@@ -158,7 +158,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectItemsLazyAbility_Method_Get);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectItemsLazyAbility_Method_Get);
 		}
 
 		[Fact]
@@ -192,7 +192,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarAbility_Method_GetFirst);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectScalarAbility_Method_GetFirst);
 		}
 
 		[Fact]
@@ -229,7 +229,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarAsyncAbility_Method_GetFirstAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectScalarAsyncAbility_Method_GetFirstAsync);
 		}
 
 		[Fact]
@@ -264,7 +264,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarsAbility_Method_Get);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectScalarsAbility_Method_Get);
 		}
 
 		[Fact]
@@ -303,7 +303,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Select.SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Select.SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Method_GetAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

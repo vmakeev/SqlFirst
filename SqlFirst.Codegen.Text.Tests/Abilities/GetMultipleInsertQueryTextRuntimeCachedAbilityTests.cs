@@ -44,7 +44,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Nested.ShouldNotBeNull();
 			result.Nested.Count().ShouldBe(1);
-			result.Nested.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Type_NumberedParameterInfo);
+			result.Nested.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Type_NumberedParameterInfo);
 			result.Fields.ShouldNotBeNull();
 			result.Fields.Count().ShouldBe(5);
 			result.Fields.ShouldContain(@"protected static readonly Regex _numberedValueRegex = new Regex(NumberedValueRegexPattern, NumberedValueRegexOptions);");
@@ -68,10 +68,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(4);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText_MultipleRows);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText_MultipleRows);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryTemplates);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetNumberedParameters);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.GetMultipleInsertQueryTextRuntimeCachedAbility_Method_GetQueryText);
 		}
 
 		private static ICodeGenerationContext GetDefaultCodeGenerationContext()

@@ -1,0 +1,14 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <returns>Количество измененных строк</returns>
+public virtual int Exec(IDbConnection connection)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+
+		return cmd.ExecuteNonQuery();
+	}
+}

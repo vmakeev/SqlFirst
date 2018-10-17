@@ -1,4 +1,5 @@
-﻿using SqlFirst.Codegen.Text.Templating;
+﻿using SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.GetDataTableSnippets;
+using SqlFirst.Codegen.Text.Templating;
 
 namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 {
@@ -26,13 +27,9 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common.Snippets
 
 		public IRenderableTemplate XmlParam => GetRenderableTemplate();
 
-		public IRenderableTemplate AddDataTableColumn => GetRenderableTemplate();
-
-		public IRenderableTemplate AddDataTableRowProperty => GetRenderableTemplate();
-
-		public IRenderableTemplate AddDataTableRowValue => GetRenderableTemplate();
-
 		public IRenderableTemplate CallGetDataTableInline => GetRenderableTemplate();
+
+		public GetDataTableSnippet GetDataTable { get; } = new GetDataTableSnippet();
 
 		public CommonInnerSnippet()
 			: base("QueryObjects.Methods.Common.Snippets")

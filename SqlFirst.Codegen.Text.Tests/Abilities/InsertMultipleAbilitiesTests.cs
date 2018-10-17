@@ -47,7 +47,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesAbility_Method_Add);
 		}
 
 		[Fact]
@@ -84,7 +84,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -119,7 +119,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithResultAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesWithResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -157,7 +157,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithResultAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesWithResultAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -192,7 +192,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithScalarResultAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesWithScalarResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -230,7 +230,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertMultipleValuesWithScalarResultAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertMultipleValuesWithScalarResultAsyncAbility_Method_AddAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

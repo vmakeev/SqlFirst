@@ -45,7 +45,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainAbility_Method_Add);
 		}
 
 		[Fact]
@@ -81,7 +81,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -115,7 +115,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainWithResultAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainWithResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -152,7 +152,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainWithResultAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainWithResultAsyncAbility_Method_AddAsync);
 		}
 
 		[Fact]
@@ -186,7 +186,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainWithScalarResultAbility_Method_Add);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainWithScalarResultAbility_Method_Add);
 		}
 
 		[Fact]
@@ -223,7 +223,7 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(AbilityFixtures.Insert.InsertSingleValuePlainWithScalarResultAsyncAbility_Method_AddAsync);
+			result.Methods.ShouldContain(AbilityArtifacts.Insert.InsertSingleValuePlainWithScalarResultAsyncAbility_Method_AddAsync);
 		}
 
 		private static IProviderSpecificType GetProviderSpecificType(string value)

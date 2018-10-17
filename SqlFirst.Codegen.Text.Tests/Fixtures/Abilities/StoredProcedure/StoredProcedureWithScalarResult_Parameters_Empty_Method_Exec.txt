@@ -1,0 +1,24 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры и возвращает дополнительные данные
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <returns>Результаты выполнения запроса</returns>
+public virtual IEnumerable<DateTime> Exec(IDbConnection connection)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+
+		var result = new List<DateTime>();
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			while (reader.Read())
+			{
+				DateTime resultItem = GetScalarFromRecord<DateTime>(reader);
+				result.Add(resultItem);
+			}
+		}
+
+		return result;
+	}
+}

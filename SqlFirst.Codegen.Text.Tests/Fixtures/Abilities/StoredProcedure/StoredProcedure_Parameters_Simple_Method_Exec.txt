@@ -1,0 +1,18 @@
+﻿/// <summary>
+/// Выполняет вызов хранимой процедуры
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <returns>Количество измененных строк</returns>
+public virtual int Exec(IDbConnection connection, Guid? firstParam, int? secondParam)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		return cmd.ExecuteNonQuery();
+	}
+}
