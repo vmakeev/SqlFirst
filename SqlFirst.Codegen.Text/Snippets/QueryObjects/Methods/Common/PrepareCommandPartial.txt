@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Заготовка для определенной пользователем обработки команды перед исполнением
+/// </summary>
+/// <param name="command">Команда</param>
+partial void PrepareCommand(IDbCommand command);

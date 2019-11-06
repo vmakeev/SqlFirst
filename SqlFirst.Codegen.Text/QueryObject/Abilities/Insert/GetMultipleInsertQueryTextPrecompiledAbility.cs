@@ -41,7 +41,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		}
 
 		/// <inheritdoc />
-		public IEnumerable<string> GetDependencies() => Enumerable.Empty<string>();
+		public IEnumerable<string> GetDependencies()
+		{
+			yield return KnownAbilityName.PrepareCommand;
+		}
 
 		/// <inheritdoc />
 		public string Name { get; } = KnownAbilityName.GetQueryTextMultipleInsert;

@@ -32,9 +32,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -68,6 +69,7 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, ICollection<Q
 			index++;
 		}
 
+		PrepareCommand(cmd);
 		return cmd.ExecuteNonQuery();
 	}
 }");
@@ -91,9 +93,10 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, ICollection<Q
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -131,6 +134,7 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			index++;
 		}
 
+		PrepareCommand(cmd);
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
 }");
@@ -154,10 +158,11 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -168,7 +173,7 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
+			result.Methods.Single().ShouldBe(@"/// <summary>
 /// Выполняет добавление строк в таблицу и возвращает дополнительные данные
 /// </summary>
 /// <param name=""connection"">Подключение к БД</param>
@@ -190,6 +195,8 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 
 			index++;
 		}
+
+		PrepareCommand(cmd);
 
 		var result = new List<QueryItemTestName>();
 		using (IDataReader reader = cmd.ExecuteReader())
@@ -224,10 +231,11 @@ public virtual IEnumerable<QueryItemTestName> Add(IDbConnection connection, Guid
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -265,6 +273,8 @@ public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection 
 			index++;
 		}
 
+		PrepareCommand(cmd);
+
 		var result = new List<QueryItemTestName>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{
@@ -298,10 +308,11 @@ public virtual async Task<IEnumerable<QueryItemTestName>> AddAsync(DbConnection 
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -334,7 +345,9 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 
 			index++;
 		}
-		
+
+		PrepareCommand(cmd);
+
 		var result = new List<DateTime>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
@@ -368,10 +381,11 @@ public virtual IEnumerable<DateTime> Add(IDbConnection connection, Guid? firstPa
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryTextMultipleInsert);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -408,7 +422,9 @@ public virtual async Task<IEnumerable<DateTime>> AddAsync(DbConnection connectio
 
 			index++;
 		}
-		
+
+		PrepareCommand(cmd);
+
 		var result = new List<DateTime>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{

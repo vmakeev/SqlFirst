@@ -21,6 +21,7 @@ $3|AddParametersNumbered|\r\n$
 			$IndexVariableName$++;
 		}
 
+		PrepareCommand(cmd);
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
 }

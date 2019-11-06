@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Linq;
 using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 
-namespace SqlFIrst.VisualStudio.Integration.Helpers
+namespace SqlFirst.VisualStudio.Integration.Helpers
 {
 	public class SqlFirstErrorsWindow
 	{

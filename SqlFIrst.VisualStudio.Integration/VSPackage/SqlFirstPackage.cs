@@ -3,10 +3,10 @@ using System.Runtime.InteropServices;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell;
 using SqlFirst.VisualStudio.Integration.Commands;
-using SqlFIrst.VisualStudio.Integration.Helpers;
-using SqlFIrst.VisualStudio.Integration.Logging;
+using SqlFirst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Logging;
 
-namespace SqlFIrst.VisualStudio.Integration.VSPackage
+namespace SqlFirst.VisualStudio.Integration.VSPackage
 {
 	/// <summary>
 	/// This is the class that implements the package exposed by this assembly.
@@ -58,8 +58,8 @@ namespace SqlFIrst.VisualStudio.Integration.VSPackage
 		{
 			base.Initialize();
 			GenerateQueryObjectsFromItems.Initialize(this);
-		    GenerateQueryObjectFromFolder.Initialize(this);
-		    BeautifySqlFile.Initialize(this);
+			GenerateQueryObjectFromFolder.Initialize(this);
+			BeautifySqlFile.Initialize(this);
 			AddSqlFirstOptions.Initialize(this);
 		}
 

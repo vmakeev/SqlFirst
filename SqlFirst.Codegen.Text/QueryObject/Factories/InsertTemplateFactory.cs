@@ -44,6 +44,15 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				BuildWithRowsCountOutput(result, internalOptions);
 			}
 
+			if (internalOptions.User.GenerateCommandTimeoutPreprocessor)
+			{
+				result.AddAbility<PrepareCommandWithTimeoutAbility>();
+			}
+			else
+			{
+				result.AddAbility<PrepareCommandPartialAbility>();
+			}
+
 			return result;
 		}
 
@@ -127,7 +136,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseMultipleInsert = options.GenerateAddMultipleMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
-					UseSingleInsert = options.GenerateAddSingleMethods ?? true
+					UseSingleInsert = options.GenerateAddSingleMethods ?? true,
+					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true
 				};
 			}
 
@@ -172,6 +182,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			public bool UseMultipleInsert { get; set; }
 
+			public bool GenerateCommandTimeoutPreprocessor { get; set; }
+
 			/// <inheritdoc />
 			public override string ToString()
 			{
@@ -182,6 +194,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					$"GenerateSyncMethods: {GenerateSyncMethods}",
 					$"UseSingleInsert: {UseSingleInsert}",
 					$"UseMultipleInsert: {UseMultipleInsert}",
+					$"GenerateCommandTimeoutPreprocessor: {GenerateCommandTimeoutPreprocessor}"
 				};
 
 				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);

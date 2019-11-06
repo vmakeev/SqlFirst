@@ -11,6 +11,8 @@ public virtual IEnumerable<$ResultItemType$> Update(IDbConnection connection$`, 
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
+
 		var result = new List<$ResultItemType$>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{

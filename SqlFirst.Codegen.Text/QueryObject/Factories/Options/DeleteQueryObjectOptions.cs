@@ -23,6 +23,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 		/// </summary>
 		public bool? UseQueryTextResourceFile { get; set; }
 
+		/// <summary>
+		/// Генерировать ли препроцессор команды, поддерживающий указание таймаута
+		/// </summary>
+		public bool? GenerateCommandTimeoutPreprocessor { get; set; }
+		
 		public DeleteQueryObjectOptions(IEnumerable<ISqlFirstOption> options)
 		{
 			if (options == null)

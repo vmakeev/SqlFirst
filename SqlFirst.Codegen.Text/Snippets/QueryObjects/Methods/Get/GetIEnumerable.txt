@@ -11,6 +11,8 @@ public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$`, `MethodPa
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
+
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
 			while (reader.Read())

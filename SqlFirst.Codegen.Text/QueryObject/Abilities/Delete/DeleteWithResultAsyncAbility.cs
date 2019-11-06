@@ -29,6 +29,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Delete
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetItemFromRecord;
+			yield return KnownAbilityName.PrepareCommand;
 		}
 
 		protected override IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Delete.DeleteWithResultAsync;

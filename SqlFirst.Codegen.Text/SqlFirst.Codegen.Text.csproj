@@ -21,6 +21,7 @@
     <None Remove="Snippets\BackingField.txt" />
     <None Remove="Snippets\BackingFieldProperty.txt" />
     <None Remove="Snippets\BackingFieldPropertyVirtual.txt" />
+    <None Remove="Snippets\Commentaries\XmlDocumentationCommentary.txt" />
     <None Remove="Snippets\Fields\BackingFieldWithValue.txt" />
     <None Remove="Snippets\Fields\Const.txt" />
     <None Remove="Snippets\Fields\Field.txt" />
@@ -64,6 +65,8 @@
     <None Remove="Snippets\QueryObjects\Methods\Common\GetQueryText.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\PrepareCommandPartial.txt" />
+    <None Remove="Snippets\QueryObjects\Methods\Common\PrepareCommandWithTimeout.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\CalculateChecksum.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetInsertedValuesSection.txt" />
     <None Remove="Snippets\QueryObjects\Methods\Common\Snippets\GetNumberedParameters.txt" />
@@ -107,6 +110,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Snippets\Commentaries\XmlDocumentationCommentary.txt" />
     <EmbeddedResource Include="Snippets\Enumerables\AsyncEnumerator.txt" />
     <EmbeddedResource Include="Snippets\Enumerables\DbAsyncEnumerator.txt" />
     <EmbeddedResource Include="Snippets\Enumerables\Enumerable.txt" />
@@ -136,6 +140,8 @@
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingleAsync.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Add\AddSingle.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryRuntimeGeneratedMultipleInsert.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\PrepareCommandWithTimeout.txt" />
+    <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\PrepareCommandPartial.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetScalarFromValue.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetScalarFromRecord.txt" />
     <EmbeddedResource Include="Snippets\QueryObjects\Methods\Common\GetQueryFromResourceCacheable.txt" />

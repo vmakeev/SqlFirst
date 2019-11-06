@@ -29,6 +29,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Update
 		{
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetQueryText;
+			yield return KnownAbilityName.PrepareCommand;
 		}
 
 		protected override IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Update.UpdateAsync;

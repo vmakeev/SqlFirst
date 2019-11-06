@@ -42,6 +42,15 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				BuildWithRowsCountOutput(result, internalOptions);
 			}
 
+			if (internalOptions.User.GenerateCommandTimeoutPreprocessor)
+			{
+				result.AddAbility<PrepareCommandWithTimeoutAbility>();
+			}
+			else
+			{
+				result.AddAbility<PrepareCommandPartialAbility>();
+			}
+
 			return result;
 		}
 
@@ -116,6 +125,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
+					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true
 				};
 			}
 
@@ -156,6 +166,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			public bool GenerateSyncMethods { get; set; }
 
+			public bool GenerateCommandTimeoutPreprocessor { get; set; }
+
 			/// <inheritdoc />
 			public override string ToString()
 			{
@@ -163,7 +175,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				{
 					$"UseResourceFile: {UseResourceFile}",
 					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
-					$"GenerateSyncMethods: {GenerateSyncMethods}"
+					$"GenerateSyncMethods: {GenerateSyncMethods}",
+					$"GenerateCommandTimeoutPreprocessor: {GenerateCommandTimeoutPreprocessor}"
 				};
 
 				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);

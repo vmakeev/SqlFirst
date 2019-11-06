@@ -12,6 +12,8 @@ public virtual async Task<IEnumerable<$ResultItemType$>> UpdateAsync(DbConnectio
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 		
+		PrepareCommand(cmd);
+
 		var result = new List<$ResultItemType$>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{

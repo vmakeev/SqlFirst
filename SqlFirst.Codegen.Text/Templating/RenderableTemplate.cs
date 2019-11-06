@@ -74,7 +74,7 @@ namespace SqlFirst.Codegen.Text.Templating
 					}
 				}
 
-				sb.Replace(snippetField.Placeholder, value);
+				sb.Replace(snippetField.Placeholder, value ?? string.Empty);
 			}
 
 			return sb.ToString();
@@ -189,7 +189,7 @@ namespace SqlFirst.Codegen.Text.Templating
 			/// </exception>
 			public int GetHashCode(SnippetField obj)
 			{
-				return obj?.Placeholder.GetHashCode() ?? 0;
+				return obj.Placeholder.GetHashCode();
 			}
 		}
 

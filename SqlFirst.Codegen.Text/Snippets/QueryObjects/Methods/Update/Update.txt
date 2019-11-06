@@ -11,6 +11,7 @@ public virtual int Update(IDbConnection connection$`, `MethodParameters|, $)
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
 		return cmd.ExecuteNonQuery();
 	}
 }

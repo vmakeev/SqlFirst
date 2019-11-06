@@ -3,9 +3,9 @@ using System.Text;
 using Common.Logging;
 using Common.Logging.Simple;
 using EnvDTE;
-using SqlFIrst.VisualStudio.Integration.Helpers;
+using SqlFirst.VisualStudio.Integration.Helpers;
 
-namespace SqlFIrst.VisualStudio.Integration.Logging
+namespace SqlFirst.VisualStudio.Integration.Logging
 {
 	public sealed class VsOutputLogger : AbstractSimpleLogger
 	{

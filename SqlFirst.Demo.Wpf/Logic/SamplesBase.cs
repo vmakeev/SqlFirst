@@ -21,6 +21,9 @@ namespace SqlFirst.Demo.Wpf.Logic
 				case QueryType.Delete:
 					return GetDeleteQuery();
 
+				case QueryType.INVALID:
+				case QueryType.Unknown:
+				case QueryType.Merge:
 				default:
 					throw new ArgumentOutOfRangeException(nameof(queryType), queryType, null);
 			}

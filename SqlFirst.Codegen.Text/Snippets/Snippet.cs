@@ -1,4 +1,5 @@
-﻿using SqlFirst.Codegen.Text.Snippets.Enumerables;
+﻿using SqlFirst.Codegen.Text.Snippets.Commentaries;
+using SqlFirst.Codegen.Text.Snippets.Enumerables;
 using SqlFirst.Codegen.Text.Snippets.Fields;
 using SqlFirst.Codegen.Text.Snippets.Files;
 using SqlFirst.Codegen.Text.Snippets.Items;
@@ -20,5 +21,7 @@ namespace SqlFirst.Codegen.Text.Snippets
 		public static PropertySnippet Property { get; } = new PropertySnippet();
 
 		public static EnumerableSnippet Enumerable { get; } = new EnumerableSnippet();
+
+		public static CommentarySnippet Commentary { get; } = new CommentarySnippet();
 	}
 }

@@ -20,6 +20,8 @@ $3|AddParametersNumbered|\r\n$
 			$IndexVariableName$++;
 		}
 
+		PrepareCommand(cmd);
+
 		var result = new List<$ResultItemType$>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{

@@ -95,7 +95,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			Match match = _sizeRegex.Match(type);
 
 			return match.Success
-				? match.Groups["size"]?.Value?.Trim()
+				? match.Groups["size"]?.Value.Trim()
 				: null;
 		}
 	}

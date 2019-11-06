@@ -23,6 +23,10 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
 
 		public IRenderable GetQueryRuntimeGeneratedMultipleInsert => GetRenderable();
 
+		public IRenderable PrepareCommandPartial => GetRenderable();
+
+		public IRenderable PrepareCommandWithTimeout => GetRenderable();
+
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public CommonSnippet()
 			: base("QueryObjects.Methods.Common")

@@ -37,6 +37,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 			/// Настройки способа получения текста запроса
 			/// </summary>
 			QueryText,
+
+			/// <summary>
+			/// Настройки команды
+			/// </summary>
+			Command,
 		}
 
 		/// <summary>
@@ -67,6 +72,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 			public const string Resource = "resource";
 
 			public const string String = "string";
+
+			public const string Command = "command";
+
+			public const string Timeout = "command";
+
+			public const string Custom = "custom";
 		}
 
 		/// <summary>
@@ -120,7 +131,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 					});
 
 			machine.Configure(State.Use)
-					.Permit(Trigger.QueryText, State.QueryText);
+					.Permit(Trigger.QueryText, State.QueryText)
+					.Permit(Trigger.Command, State.Command);
+
+			machine.Configure(State.Command)
+					.PermitReentry(Trigger.Timeout, () => options.GenerateCommandTimeoutPreprocessor = true)
+					.PermitReentry(Trigger.Custom, () => options.GenerateCommandTimeoutPreprocessor = false);
 
 			machine.Configure(State.QueryText)
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
@@ -183,7 +199,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 					});
 
 			machine.Configure(State.Use)
-					.Permit(Trigger.QueryText, State.QueryText);
+					.Permit(Trigger.QueryText, State.QueryText)
+					.Permit(Trigger.Command, State.Command);
+
+			machine.Configure(State.Command)
+					.PermitReentry(Trigger.Timeout, () => options.GenerateCommandTimeoutPreprocessor = true)
+					.PermitReentry(Trigger.Custom, () => options.GenerateCommandTimeoutPreprocessor = false);
 
 			machine.Configure(State.QueryText)
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
@@ -230,7 +251,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 					});
 
 			machine.Configure(State.Use)
-					.Permit(Trigger.QueryText, State.QueryText);
+					.Permit(Trigger.QueryText, State.QueryText)
+					.Permit(Trigger.Command, State.Command);
+
+			machine.Configure(State.Command)
+					.PermitReentry(Trigger.Timeout, () => options.GenerateCommandTimeoutPreprocessor = true)
+					.PermitReentry(Trigger.Custom, () => options.GenerateCommandTimeoutPreprocessor = false);
 
 			machine.Configure(State.QueryText)
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)
@@ -277,7 +303,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 					});
 
 			machine.Configure(State.Use)
-					.Permit(Trigger.QueryText, State.QueryText);
+					.Permit(Trigger.QueryText, State.QueryText)
+					.Permit(Trigger.Command, State.Command);
+
+			machine.Configure(State.Command)
+					.PermitReentry(Trigger.Timeout, () => options.GenerateCommandTimeoutPreprocessor = true)
+					.PermitReentry(Trigger.Custom, () => options.GenerateCommandTimeoutPreprocessor = false);
 
 			machine.Configure(State.QueryText)
 					.PermitReentry(Trigger.Resource, () => options.UseQueryTextResourceFile = true)

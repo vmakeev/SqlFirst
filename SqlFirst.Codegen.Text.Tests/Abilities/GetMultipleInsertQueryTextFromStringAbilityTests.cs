@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using FakeItEasy;
 using Shouldly;
+using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Insert;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Core;
@@ -30,7 +31,8 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(0);
+			ability.GetDependencies().Count().ShouldBe(1);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);

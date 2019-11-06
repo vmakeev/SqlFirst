@@ -96,7 +96,7 @@ namespace SqlFirst.Providers.Postgres
 			Match match = _sizeRegex.Match(type);
 
 			return match.Success
-				? match.Groups["size"]?.Value?.Trim()
+				? match.Groups["size"]?.Value.Trim()
 				: null;
 		}
 	}
