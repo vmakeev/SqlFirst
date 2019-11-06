@@ -232,7 +232,7 @@ namespace SqlFirst.Codegen.Helpers
 				targetType == typeof(float) ||
 				targetType == typeof(float?))
 			{
-				return valueString.Replace(",", ".");
+				return valueString?.Replace(",", ".");
 			}
 
 			throw new CodeGenerationException($"Unable generate value of type [{targetType.FullName}].");

@@ -12,6 +12,7 @@ public virtual async Task<int> DeleteAsync(DbConnection connection$`, `MethodPar
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
 }

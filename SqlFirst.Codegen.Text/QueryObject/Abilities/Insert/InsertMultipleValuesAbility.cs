@@ -61,6 +61,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 		{
 			yield return KnownAbilityName.GetQueryTextMultipleInsert;
 			yield return KnownAbilityName.AddParameter;
+			yield return KnownAbilityName.PrepareCommand;
 		}
 
 		protected virtual IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Add.AddMultiple;

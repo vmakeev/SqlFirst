@@ -60,6 +60,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Update
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetScalarFromRecord;
+			yield return KnownAbilityName.PrepareCommand;
 		}
 
 		protected virtual IRenderableTemplate GetTemplate() => Snippet.Query.Methods.Update.UpdateWithScalarResult;

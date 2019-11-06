@@ -14,6 +14,8 @@ public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$`,
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
+
 		DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
 		return new DbAsyncEnumerator<$ItemType$>(cmd, reader, GetItemFromRecord, cancellationToken);
 	}

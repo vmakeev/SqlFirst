@@ -10,7 +10,9 @@ public virtual $ResultItemType$ Add(IDbConnection connection$`, `MethodParameter
 	{
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
-		
+
+		PrepareCommand(cmd);
+
 		object value = cmd.ExecuteScalar();
 		return GetScalarFromValue<$ResultItemType$>(value);
 	}

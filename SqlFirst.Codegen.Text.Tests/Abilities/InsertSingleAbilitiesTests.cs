@@ -32,9 +32,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -59,6 +60,7 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, int? secondPa
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
+		PrepareCommand(cmd);
 		return cmd.ExecuteNonQuery();
 	}
 }");
@@ -82,9 +84,10 @@ public virtual int Add(IDbConnection connection, Guid? firstParam, int? secondPa
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -113,6 +116,7 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
+		PrepareCommand(cmd);
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
 }");
@@ -136,10 +140,11 @@ public virtual async Task<int> AddAsync(DbConnection connection, Guid? firstPara
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -163,6 +168,8 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
+
+		PrepareCommand(cmd);
 
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
@@ -195,10 +202,11 @@ public virtual QueryItemTestName Add(IDbConnection connection, Guid? firstParam,
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -226,6 +234,8 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
+
+		PrepareCommand(cmd);
 
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{
@@ -258,10 +268,11 @@ public virtual async Task<QueryItemTestName> AddAsync(DbConnection connection, G
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -285,7 +296,9 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
+
+		PrepareCommand(cmd);
+
 		object value = cmd.ExecuteScalar();
 		return GetScalarFromValue<DateTime>(value);
 	}
@@ -310,10 +323,11 @@ public virtual DateTime Add(IDbConnection connection, Guid? firstParam, int? sec
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromValue);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -341,7 +355,9 @@ public virtual async Task<DateTime> AddAsync(DbConnection connection, Guid? firs
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
+
+		PrepareCommand(cmd);
+
 		object value = await cmd.ExecuteScalarAsync(cancellationToken);
 		return GetScalarFromValue<DateTime>(value);
 	}

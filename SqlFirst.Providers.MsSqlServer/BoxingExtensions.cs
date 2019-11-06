@@ -43,6 +43,7 @@ namespace SqlFirst.Providers.MsSqlServer
 			return type.IsGenericType && !type.IsGenericTypeDefinition && (typeof(Nullable<>) == type.GetGenericTypeDefinition());
 		}
 
+		[SuppressMessage("ReSharper", "PossibleNullReferenceException")]
 		private static Converter<object, T> GetConverter<T>()
 		{
 			Type type = typeof(T);

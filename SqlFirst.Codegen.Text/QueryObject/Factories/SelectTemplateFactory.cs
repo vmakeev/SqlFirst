@@ -44,6 +44,15 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				AddItemAbilities(result, internalOptions);
 			}
 
+			if (internalOptions.User.GenerateCommandTimeoutPreprocessor)
+			{
+				result.AddAbility<PrepareCommandWithTimeoutAbility>();
+			}
+			else
+			{
+				result.AddAbility<PrepareCommandPartialAbility>();
+			}
+
 			return result;
 		}
 
@@ -116,7 +125,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
 					UseGetAll = options.GenerateSelectAllMethods ?? true,
-					UseGetFirst = options.GenerateSelectFirstMethods ?? true
+					UseGetFirst = options.GenerateSelectFirstMethods ?? true,
+					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true
 				};
 			}
 
@@ -155,6 +165,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			public bool UseGetAll { get; set; }
 
+			public bool GenerateCommandTimeoutPreprocessor { get; set; }
+
 			/// <inheritdoc />
 			public override string ToString()
 			{
@@ -164,7 +176,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
 					$"GenerateSyncMethods: {GenerateSyncMethods}",
 					$"UseGetAll: {UseGetAll}",
-					$"UseGetFirst: {UseGetFirst}"
+					$"UseGetFirst: {UseGetFirst}",
+					$"GenerateCommandTimeoutPreprocessor: {GenerateCommandTimeoutPreprocessor}"
 				};
 
 				return "UserOptions:\r\n" + string.Join(Environment.NewLine, parameters).Indent("\t", 1);

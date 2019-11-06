@@ -31,6 +31,7 @@ namespace SqlFirst.Codegen.Text.Common.PropertyGenerator
 
 					return new BackingFieldPropertiesGenerator(propertyGenerationOptions);
 
+				case PropertyType.INVALID:
 				default:
 					throw new CodeGenerationException($"Unexpected options.propertyType [{options.PropertyType:G}]");
 			}

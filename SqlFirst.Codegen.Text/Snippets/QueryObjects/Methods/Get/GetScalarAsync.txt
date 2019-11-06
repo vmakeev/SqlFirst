@@ -12,6 +12,8 @@ public virtual async Task<$ItemType$> GetFirstAsync(DbConnection connection$`, `
 		cmd.CommandText = GetQueryText();
 $2|AddParameters`\r\n`|\r\n$~
 
+		PrepareCommand(cmd);
+
 		object value = await cmd.ExecuteScalarAsync(cancellationToken);
 		return GetScalarFromValue<$ItemType$>(value);
 	}

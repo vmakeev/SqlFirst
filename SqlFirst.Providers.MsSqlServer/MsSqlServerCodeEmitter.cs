@@ -59,6 +59,8 @@ namespace SqlFirst.Providers.MsSqlServer
 					sectionStart = string.Empty;
 					sectionEnd = string.Empty;
 					break;
+
+				case QuerySectionType.INVALID:
 				default:
 					throw new QueryEmitException($"Unexpected querySectionType: {section.Type:G}({section.Type:D})");
 			}

@@ -449,7 +449,7 @@ test declarations_2
 				Length = null
 			};
 
-			var infos = new[] { info1, info2 };
+			IQueryParamInfo[] infos = { info1, info2 };
 
 			var emitter = new MsSqlServerCodeEmitter();
 			string declaration = emitter.EmitDeclarations(infos);

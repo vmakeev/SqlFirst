@@ -32,9 +32,10 @@ namespace SqlFirst.Codegen.Text.Tests.Abilities
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(3);
@@ -59,6 +60,7 @@ public virtual int Delete(IDbConnection connection, Guid? firstParam, int? secon
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
+		PrepareCommand(cmd);
 		return cmd.ExecuteNonQuery();
 	}
 }");
@@ -82,9 +84,10 @@ public virtual int Delete(IDbConnection connection, Guid? firstParam, int? secon
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(2);
+			ability.GetDependencies().Count().ShouldBe(3);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(6);
@@ -113,6 +116,7 @@ public virtual async Task<int> DeleteAsync(DbConnection connection, Guid? firstP
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
 
+		PrepareCommand(cmd);
 		return await cmd.ExecuteNonQueryAsync(cancellationToken);
 	}
 }");
@@ -136,10 +140,11 @@ public virtual async Task<int> DeleteAsync(DbConnection connection, Guid? firstP
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -164,6 +169,8 @@ public virtual IEnumerable<QueryItemTestName> Delete(IDbConnection connection, G
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
+
+		PrepareCommand(cmd);
 
 		var result = new List<QueryItemTestName>();
 		using (IDataReader reader = cmd.ExecuteReader())
@@ -198,10 +205,11 @@ public virtual IEnumerable<QueryItemTestName> Delete(IDbConnection connection, G
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetItemFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -215,7 +223,7 @@ public virtual IEnumerable<QueryItemTestName> Delete(IDbConnection connection, G
 
 			result.Methods.ShouldNotBeNull();
 			result.Methods.Count().ShouldBe(1);
-			result.Methods.ShouldContain(@"/// <summary>
+			result.Methods.Single().ShouldBe(@"/// <summary>
 /// Выполняет удаление строк из таблицы и возвращает дополнительные данные
 /// </summary>
 /// <param name=""connection"">Подключение к БД</param>
@@ -230,6 +238,8 @@ public virtual async Task<IEnumerable<QueryItemTestName>> DeleteAsync(DbConnecti
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
+
+		PrepareCommand(cmd);
 
 		var result = new List<QueryItemTestName>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
@@ -264,10 +274,11 @@ public virtual async Task<IEnumerable<QueryItemTestName>> DeleteAsync(DbConnecti
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(4);
@@ -292,7 +303,9 @@ public virtual IEnumerable<DateTime> Delete(IDbConnection connection, Guid? firs
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
+
+		PrepareCommand(cmd);
+
 		var result = new List<DateTime>();
 		using (IDataReader reader = cmd.ExecuteReader())
 		{
@@ -326,10 +339,11 @@ public virtual IEnumerable<DateTime> Delete(IDbConnection connection, Guid? firs
 			result.Fields.ShouldBeEmpty();
 
 			ability.GetDependencies().ShouldNotBeNull();
-			ability.GetDependencies().Count().ShouldBe(3);
+			ability.GetDependencies().Count().ShouldBe(4);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetQueryText);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.AddParameter);
 			ability.GetDependencies().ShouldContain(KnownAbilityName.GetScalarFromRecord);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.PrepareCommand);
 
 			result.Usings.ShouldNotBeNull();
 			result.Usings.Count().ShouldBe(7);
@@ -358,7 +372,9 @@ public virtual async Task<IEnumerable<DateTime>> DeleteAsync(DbConnection connec
 		cmd.CommandText = GetQueryText();
 		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, ""@FirstParam"", firstParam);
 		AddParameter(cmd, MySpecificDbType.MySpecificIntType, ""@SECOND_Param"", secondParam);
-		
+
+		PrepareCommand(cmd);
+
 		var result = new List<DateTime>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{

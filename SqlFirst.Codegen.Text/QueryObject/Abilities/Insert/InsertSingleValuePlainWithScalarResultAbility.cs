@@ -59,6 +59,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Insert
 			yield return KnownAbilityName.GetQueryText;
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetScalarFromValue;
+			yield return KnownAbilityName.PrepareCommand;
 		}
 
 		/// <inheritdoc />

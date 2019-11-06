@@ -1,0 +1,11 @@
+﻿/// <summary>
+/// Применяет таймаут к команде
+/// </summary>
+/// <param name="cmd">Команда</param>
+private void PrepareCommand(IDbCommand cmd)
+{
+	if (CommandTimeout != null)
+	{
+		cmd.CommandTimeout = (int)CommandTimeout.Value.TotalSeconds;
+	}
+}

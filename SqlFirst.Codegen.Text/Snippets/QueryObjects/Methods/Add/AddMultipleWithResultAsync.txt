@@ -21,6 +21,8 @@ $3|AddParametersNumbered|\r\n$
 			$IndexVariableName$++;
 		}
 
+		PrepareCommand(cmd);
+
 		var result = new List<$ResultItemType$>();
 		using (DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken))
 		{
