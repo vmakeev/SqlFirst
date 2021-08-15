@@ -6,7 +6,7 @@ using SqlFirst.Intelligence.Generators;
 using SqlFirst.Intelligence.Helpers;
 using SqlFirst.Intelligence.Options;
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public class SingleFilePerformer : IPerformer
 	{
@@ -16,7 +16,7 @@ namespace SqlFirst.VisualStudio.ExternalTool
 
 		public virtual void Perform(GenerationOptions options)
 		{
-			_log.Trace(p => p("IncomingOptions:\r\n" + options.ToString()));
+			Log.Trace(p => p("IncomingOptions:\r\n" + options.ToString()));
 
 			options.FillWithDefaults();
 			options.ApplyGlobalOptions();

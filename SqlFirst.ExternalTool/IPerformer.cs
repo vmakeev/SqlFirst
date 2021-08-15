@@ -1,6 +1,6 @@
 ﻿using SqlFirst.Intelligence.Options;
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public interface IPerformer
 	{

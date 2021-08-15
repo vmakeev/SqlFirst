@@ -220,4 +220,5 @@ crashlytics.properties
 crashlytics-build.properties
 fabric.properties
 /.vs
+/.idea
 CasebookApi.Kong.Utility.ConsoleUI/.vs/

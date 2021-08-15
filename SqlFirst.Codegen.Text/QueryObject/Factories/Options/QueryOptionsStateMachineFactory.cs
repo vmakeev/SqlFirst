@@ -75,7 +75,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 
 			public const string Command = "command";
 
-			public const string Timeout = "command";
+			public const string Timeout = "timeout";
 
 			public const string Custom = "custom";
 		}

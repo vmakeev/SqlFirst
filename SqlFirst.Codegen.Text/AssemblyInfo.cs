@@ -1,13 +1,6 @@
 ﻿using System.Runtime.CompilerServices;
 
-[assembly: InternalsVisibleTo("SqlFirst.Codegen.Text.Tests, PublicKey=0024000004800000940000000602000000240000525341310004000001000100e93701c92a6e5d" +
-								"7a8c3ef2259b7b0eb32216183142e6060707858322e445f4ec63b5a6105c2cded6379068ef34ef" +
-								"d3d4ec54c712505cbf5fbb4468af409199d543e327a1d0ba75c6befabc2f9b9f8b2a7bfae12f30" +
-								"c11873e38feb40d65e5443de7dca6c9c57f36ead47823a3321832a7b092408bf1f96733caf3e71" +
-								"3d07d9df")]
+[assembly: InternalsVisibleTo("SqlFirst.Codegen.Text.Tests")]
 
-[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2, PublicKey=0024000004800000940000000602000000240000525341310004000001000100c547cac37abd99c8db" +
-							"225ef2f6c8a3602f3b3606cc9891605d02baa56104f4cfc0734aa39b93bf7852f7d9266654753c" +
-							"c297e7d2edfe0bac1cdcf9f717241550e0a7b191195b7667bb4f64bcb8e2121380fd1d9d46ad2d" +
-							"92d2d15605093924cceaf74c4861eff62abf69b9291ed0a340e113be11e6a7d3113e92484cf7045cc7")]
+[assembly: InternalsVisibleTo("DynamicProxyGenAssembly2")]
 

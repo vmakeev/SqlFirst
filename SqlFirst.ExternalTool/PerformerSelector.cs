@@ -1,7 +1,7 @@
 ﻿using System.IO;
 using SqlFirst.Intelligence.Options;
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public static class PerformerSelector
 	{

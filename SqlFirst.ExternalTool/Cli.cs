@@ -5,9 +5,9 @@ using Common.Logging;
 using Mono.Options;
 using SqlFirst.Intelligence.Options;
 
-[assembly: InternalsVisibleTo("SqlFirst.VisualStudio.ExternalTool.Tests")]
+[assembly: InternalsVisibleTo("SqlFirst.ExternalTool.Tests")]
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public static class Cli
 	{

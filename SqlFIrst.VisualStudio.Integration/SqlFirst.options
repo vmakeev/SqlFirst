@@ -1,4 +1,0 @@
-{
-  "ConnectionString": "PUT_CONNECTION_STRING_HERE",
-  "Dialect": "MsSqlServer"
-}

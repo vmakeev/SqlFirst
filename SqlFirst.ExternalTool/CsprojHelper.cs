@@ -6,7 +6,7 @@ using Common.Logging;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public static class CsprojHelper
 	{

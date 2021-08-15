@@ -1,10 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
     <ApplicationIcon>cancer.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
-    <StartupObject>SqlFirst.VisualStudio.ExternalTool.Cli</StartupObject>
+    <StartupObject>SqlFirst.ExternalTool.Cli</StartupObject>
+    <AssemblyName>sqlFirst</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

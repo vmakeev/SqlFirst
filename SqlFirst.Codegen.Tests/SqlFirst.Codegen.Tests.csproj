@@ -2,14 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>net462</TargetFramework>
-
     <IsPackable>false</IsPackable>
-
-    <SignAssembly>true</SignAssembly>
-
-    <DelaySign>false</DelaySign>
-
-    <AssemblyOriginatorKeyFile>SqlFirst.pfx</AssemblyOriginatorKeyFile>
   </PropertyGroup>
 
   <ItemGroup>

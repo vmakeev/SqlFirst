@@ -4,7 +4,7 @@ using System.IO;
 using System.Linq;
 using SqlFirst.Intelligence.Options;
 
-namespace SqlFirst.VisualStudio.ExternalTool
+namespace SqlFirst.ExternalTool
 {
 	public class FolderPerformer : SingleFilePerformer
 	{
