@@ -14,6 +14,8 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get
 		public IRenderableTemplate GetIEnumerable => GetRenderableTemplate();
 
 		public IRenderableTemplate GetIEnumerableAsync => GetRenderableTemplate();
+		
+		public IRenderableTemplate GetIAsyncEnumerableAsync => GetRenderableTemplate();
 
 		public IRenderableTemplate GetScalar => GetRenderableTemplate();
 
@@ -21,7 +23,9 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Get
 
 		public IRenderableTemplate GetScalars => GetRenderableTemplate();
 
-		public IRenderableTemplate GetScalarsAsync => GetRenderableTemplate();
+		public IRenderableTemplate GetIEnumerableScalarsAsync => GetRenderableTemplate();
+		
+		public IRenderableTemplate GetIAsyncEnumerableScalarsAsync => GetRenderableTemplate();
 
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public GetSnippet()

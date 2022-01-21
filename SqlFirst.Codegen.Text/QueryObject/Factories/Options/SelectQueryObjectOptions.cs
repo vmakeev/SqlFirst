@@ -24,6 +24,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 		public bool? GenerateAsyncMethods { get; set; }
 
 		/// <summary>
+		/// Разрешить ли использование IAsyncEnumerable
+		/// </summary>
+		public bool? AllowIAsyncEnumerable { get; set; }
+
+		/// <summary>
 		/// Генерировать ли синхронные методы
 		/// </summary>
 		public bool? GenerateSyncMethods { get; set; }
@@ -34,11 +39,16 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 		public bool? UseQueryTextResourceFile { get; set; }
 
 		/// <summary>
+		/// Не выполнять проверку контрольной суммы запроса
+		/// </summary>
+		public bool? IgnoreChecksum { get; set; }
+
+		/// <summary>
 		/// Генерировать ли препроцессор команды, поддерживающий указание таймаута
 		/// </summary>
 		public bool? GenerateCommandTimeoutPreprocessor { get; set; }
 
-		public SelectQueryObjectOptions(IEnumerable<ISqlFirstOption> options)
+		public SelectQueryObjectOptions(IEnumerable<ISqlFirstOption> options, IReadOnlyDictionary<string, bool> optionDefaults)
 		{
 			if (options == null)
 			{
@@ -69,6 +79,25 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories.Options
 					machine.Fire(parameter);
 				}
 			}
+
+			GenerateSelectFirstMethods = ApplyDefaults(GenerateSelectFirstMethods, nameof(GenerateSelectFirstMethods), optionDefaults);
+			GenerateSelectAllMethods = ApplyDefaults(GenerateSelectAllMethods, nameof(GenerateSelectAllMethods), optionDefaults);
+			GenerateAsyncMethods = ApplyDefaults(GenerateAsyncMethods, nameof(GenerateAsyncMethods), optionDefaults);
+			AllowIAsyncEnumerable = ApplyDefaults(AllowIAsyncEnumerable, nameof(AllowIAsyncEnumerable), optionDefaults);
+			GenerateSyncMethods = ApplyDefaults(GenerateSyncMethods, nameof(GenerateSyncMethods), optionDefaults);
+			UseQueryTextResourceFile = ApplyDefaults(UseQueryTextResourceFile, nameof(UseQueryTextResourceFile), optionDefaults);
+			IgnoreChecksum = ApplyDefaults(IgnoreChecksum, nameof(IgnoreChecksum), optionDefaults);
+			GenerateCommandTimeoutPreprocessor = ApplyDefaults(GenerateCommandTimeoutPreprocessor, nameof(GenerateCommandTimeoutPreprocessor), optionDefaults);
+		}
+
+		private static bool? ApplyDefaults(bool? actualValue, string optionKey, IReadOnlyDictionary<string, bool> optionDefaults)
+		{
+			if (actualValue == null && optionDefaults.TryGetValue(optionKey, out bool value))
+			{
+				return value;
+			}
+
+			return actualValue;
 		}
 	}
 }

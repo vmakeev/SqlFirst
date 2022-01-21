@@ -1,0 +1,28 @@
+/// <summary>
+/// Выполняет загрузку первого элемента типа <see cref="QueryItemTestName"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <returns>Первый элемент типа <see cref="QueryItemTestName"/></returns>
+public virtual QueryItemTestName GetFirst(IDbConnection connection, Guid? firstParam, int? secondParam)
+{
+	using(IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		PrepareCommand(cmd);
+
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			if (!reader.Read())
+			{
+				return null;
+			}
+
+			return GetItemFromRecord(reader);
+		}
+	}
+}

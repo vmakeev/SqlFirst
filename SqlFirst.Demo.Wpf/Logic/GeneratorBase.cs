@@ -92,7 +92,7 @@ namespace SqlFirst.Demo.Wpf.Logic
 
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
-			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
+			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions, OptionDefaults.Empty);
 			IGeneratedItem generatedItem = CodeGenerator.GenerateQueryObject(context, queryOptions);
 
 			return generatedItem;

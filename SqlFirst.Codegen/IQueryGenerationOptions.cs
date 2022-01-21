@@ -11,5 +11,8 @@ namespace SqlFirst.Codegen
 		QueryType QueryType { get; }
 
 		IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
+		
+		/// <inheritdoc />
+		IOptionDefaults OptionDefaults { get; }
 	}
 }

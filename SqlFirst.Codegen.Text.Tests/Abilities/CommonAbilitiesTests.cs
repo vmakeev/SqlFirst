@@ -104,11 +104,13 @@ protected virtual void AddParameter(IDbCommand command, MySpecificDbType paramet
 
 			var data = A.Dummy<IQueryObjectData>();
 
-			var ability = new GetQueryTextFromResourceCacheableAbility();
+			var ability = new GetQueryTextFromResourceCacheableWithCheckAbility();
 			IQueryObjectData result = ability.Apply(context, data);
 
 			ability.Name.ShouldBe(KnownAbilityName.GetQueryText);
-			ability.GetDependencies().ShouldBeEmpty();
+			ability.GetDependencies().ShouldNotBeNull();
+			ability.GetDependencies().Count().ShouldBe(1);
+			ability.GetDependencies().ShouldContain(KnownAbilityName.ProcessCachedSql);
 
 			result.Constants.ShouldBeEmpty();
 			result.Nested.ShouldBeEmpty();
@@ -202,6 +204,8 @@ protected virtual string GetQueryText()
 				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
 
 				_cachedSql = sql;
+
+				ProcessCachedSql(ref _cachedSql);
 			}
 		}
 	}

@@ -8,15 +8,10 @@ using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 {
-	internal abstract class SelectItemsIEnumerableAsyncAbilityBase : QueryObjectAbilityBase
+	internal class SelectItemsIEnumerableAsyncAbility : QueryObjectAbilityBase
 	{
 		/// <inheritdoc />
 		public override string Name { get; } = "GetItemsIEnumerableAsync";
-
-		[SuppressMessage("ReSharper", "EmptyConstructor")]
-		protected SelectItemsIEnumerableAsyncAbilityBase()
-		{
-		}
 
 		/// <inheritdoc />
 		public override IQueryObjectData Apply(ICodeGenerationContext context, IQueryObjectData data)
@@ -57,6 +52,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 			yield return KnownAbilityName.AddParameter;
 			yield return KnownAbilityName.GetItemFromRecord;
 			yield return KnownAbilityName.PrepareCommand;
+			yield return KnownAbilityName.AsyncEnumerable;
 		}
 	}
 }

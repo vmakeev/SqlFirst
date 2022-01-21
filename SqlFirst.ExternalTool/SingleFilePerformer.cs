@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text.RegularExpressions;
 using Common.Logging;
 using Microsoft.Build.Evaluation;
 using SqlFirst.Intelligence.Generators;
@@ -33,6 +34,19 @@ namespace SqlFirst.ExternalTool
 
 			string queryText = File.ReadAllText(options.Target);
 
+			if (options.PreprocessQueryRegexes != null)
+			{
+				foreach (string[] preprocessQueryRegex in options.PreprocessQueryRegexes)
+				{
+					if (preprocessQueryRegex.Length != 2)
+					{
+						throw new Exception("Invalid preprocess regex: " + preprocessQueryRegex);
+					}
+					
+					queryText = Regex.Replace(queryText, preprocessQueryRegex[0], preprocessQueryRegex[1]);
+				}
+			}
+
 			string targetDirectory = Path.GetDirectoryName(options.Target);
 			if (string.IsNullOrEmpty(targetDirectory) || !Directory.Exists(targetDirectory))
 			{
@@ -42,22 +56,28 @@ namespace SqlFirst.ExternalTool
 			GeneratorBase generator = GetGenerator(options);
 
 			string queryObject = generator.GenerateQueryObjectCode(queryText, options);
-			string parameterItem = generator.GenerateParameterItemCode(queryText, options);
-			string resultItem = generator.GenerateResultItemCode(queryText, options);
+
+			string parameterItem = options.ParameterItemMappedFrom == null
+				? generator.GenerateParameterItemCode(queryText, options)
+				: null;
+
+			string resultItem = options.ResultItemMappedFrom == null 
+				? generator.GenerateResultItemCode(queryText, options)
+				: null;
 
 			Log.Debug("Query objects generated");
 
 			string queryObjectFileName = Path.GetFileNameWithoutExtension(options.Target) + ".gen.cs";
-			string parameterItemFileName = options.ParameterItemName + ".gen.cs";
-			string resultItemFileName = options.ResultItemName + ".gen.cs";
+			string parameterItemFileName = (options.ParameterItemMappedFrom ?? options.ParameterItemName) + ".gen.cs";
+			string resultItemFileName = (options.ResultItemMappedFrom ?? options.ResultItemName) + ".gen.cs";
 
 			string queryObjectPath = Path.Combine(targetDirectory, queryObjectFileName);
 			string parameterItemPath = Path.Combine(targetDirectory, parameterItemFileName);
 			string resultItemPath = Path.Combine(targetDirectory, resultItemFileName);
 
-			WriteFile(queryObject, queryObjectPath);
-			WriteFile(parameterItem, parameterItemPath);
-			WriteFile(resultItem, resultItemPath);
+			WriteFile(queryObject, queryObjectPath, options.ReplaceIndent);
+			WriteFile(parameterItem, parameterItemPath, options.ReplaceIndent);
+			WriteFile(resultItem, resultItemPath, options.ReplaceIndent);
 
 			if (options.UpdateCsproj)
 			{
@@ -154,7 +174,7 @@ namespace SqlFirst.ExternalTool
 			return generator;
 		}
 
-		protected virtual void WriteFile(string item, string path)
+		protected virtual void WriteFile(string item, string path, string customIndent)
 		{
 			if (string.IsNullOrEmpty(item))
 			{
@@ -167,6 +187,12 @@ namespace SqlFirst.ExternalTool
 			else
 			{
 				Log.Debug("File will be (re)created: " + path);
+
+				if (customIndent != null)
+				{
+					item = item.Replace("\t", customIndent);
+				}
+				
 				File.WriteAllText(path, item);
 			}
 		}

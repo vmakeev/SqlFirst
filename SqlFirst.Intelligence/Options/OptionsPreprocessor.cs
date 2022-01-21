@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -39,6 +40,49 @@ namespace SqlFirst.Intelligence.Options
 				generationOptions.Dialect = optionsFile.Dialect;
 			}
 
+			if (optionsFile.Indent != null)
+			{
+				generationOptions.ReplaceIndent = optionsFile.Indent;
+			}
+
+			if (optionsFile.PreprocessQueryRegexes != null)
+			{
+				generationOptions.PreprocessQueryRegexes = optionsFile.PreprocessQueryRegexes
+																	.Select(p => p.Split(new[] { " => " }, StringSplitOptions.RemoveEmptyEntries))
+																	.ToArray();
+			}
+
+			if (optionsFile.OptionDefaults != null)
+			{
+				generationOptions.OptionDefaults = optionsFile.OptionDefaults.ToOptionDefaults();
+			}
+
+			if (optionsFile.ExternalResultItemsMap != null)
+			{
+				generationOptions.ExternalResultItemsMap = optionsFile.ExternalResultItemsMap;
+			}
+
+			if (optionsFile.ExternalParameterItemsMap != null)
+			{
+				generationOptions.ExternalParameterItemsMap = optionsFile.ExternalParameterItemsMap;
+			}
+
+			if (generationOptions.ResultItemName != null &&
+				optionsFile.ExternalResultItemsMap != null &&
+				optionsFile.ExternalResultItemsMap.TryGetValue(generationOptions.ResultItemName, out var externalResultItem))
+			{
+				generationOptions.ResultItemMappedFrom = generationOptions.ResultItemName;
+				generationOptions.ResultItemName = externalResultItem.Name;
+			}
+
+			if (generationOptions.ParameterItemName != null &&
+				optionsFile.ExternalParameterItemsMap != null &&
+				optionsFile.ExternalParameterItemsMap.TryGetValue(generationOptions.ParameterItemName, out var externalParameterItem))
+			{
+				generationOptions.ParameterItemMappedFrom = generationOptions.ParameterItemName;
+				generationOptions.ParameterItemName = externalParameterItem.Name;
+			}
+
 			_log.Trace(p => p("ApplyGlobalOptions:\r\n" + generationOptions.ToString()));
 		}
 
@@ -75,11 +119,9 @@ namespace SqlFirst.Intelligence.Options
 			{
 				generationOptions.BeautifyFile = false;
 			}
-			
 
 			_log.Trace(p => p("FillWithDefaults:\r\n" + generationOptions.ToString()));
 		}
-
 
 		private static string GetNamespace(string projectFile, string queryFile)
 		{

@@ -22,6 +22,8 @@ protected virtual string GetQueryText()
 				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
 
 				$CacheName$ = sql;
+
+				ProcessCachedSql(ref $CacheName$);
 			}
 		}
 	}

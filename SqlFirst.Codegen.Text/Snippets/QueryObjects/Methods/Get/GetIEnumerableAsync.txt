@@ -8,7 +8,7 @@ $XmlParams`\r\n`|\r\n$~
 public virtual Task<IEnumerable<$ItemType$>> GetAsync(DbConnection connection$`, `MethodParameters|, $, CancellationToken cancellationToken)
 {
 	async Task<IEnumerator<$ItemType$>> CreateEnumerator()
-	{	
+	{
 		// Command will be disposed in DbAsyncEnumerator.Dispose() method
 		DbCommand cmd = connection.CreateCommand();
 		cmd.CommandText = GetQueryText();

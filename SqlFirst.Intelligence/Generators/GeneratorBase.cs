@@ -156,10 +156,28 @@ namespace SqlFirst.Intelligence.Generators
 			Log.Info("Preparing to generate query object");
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
-			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions);
+			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions, parameters.OptionDefaults);
 			Log.Info("Query object generating is in progress");
 			IGeneratedItem generatedItem = CodeGenerator.GenerateQueryObject(context, queryOptions);
 			Log.Info("Query object generating is completed");
+
+			if (parameters.ResultItemMappedFrom != null)
+			{
+				string additionalUsing = parameters.ExternalResultItemsMap[parameters.ResultItemMappedFrom].Namespace;
+				generatedItem = new GeneratedItemExtender(
+					generatedItem,
+					additionalUsings: new[] { additionalUsing }
+				);
+			}
+			
+			if (parameters.ParameterItemMappedFrom != null)
+			{
+				string additionalUsing = parameters.ExternalParameterItemsMap[parameters.ParameterItemMappedFrom].Namespace;
+				generatedItem = new GeneratedItemExtender(
+					generatedItem,
+					additionalUsings: new[] { additionalUsing }
+				);
+			}
 
 			return generatedItem;
 		}

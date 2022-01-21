@@ -1,9 +1,9 @@
 ﻿/// <summary>
-/// Выполняет загрузку значения типа <see cref="$ItemType$"/>
+/// Выполняет загрузку значения типа <see cref="$ItemTypeXml$"/>
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
 $XmlParams`\r\n`|\r\n$~
-/// <returns>Значение типа  <see cref="$ItemType$"/></returns>
+/// <returns>Значение типа <see cref="$ItemTypeXml$"/></returns>
 public virtual IEnumerable<$ItemType$> Get(IDbConnection connection$`, `MethodParameters|, $)
 {
 	using (IDbCommand cmd = connection.CreateCommand())

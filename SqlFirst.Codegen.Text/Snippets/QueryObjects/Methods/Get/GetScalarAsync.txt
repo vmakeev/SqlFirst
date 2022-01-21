@@ -1,10 +1,10 @@
 ﻿/// <summary>
-/// Выполняет загрузку значения типа <see cref="$ItemType$"/>
+/// Выполняет загрузку значения типа <see cref="$ItemTypeXml$"/>
 /// </summary>
 /// <param name="connection">Подключение к БД</param>
 $XmlParams`\r\n`|\r\n$~
 /// <param name="cancellationToken">Токен отмены</param>
-/// <returns>Значение типа  <see cref="$ItemType$"/></returns>
+/// <returns>Значение типа <see cref="$ItemTypeXml$"/></returns>
 public virtual async Task<$ItemType$> GetFirstAsync(DbConnection connection$`, `MethodParameters|, $, CancellationToken cancellationToken)
 {
 	using(DbCommand cmd = connection.CreateCommand())

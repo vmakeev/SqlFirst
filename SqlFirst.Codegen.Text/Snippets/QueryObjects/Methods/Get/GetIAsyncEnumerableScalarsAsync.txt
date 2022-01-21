@@ -1,0 +1,22 @@
+﻿/// <summary>
+/// Выполняет ленивую загрузку значений типа <see cref="$ItemTypeXml$"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+$XmlParams`\r\n`|\r\n$~
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Значения типа <see cref="$ItemTypeXml$"/></returns>
+public virtual async IAsyncEnumerable<$ItemType$> GetAsync(DbConnection connection$`, `MethodParameters|, $, [EnumeratorCancellation] CancellationToken cancellationToken)
+{
+	using DbCommand cmd = connection.CreateCommand();
+	cmd.CommandText = GetQueryText();
+$1|AddParameters`\r\n`|\r\n$~
+
+	PrepareCommand(cmd);
+
+	using DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
+
+	while (await reader.ReadAsync(cancellationToken))
+	{
+		yield return GetScalarFromRecord<$ItemType$>(reader);
+	}
+}

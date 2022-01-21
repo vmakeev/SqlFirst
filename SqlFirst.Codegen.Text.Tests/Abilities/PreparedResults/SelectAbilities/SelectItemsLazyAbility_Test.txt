@@ -1,0 +1,26 @@
+/// <summary>
+/// Выполняет ленивую загрузку списка элементов типа <see cref="QueryItemTestName"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <returns>Список элементов типа <see cref="QueryItemTestName"/></returns>
+public virtual IEnumerable<QueryItemTestName> Get(IDbConnection connection, Guid? firstParam, int? secondParam)
+{
+	using (IDbCommand cmd = connection.CreateCommand())
+	{
+		cmd.CommandText = GetQueryText();
+		AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+		AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+		PrepareCommand(cmd);
+
+		using (IDataReader reader = cmd.ExecuteReader())
+		{
+			while (reader.Read())
+			{
+				yield return GetItemFromRecord(reader);
+			}
+		}
+	}
+}

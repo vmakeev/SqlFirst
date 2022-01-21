@@ -1,0 +1,27 @@
+﻿/// <summary>
+/// Возвращает текст запроса
+/// </summary>
+/// <returns>Текст запроса</returns>
+protected virtual string GetQueryText()
+{
+	if ($CacheName$ == null)
+	{
+		lock ($LockerName$)
+		{
+			using (Stream stream = typeof($QueryName$).Assembly.GetManifestResourceStream("$QuerySqlFullPath$"))
+			{
+				string sql = new StreamReader(stream ?? throw new InvalidOperationException("Can not get manifest resource stream.")).ReadToEnd();
+
+				const string sectionRegexPattern = @"--\s*begin\s+[a-zA-Z0-9_]*\s*\r?\n.*?\s*\r?\n\s*--\s*end\s*\r?\n";
+				const RegexOptions regexOptions = RegexOptions.Singleline | RegexOptions.IgnoreCase | RegexOptions.Compiled;
+				sql = Regex.Replace(sql, sectionRegexPattern, string.Empty, regexOptions);
+
+				$CacheName$ = sql;
+
+				ProcessCachedSql(ref $CacheName$);
+			}
+		}
+	}
+
+	return $CacheName$;
+}

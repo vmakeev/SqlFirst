@@ -26,7 +26,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			if (internalOptions.User.UseResourceFile)
 			{
-				result.AddAbility<GetQueryTextFromResourceCacheableAbility>();
+				result.AddAbility<ProcessCachedSqlPartialAbility>();
+				
+				result.AddAbility<GetQueryTextFromResourceCacheableWithCheckAbility>(() => !internalOptions.User.IgnoreChecksum);
+				result.AddAbility<GetQueryTextFromResourceCacheableNoCheckAbility>(() => internalOptions.User.IgnoreChecksum);
 			}
 			else
 			{
@@ -60,7 +63,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 		{
 			if (!template.IsExists(KnownAbilityName.AsyncEnumerable))
 			{
-				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
+				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && !options.User.AllowIAsyncEnumerable);
+				template.AddAbility<AsyncIEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && options.User.AllowIAsyncEnumerable);
 			}
 
 			template.AddAbility<MapDataRecordToItemAbility>(() =>
@@ -70,14 +74,18 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 			template.AddAbility<SelectFirstItemAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetFirst);
 
 			template.AddAbility<SelectItemsLazyAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetAll);
-			template.AddAbility<SelectItemsIEnumerableAsyncNestedEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
+			
+			
+			template.AddAbility<SelectItemsIEnumerableAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && !options.User.AllowIAsyncEnumerable);
+			template.AddAbility<SelectItemsIAsyncEnumerableAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && options.User.AllowIAsyncEnumerable);
 		}
 
 		private static void AddScalarAbilities(QueryObjectTemplate template, InternalOptions options)
 		{
 			if (!template.IsExists(KnownAbilityName.AsyncEnumerable))
 			{
-				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
+				template.AddAbility<NestedAsyncEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && !options.User.AllowIAsyncEnumerable);
+				template.AddAbility<AsyncIEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && options.User.AllowIAsyncEnumerable);
 			}
 
 			template.AddAbility<MapDataRecordToScalarAbility>(() => (options.User.GenerateSyncMethods || options.User.GenerateAsyncMethods) && options.User.UseGetAll);
@@ -88,7 +96,9 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 			template.AddAbility<SelectScalarAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetFirst);
 
 			template.AddAbility<SelectScalarsAbility>(() => options.User.GenerateSyncMethods && options.User.UseGetAll);
-			template.AddAbility<SelectScalarsIEnumerableAsyncNestedEnumerableAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll);
+			
+			template.AddAbility<SelectScalarsIEnumerableAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && !options.User.AllowIAsyncEnumerable);
+			template.AddAbility<SelectScalarsIAsyncEnumerableAsyncAbility>(() => options.User.GenerateAsyncMethods && options.User.UseGetAll && options.User.AllowIAsyncEnumerable);
 		}
 
 		#region Nested
@@ -112,21 +122,23 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					throw new ArgumentNullException(nameof(options));
 				}
 
-				int outgoungParametersCount = context.OutgoingParameters.Count();
+				int outgoingParametersCount = context.OutgoingParameters.Count();
 
 				Calculated = new CalculatedOptions
 				{
-					IsScalarOutput = outgoungParametersCount == 1
+					IsScalarOutput = outgoingParametersCount == 1
 				};
 
 				User = new UserOptions
 				{
 					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
+					AllowIAsyncEnumerable = options.AllowIAsyncEnumerable ?? true,
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
 					UseGetAll = options.GenerateSelectAllMethods ?? true,
 					UseGetFirst = options.GenerateSelectFirstMethods ?? true,
-					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true
+					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true,
+					IgnoreChecksum = options.IgnoreChecksum ?? false
 				};
 			}
 
@@ -158,12 +170,16 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 			public bool UseResourceFile { get; set; }
 
 			public bool GenerateAsyncMethods { get; set; }
+			
+			public bool AllowIAsyncEnumerable { get; set; }
 
 			public bool GenerateSyncMethods { get; set; }
 
 			public bool UseGetFirst { get; set; }
 
 			public bool UseGetAll { get; set; }
+			
+			public bool IgnoreChecksum { get; set; }
 
 			public bool GenerateCommandTimeoutPreprocessor { get; set; }
 
@@ -174,9 +190,11 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 				{
 					$"UseResourceFile: {UseResourceFile}",
 					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
+					$"AllowIAsyncEnumerable: {AllowIAsyncEnumerable}",
 					$"GenerateSyncMethods: {GenerateSyncMethods}",
 					$"UseGetAll: {UseGetAll}",
 					$"UseGetFirst: {UseGetFirst}",
+					$"IgnoreChecksum: {IgnoreChecksum}",
 					$"GenerateCommandTimeoutPreprocessor: {GenerateCommandTimeoutPreprocessor}"
 				};
 

@@ -16,6 +16,8 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
 		public IRenderable GetScalarFromValue => GetRenderable();
 
 		public IRenderableTemplate GetQueryFromResourceCacheable => GetRenderableTemplate();
+		
+		public IRenderableTemplate GetQueryFromResourceCacheableNoCheck => GetRenderableTemplate();
 
 		public IRenderableTemplate GetQueryFromString => GetRenderableTemplate();
 
@@ -24,6 +26,8 @@ namespace SqlFirst.Codegen.Text.Snippets.QueryObjects.Methods.Common
 		public IRenderable GetQueryRuntimeGeneratedMultipleInsert => GetRenderable();
 
 		public IRenderable PrepareCommandPartial => GetRenderable();
+		
+		public IRenderable ProcessCachedSqlPartial => GetRenderable();
 
 		public IRenderable PrepareCommandWithTimeout => GetRenderable();
 

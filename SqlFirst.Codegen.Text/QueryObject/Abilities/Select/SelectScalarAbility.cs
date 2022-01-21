@@ -31,10 +31,12 @@ namespace SqlFirst.Codegen.Text.QueryObject.Abilities.Select
 
 			Type scalarType = context.TypeMapper.MapToClrType(firstParameter.DbType, firstParameter.AllowDbNull);
 			string scalarTypeString = CSharpCodeHelper.GetTypeBuiltInName(scalarType);
+			string scalarTypeXmlString = CSharpCodeHelper.GetTypeXmlName(scalarType);
 
 			string method = Snippet.Query.Methods.Get.GetScalar.Render(new
 			{
 				ItemType = scalarTypeString,
+				ItemTypeXml = scalarTypeXmlString,
 				XmlParams = xmlParameters,
 				MethodParameters = methodParameters,
 				AddParameters = addParameters

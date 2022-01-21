@@ -24,7 +24,10 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 
 			if (internalOptions.User.UseResourceFile)
 			{
-				result.AddAbility<GetQueryTextFromResourceCacheableAbility>();
+				result.AddAbility<ProcessCachedSqlPartialAbility>();
+				
+				result.AddAbility<GetQueryTextFromResourceCacheableWithCheckAbility>(() => !internalOptions.User.IgnoreChecksum);
+				result.AddAbility<GetQueryTextFromResourceCacheableNoCheckAbility>(() => internalOptions.User.IgnoreChecksum);
 			}
 			else
 			{
@@ -125,7 +128,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					GenerateAsyncMethods = options.GenerateAsyncMethods ?? true,
 					GenerateSyncMethods = options.GenerateSyncMethods ?? true,
 					UseResourceFile = options.UseQueryTextResourceFile ?? false,
-					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true
+					GenerateCommandTimeoutPreprocessor = options.GenerateCommandTimeoutPreprocessor ?? true,
+					IgnoreChecksum = options.IgnoreChecksum ?? false
 				};
 			}
 
@@ -167,6 +171,8 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 			public bool GenerateSyncMethods { get; set; }
 
 			public bool GenerateCommandTimeoutPreprocessor { get; set; }
+			
+			public bool IgnoreChecksum { get; set; }
 
 			/// <inheritdoc />
 			public override string ToString()
@@ -176,6 +182,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Factories
 					$"UseResourceFile: {UseResourceFile}",
 					$"GenerateAsyncMethods: {GenerateAsyncMethods}",
 					$"GenerateSyncMethods: {GenerateSyncMethods}",
+					$"IgnoreChecksum: {IgnoreChecksum}",
 					$"GenerateCommandTimeoutPreprocessor: {GenerateCommandTimeoutPreprocessor}"
 				};
 

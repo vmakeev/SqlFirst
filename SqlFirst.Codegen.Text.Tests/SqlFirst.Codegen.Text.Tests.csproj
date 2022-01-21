@@ -22,4 +22,25 @@
 	  <ProjectReference Include="..\SqlFirst.Codegen\SqlFirst.Codegen.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectItemsIEnumerableAsyncNestedEnumerableAbility_Test.txt" />
+	  <None Remove="Abilities\Results\SelectAbilities\SelectItemsIAsyncEnumerableAsyncAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectItemsIAsyncEnumerableAsyncAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectFirstItemAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectFirstItemAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectFirstItemAsyncAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectFirstItemAsyncAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectItemsLazyAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectItemsLazyAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectScalarsAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectScalarsAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectScalarAsyncAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectScalarAsyncAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectScalarAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectScalarAbility_Test.txt" />
+	  <None Remove="Abilities\PreparedResults\SelectAbilities\SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectScalarsIAsyncEnumerableAsync_Test.txt" />
+	  <EmbeddedResource Include="Abilities\PreparedResults\SelectAbilities\SelectScalarsIEnumerableAsyncNestedEnumerableAbility_Test.txt" />
+	</ItemGroup>
+
 </Project>

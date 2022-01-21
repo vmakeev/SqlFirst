@@ -7,9 +7,12 @@ namespace SqlFirst.Codegen.Impl
 	public class QueryGenerationOptions : IQueryGenerationOptions
 	{
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
-		public QueryGenerationOptions(QueryType queryType, IEnumerable<ISqlFirstOption> sqlFirstOptions)
+		public QueryGenerationOptions(QueryType queryType,
+									IEnumerable<ISqlFirstOption> sqlFirstOptions,
+									IOptionDefaults optionDefaults)
 		{
 			SqlFirstOptions = sqlFirstOptions;
+			OptionDefaults = optionDefaults;
 			QueryType = queryType;
 		}
 
@@ -17,5 +20,8 @@ namespace SqlFirst.Codegen.Impl
 
 		/// <inheritdoc />
 		public IEnumerable<ISqlFirstOption> SqlFirstOptions { get; }
+
+		/// <inheritdoc />
+		public IOptionDefaults OptionDefaults { get; }
 	}
 }

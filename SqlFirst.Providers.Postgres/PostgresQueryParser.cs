@@ -202,7 +202,7 @@ namespace SqlFirst.Providers.Postgres
 						}
 						else
 						{
-							Type clrType = _adoTypeMapper.Value.Map(parameter.DbType, false);
+							Type clrType = _adoTypeMapper.Value.Map(parameter.DbType, parameter.NpgsqlDbType, false);
 
 							if (clrType == typeof(string))
 							{

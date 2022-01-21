@@ -10,5 +10,6 @@
 		public const string GetScalarFromValue = "GetScalarFromValue";
 		public const string AsyncEnumerable = "AsyncEnumerable";
 		public const string PrepareCommand = "PrepareCommand";
+		public const string ProcessCachedSql = "ProcessCachedSql";
 	}
 }

@@ -201,5 +201,24 @@ namespace SqlFirst.Codegen.Tests
 		{
 			CSharpCodeHelper.GetTypeBuiltInName(input).ShouldBe(output);
 		}
+
+		[Theory]
+		[InlineData(typeof(int), "Int32")]
+		[InlineData(typeof(DateTime?), "Nullable{DateTime}")]
+		[InlineData(typeof(string[]), "String[]")]
+		[InlineData(typeof(List<string>), "List{String}")]
+		[InlineData(typeof(List<string[]>), "List{String[]}")]
+		[InlineData(typeof(IEnumerable<List<string>>), "IEnumerable{List{String}}")]
+		[InlineData(typeof(Dictionary<int, decimal>), "Dictionary{Int32, Decimal}")]
+		[InlineData(typeof(Dictionary<int, decimal>[]), "Dictionary{Int32, Decimal}[]")]
+		[InlineData(typeof(List<Dictionary<int, decimal>[]>), "List{Dictionary{Int32, Decimal}[]}")]
+		[InlineData(typeof(List<Dictionary<int, decimal>[]>[]), "List{Dictionary{Int32, Decimal}[]}[]")]
+		[InlineData(typeof(List<>), "List")]
+		[InlineData(typeof(object), "Object")]
+		[InlineData(typeof(long?[]), "Nullable{Int64}[]")]
+		public void GetTypeXmlInNameTests(Type input, string output)
+		{
+			CSharpCodeHelper.GetTypeXmlName(input).ShouldBe(output);
+		}
 	}
 }

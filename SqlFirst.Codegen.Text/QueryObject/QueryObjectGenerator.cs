@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using SqlFirst.Codegen.Impl;
@@ -52,19 +53,23 @@ namespace SqlFirst.Codegen.Text.QueryObject
 			switch (options.QueryType)
 			{
 				case QueryType.Create:
-					var insertOptions = new InsertQueryObjectOptions(options.SqlFirstOptions);
+					var insertDefaults = GetOptionDefaults(options.OptionDefaults, "insert");
+					var insertOptions = new InsertQueryObjectOptions(options.SqlFirstOptions, insertDefaults);
 					return InsertTemplateFactory.Build(context, insertOptions);
 
 				case QueryType.Read:
-					var selectOptions = new SelectQueryObjectOptions(options.SqlFirstOptions);
+					var selectDefaults = GetOptionDefaults(options.OptionDefaults, "select");
+					var selectOptions = new SelectQueryObjectOptions(options.SqlFirstOptions, selectDefaults);
 					return SelectTemplateFactory.Build(context, selectOptions);
 
 				case QueryType.Update:
-					var updateOptions = new UpdateQueryObjectOptions(options.SqlFirstOptions);
+					var updateDefaults = GetOptionDefaults(options.OptionDefaults, "update");
+					var updateOptions = new UpdateQueryObjectOptions(options.SqlFirstOptions, updateDefaults);
 					return UpdateTemplateFactory.Build(context, updateOptions);
 
 				case QueryType.Delete:
-					var deleteOptions = new DeleteQueryObjectOptions(options.SqlFirstOptions);
+					var deleteDefaults = GetOptionDefaults(options.OptionDefaults, "delete");
+					var deleteOptions = new DeleteQueryObjectOptions(options.SqlFirstOptions, deleteDefaults);
 					return DeleteTemplateFactory.Build(context, deleteOptions);
 
 				case QueryType.Merge:
@@ -73,6 +78,16 @@ namespace SqlFirst.Codegen.Text.QueryObject
 				default:
 					throw new CodeGenerationException($"Unsupported QueryType: [{options.QueryType:G}] ({options.QueryType:D})");
 			}
+		}
+
+		private static IReadOnlyDictionary<string, bool> GetOptionDefaults(IOptionDefaults optionDefaults, string section)
+		{
+			if (optionDefaults == null || !optionDefaults.TryGetValue(section, out IReadOnlyDictionary<string, bool> sectionData))
+			{
+				return new Dictionary<string, bool>();
+			}
+
+			return sectionData;
 		}
 	}
 }

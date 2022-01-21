@@ -1,0 +1,5 @@
+﻿/// <summary>
+/// Заготовка для определенной пользователем пост-обработки текста запроса
+/// </summary>
+/// <param name="queryText">Текст кэшированного sql-запроса</param>
+partial void ProcessCachedSql(ref string queryText);

@@ -1,5 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Net;
+using System.Net.NetworkInformation;
+using NpgsqlTypes;
 
 namespace SqlFirst.Providers.Postgres
 {
@@ -9,11 +13,17 @@ namespace SqlFirst.Providers.Postgres
 		/// Возвращает имя типа CLR, который может быть безопасно использован для представления указанного типа данных в БД
 		/// </summary>
 		/// <param name="dbType">Название типа данных в БД</param>
+		/// <param name="npgsqlDbType">Тип данные по версии npgsql</param>
 		/// <param name="nullable">Поддерживается ли значение null</param>
 		/// <returns>Имя типа CLR</returns>
-		public Type Map(DbType dbType, bool nullable)
+		public Type Map(DbType dbType, NpgsqlDbType npgsqlDbType, bool nullable)
 		{
 			Type baseType = GetBaseType(dbType);
+
+			if (baseType == null || baseType == typeof(object))
+			{
+				baseType = GetBaseType(npgsqlDbType);
+			}
 
 			if (nullable && baseType.IsValueType)
 			{
@@ -112,6 +122,130 @@ namespace SqlFirst.Providers.Postgres
 			}
 
 			return clrType;
+		}
+
+		private static Type GetBaseType(NpgsqlDbType npgsqlDbType)
+		{
+			switch (npgsqlDbType)
+			{
+				case NpgsqlDbType.Bigint:
+					return typeof(long);
+
+				case NpgsqlDbType.Double:
+					return typeof(double);
+
+				case NpgsqlDbType.Integer:
+					return typeof(int);
+
+				case NpgsqlDbType.Money:
+				case NpgsqlDbType.Numeric:
+					return typeof(decimal);
+
+				case NpgsqlDbType.Real:
+					return typeof(float);
+
+				case NpgsqlDbType.Smallint:
+					return typeof(short);
+
+				case NpgsqlDbType.Boolean:
+				case NpgsqlDbType.Bit:
+					return typeof(bool);
+
+				case NpgsqlDbType.Enum:
+					return typeof(int);
+
+				case NpgsqlDbType.Box:
+					return typeof(NpgsqlBox);
+
+				case NpgsqlDbType.Line:
+					return typeof(NpgsqlLine);
+
+				case NpgsqlDbType.LSeg:
+					return typeof(NpgsqlLSeg);
+
+				case NpgsqlDbType.Path:
+					return typeof(NpgsqlPath);
+
+				case NpgsqlDbType.Point:
+					return typeof(NpgsqlPoint);
+
+				case NpgsqlDbType.Polygon:
+					return typeof(NpgsqlPolygon);
+
+				case NpgsqlDbType.Char:
+				case NpgsqlDbType.InternalChar:
+					return typeof(char);
+
+				case NpgsqlDbType.Text:
+				case NpgsqlDbType.Varchar:
+				case NpgsqlDbType.Name:
+				case NpgsqlDbType.Citext:
+				case NpgsqlDbType.Xml:
+				case NpgsqlDbType.Json:
+				case NpgsqlDbType.Jsonb:
+					return typeof(string);
+
+				case NpgsqlDbType.Bytea:
+				case NpgsqlDbType.Varbit:
+					return typeof(byte[]);
+
+				case NpgsqlDbType.Date:
+				case NpgsqlDbType.Timestamp:
+				case NpgsqlDbType.TimestampTz:
+				case NpgsqlDbType.Abstime:
+					return typeof(DateTime);
+
+				case NpgsqlDbType.Time:
+				case NpgsqlDbType.Interval:
+					return typeof(TimeSpan);
+
+				case NpgsqlDbType.TimeTz:
+					return typeof(DateTimeOffset);
+
+				case NpgsqlDbType.Inet:
+					return typeof(IPAddress);
+
+				case NpgsqlDbType.Cidr:
+					return typeof((IPAddress, int));
+
+				case NpgsqlDbType.MacAddr:
+					return typeof(PhysicalAddress);
+
+				case NpgsqlDbType.TsVector:
+					return typeof(NpgsqlTsVector);
+
+				case NpgsqlDbType.TsQuery:
+					return typeof(NpgsqlTsQuery);
+
+				case NpgsqlDbType.Uuid:
+					return typeof(Guid);
+
+				case NpgsqlDbType.Hstore:
+					return typeof(Dictionary<string, string>);
+
+				case NpgsqlDbType.Oidvector:
+					return typeof(uint[]);
+
+				case NpgsqlDbType.Xid:
+				case NpgsqlDbType.Oid:
+				case NpgsqlDbType.Cid:
+					return typeof(uint);
+
+				case NpgsqlDbType.Geometry:
+					return typeof(PostgisGeometry);
+
+				case NpgsqlDbType.Unknown:
+				case NpgsqlDbType.Tid:
+				case NpgsqlDbType.Regtype:
+				case NpgsqlDbType.Int2Vector:
+				case NpgsqlDbType.Array:
+				case NpgsqlDbType.Composite:
+				case NpgsqlDbType.Range:
+				case NpgsqlDbType.Refcursor:
+				case NpgsqlDbType.Circle:
+				default:
+					throw new ArgumentOutOfRangeException(nameof(npgsqlDbType), npgsqlDbType, $"Unsupported {typeof(NpgsqlDbType)}: {npgsqlDbType}");
+			}
 		}
 	}
 }

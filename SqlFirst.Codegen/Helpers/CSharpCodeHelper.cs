@@ -86,6 +86,26 @@ namespace SqlFirst.Codegen.Helpers
 		}
 
 		/// <summary>
+		/// Возвращает имя типа для XML-комментариев
+		/// </summary>
+		/// <param name="type">Тип</param>
+		/// <returns>Имя типа</returns>
+		public static string GetTypeXmlName(Type type)
+		{
+			string NameResolver(Type t)
+			{
+				return t.Name;
+			}
+
+			return GetTypeName(
+						type: type,
+						directTypeNameResolver: NameResolver,
+						simplifyNullable: false)
+					.Replace('<', '{')
+					.Replace('>', '}');
+		}
+
+		/// <summary>
 		/// Возвращает имя встроенного в C# типа, или просто имя типа, если отдельного ключевого слова не существует
 		/// </summary>
 		/// <param name="type">Тип</param>

@@ -1,0 +1,24 @@
+/// <summary>
+/// Выполняет ленивую загрузку значений типа <see cref="Int32"/>
+/// </summary>
+/// <param name="connection">Подключение к БД</param>
+/// <param name="firstParam">FirstParam</param>
+/// <param name="secondParam">SECOND_Param</param>
+/// <param name="cancellationToken">Токен отмены</param>
+/// <returns>Значения типа <see cref="Int32"/></returns>
+public virtual async IAsyncEnumerable<int> GetAsync(DbConnection connection, Guid? firstParam, int? secondParam, [EnumeratorCancellation] CancellationToken cancellationToken)
+{
+	using DbCommand cmd = connection.CreateCommand();
+	cmd.CommandText = GetQueryText();
+	AddParameter(cmd, MySpecificDbType.MySpecificGuidType, "@FirstParam", firstParam);
+	AddParameter(cmd, MySpecificDbType.MySpecificIntType, "@SECOND_Param", secondParam);
+
+	PrepareCommand(cmd);
+
+	using DbDataReader reader = await cmd.ExecuteReaderAsync(cancellationToken);
+
+	while (await reader.ReadAsync(cancellationToken))
+	{
+		yield return GetScalarFromRecord<int>(reader);
+	}
+}

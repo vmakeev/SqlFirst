@@ -74,7 +74,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Data
 			{
 				foreach (IQueryObjectAbility ability in _abilities)
 				{
-					EnjureDependencies(ability);
+					EnsureDependencies(ability);
 					result = ability.Apply(context, result);
 				}
 			}
@@ -87,7 +87,7 @@ namespace SqlFirst.Codegen.Text.QueryObject.Data
 			return _abilities.Any(p => p.Name == abilityName);
 		}
 
-		private void EnjureDependencies(IQueryObjectAbility ability)
+		private void EnsureDependencies(IQueryObjectAbility ability)
 		{
 			foreach (string dependency in ability.GetDependencies())
 			{
