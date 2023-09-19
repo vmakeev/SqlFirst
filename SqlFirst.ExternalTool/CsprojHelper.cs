@@ -2,30 +2,31 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Common.Logging;
 using Microsoft.Build.Construction;
 using Microsoft.Build.Evaluation;
+using Microsoft.Extensions.Logging;
+using SqlFirst.Core;
 
 namespace SqlFirst.ExternalTool
 {
 	public static class CsprojHelper
 	{
-		private static readonly ILog _log = LogManager.GetLogger(typeof(CsprojHelper));
+		private static readonly ILogger _log = LogManager.GetLogger(typeof(CsprojHelper));
 
 		public static Project BeginUpdate(string csprojPath)
 		{
-			_log.Trace($"Trying to load project file [{csprojPath}]");
+			_log.LogTrace($"Trying to load project file [{csprojPath}]");
 			var projectCollection = new ProjectCollection();
 			Project result = projectCollection.LoadProject(csprojPath);
-			_log.Trace("Project file loaded successfully");
+			_log.LogTrace("Project file loaded successfully");
 			return result;
 		}
 
 		public static void EndUpdate(Project project)
 		{
-			_log.Trace($"Trying to save project [{project.FullPath}]");
+			_log.LogTrace($"Trying to save project [{project.FullPath}]");
 			project.Save();
-			_log.Trace("Project file saved successfully");
+			_log.LogTrace("Project file saved successfully");
 		}
 
 		public static void AddItem(Project project, string relativeItemPath, ItemType itemType, string dependenceItemRelativePath = null)
@@ -44,12 +45,12 @@ namespace SqlFirst.ExternalTool
 
 			if (!string.IsNullOrEmpty(dependenceItemRelativePath))
 			{
-				_log.Trace($"AddItem: {itemType:G} [{relativeItemPath}] DependentUpon [{dependenceItemRelativePath}]");
+				_log.LogTrace($"AddItem: {itemType:G} [{relativeItemPath}] DependentUpon [{dependenceItemRelativePath}]");
 				project.AddItem(itemType.ToString("G"), relativeItemPath, new[] { new KeyValuePair<string, string>("DependentUpon", dependenceItemRelativePath) });
 			}
 			else
 			{
-				_log.Trace($"AddItem: {itemType:G} [{relativeItemPath}]");
+				_log.LogTrace($"AddItem: {itemType:G} [{relativeItemPath}]");
 				project.AddItem(itemType.ToString("G"), relativeItemPath);
 			}
 
@@ -65,13 +66,13 @@ namespace SqlFirst.ExternalTool
 				throw new Exception($"{nameof(relativeItemPath)} must be a relative path.");
 			}
 
-			_log.Trace($"RemoveItem: [{relativeItemPath}]");
+			_log.LogTrace($"RemoveItem: [{relativeItemPath}]");
 
 			ProjectItem[] existingItems = project.AllEvaluatedItems
 												.Where(projectItem => !projectItem.IsImported && projectItem.EvaluatedInclude == relativeItemPath)
 												.ToArray();
 
-			_log.Trace($"{existingItems.Length} items will be deleted");
+			_log.LogTrace($"{existingItems.Length} items will be deleted");
 
 			if (existingItems.Any())
 			{
@@ -99,7 +100,7 @@ namespace SqlFirst.ExternalTool
 				projectItem.EvaluatedInclude == relativeItemPath &&
 				projectItem.ItemType == itemType.ToString("G"));
 
-			_log.Trace(p => p($"CheckIsExists: ItemType: [{itemType:G}], path: [{relativeItemPath}] -> {existingItem != null}"));
+			_log.LogTrace($"CheckIsExists: ItemType: [{itemType:G}], path: [{relativeItemPath}] -> {existingItem != null}");
 
 			return existingItem != null;
 		}

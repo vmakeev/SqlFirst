@@ -1,8 +1,9 @@
 ﻿using System;
 using System.IO;
 using System.Text.RegularExpressions;
-using Common.Logging;
 using Microsoft.Build.Evaluation;
+using Microsoft.Extensions.Logging;
+using SqlFirst.Core;
 using SqlFirst.Intelligence.Generators;
 using SqlFirst.Intelligence.Helpers;
 using SqlFirst.Intelligence.Options;
@@ -11,13 +12,13 @@ namespace SqlFirst.ExternalTool
 {
 	public class SingleFilePerformer : IPerformer
 	{
-		private ILog _log;
+		private static ILogger _log;
 
-		protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType()));
+		protected ILogger Log => _log ??= LogManager.GetLogger(GetType());
 
 		public virtual void Perform(GenerationOptions options)
 		{
-			Log.Trace(p => p("IncomingOptions:\r\n" + options.ToString()));
+			Log.LogTrace("IncomingOptions:\r\n" + options);
 
 			options.FillWithDefaults();
 			options.ApplyGlobalOptions();
@@ -65,7 +66,7 @@ namespace SqlFirst.ExternalTool
 				? generator.GenerateResultItemCode(queryText, options)
 				: null;
 
-			Log.Debug("Query objects generated");
+			Log.LogDebug("Query objects generated");
 
 			string queryObjectFileName = Path.GetFileNameWithoutExtension(options.Target) + ".gen.cs";
 			string parameterItemFileName = (options.ParameterItemMappedFrom ?? options.ParameterItemName) + ".gen.cs";
@@ -84,7 +85,7 @@ namespace SqlFirst.ExternalTool
 				UpdateCsprojFile(options, (queryObjectPath, queryObject), (parameterItemPath, parameterItem), (resultItemPath, resultItem));
 			}
 
-			Log.Info("Query objects generation was successfully completed.");
+			Log.LogInformation("Query objects generation was successfully completed.");
 		}
 
 		protected virtual void UpdateCsprojFile(GenerationOptions options,
@@ -92,7 +93,7 @@ namespace SqlFirst.ExternalTool
 			(string Path, string Data) parameter,
 			(string Path, string Data) result)
 		{
-			Log.Debug("Trying to modify project file");
+			Log.LogDebug("Trying to modify project file");
 
 			string csprojDirectoryName = Path.GetDirectoryName(options.ProjectFile);
 
@@ -122,13 +123,13 @@ namespace SqlFirst.ExternalTool
 
 			if (!CsprojHelper.IsExists(project, ItemType.EmbeddedResource, relativeQuerySqlPath))
 			{
-				Log.Warn("Query SQL file is not an EmbeddedResource. Trying to fix it");
+				Log.LogWarning("Query SQL file is not an EmbeddedResource. Trying to fix it");
 				CsprojHelper.RemoveItem(project, relativeQuerySqlPath);
 				CsprojHelper.AddItem(project, relativeQuerySqlPath, ItemType.EmbeddedResource);
 			}
 			else
 			{
-				Log.Info("Query SQL file is EmbeddedResource, OK");
+				Log.LogInformation("Query SQL file is EmbeddedResource, OK");
 			}
 
 			if (!string.IsNullOrEmpty(queryObject.Data))
@@ -155,12 +156,12 @@ namespace SqlFirst.ExternalTool
 			switch (options.Dialect)
 			{
 				case Dialect.MsSqlServer:
-					Log.Debug($"{nameof(MsSqlServerGenerator)} will be used as generator.");
+					Log.LogDebug($"{nameof(MsSqlServerGenerator)} will be used as generator.");
 					generator = new MsSqlServerGenerator();
 					break;
 
 				case Dialect.Postgres:
-					Log.Debug($"{nameof(PostgresGenerator)} will be used as generator.");
+					Log.LogDebug($"{nameof(PostgresGenerator)} will be used as generator.");
 					generator = new PostgresGenerator();
 					break;
 
@@ -180,13 +181,13 @@ namespace SqlFirst.ExternalTool
 			{
 				if (File.Exists(path))
 				{
-					Log.Debug("File will be deleted: " + path);
+					Log.LogDebug("File will be deleted: " + path);
 					File.Delete(path);
 				}
 			}
 			else
 			{
-				Log.Debug("File will be (re)created: " + path);
+				Log.LogDebug("File will be (re)created: " + path);
 
 				if (customIndent != null)
 				{

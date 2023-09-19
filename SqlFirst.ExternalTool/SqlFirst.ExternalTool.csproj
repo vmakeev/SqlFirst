@@ -1,21 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net462</TargetFramework>
+    <TargetFramework>net7.0</TargetFramework>
     <ApplicationIcon>cancer.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
-    <StartupObject>SqlFirst.ExternalTool.Cli</StartupObject>
     <AssemblyName>sqlFirst</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Logging" Version="7.0.0" />
     <PackageReference Include="Mono.Options" Version="5.3.0.1" />
-    <PackageReference Include="Common.Logging" Version="3.4.1" />
     <PackageReference Include="Microsoft.Build" Version="15.5.180" />
     <PackageReference Include="Microsoft.Build.Utilities.Core" Version="15.5.180" />
     <PackageReference Include="Newtonsoft.Json" Version="10.0.3" />
-    <PackageReference Include="Npgsql" Version="3.3.0" />
-    <PackageReference Include="System.ValueTuple" Version="4.4.0" />
+    <PackageReference Include="Npgsql" Version="7.0.2" />
   </ItemGroup>
 
   <ItemGroup>

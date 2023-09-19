@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using SqlFirst.Codegen;
 using SqlFirst.Codegen.Helpers;
 using SqlFirst.Codegen.Impl;
@@ -15,9 +15,9 @@ namespace SqlFirst.Intelligence.Generators
 {
 	public abstract class GeneratorBase
 	{
-		private ILog _log;
+		private static ILogger _log;
 
-		protected ILog Log => _log ?? (_log = LogManager.GetLogger(GetType()));
+		protected ILogger Log => _log ??= LogManager.GetLogger(GetType());
 
 		public abstract ISqlEmitter SqlEmitter { get; }
 
@@ -89,17 +89,17 @@ namespace SqlFirst.Intelligence.Generators
 		{
 			if (!info.Parameters.Any(paramInfo => paramInfo.IsNumbered))
 			{
-				Log.Debug("No numbered parameters found, parameter item won't be generated.");
+				Log.LogDebug("No numbered parameters found, parameter item won't be generated.");
 				return null;
 			}
 
-			Log.Info("Preparing to generate parameter item");
+			Log.LogInformation("Preparing to generate parameter item");
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IParameterGenerationOptions itemOptions = new ParameterGenerationOptions(info.SqlFirstOptions);
-			Log.Info("Parameter item generating is in progress");
+			Log.LogInformation("Parameter item generating is in progress");
 			IGeneratedItem generatedItem = CodeGenerator.GenerateParameterItem(context, itemOptions);
-			Log.Info("Parameter item generating is completed");
+			Log.LogInformation("Parameter item generating is completed");
 
 			return generatedItem;
 		}
@@ -108,17 +108,17 @@ namespace SqlFirst.Intelligence.Generators
 		{
 			if (info.Results.Count() <= 1)
 			{
-				Log.Debug("No such output columns found, result item won't be generated.");
+				Log.LogDebug("No such output columns found, result item won't be generated.");
 				return null;
 			}
 
-			Log.Info("Preparing to generate result item");
+			Log.LogInformation("Preparing to generate result item");
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IResultGenerationOptions itemOptions = new ResultGenerationOptions(info.SqlFirstOptions);
-			Log.Info("Result item generating is in progress");
+			Log.LogInformation("Result item generating is in progress");
 			IGeneratedItem generatedItem = CodeGenerator.GenerateResultItem(context, itemOptions);
-			Log.Info("Result item generating is completed");
+			Log.LogInformation("Result item generating is completed");
 
 			return generatedItem;
 		}
@@ -130,9 +130,9 @@ namespace SqlFirst.Intelligence.Generators
 				return null;
 			}
 
-			Log.Info("Preparing to compose .cs file with result item");
+			Log.LogInformation("Preparing to compose .cs file with result item");
 			string itemCode = CodeGenerator.GenerateFile(new[] { generatedItem });
-			Log.Info("File with result item was successfully composed");
+			Log.LogInformation("File with result item was successfully composed");
 
 			return itemCode;
 		}
@@ -144,22 +144,22 @@ namespace SqlFirst.Intelligence.Generators
 				return null;
 			}
 
-			Log.Info("Preparing to compose .cs file with parameter item");
+			Log.LogInformation("Preparing to compose .cs file with parameter item");
 			string itemCode = CodeGenerator.GenerateFile(new[] { generatedItem });
-			Log.Info("File with parameter item was successfully composed");
+			Log.LogInformation("File with parameter item was successfully composed");
 
 			return itemCode;
 		}
 
 		private IGeneratedItem GenerateQueryObjectInternal(string query, GenerationOptions parameters, IQueryInfo info)
 		{
-			Log.Info("Preparing to generate query object");
+			Log.LogInformation("Preparing to generate query object");
 			ICodeGenerationContext context = GetCodeGenerationContext(info, parameters, query);
 
 			IQueryGenerationOptions queryOptions = new QueryGenerationOptions(info.Type, info.SqlFirstOptions, parameters.OptionDefaults);
-			Log.Info("Query object generating is in progress");
+			Log.LogInformation("Query object generating is in progress");
 			IGeneratedItem generatedItem = CodeGenerator.GenerateQueryObject(context, queryOptions);
-			Log.Info("Query object generating is completed");
+			Log.LogInformation("Query object generating is completed");
 
 			if (parameters.ResultItemMappedFrom != null)
 			{
@@ -189,9 +189,9 @@ namespace SqlFirst.Intelligence.Generators
 				return null;
 			}
 
-			Log.Info("Preparing to compose .cs file with query object");
+			Log.LogInformation("Preparing to compose .cs file with query object");
 			string itemCode = CodeGenerator.GenerateFile(new[] { generatedItem });
-			Log.Info("File with query object was successfully composed");
+			Log.LogInformation("File with query object was successfully composed");
 
 			return itemCode;
 		}
@@ -202,7 +202,7 @@ namespace SqlFirst.Intelligence.Generators
 			if (csOption != null)
 			{
 				connectionString = string.Join(" ", csOption.Parameters).TrimStart('=').Trim();
-				Log.Debug($"Connection string option found. [{connectionString}] will be used as primary connection string.");
+				Log.LogDebug($"Connection string option found. [{connectionString}] will be used as primary connection string.");
 			}
 
 			IQueryInfo baseInfo = QueryParser.GetQueryInfo(query, connectionString);
@@ -220,21 +220,21 @@ namespace SqlFirst.Intelligence.Generators
 			{
 				string oldName = queryName;
 				queryName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
-				Log.Warn($"Invalid Query Object name [{oldName}]. Name [{queryName}] will be used");
+				Log.LogWarning($"Invalid Query Object name [{oldName}]. Name [{queryName}] will be used");
 			}
 
 			if (!string.IsNullOrEmpty(resultName) && !CSharpCodeHelper.IsValidIdentifierName(resultName))
 			{
 				string oldName = resultName;
 				resultName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
-				Log.Warn($"Invalid Query Result Item name [{oldName}]. Name [{resultName}] will be used");
+				Log.LogWarning($"Invalid Query Result Item name [{oldName}]. Name [{resultName}] will be used");
 			}
 
 			if (!string.IsNullOrEmpty(parameterName) && !CSharpCodeHelper.IsValidIdentifierName(parameterName))
 			{
 				string oldName = parameterName;
 				parameterName = CSharpCodeHelper.GetValidIdentifierName(oldName, NamingPolicy.Pascal);
-				Log.Warn($"Invalid Query Parameter Item name [{oldName}]. Name [{parameterName}] will be used");
+				Log.LogWarning($"Invalid Query Parameter Item name [{oldName}]. Name [{parameterName}] will be used");
 			}
 
 			IReadOnlyDictionary<string, object> contextOptions = new Dictionary<string, object>
@@ -248,7 +248,7 @@ namespace SqlFirst.Intelligence.Generators
 				["ResourcePath"] = $"{parameters.Namespace}.{Path.GetFileName(parameters.Target)}"
 			};
 
-			Log.Trace(p => p("CodeGenerationContext options:\n" + string.Join("\n", contextOptions.Select(pair => $"\t{pair.Key}: {pair.Value}"))));
+			Log.LogTrace("CodeGenerationContext options:\n" + string.Join("\n", contextOptions.Select(pair => $"\t{pair.Key}: {pair.Value}")));
 
 			var context = new CodeGenerationContext(info.Parameters, info.Results, contextOptions, TypeMapper, DatabaseProvider);
 

@@ -30,7 +30,7 @@ namespace SqlFirst.Intelligence.Options
 
 		public string ConnectionString { get; set; }
 
-		public bool UpdateCsproj { get; set; } = true;
+		public bool UpdateCsproj { get; set; } 
 
 		public string ReplaceIndent { get; set; }
 		

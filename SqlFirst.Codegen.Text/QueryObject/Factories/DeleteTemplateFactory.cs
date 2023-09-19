@@ -1,24 +1,25 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Delete;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.QueryObject.Factories.Options;
+using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Factories
 {
 	internal static class DeleteTemplateFactory
 	{
-		private static readonly ILog _log = LogManager.GetLogger(typeof(DeleteTemplateFactory));
+		private static readonly ILogger _log = LogManager.GetLogger(typeof(DeleteTemplateFactory));
 
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static QueryObjectTemplate Build(ICodeGenerationContext context, DeleteQueryObjectOptions options)
 		{
 			var internalOptions = new InternalOptions(context, options);
 
-			_log.Trace(p => p($"QueryObject for DELETE:\n{internalOptions}"));
+			_log.LogTrace($"QueryObject for DELETE:\n{internalOptions}");
 
 			var result = new QueryObjectTemplate();
 

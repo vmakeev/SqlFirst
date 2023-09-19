@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Microsoft.Extensions.Logging;
 using SqlFirst.Intelligence.Options;
 
 namespace SqlFirst.ExternalTool
@@ -57,7 +58,7 @@ namespace SqlFirst.ExternalTool
 				ParameterItemName = null
 			};
 
-			if (Log.IsInfoEnabled)
+			if (Log.IsEnabled(LogLevel.Information))
 			{
 				var props = new List<string>(4);
 				if (source.ProjectFile != null)
@@ -82,7 +83,7 @@ namespace SqlFirst.ExternalTool
 
 				if (props.Any())
 				{
-					Log.Info("Following options will be ignored due to the [Folder] mode:\r\n\t" + string.Join(Environment.NewLine + "\t", props));
+					Log.LogInformation("Following options will be ignored due to the [Folder] mode:\r\n\t" + string.Join(Environment.NewLine + "\t", props));
 				}
 			}
 

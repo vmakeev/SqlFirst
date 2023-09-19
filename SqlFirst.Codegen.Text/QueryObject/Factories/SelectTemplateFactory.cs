@@ -1,26 +1,30 @@
 ﻿using System;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using SqlFirst.Codegen.Text.QueryObject.Abilities;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Common;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Nested;
 using SqlFirst.Codegen.Text.QueryObject.Abilities.Select;
 using SqlFirst.Codegen.Text.QueryObject.Data;
 using SqlFirst.Codegen.Text.QueryObject.Factories.Options;
+using SqlFirst.Core;
 
 namespace SqlFirst.Codegen.Text.QueryObject.Factories
 {
 	internal static class SelectTemplateFactory
 	{
-		private static readonly ILog _log = LogManager.GetLogger(typeof(SelectTemplateFactory));
+		private static readonly ILogger _log = LogManager.GetLogger(typeof(SelectTemplateFactory));
 
 		[SuppressMessage("ReSharper", "UnusedParameter.Global")]
 		public static QueryObjectTemplate Build(ICodeGenerationContext context, SelectQueryObjectOptions options)
 		{
 			var internalOptions = new InternalOptions(context, options);
 
-			_log.Trace(p => p($"QueryObject for SELECT:\n{internalOptions}"));
+			if (_log.IsEnabled(LogLevel.Trace))
+			{
+				_log.LogTrace($"QueryObject for SELECT:\n{internalOptions}");
+			}
 
 			var result = new QueryObjectTemplate();
 

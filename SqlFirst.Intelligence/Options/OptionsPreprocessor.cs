@@ -1,17 +1,17 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using Common.Logging;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
+using SqlFirst.Core;
 using SqlFirst.Intelligence.Helpers;
 
 namespace SqlFirst.Intelligence.Options
 {
 	public static class OptionsPreprocessor
 	{
-		private static readonly ILog _log = LogManager.GetLogger(typeof(OptionsPreprocessor));
+		private static readonly ILogger _log = LogManager.GetLogger(typeof(OptionsPreprocessor));
 
 		public static void ApplyGlobalOptions(this GenerationOptions generationOptions)
 		{
@@ -19,11 +19,11 @@ namespace SqlFirst.Intelligence.Options
 
 			if (optionsFile == null)
 			{
-				_log.Trace("Global options are missing: 'SqlFirst.options' was not found.");
+				_log.LogTrace("Global options are missing: 'SqlFirst.options' was not found.");
 				return;
 			}
 
-			_log.Debug("Applying global options");
+			_log.LogDebug("Applying global options");
 
 			if (optionsFile.ConnectionString != null)
 			{
@@ -83,7 +83,7 @@ namespace SqlFirst.Intelligence.Options
 				generationOptions.ParameterItemName = externalParameterItem.Name;
 			}
 
-			_log.Trace(p => p("ApplyGlobalOptions:\r\n" + generationOptions.ToString()));
+			_log.LogTrace("ApplyGlobalOptions:\r\n" + generationOptions);
 		}
 
 		public static void FillWithDefaults(this GenerationOptions generationOptions)
@@ -92,25 +92,25 @@ namespace SqlFirst.Intelligence.Options
 			{
 				if (generationOptions.ProjectFile == null)
 				{
-					_log.Debug($"Trying to specify {nameof(generationOptions.ProjectFile)}");
+					_log.LogDebug($"Trying to specify {nameof(generationOptions.ProjectFile)}");
 					generationOptions.ProjectFile = FindProjectFile(generationOptions.Target);
 				}
 
 				if (generationOptions.Namespace == null && generationOptions.ProjectFile != null)
 				{
-					_log.Debug($"Trying to specify {nameof(generationOptions.Namespace)}");
+					_log.LogDebug($"Trying to specify {nameof(generationOptions.Namespace)}");
 					generationOptions.Namespace = GetNamespace(generationOptions.ProjectFile, generationOptions.Target);
 				}
 
 				if (generationOptions.ResultItemName == null)
 				{
-					_log.Debug($"Trying to specify {nameof(generationOptions.ResultItemName)}");
+					_log.LogDebug($"Trying to specify {nameof(generationOptions.ResultItemName)}");
 					generationOptions.ResultItemName = Path.GetFileNameWithoutExtension(generationOptions.Target) + "Result";
 				}
 
 				if (generationOptions.ParameterItemName == null)
 				{
-					_log.Debug($"Trying to specify {nameof(generationOptions.ParameterItemName)}");
+					_log.LogDebug($"Trying to specify {nameof(generationOptions.ParameterItemName)}");
 					generationOptions.ParameterItemName = Path.GetFileNameWithoutExtension(generationOptions.Target) + "Parameter";
 				}
 			}
@@ -120,7 +120,7 @@ namespace SqlFirst.Intelligence.Options
 				generationOptions.BeautifyFile = false;
 			}
 
-			_log.Trace(p => p("FillWithDefaults:\r\n" + generationOptions.ToString()));
+			_log.LogTrace("FillWithDefaults:\r\n" + generationOptions.ToString());
 		}
 
 		private static string GetNamespace(string projectFile, string queryFile)
@@ -130,7 +130,7 @@ namespace SqlFirst.Intelligence.Options
 
 			if (string.IsNullOrEmpty(projectPath) || string.IsNullOrEmpty(queryPath))
 			{
-				_log.Warn("Can not specify namespace. Default will be used.");
+				_log.LogWarning("Can not specify namespace. Default will be used.");
 				return "DefaultNamespace";
 			}
 
@@ -157,11 +157,11 @@ namespace SqlFirst.Intelligence.Options
 				switch (found.Length)
 				{
 					case 0:
-						_log.Trace($"{nameof(FindProjectFile)}: file not found at [{directory}]");
+						_log.LogTrace($"{nameof(FindProjectFile)}: file not found at [{directory}]");
 						break;
 
 					case 1:
-						_log.Trace($"{nameof(FindProjectFile)}: file successfully found at [{directory}]");
+						_log.LogTrace($"{nameof(FindProjectFile)}: file successfully found at [{directory}]");
 						return Path.Combine(directory, found.Single());
 
 					default:
@@ -171,7 +171,7 @@ namespace SqlFirst.Intelligence.Options
 				directory = Path.GetDirectoryName(directory.TrimEnd(separators));
 			}
 
-			_log.Warn($"{nameof(FindProjectFile)}: project file not found.");
+			_log.LogWarning($"{nameof(FindProjectFile)}: project file not found.");
 			return null;
 		}
 
@@ -180,20 +180,20 @@ namespace SqlFirst.Intelligence.Options
 			string rootFile = generationOptions.SolutionFile;
 			if (string.IsNullOrEmpty(rootFile))
 			{
-				_log.Debug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.SolutionFile)} not specified");
+				_log.LogDebug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.SolutionFile)} not specified");
 				rootFile = generationOptions.ProjectFile;
 			}
 
 			if (string.IsNullOrEmpty(rootFile))
 			{
-				_log.Debug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.ProjectFile)} not specified");
+				_log.LogDebug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.ProjectFile)} not specified");
 				rootFile = generationOptions.Target;
 			}
 
 			if (string.IsNullOrEmpty(rootFile))
 			{
-				_log.Debug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.Target)} not specified");
-				_log.Debug($"{nameof(ReadGlobalOptionsFile)}: Unable to start options file search: can not determine effective root folder.");
+				_log.LogDebug($"{nameof(ReadGlobalOptionsFile)}: {nameof(generationOptions.Target)} not specified");
+				_log.LogDebug($"{nameof(ReadGlobalOptionsFile)}: Unable to start options file search: can not determine effective root folder.");
 				return null;
 			}
 
@@ -210,14 +210,14 @@ namespace SqlFirst.Intelligence.Options
 				switch (found.Length)
 				{
 					case 0:
-						_log.Trace($"{nameof(ReadGlobalOptionsFile)}: SqlFirst.options not found at [{directory}].");
+						_log.LogTrace($"{nameof(ReadGlobalOptionsFile)}: SqlFirst.options not found at [{directory}].");
 						break;
 
 					case 1:
 						try
 						{
 							string optionsFilePath = Path.Combine(directory, found.Single());
-							_log.Debug($"{nameof(ReadGlobalOptionsFile)}: SqlFirst.options successfully found at [{optionsFilePath}].");
+							_log.LogDebug($"{nameof(ReadGlobalOptionsFile)}: SqlFirst.options successfully found at [{optionsFilePath}].");
 							string optionsFileContent = File.ReadAllText(optionsFilePath);
 
 							return string.IsNullOrEmpty(optionsFileContent)

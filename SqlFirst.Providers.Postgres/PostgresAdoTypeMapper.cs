@@ -151,9 +151,6 @@ namespace SqlFirst.Providers.Postgres
 				case NpgsqlDbType.Bit:
 					return typeof(bool);
 
-				case NpgsqlDbType.Enum:
-					return typeof(int);
-
 				case NpgsqlDbType.Box:
 					return typeof(NpgsqlBox);
 
@@ -209,6 +206,7 @@ namespace SqlFirst.Providers.Postgres
 					return typeof((IPAddress, int));
 
 				case NpgsqlDbType.MacAddr:
+				case NpgsqlDbType.MacAddr8:
 					return typeof(PhysicalAddress);
 
 				case NpgsqlDbType.TsVector:
@@ -230,16 +228,40 @@ namespace SqlFirst.Providers.Postgres
 				case NpgsqlDbType.Oid:
 				case NpgsqlDbType.Cid:
 					return typeof(uint);
+				
+				case NpgsqlDbType.Xid8:
+					return typeof(ulong);
 
+				case NpgsqlDbType.Regconfig:
+				case NpgsqlDbType.JsonPath:
+				case NpgsqlDbType.PgLsn:
 				case NpgsqlDbType.Geometry:
-					return typeof(PostgisGeometry);
-
+				case NpgsqlDbType.Geography:
+				case NpgsqlDbType.LTree:
+				case NpgsqlDbType.LQuery:
+				case NpgsqlDbType.LTxtQuery:
+				case NpgsqlDbType.IntegerRange:
+				case NpgsqlDbType.BigIntRange:
+				case NpgsqlDbType.NumericRange:
+				case NpgsqlDbType.TimestampRange:
+				case NpgsqlDbType.TimestampTzRange:
+				case NpgsqlDbType.DateRange:
+				case NpgsqlDbType.IntegerMultirange:
+				case NpgsqlDbType.BigIntMultirange:
+				case NpgsqlDbType.NumericMultirange:
+				case NpgsqlDbType.TimestampMultirange:
+				case NpgsqlDbType.TimestampTzMultirange:
+				case NpgsqlDbType.DateMultirange:
+				case NpgsqlDbType.Multirange:
+					throw new ArgumentOutOfRangeException(nameof(npgsqlDbType), npgsqlDbType, $"Unsupported {typeof(NpgsqlDbType)}: {npgsqlDbType}, need research");
+				
+				
+				
 				case NpgsqlDbType.Unknown:
 				case NpgsqlDbType.Tid:
 				case NpgsqlDbType.Regtype:
 				case NpgsqlDbType.Int2Vector:
 				case NpgsqlDbType.Array:
-				case NpgsqlDbType.Composite:
 				case NpgsqlDbType.Range:
 				case NpgsqlDbType.Refcursor:
 				case NpgsqlDbType.Circle:
