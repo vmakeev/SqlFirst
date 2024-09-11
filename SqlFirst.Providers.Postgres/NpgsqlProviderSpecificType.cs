@@ -10,7 +10,9 @@ namespace SqlFirst.Providers.Postgres
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>
 		public NpgsqlProviderSpecificType(NpgsqlDbType dbType)
 		{
-			ValueName = dbType.ToString("G");
+			ValueName = dbType.TryGetArrayItemType(out var arrayItemType) 
+				? $"{arrayItemType:G} | NpgsqlDbType.Array" 
+				: dbType.ToString("G");
 		}
 
 		/// <summary>Initializes a new instance of the <see cref="T:System.Object"></see> class.</summary>

@@ -22,7 +22,9 @@ namespace SqlFirst.Providers.Postgres
 
 			if (baseType == null || baseType == typeof(object))
 			{
-				baseType = GetBaseType(npgsqlDbType);
+				baseType = npgsqlDbType.TryGetArrayItemType(out var arrayItemType) 
+					? GetBaseType(arrayItemType).MakeArrayType() 
+					: GetBaseType(npgsqlDbType);
 			}
 
 			if (nullable && baseType.IsValueType)
@@ -124,7 +126,7 @@ namespace SqlFirst.Providers.Postgres
 			return clrType;
 		}
 
-		private static Type GetBaseType(NpgsqlDbType npgsqlDbType)
+		internal static Type GetBaseType(NpgsqlDbType npgsqlDbType)
 		{
 			switch (npgsqlDbType)
 			{

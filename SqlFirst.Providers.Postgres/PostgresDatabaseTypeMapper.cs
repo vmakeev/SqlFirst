@@ -16,7 +16,9 @@ namespace SqlFirst.Providers.Postgres
 		/// <returns>Имя типа CLR</returns>
 		public Type MapToClrType(string dbType, bool nullable)
 		{
-			Type baseType = GetBaseType(dbType);
+			var baseType = dbType.TryGetDbTypeArrayItemType(out var arrayItemType) 
+				? PostgresAdoTypeMapper.GetBaseType(arrayItemType).MakeArrayType() 
+				: GetBaseType(dbType);
 
 			if (nullable && baseType.IsValueType)
 			{
@@ -149,6 +151,11 @@ namespace SqlFirst.Providers.Postgres
 		/// </returns>
 		public IProviderSpecificType MapToProviderSpecificType(string dbType)
 		{
+			if (dbType.TryGetIntDbTypeNpgsqlDbTypeUnsafe(out var npgsqlType))
+			{
+				return new NpgsqlProviderSpecificType(npgsqlType);
+			}
+			
 			switch (PostgresDbType.Normalize(dbType))
 			{
 				case PostgresDbType.Int8:

@@ -212,6 +212,10 @@ namespace SqlFirst.Providers.Postgres
 							{
 								parameter.Value = DateTime.UtcNow.Date;
 							}
+							else if (clrType.IsArray)
+							{
+								parameter.Value = Array.CreateInstance(clrType.GetElementType(), 1);
+							}
 							else
 							{
 								parameter.Value = Activator.CreateInstance(clrType);
