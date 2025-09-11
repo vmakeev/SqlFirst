@@ -30,7 +30,7 @@ namespace SqlFirst.Codegen.Text.Templating
 		private readonly string _template;
 
 		protected static readonly Regex _templatesRegex =
-			new Regex(@"(?<placeholder>\$((?<indent>\d{1,2})\|)?(\`(?<prefix>[^\`]+)\`)?(?<name>[a-zA-Z0-9_]+)(\`(?<postfix>[^\`]+)\`)?(\|(?<delimiter>[^\$]*))?\$(~\r?\n?)?)",
+			new Regex(@"(?<placeholder>\$((?<indent>\d{1,2})\|)?(\`(?<prefix>[^\`]+)\`)?(?<name>[a-zA-Z0-9_]+)(\`(?<postfix>[^\`]+)\`)?(\|(?<delimiter>[^\$]*))?\$(~(\r\n?|\n))?)",
 				RegexOptions.Compiled);
 
 		private readonly SnippetField[] _snippetFields;
